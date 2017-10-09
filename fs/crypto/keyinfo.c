@@ -467,7 +467,7 @@ int fscrypt_get_encryption_info(struct inode *inode)
 	res = inode->i_sb->s_cop->get_context(inode, &ctx, sizeof(ctx), &has_crc);
 	if (res < 0) {
 		if (!fscrypt_dummy_context_enabled(inode) ||
-		    inode->i_sb->s_cop->is_encrypted(inode)) {
+		    IS_ENCRYPTED(inode)) {
 			verify = fscrypt_get_verify_context(inode, &ctx,
 								    sizeof(ctx));
 			if (verify < 0)
