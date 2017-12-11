@@ -674,6 +674,7 @@ void tcp_rcv_space_adjust(struct sock *sk)
 	struct tcp_sock *tp = tcp_sk(sk);
 	u32 copied;
 	int time;
+
 #ifdef CONFIG_TCP_AUTOTUNING
 	int arrived, segs = tp->segs_in;
 #endif
