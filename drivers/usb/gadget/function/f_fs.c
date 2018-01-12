@@ -768,9 +768,13 @@ static void ffs_user_copy_worker(struct work_struct *work)
 	mm_segment_t old_fs = get_fs();
 	set_fs(USER_DS);
 	if (io_data->read && ret > 0) {
+		mm_segment_t oldfs = get_fs();
+
+		set_fs(USER_DS);
 		use_mm(io_data->mm);
 		ret = ffs_copy_to_iter(io_data->buf, ret, &io_data->data);
 		unuse_mm(io_data->mm);
+		set_fs(oldfs);
 	}
 	set_fs(old_fs);
 
