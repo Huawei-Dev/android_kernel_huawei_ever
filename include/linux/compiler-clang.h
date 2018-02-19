@@ -33,4 +33,8 @@
 #endif
 
 #define __nocfi		__attribute__((no_sanitize("cfi")))
+
+/* Clang doesn't have a way to turn it off per-function, yet. */
+#ifdef __noretpoline
+#undef __noretpoline
 #endif
