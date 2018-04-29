@@ -9,6 +9,11 @@
  */
 #include <linux/init.h>
 #include <linux/utsname.h>
+#include <linux/cpu.h>
+#include <linux/module.h>
+
+#include <asm/spec-ctrl.h>
+#include <asm/cmdline.h>
 #include <asm/bugs.h>
 #include <asm/processor.h>
 #include <asm/processor-flags.h>
