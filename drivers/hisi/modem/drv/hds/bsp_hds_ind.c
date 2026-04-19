@@ -53,7 +53,7 @@
 #include <linux/slab.h>
 #include <linux/kernel.h>
 #include <linux/spinlock.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #include <mdrv.h>
 #include <of.h>
 #include <osl_thread.h>

@@ -27,7 +27,7 @@
 #include <linux/gpio.h>
 #include <linux/sched.h>
 #include <linux/interrupt.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #include <asm/io.h>
 #include <linux/proc_fs.h>
 #include <linux/sysfs.h>
