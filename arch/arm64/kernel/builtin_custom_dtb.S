@@ -11,9 +11,6 @@
 #ifndef CUSTOM_BUILTIN_DTB_PATH
 #error "CUSTOM_BUILTIN_DTB_PATH is not defined"
 #endif
-
-#if defined(CONFIG_ARM64_BUILTIN_APPENDED_DTB_OVERRIDE)
-
 	.section .builtin_custom_dtb, "a"
 	.balign 8
 
@@ -23,7 +20,4 @@ __builtin_custom_dtb_start:
 
 	.global __builtin_custom_dtb_end
 __builtin_custom_dtb_end:
-
 	.balign 8
-
-#endif
