@@ -1185,6 +1185,7 @@ static inline struct list_head *binder_proc_select_worklist_ilocked(
 }
 
 #ifdef CONFIG_HW_QOS_THREAD
+#ifdef CONFIG_HW_BINDER_SCHED
 static inline bool binder_thread_check_and_set_dynamic_qos(
 	struct binder_thread *thread, struct binder_thread *from,
 	unsigned int oneway)
@@ -1201,7 +1202,7 @@ static inline void binder_thread_check_and_remove_dynamic_qos(
 	if (!oneway)
 		dynamic_qos_dequeue(thread->task, DYNAMIC_QOS_BINDER);
 }
-
+#endif
 #endif
 #ifdef CONFIG_HW_VIP_THREAD
 static inline void binder_thread_check_and_set_dynamic_vip(
@@ -1472,8 +1473,10 @@ static void check_qos_low_to_critical(struct binder_thread *thread,
 			task_qos = get_task_qos(thread->task);
 	}
 #ifdef CONFIG_HW_QOS_THREAD
+#ifdef CONFIG_HW_BINDER_SCHED
 	is_binder_trans_vertical =
 		binder_thread_check_and_set_dynamic_qos(thread, from, oneway);
+#endif
 #endif
 	if (atomic_read(&binder_sched_switch) && is_binder_trans_vertical &&
 		(task_qos == VALUE_QOS_LOW))
@@ -3439,7 +3442,6 @@ static bool binder_proc_transaction(struct binder_transaction *t,
 #ifdef CONFIG_HW_QOS_THREAD
 #ifdef CONFIG_HW_BINDER_SCHED
 		check_qos_low_to_critical(thread, t->from, oneway, proc);
-#else
 		binder_thread_check_and_set_dynamic_qos(thread,
 			t->from, oneway);
 #endif
@@ -4095,8 +4097,10 @@ static void binder_transaction(struct binder_proc *proc,
 		if (target_thread->is_dead) {
 			binder_inner_proc_unlock(target_proc);
 #ifdef CONFIG_HW_QOS_THREAD
+#ifdef CONFIG_HW_BINDER_SCHED
 			binder_thread_check_and_remove_dynamic_qos(thread,
 				oneway_flag);
+#endif
 #endif
 			goto err_dead_proc_or_thread;
 		}
@@ -4109,7 +4113,9 @@ static void binder_transaction(struct binder_proc *proc,
 		binder_inner_proc_unlock(target_proc);
 		wake_up_interruptible_sync(&target_thread->wait);
 #ifdef CONFIG_HW_QOS_THREAD
+#ifdef CONFIG_HW_BINDER_SCHED
 		binder_thread_check_and_remove_dynamic_qos(thread, oneway_flag);
+#endif
 #endif
 #ifdef CONFIG_HW_BINDER_FG_REQ_FIRST
 #ifdef CONFIG_HW_VIP_THREAD
@@ -5115,7 +5121,6 @@ retry:
 #ifdef CONFIG_HW_BINDER_SCHED
 			check_qos_low_to_critical(thread, t->from,
 				(t->flags & TF_ONE_WAY), proc);
-#else
 			binder_thread_check_and_set_dynamic_qos(thread,
 				t_from, (t->flags & TF_ONE_WAY));
 #endif
