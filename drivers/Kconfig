@@ -257,8 +257,6 @@ source "drivers/devkit/tpkit/Kconfig"
 
 source "drivers/connectivity/Kconfig"
 
-source "drivers/storage_rofa/Kconfig"
-
 source "drivers/mmonitor/Kconfig"
 
 source "drivers/hwxcollie/Kconfig"

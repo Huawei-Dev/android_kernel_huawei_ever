@@ -52,6 +52,7 @@ source "drivers/huawei_platform/card_tray/Kconfig"
 source "drivers/huawei_platform/rmeminspect/Kconfig"
 source "drivers/huawei_platform/pmeminfo/Kconfig"
 source "drivers/huawei_platform/switch/Kconfig"
+source "drivers/huawei_platform/storage_rofa/Kconfig"
 endif #HUAWEI_PLATFORM
 
 endmenu

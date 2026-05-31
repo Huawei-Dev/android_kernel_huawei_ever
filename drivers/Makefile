@@ -214,7 +214,6 @@ obj-$(CONFIG_HUAWEI_PLATFORM) += huawei_platform/
 obj-$(CONFIG_HW_FDLEAK) += hwfdleak/
 obj-$(CONFIG_HW_GADGET) += hwusb/
 obj-$(CONFIG_CONNECTIVITY_HI110X) += connectivity/
-obj-$(CONFIG_HUAWEI_STORAGE_ROFA) += storage_rofa/
 obj-$(CONFIG_HW_ERECOVERY) += hwerecovery/
 obj-$(CONFIG_HW_CPULOAD_NOTI) += cpuload/
 obj-$(CONFIG_HW_MEMORY_MONITOR) += mmonitor/

@@ -48,3 +48,4 @@ obj-$(CONFIG_CARD_TRAY_GPIO_DETECT) += card_tray/
 obj-$(CONFIG_MEM_INSPECT) += rmeminspect/
 obj-$(CONFIG_HUAWEI_MEMINFO_DUMP) += pmeminfo/
 obj-$(CONFIG_SWITCH)        += switch/
+obj-$(CONFIG_HUAWEI_STORAGE_ROFA) += storage_rofa/
