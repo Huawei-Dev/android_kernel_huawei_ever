@@ -1,2 +1,0 @@
-config SND_SOC_HI6XXX_MBHC
-	tristate "HI Soc Smartstar Codec Hi6xxx serise support"
