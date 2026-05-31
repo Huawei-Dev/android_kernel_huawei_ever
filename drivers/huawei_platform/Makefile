@@ -49,3 +49,4 @@ obj-$(CONFIG_MEM_INSPECT) += rmeminspect/
 obj-$(CONFIG_HUAWEI_MEMINFO_DUMP) += pmeminfo/
 obj-$(CONFIG_SWITCH)        += switch/
 obj-$(CONFIG_HUAWEI_STORAGE_ROFA) += storage_rofa/
+obj-$(CONFIG_HISI_SPMI)		+= spmi_hisi/

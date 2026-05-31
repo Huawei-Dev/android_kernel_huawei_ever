@@ -53,6 +53,7 @@ source "drivers/huawei_platform/rmeminspect/Kconfig"
 source "drivers/huawei_platform/pmeminfo/Kconfig"
 source "drivers/huawei_platform/switch/Kconfig"
 source "drivers/huawei_platform/storage_rofa/Kconfig"
+source "drivers/huawei_platform/spmi_hisi/Kconfig"
 endif #HUAWEI_PLATFORM
 
 endmenu
