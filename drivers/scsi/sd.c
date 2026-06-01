@@ -1403,11 +1403,7 @@ static int sd_open(struct block_device *bdev, fmode_t mode)
 	 * if the user expects to be able to write to the thing.
 	 */
 	retval = -EROFS;
-#ifdef CONFIG_HUAWEI_STORAGE_ROW
-	if (get_storage_row_bootopt() == 0 && sdkp->write_prot && (mode & FMODE_WRITE))
-#else
 	if (sdkp->write_prot && (mode & FMODE_WRITE))
-#endif
 		goto error_out;
 
 	/*

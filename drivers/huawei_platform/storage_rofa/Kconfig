@@ -24,11 +24,3 @@ config HUAWEI_DYNAMIC_BRD
          Create a given size ramdisk dynamicly.
 
          If unsure, say N.
-
-config HUAWEI_STORAGE_ROW
-       bool "Huawei redirection on write DM"
-       default n
-       depends on MD
-       ---help---
-         This device-mapper target is virtually a ROW target. This
-         target is setup by reading a string table.
