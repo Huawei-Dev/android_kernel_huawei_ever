@@ -136,10 +136,6 @@
 #include <hwnet/chr/chr_interface.h>
 #endif
 
-#ifdef CONFIG_MPTCP_EPC
-#include <net/mptcp_epc.h>
-#endif
-
 struct udp_table udp_table __read_mostly;
 EXPORT_SYMBOL(udp_table);
 
@@ -927,11 +923,6 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
 	bool bAccelerate = false;
 #endif
 
-#ifdef CONFIG_MPTCP_EPC
-	struct sockaddr_in *server_addr = (struct sockaddr_in *) (&(up->server_addr));
-	int mutp_tot_len = 0;
-#endif
-
 	if (len > 0xFFFF)
 		return -EMSGSIZE;
 
@@ -986,9 +977,6 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
 			if (usin->sin_family != AF_UNSPEC)
 				return -EAFNOSUPPORT;
 		}
-#ifdef CONFIG_MPTCP_EPC
-		mutp_rewrite_dst_addr(sk, (struct sockaddr *)usin);
-#endif
 		daddr = usin->sin_addr.s_addr;
 		dport = usin->sin_port;
 		if (dport == 0)
@@ -1003,11 +991,6 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
 		 */
 		connected = 1;
 	}
-
-#ifdef CONFIG_MPTCP_EPC
-	mutp_tot_len = (server_addr->sin_addr.s_addr != 0 && server_addr->sin_port != 0) ?
-		MUTP_HEADER_LEN + sizeof(struct iphdr) + (ipc.opt ? ipc.opt->opt.optlen : 0) + sizeof(struct udphdr) : 0;
-#endif
 
 	ipc.sockc.tsflags = sk->sk_tsflags;
 	ipc.addr = inet->inet_saddr;
@@ -1109,18 +1092,9 @@ back_from_confirm:
 
 	/* Lockless fast path for the non-corking case. */
 	if (!corkreq) {
-#ifdef CONFIG_MPTCP_EPC
-		skb = ip_make_skb(sk, fl4, getfrag, msg, ulen + mutp_tot_len,
-				  sizeof(struct udphdr) + mutp_tot_len,
-				  &ipc, &rt,
-				  msg->msg_flags);
-
-		mutp_fill_mutp_header(sk, skb);
-#else
 		skb = ip_make_skb(sk, fl4, getfrag, msg, ulen,
 				  sizeof(struct udphdr), &ipc, &rt,
 				  msg->msg_flags);
-#endif
 		err = PTR_ERR(skb);
 		if (!IS_ERR_OR_NULL(skb))
 #ifdef CONFIG_WIFI_DELAY_STATISTIC
@@ -1665,9 +1639,6 @@ int udp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int noblock,
 	int err;
 	int is_udplite = IS_UDPLITE(sk);
 	bool checksum_valid = false;
-#ifdef CONFIG_MPTCP_EPC
-	bool is_mutp = false;
-#endif
 
 	if (flags & MSG_ERRQUEUE)
 		return ip_recv_error(sk, msg, len, addr_len);
@@ -1684,10 +1655,6 @@ try_again:
 #endif
 	ulen = udp_skb_len(skb);
 	copied = len;
-
-#ifdef CONFIG_MPTCP_EPC
-	is_mutp = mutp_decode_recv(skb, true, &off);
-#endif
 
 	if (copied > ulen - off)
 		copied = ulen - off;
@@ -1743,12 +1710,8 @@ try_again:
 	/* Copy the address. */
 	if (sin) {
 		sin->sin_family = AF_INET;
-#ifndef CONFIG_MPTCP_EPC
 		sin->sin_port = udp_hdr(skb)->source;
 		sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
-#else
-		mutp_rewrite_msg_addr(is_mutp, skb, sin);
-#endif
 		memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
 		*addr_len = sizeof(*sin);
 	}

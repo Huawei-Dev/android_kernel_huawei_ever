@@ -49,7 +49,7 @@ inline u32 get_sock_uid(struct sock *sk)
 	return (u32)sk->sk_uid.val;
 }
 
-#if defined(CONFIG_HUAWEI_KSTATE) || defined(CONFIG_MPTCP)
+#if defined(CONFIG_HUAWEI_KSTATE)
 inline u32 get_sock_pid(struct sock *sk)
 {
 	if (sk->sk_socket == NULL)
@@ -87,7 +87,7 @@ static u32 match_app(struct sock *sk, struct tcp_res *stat,
 	if ((protocal == IPPROTO_TCP) && (!sk_fullsock(sk)))
 		return FORGROUND_UNMACH; // ignore timewait or request socket
 	uid = get_sock_uid(sk);
-#if defined(CONFIG_HUAWEI_KSTATE) || defined(CONFIG_MPTCP)
+#if defined(CONFIG_HUAWEI_KSTATE)
 	if (stat->pid == 0) {
 		if (uid == stat->uid)
 			return FORGROUND_MACH; // udp_out

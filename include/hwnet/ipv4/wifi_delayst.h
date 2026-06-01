@@ -85,11 +85,7 @@ typedef struct delayskbcb{
 	ktime_t  ptime[TP_SKB_MAX_ENTRY];          /*timestamp for skb*/
 }DELAYSKB_CB_T;
 
-#ifdef CONFIG_MPTCP
-#define DELAYST_SKB_CB(__skb)     ((DELAYSKB_CB_T *)&((__skb)->cb[80]))
-#else
 #define DELAYST_SKB_CB(__skb)     ((DELAYSKB_CB_T *)&((__skb)->cb[48]))
-#endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0))
 #define IS_NEED_RECORD_DELAY(__skb, __index)   (0 != (skbprobe_get_skbtime(__skb,__index).tv64))
@@ -101,11 +97,7 @@ typedef struct delayskbcb{
 	(__DIRECT.T_TotalPkts[__index] >= Settings.print_interval) //packet is enough for print
 
 /*copy skb->cb to other fragment ,using in ip_copy_meta_data*/
-#ifdef CONFIG_MPTCP
-#define MEMCPY_SKB_CB(__to, __from)   (memcpy(__to->cb,__from->cb,128))
-#else
 #define MEMCPY_SKB_CB(__to, __from)   (memcpy(__to->cb,__from->cb,96))
-#endif
 
 extern char tcp_delay_filter[DELAY_FILTER_NAME_MAX] ;
 extern DP_SETTINGS_T Settings;
