@@ -57,6 +57,7 @@ source "drivers/huawei_platform/spmi_hisi/Kconfig"
 source "drivers/huawei_platform/log/Kconfig"
 source "drivers/huawei_platform/hwzerohung/Kconfig"
 source "drivers/huawei_platform/hwxcollie/Kconfig"
+source "drivers/huawei_platform/hwusb/Kconfig"
 endif #HUAWEI_PLATFORM
 
 endmenu
