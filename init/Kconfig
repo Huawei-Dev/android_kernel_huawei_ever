@@ -892,7 +892,6 @@ config CGROUP_FREEZER
 	  controller includes important in-kernel memory consumers per default.
 
 	  If you're using cgroup2, say N.
-source "kernel/cgroup_huawei/Kconfig"
 
 config MEMCG_PROTECT_LRU
 	bool "Memory Resource Controller Protect LRU file pages"

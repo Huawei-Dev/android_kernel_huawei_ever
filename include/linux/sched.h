@@ -54,9 +54,6 @@ struct sighand_struct;
 struct signal_struct;
 struct task_delay_info;
 struct task_group;
-#ifdef CONFIG_HW_CGROUP_PIDS
-struct group_pids;
-#endif
 
 /*
  * Task state bitmask. NOTE! These bits are also
@@ -1316,10 +1313,6 @@ struct task_struct {
 #ifdef CONFIG_INTEL_RDT
 	u32				closid;
 	u32				rmid;
-#endif
-#ifdef CONFIG_HW_CGROUP_PIDS
-	struct list_head group_pids_list;
-	struct group_pids *group_pids;
 #endif
 #ifdef CONFIG_FUTEX
 	struct robust_list_head __user	*robust_list;
