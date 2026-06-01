@@ -225,8 +225,6 @@ source "drivers/hwbfm/Kconfig"
 
 source "drivers/contexthub/Kconfig"
 
-source "drivers/hwerecovery/Kconfig"
-
 source "drivers/devkit/audiokit/Kconfig"
 
 source "drivers/devkit/lcdkit/Kconfig"

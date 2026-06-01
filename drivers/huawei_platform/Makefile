@@ -56,3 +56,4 @@ obj-$(CONFIG_HW_GADGET) += hwusb/
 obj-$(CONFIG_HW_WIFI)       += hwnet/
 obj-$(CONFIG_HW_MEMCHECK) += hwmemcheck/
 obj-$(CONFIG_HW_FDLEAK) += hwfdleak/
+obj-$(CONFIG_HW_ERECOVERY) += hwerecovery/

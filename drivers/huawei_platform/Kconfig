@@ -61,6 +61,7 @@ source "drivers/huawei_platform/hwusb/Kconfig"
 source "drivers/huawei_platform/hwnet/Kconfig"
 source "drivers/huawei_platform/hwmemcheck/Kconfig"
 source "drivers/huawei_platform/hwfdleak/Kconfig"
+source "drivers/huawei_platform/hwerecovery/Kconfig"
 endif #HUAWEI_PLATFORM
 
 endmenu
