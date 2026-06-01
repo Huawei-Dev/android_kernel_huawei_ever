@@ -231,8 +231,6 @@ source "drivers/dubai/Kconfig"
 
 source "drivers/cfi/Kconfig"
 
-source "drivers/cpuload/Kconfig"
-
 source "drivers/devkit/tpkit/Kconfig"
 
 source "drivers/connectivity/Kconfig"
