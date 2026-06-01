@@ -234,6 +234,4 @@ source "drivers/cfi/Kconfig"
 source "drivers/devkit/tpkit/Kconfig"
 
 source "drivers/connectivity/Kconfig"
-
-source "drivers/mmonitor/Kconfig"
 endmenu
