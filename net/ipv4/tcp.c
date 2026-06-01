@@ -287,9 +287,6 @@
 #ifdef CONFIG_HW_WIFIPRO
 #include <hwnet/ipv4/wifipro_tcp_monitor.h>
 #endif
-#ifdef CONFIG_HW_NETQOS_SCHED
-#include <netqos_sched/netqos_sched.h>
-#endif
 #ifdef CONFIG_CHR_NETLINK_MODULE
 #include <hwnet/chr/chr_interface.h>
 #endif
@@ -510,13 +507,6 @@ void tcp_init_sock(struct sock *sk)
 	tp->snd_ssthresh = TCP_INFINITE_SSTHRESH;
 	tp->snd_cwnd_clamp = ~0;
 	tp->mss_cache = TCP_MSS_DEFAULT;
-
-#ifdef CONFIG_HW_NETQOS_SCHED
-	tp->rcv_rate.min_rtt = ~0U;
-	tp->rcv_rate.rcv_wnd = ~0U;
-	sk->sk_netqos_level = get_net_qos_level(current);
-	sk->sk_netqos_time = jiffies;
-#endif
 
 	tp->reordering = sock_net(sk)->ipv4.sysctl_tcp_reordering;
 	tcp_assign_congestion_control(sk);
@@ -1354,10 +1344,6 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
 #ifdef CONFIG_HUAWEI_XENGINE
 	bool bAccelerate = false;
 #endif
-#ifdef CONFIG_HW_NETQOS_SCHED
-	netqos_sendrcv(sk, size);
-#endif
-
 	flags = msg->msg_flags;
 
 	if (flags & MSG_ZEROCOPY && size && sock_flag(sk, SOCK_ZEROCOPY)) {
@@ -2292,10 +2278,6 @@ skip_copy:
 	tp->ops->cleanup_rbuf(sk, copied);
 #else
 	tcp_cleanup_rbuf(sk, copied);
-#endif
-#ifdef CONFIG_HW_NETQOS_SCHED
-
-	netqos_sendrcv(sk, copied);
 #endif
 	release_sock(sk);
 	return copied;
