@@ -287,9 +287,6 @@
 #ifdef CONFIG_HW_WIFIPRO
 #include <hwnet/ipv4/wifipro_tcp_monitor.h>
 #endif
-#ifdef CONFIG_HW_NETWORK_AWARE
-#include <network_aware/network_aware.h>
-#endif
 #ifdef CONFIG_HW_NETQOS_SCHED
 #include <netqos_sched/netqos_sched.h>
 #endif
@@ -1357,10 +1354,6 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
 #ifdef CONFIG_HUAWEI_XENGINE
 	bool bAccelerate = false;
 #endif
-#ifdef CONFIG_HW_NETWORK_AWARE
-	tcp_network_aware(false);
-	stat_bg_network_flow(false, size);
-#endif
 #ifdef CONFIG_HW_NETQOS_SCHED
 	netqos_sendrcv(sk, size);
 #endif
@@ -2054,9 +2047,6 @@ int tcp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int nonblock,
 
 	if (unlikely(flags & MSG_ERRQUEUE))
 		return inet_recv_error(sk, msg, len, addr_len);
-#ifdef CONFIG_HW_NETWORK_AWARE
-	tcp_network_aware(true);
-#endif
 
 	if (sk_can_busy_loop(sk) && skb_queue_empty(&sk->sk_receive_queue) &&
 	    (sk->sk_state == TCP_ESTABLISHED))
@@ -2302,9 +2292,6 @@ skip_copy:
 	tp->ops->cleanup_rbuf(sk, copied);
 #else
 	tcp_cleanup_rbuf(sk, copied);
-#endif
-#ifdef CONFIG_HW_NETWORK_AWARE
-	stat_bg_network_flow(true, copied);
 #endif
 #ifdef CONFIG_HW_NETQOS_SCHED
 
