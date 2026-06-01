@@ -107,8 +107,6 @@ source "drivers/uwb/Kconfig"
 
 source "drivers/mmc/Kconfig"
 
-source "drivers/iomt_host/Kconfig"
-
 source "drivers/memstick/Kconfig"
 
 source "drivers/leds/Kconfig"

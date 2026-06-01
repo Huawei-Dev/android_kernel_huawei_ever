@@ -576,10 +576,6 @@ struct mmc_host {
 	int			dsr_req;	/* DSR value is valid */
 	u32			dsr;	/* optional driver stage (DSR) value */
 
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	void *iomt_host_info;
-#endif
-
 	/* Command Queue Engine (CQE) support */
 	const struct mmc_cqe_ops *cqe_ops;
 	void			*cqe_private;

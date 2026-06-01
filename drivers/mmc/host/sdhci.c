@@ -3583,10 +3583,6 @@ struct sdhci_host *sdhci_alloc_host(struct device *dev,
 	host->mmc_host_ops = sdhci_ops;
 	mmc->ops = &host->mmc_host_ops;
 
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	dsm_iomt_mmc_host_pre_init(host);
-#endif
-
 	host->flags = SDHCI_SIGNALING_330;
 
 	host->cqe_ier     = SDHCI_CQE_INT_MASK;

@@ -36,10 +36,6 @@
 #include <linux/mmc/dsm_sdcard.h>
 #endif
 
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-#include <linux/iomt_host/dsm_iomt_emmc_host.h>
-#endif
-
 #define cls_dev_to_mmc_host(d)	container_of(d, struct mmc_host, class_dev)
 
 static DEFINE_IDA(mmc_host_ida);
@@ -402,10 +398,6 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
 	/* scanning will be enabled when we're ready */
 	host->rescan_disable = 1;
 
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	host->iomt_host_info = NULL;
-#endif
-
 #ifdef CONFIG_HISI_MMC
 	hisi_stub_mmc_to_adapt_ufs(dev);
 #endif
@@ -489,10 +481,6 @@ int mmc_add_host(struct mmc_host *host)
 	mmc_add_host_debugfs(host);
 #endif
 
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	dsm_iomt_mmc_host_init(host);
-#endif
-
 	mmc_start_host(host);
 	if (!(host->pm_flags & MMC_PM_IGNORE_PM_NOTIFY))
 		mmc_register_pm_notifier(host);
@@ -518,10 +506,6 @@ void mmc_remove_host(struct mmc_host *host)
 
 #ifdef CONFIG_DEBUG_FS
 	mmc_remove_host_debugfs(host);
-#endif
-
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	dsm_iomt_mmc_host_exit(host);
 #endif
 
 	device_del(&host->class_dev);

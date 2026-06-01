@@ -933,10 +933,6 @@ static int cmdq_request(struct mmc_host *mmc, struct mmc_request *mrq)
 	struct cmdq_host *cq_host = (struct cmdq_host *)mmc_cmdq_private(mmc);
 	unsigned long flags;
 
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	iomt_host_latency_mrq_init(mrq);
-#endif
-
 	if (!cq_host->enabled) {
 		pr_err("%s cq_host->enable not true.\n", __func__);
 		err = -EHOSTDOWN;
@@ -971,9 +967,6 @@ static int cmdq_request(struct mmc_host *mmc, struct mmc_request *mrq)
 				rdr_syserr_process_for_ap((u32)MODID_AP_S_PANIC_STORAGE, 0ull, 0ull);
 
 		mmc->cmdq_task_info[tag].start_dbr_time = ktime_get();
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-		iomt_host_latency_mrq_start(mrq);
-#endif
 		cmdq_writel(cq_host, (u32)1 << 31, CQTDBR);
 
 		if (cq_host->quirks & CMDQ_QUIRK_CHECK_BUSY)
@@ -1014,16 +1007,10 @@ static int cmdq_request(struct mmc_host *mmc, struct mmc_request *mrq)
 	if (true == cq_host->fix_qbr) {
 		if (0 == cmdq_readl(cq_host, CQTDBR)) {
 			mmc->cmdq_task_info[tag].start_dbr_time = ktime_get();
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-			iomt_host_latency_mrq_start(mrq);
-#endif
 			cmdq_writel(cq_host, (u32) 1 << tag, CQTDBR);
 		}
 	} else {
 			mmc->cmdq_task_info[tag].start_dbr_time = ktime_get();
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-			iomt_host_latency_mrq_start(mrq);
-#endif
 			cmdq_writel(cq_host, (u32) 1 << tag, CQTDBR);
 	}
 
@@ -1050,10 +1037,6 @@ static int cmdq_finish_data(struct mmc_host *mmc, unsigned int tag)
 
 	cq_host->mrq_slot[tag] = NULL;
 	cq_host->ops->tuning_move(mmc, TUNING_CLK, TUNING_FLAG_CLEAR_COUNT);
-
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	iomt_host_latency_mrq_end(mmc, mrq);
-#endif
 
 	/*TODO: error handle*/
 	mrq->done(mrq);

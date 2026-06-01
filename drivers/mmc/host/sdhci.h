@@ -21,9 +21,6 @@
 #include <linux/interrupt.h>
 
 #include <linux/mmc/host.h>
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-#include <linux/iomt_host/dsm_iomt_emmc_host.h>
-#endif
 
 /* sctrl register */
 #define SCTRL_PEREN1			(0x170)
@@ -597,10 +594,6 @@ struct sdhci_host {
 
 	struct timer_list timer;	/* Timer for timeouts */
 	struct timer_list data_timer;	/* Timer for data timeouts */
-
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	struct iomt_host_info iomt_host_info_entity;
-#endif
 
 	u32 caps;		/* CAPABILITY_0 */
 	u32 caps1;		/* CAPABILITY_1 */

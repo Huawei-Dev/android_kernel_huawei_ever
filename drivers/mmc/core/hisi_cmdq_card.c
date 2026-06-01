@@ -39,10 +39,6 @@
 void sdhci_dsm_report(struct mmc_host *host, struct mmc_request *mrq);
 #endif
 
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-#include <linux/iomt_host/dsm_iomt_emmc_host.h>
-#endif
-
 #ifdef CONFIG_HW_MMC_MAINTENANCE_DATA
 extern void record_cmdq_rw_data(struct mmc_request *mrq);
 #endif
@@ -342,14 +338,6 @@ static struct mmc_cmdq_req *mmc_blk_cmdq_rw_prep(
 #else
 	trace_mmc_blk_cmdq_rw_start(cmdq_rq->cmdq_req_flags, cmdq_rq->tag, cmdq_rq->blk_addr,
 		(cmdq_rq->data.blocks * cmdq_rq->data.blksz));
-#endif
-
-#ifdef CONFIG_HUAWEI_DSM_IOMT_EMMC_HOST
-	if (card->host->iomt_host_info)
-		iomt_host_stat_rw_size(
-			(struct iomt_host_info *)card->host->iomt_host_info,
-			(unsigned long)cmdq_rq->data.blocks,
-			read_dir ? IOMT_DIR_READ : IOMT_DIR_WRITE);
 #endif
 
 	return &mqrq->mmc_cmdq_req;
