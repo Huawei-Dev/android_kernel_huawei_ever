@@ -199,7 +199,5 @@ obj-$(CONFIG_HISILICON_PLATFORM)+= hisi/
 obj-$(CONFIG_HUAWEI_DSM)	+= dsm/
 obj-$(CONFIG_AUDIOKIT) += devkit/audiokit/
 obj-y += contexthub/
-# the cfi is for CFI test case
-obj-y += cfi/
 obj-$(CONFIG_HUAWEI_PLATFORM) += huawei_platform/
 obj-$(CONFIG_CONNECTIVITY_HI110X) += connectivity/
