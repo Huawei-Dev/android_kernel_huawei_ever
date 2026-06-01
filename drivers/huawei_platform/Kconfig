@@ -56,6 +56,7 @@ source "drivers/huawei_platform/storage_rofa/Kconfig"
 source "drivers/huawei_platform/spmi_hisi/Kconfig"
 source "drivers/huawei_platform/log/Kconfig"
 source "drivers/huawei_platform/hwzerohung/Kconfig"
+source "drivers/huawei_platform/hwxcollie/Kconfig"
 endif #HUAWEI_PLATFORM
 
 endmenu
