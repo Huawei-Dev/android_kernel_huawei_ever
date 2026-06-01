@@ -59,6 +59,7 @@ source "drivers/huawei_platform/hwzerohung/Kconfig"
 source "drivers/huawei_platform/hwxcollie/Kconfig"
 source "drivers/huawei_platform/hwusb/Kconfig"
 source "drivers/huawei_platform/hwnet/Kconfig"
+source "drivers/huawei_platform/hwmemcheck/Kconfig"
 endif #HUAWEI_PLATFORM
 
 endmenu

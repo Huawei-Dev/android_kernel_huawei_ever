@@ -198,7 +198,6 @@ obj-y += devkit/tpkit/
 obj-$(CONFIG_HISILICON_PLATFORM)+= hisi/
 obj-$(CONFIG_HUAWEI_DSM)	+= dsm/
 obj-$(CONFIG_HUAWEI_BFM) += hwbfm/
-obj-$(CONFIG_HW_MEMCHECK) += hwmemcheck/
 obj-$(CONFIG_AUDIOKIT) += devkit/audiokit/
 obj-y += contexthub/
 # the cfi is for CFI test case
