@@ -100,14 +100,6 @@ config SECURITY_SELINUX_CHECKREQPROT_VALUE
 
 	  If you are unsure how to answer this question, answer 0.
 
-config HISI_SELINUX_EBITMAP_RO
-        bool "Protect extensible bitmaps used to represent the SE Linux policy DB"
-        select HISI_PMALLOC
-        default n
-        help
-          Those extensible bitmaps that are used to store parts of the policy DB are
-          protected and marked read-only, when the option is enabled.
-
 config SECURITY_SELINUX_TRACE_LOG
         bool "Enable call trace for SELinux avc log"
         default n

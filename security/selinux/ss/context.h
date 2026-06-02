@@ -88,13 +88,13 @@ static inline int mls_context_cpy_high(struct context *dst, struct context *src)
 
 	dst->range.level[0].sens = src->range.level[1].sens;
 	rc = ebitmap_cpy(&dst->range.level[0].cat,
-			 &src->range.level[1].cat, HISI_SELINUX_EBITMAP_RO);
+			 &src->range.level[1].cat, false);
 	if (rc)
 		goto out;
 
 	dst->range.level[1].sens = src->range.level[1].sens;
 	rc = ebitmap_cpy(&dst->range.level[1].cat,
-			 &src->range.level[1].cat, HISI_SELINUX_EBITMAP_RO);
+			 &src->range.level[1].cat, false);
 	if (rc)
 		ebitmap_destroy(&dst->range.level[0].cat);
 out:

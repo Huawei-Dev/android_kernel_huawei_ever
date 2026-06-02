@@ -409,7 +409,7 @@ int mls_range_set(struct context *context,
 	for (l = 0; l < 2; l++) {
 		context->range.level[l].sens = range->level[l].sens;
 		rc = ebitmap_cpy(&context->range.level[l].cat,
-				 &range->level[l].cat, HISI_SELINUX_EBITMAP_RO);
+				 &range->level[l].cat, false);
 		if (rc)
 			break;
 	}
@@ -481,7 +481,7 @@ int mls_convert_context(struct policydb *oldp,
 			return -EINVAL;
 		c->range.level[l].sens = levdatum->level->sens;
 
-		ebitmap_init(&bitmap, HISI_SELINUX_EBITMAP_RO);
+		ebitmap_init(&bitmap, false);
 		ebitmap_for_each_positive_bit(&c->range.level[l].cat, node, i) {
 			int rc;
 
