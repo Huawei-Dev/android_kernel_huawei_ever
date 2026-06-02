@@ -95,8 +95,6 @@
 #include <asm/sections.h>
 #include <asm/cacheflush.h>
 
-#include <chipset_common/security/root_scan.h>
-
 #ifdef CONFIG_HUAWEI_BOOT_TIME
 #include <huawei_platform/boottime/hw_boottime.h>
 #endif
@@ -1090,8 +1088,6 @@ static int __ref kernel_init(void *unused)
 	ftrace_free_init_mem();
 	free_initmem();
 	mark_readonly();
-	/* once marked ro data, root scan will measure it in TA */
-	tee_rootscan_run();
 	system_state = SYSTEM_RUNNING;
 	numa_default_policy();
 
