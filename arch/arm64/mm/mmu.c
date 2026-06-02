@@ -496,14 +496,8 @@ void mark_rodata_ro(void)
 			 ALIGN(section_size, PAGE_SIZE));
 
 }
-#ifdef CONFIG_DEBUG_HISI_EARLY_RODATA_PROTECTION
-void test_early_rodata_protection(void);
-#endif
 void mark_constdata_ro(void)
 {
-#ifdef CONFIG_DEBUG_HISI_EARLY_RODATA_PROTECTION
-	test_early_rodata_protection();
-#else
 	unsigned long start = (unsigned long)__start_rodata;
 	unsigned long end = (unsigned long)__init_begin;
 	unsigned long section_size = (unsigned long)end - (unsigned long)start;
@@ -515,7 +509,6 @@ void mark_constdata_ro(void)
 	update_mapping_prot(__pa_symbol(__start_rodata), start,
 			    section_size, PAGE_KERNEL_RO);
 	hkip_register_ro((void *)start, ALIGN(section_size, PAGE_SIZE));
-#endif
 	debug_checkwx();
 }
 

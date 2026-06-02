@@ -11,5 +11,4 @@ obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
 KASAN_SANITIZE_physaddr.o	+= n
 
 obj-$(CONFIG_KASAN)		+= kasan_init.o
-obj-$(CONFIG_DEBUG_HISI_EARLY_RODATA_PROTECTION) += test_rodata_protection.o
 KASAN_SANITIZE_kasan_init.o	:= n
