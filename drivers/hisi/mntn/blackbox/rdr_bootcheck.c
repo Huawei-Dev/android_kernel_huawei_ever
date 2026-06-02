@@ -23,9 +23,6 @@
 #include "rdr_field.h"
 #include "rdr_print.h"
 #include "rdr_debug.h"
-#ifdef CONFIG_HUAWEI_BFM
-#include <chipset_common/hwbfm/hw_boot_fail_core.h>
-#endif
 
 struct bootcheck {
 	u64 mask;
@@ -201,10 +198,6 @@ int rdr_bootcheck_thread_body(void *arg)
 	if (EOK != memset_s(path, PATH_MAXLEN, 0, PATH_MAXLEN)) {
 		BB_PRINT_PN("[%s:%d]: memset_s err \n]", __func__, __LINE__);
 	}
-
-#ifdef CONFIG_HUAWEI_BFM
-	save_hwbootfailInfo_to_file();
-#endif
 
 	BB_PRINT_PN("============wait for fs ready start =============\n");
 	while (rdr_wait_partition("/data/lost+found", 1000) != 0)

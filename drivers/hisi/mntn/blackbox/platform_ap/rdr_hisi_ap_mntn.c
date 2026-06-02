@@ -22,12 +22,6 @@
 static u32 reboot_reason_flag;
 #endif
 
-#ifdef CONFIG_HUAWEI_BFM
-#include <chipset_common/bfmr/bfm/chipsets/bfm_chipsets.h>
-#endif
-
-
-
 static int g_powerkey_only_status;
 
 static int hisi_pmic_powerkey_only_flag(void)
@@ -102,9 +96,6 @@ void rdr_long_press_powerkey(void)
 	set_reboot_reason(AP_S_PRESS6S);
 	if (get_boot_keypoint() != STAGE_BOOTUP_END) {
 		BB_PRINT_PN("press6s in boot\n");
-#ifdef CONFIG_HUAWEI_BFM
-		bfm_set_valid_long_press_flag();
-#endif
 		save_log_to_dfx_tempbuffer(AP_S_PRESS6S);
 		sys_sync();
 	} else {

@@ -363,63 +363,6 @@ typedef enum
 
 /*----export function prototypes--------------------------------------------------------*/
 
-#ifdef CONFIG_USE_BOOTFAIL_RECOVERY_SOLUTION
-void release_rrecord_param(void);
-int bfr_get_hardware_fault_times(bfmr_get_hw_fault_info_param_t *pfault_info_param);
-int bfr_get_real_recovery_info(bfr_real_recovery_info_t *preal_recovery_info);
-char* bfr_get_recovery_method_desc(int recovery_method);
-
-/**
-    @function: void boot_status_notify(int boot_success)
-    @brief: when the system bootup successfully, the BFM must call this
-        function to notify the BFR, and the BFM was notified by the BFD.
-
-    @param: boot_success.
-
-    @return: none.
-
-    @note: this fuction only need be initialized in kernel.
-*/
-void boot_status_notify(int boot_success);
-
-/**
-    @function: bfr_recovery_method_e try_to_recovery(
-        unsigned long long boot_fail_detected_time,
-        bfmr_bootfail_errno_e boot_fail_no,
-        bfmr_detail_boot_stage_e boot_fail_stage,
-        bfr_suggested_recovery_method_e suggested_recovery_method,
-        char *args)
-    @brief: do recovery for the boot fail.
-
-    @param: boot_fail_detected_time [in], rtc time when boot fail was detected.
-    @param: boot_fail_no [in], boot fail errno.
-    @param: boot_fail_stage [in], the stage when boot fail happened.
-    @param: suggested_recovery_method [in], suggested recovery method transfered by the BFD(Boot Fail Detection).
-    @param: args [in], extra parametrs for recovery.
-
-    @return: the recovery method selected by the BFR.
-
-    @note:
-*/
-bfr_recovery_method_e try_to_recovery(
-    unsigned long long boot_fail_detected_time,
-    bfmr_bootfail_errno_e boot_fail_no,
-    bfmr_detail_boot_stage_e boot_fail_stage,
-    bfr_suggested_recovery_method_e suggested_recovery_method,
-    char *args);
-
-/**
-    @function: int bfr_init(void)
-    @brief: init BFR.
-
-    @param: none.
-
-    @return: none.
-
-    @note:
-*/
-int bfr_init(void);
-#else
 static inline int bfr_get_hardware_fault_times(bfmr_get_hw_fault_info_param_t *pfault_info_param)
 {
     return -1;
@@ -454,7 +397,6 @@ static inline int bfr_init(void)
 {
     return 0;
 }
-#endif
 
 #ifdef __cplusplus
 }
