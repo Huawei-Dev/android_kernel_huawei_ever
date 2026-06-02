@@ -244,18 +244,6 @@ static inline void stat(const struct kmem_cache *s, enum stat_item si)
 #endif
 }
 
-#ifdef CONFIG_HW_SLUB_SANITIZE
-static inline bool has_sanitize(struct kmem_cache *s)
-{
-#ifdef CONFIG_HW_SLUB_DF
-	return false;
-#else
-	return (s->flags & SLAB_CLEAR) &&
-		!(s->flags & (SLAB_TYPESAFE_BY_RCU | SLAB_POISON));
-#endif
-}
-#endif
-
 /********************************************************************
  * 			Core slab cache functions
  *******************************************************************/
@@ -311,17 +299,6 @@ static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
 {
 	unsigned long freeptr_addr = (unsigned long)object + s->offset;
 
-#ifdef CONFIG_HW_SLUB_SANITIZE
-	if (unlikely(object == fp)) {
-#ifdef CONFIG_HW_SLUB_DF
-		set_harden_double_free_check_flags(true);
-#else
-		s->flags |= SLAB_CLEAR;
-#endif
-		WARN_ON(1);
-		return;
-	}
-#endif
 	*(void **)freeptr_addr = freelist_ptr(s, fp, freeptr_addr);
 }
 
@@ -2933,10 +2910,6 @@ static void __slab_free(struct kmem_cache *s, struct page *page,
 		prior = page->freelist;
 		counters = page->counters;
 		set_freepointer(s, tail, prior);
-#ifdef CONFIG_HW_SLUB_SANITIZE
-		if (unlikely(get_freepointer(s, tail) != prior))
-			return;
-#endif
 		new.counters = counters;
 		was_frozen = new.frozen;
 		new.inuse -= cnt;
@@ -3047,21 +3020,6 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
 	void *tail_obj = tail ? : head;
 	struct kmem_cache_cpu *c;
 	unsigned long tid;
-#ifdef CONFIG_HW_SLUB_SANITIZE
-	if (unlikely(has_sanitize(s))) {
-		int offset = s->offset ? 0 : sizeof(void *);
-		void *x = head;
-
-		while (1) {
-			memset(x + offset, 0, s->object_size - offset);
-			if (s->ctor)
-				s->ctor(x);
-			if (x == tail_obj)
-				break;
-			x = get_freepointer(s, x);
-		}
-	}
-#endif
 
 #ifdef CONFIG_HW_SLUB_DF
 	if (unlikely(s->flags & SLAB_DOUBLEFREE_CHECK) &&
@@ -3086,10 +3044,6 @@ redo:
 
 	if (likely(page == c->page)) {
 		set_freepointer(s, tail_obj, c->freelist);
-#ifdef CONFIG_HW_SLUB_SANITIZE
-	if (unlikely(get_freepointer(s, tail_obj) != c->freelist))
-		return;
-#endif
 		if (unlikely(!this_cpu_cmpxchg_double(
 				s->cpu_slab->freelist, s->cpu_slab->tid,
 				c->freelist, tid,
