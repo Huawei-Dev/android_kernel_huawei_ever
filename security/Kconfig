@@ -280,7 +280,6 @@ source security/check_root/Kconfig
 source security/hkip_atkinfo/Kconfig
 source security/mdpp_selftest/Kconfig
 source security/hw_root_scan/Kconfig
-source security/kernel_stp/Kconfig
 source security/hwaa/Kconfig
 endmenu
 
