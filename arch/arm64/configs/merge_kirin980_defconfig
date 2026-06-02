@@ -6312,11 +6312,6 @@ CONFIG_DEFAULT_SECURITY="selinux"
 # CONFIG_HKIP_ATKINFO_DEBUGFS is not set
 
 #
-# Huawei kernel mdpp selftest
-#
-# CONFIG_HUAWEI_CRYPTO_TEST_MDPP is not set
-
-#
 # Crypto core or helper
 #
 CONFIG_CRYPTO=y
