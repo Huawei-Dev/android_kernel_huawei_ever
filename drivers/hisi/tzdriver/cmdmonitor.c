@@ -26,8 +26,6 @@ const char g_cmd_monitor_white_table[][TASK_COMM_LEN]={
 };
 const uint32_t g_white_table_thread_num = sizeof(g_cmd_monitor_white_table) / TASK_COMM_LEN;
 
-extern void wakeup_tc_siq(void);
-
 static int cmd_need_archivelog = 0;
 static LIST_HEAD(cmd_monitor_list);
 static int cmd_monitor_list_size = 0;
@@ -130,7 +128,6 @@ static void cmd_monitor_tick(void)
 			tloge("monitor: pid-%d", monitor->pid);
 			if((!(is_thread_in_white_table(monitor->tname))) && (!tui_pid_status(monitor->pid))){
 				cmd_need_archivelog = 1;
-				wakeup_tc_siq();
 			}
 		} else if (timedif > 1*1000) {
 			tloge("[cmd_monitor_tick] pid=%d,pname=%s,tid=%d,timedif=%ld ms\n", monitor->pid, monitor->pname, monitor->tid, timedif);

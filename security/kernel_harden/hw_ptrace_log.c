@@ -27,7 +27,6 @@
 #include <linux/uio.h>
 #include <linux/audit.h>
 #include <linux/pid_namespace.h>
-#include <chipset_common/security/saudit.h>
 
 void record_ptrace_info_before_return(long request, struct task_struct *child)
 {
@@ -53,7 +52,4 @@ void record_ptrace_info_before_return(long request, struct task_struct *child)
 		(void)strncpy(comm_tracer, "unknown", sizeof("unknown"));
 
 	rcu_read_unlock();
-
-	saudit_log(PTRACE, STP_RISK, 0, "child=%s,tracer=%s,", comm_child, comm_tracer);
-
 }

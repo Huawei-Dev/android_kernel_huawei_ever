@@ -39,7 +39,6 @@
 
 #include <linux/hisi/rdr_hisi_ap_hook.h>
 #include <trace/events/kmem.h>
-#include <chipset_common/security/saudit.h>
 #include "internal.h"
 
 #ifdef CONFIG_HW_SLUB_DF
@@ -320,8 +319,6 @@ static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
 		s->flags |= SLAB_CLEAR;
 #endif
 		WARN_ON(1);
-		saudit_log(DOUBLE_FREE, STP_RISK, SAUDIT_ASYNC,
-			"type=light,kmem_cache_name=%s", s->name);
 		return;
 	}
 #endif
@@ -374,8 +371,6 @@ static inline bool hw_check_canary(struct kmem_cache *s, void *object, unsigned 
 	canary = hw_get_canary(s, object);
 
 	if (*canary == hw_get_canary_value(canary, value)) {
-		saudit_log(DOUBLE_FREE, STP_RISK, SAUDIT_ASYNC,
-			"type=harden,kmem_cache_name=%s", s->name);
 #ifdef CONFIG_HW_SLUB_DF_BUGON
 		BUG_ON(1);
 #endif
@@ -395,8 +390,6 @@ static inline bool hw_check_and_set_canary(struct kmem_cache *s, void *object,
 	canary = hw_get_canary(s, object);
 
 	if (*canary == hw_get_canary_value(canary, value)) {
-		saudit_log(DOUBLE_FREE, STP_RISK, SAUDIT_ASYNC,
-			"type=harden,kmem_cache_name=%s", s->name);
 #ifdef CONFIG_HW_SLUB_DF_BUGON
 		BUG_ON(1);
 #endif
@@ -4034,10 +4027,6 @@ err:
 	pr_err("ptr = %pK, page = %pK, n = %lu\n", ptr, page, n);
 	pr_err("page_addr = %pK, kmem_cache = %pK, size = %d, object= %lu, red_left_pad = %d",
 		page_address(page), s, s->size, object_size, s->red_left_pad);
-
-	saudit_log(USERCOPY, STP_RISK, 0,
-		"msg=kernel memory r/w attempt detected from/to %pK (%s) (%lu bytes),",
-		ptr, s->name, n);
 
 	BUG();
 }

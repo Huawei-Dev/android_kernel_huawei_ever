@@ -27,7 +27,6 @@
 static struct dentry *tz_dbg_dentry;
 
 extern void tzdebug_archivelog(void);
-extern void wakeup_tc_siq(void);
 extern void tz_log_write(void);
 extern int release_configid_mem(uint32_t configid);
 extern int register_to_tee(struct dynamic_mem_item* mem_item);
@@ -69,7 +68,6 @@ static void tzdump(char* param)
 {
 	(void)param;
 	show_cmd_bitmap();
-	wakeup_tc_siq();
 }
 static void tzmemdump(char* param)
 {

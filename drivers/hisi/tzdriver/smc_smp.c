@@ -1274,34 +1274,6 @@ spi_err:
 	return -EINVAL;
 }
 
-#define HUNGTASK_LIST_LEN	13
-static const char* g_hungtask_monitor_list[HUNGTASK_LIST_LEN] = {
-	"system_server","fingerprintd", "atcmdserver", "keystore", "gatekeeperd",
-	"volisnotd", "secure_storage", "secure_storage_s", "mediaserver",
-	"vold", "tee_test_ut", "tee_test_secure_timer", "IFAAPluginThrea"};
-
-bool is_tee_hungtask(struct task_struct *t)
-{
-	uint32_t i;
-	if (!t)
-		return false;
-
-	for (i=0; i < HUNGTASK_LIST_LEN; i++) {
-		if (!strcmp(t->comm, g_hungtask_monitor_list[i])) { /*lint !e421 */
-			tloge("tee_hungtask detected:the hungtask is %s\n",t->comm);
-			return true;
-		}
-	}
-	return false;
-
-}
-
-void wakeup_tc_siq(void)
-{
-	atomic_set(&siq_th_run, 1);/*lint !e1058*/
-	wake_up_interruptible(&siq_th_wait);
-}
-
 /*
  * Function:     TC_NS_SMC
  * Description:   This function first power on crypto cell,
