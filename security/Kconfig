@@ -277,6 +277,5 @@ config DEFAULT_SECURITY
 
 source security/kernel_harden/Kconfig
 source security/check_root/Kconfig
-source security/hkip_atkinfo/Kconfig
 endmenu
 
