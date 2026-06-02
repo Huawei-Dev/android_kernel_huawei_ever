@@ -85,17 +85,13 @@
 #define NETLINK_ST_LASER_DRIVER 38
 #endif
 
-#ifdef CONFIG_HUAWEI_EIMA_ACCESS_CONTROL
-#define NETLINK_EIMA 39
-#endif
-
 #ifdef CONFIG_HW_DC_MODULE
-#define NETLINK_HW_DC 40
+#define NETLINK_HW_DC 39
 #endif
 
-#define NETLINK_OLLIE 41
+#define NETLINK_OLLIE 40
 
-#define MAX_LINKS 42
+#define MAX_LINKS 41
 
 struct sockaddr_nl {
 	__kernel_sa_family_t	nl_family;	/* AF_NETLINK	*/
