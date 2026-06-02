@@ -4,11 +4,3 @@ config HW_ZEROHUNG
 	default n
 	---help---
 	  This feature support to catch hung log
-
-config HW_CGROUP_INFO
-	depends on CGROUPS
-	depends on CGROUP_FREEZER
-	bool "Huawei cgroup info for dfr"
-	default n
-	---help---
-	  This feature support to catch freezer cgroup hung
