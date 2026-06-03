@@ -5216,7 +5216,6 @@ CONFIG_HISPIPP_V200=y
 #
 CONFIG_HISI_PERF_CTRL=y
 CONFIG_HISI_DDR_PERF_CTRL=y
-# CONFIG_HISI_RENDER_RT is not set
 CONFIG_HISI_DRG=y
 # CONFIG_HISI_DUMMY_KO is not set
 
@@ -5226,86 +5225,6 @@ CONFIG_HISI_DRG=y
 CONFIG_HISI_RPMB=y
 # CONFIG_HISI_RPMB_MMC is not set
 CONFIG_HISI_RPMB_UFS=y
-
-#
-# Freqdump FEATURE
-#
-
-#
-# Hisi Modem
-#
-
-#
-# Modem Drivers
-#
-
-#
-# ipc driver
-#
-
-#
-# multicore communication driver
-#
-
-#
-# linux kernel call secure func
-#
-
-#
-# timer driver
-#
-
-#
-# balong modem reset
-#
-
-#
-# acore image load driver
-#
-
-#
-# nv driver
-#
-
-#
-# shared memory
-#
-
-#
-# get ip base addr
-#
-
-#
-# balong onoff management
-#
-
-#
-# ccore image load driver
-#
-
-#
-# udi adaption layer
-#
-
-#
-# sysctrl
-#
-
-#
-# mem driver
-#
-
-#
-# sync
-#
-
-#
-# misc driver
-#
-
-#
-# ccore image load driver
-#
 
 #
 # Hisilicon IVP

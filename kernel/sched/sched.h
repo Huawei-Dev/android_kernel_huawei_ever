@@ -2564,17 +2564,10 @@ extern unsigned int walt_rotation_enabled;
 #define walt_rotation_enabled (0)
 #endif
 
-#ifdef CONFIG_HISI_RENDER_RT
-extern void add_render_rthread(struct task_struct *task);
-extern void remove_render_rthread(struct task_struct *task);
-extern void add_waker_to_render_rthread(struct task_struct *task);
-extern bool render_rt_inited(void);
-#else
 static inline void add_waker_to_render_rthread(struct task_struct *task) {return ;}
 static inline void add_render_rthread(struct task_struct *task) { return; }
 static inline void remove_render_rthread(struct task_struct *task) { return; }
 static inline bool render_rt_inited(void) { return false; }
-#endif
 
 #ifdef CONFIG_HISI_EAS_SCHED
 extern int global_boost_enable;

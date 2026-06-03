@@ -2357,10 +2357,6 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags,
 
 	trace_sched_waking(p);
 
-#ifdef CONFIG_HISI_RENDER_RT
-	add_waker_to_render_rthread(p);
-#endif
-
 	/* We're going to change ->state: */
 	success = 1;
 	cpu = task_cpu(p);
@@ -2513,10 +2509,6 @@ static void try_to_wake_up_local(struct task_struct *p, struct rq_flags *rf)
 
 	trace_sched_waking(p);
 
-#ifdef CONFIG_HISI_RENDER_RT
-	add_waker_to_render_rthread(p);
-#endif
-
 	if (!task_on_rq_queued(p)) {
 		u64 wallclock = walt_ktime_clock();
 
@@ -2567,10 +2559,6 @@ void sched_exit(struct task_struct *p)
 #ifdef CONFIG_SCHED_WALT
 	struct rq_flags flags;
 	struct rq *rq;
-
-#ifdef CONFIG_HISI_RENDER_RT
-	remove_render_rthread(p);
-#endif
 
 #ifdef CONFIG_HISI_RTG
 	_sched_set_group_id(p, DEFAULT_RTG_GRP_ID);
@@ -2903,10 +2891,6 @@ void wake_up_new_task(struct task_struct *p)
 	struct rq_flags rf;
 	struct rq *rq;
 
-#ifdef CONFIG_HISI_RENDER_RT
-	add_render_rthread(p);
-#endif
-
 #ifdef CONFIG_HISI_RTG
 	add_new_task_to_grp(p);
 #endif
@@ -2914,10 +2898,6 @@ void wake_up_new_task(struct task_struct *p)
 	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
 
 	p->state = TASK_RUNNING;
-
-#ifdef CONFIG_HISI_RENDER_RT
-	add_waker_to_render_rthread(p);
-#endif
 
 #ifdef CONFIG_HISI_EAS_SCHED
 	/* Initialize new task's runnable average */

@@ -58,10 +58,6 @@ extern unsigned int sysctl_sched_enable_rt_cas;
 extern unsigned int sysctl_sched_enable_rt_active_lb;
 #endif
 
-#ifdef CONFIG_HISI_RENDER_RT_DEBUG
-extern unsigned int sysctl_sched_enable_render_rt_trace;
-#endif
-
 enum sched_tunable_scaling {
 	SCHED_TUNABLESCALING_NONE,
 	SCHED_TUNABLESCALING_LOG,

@@ -498,15 +498,6 @@ static struct ctl_table kern_table[] = {
 	},
 #endif /* CONFIG_SCHED_HISI_RUNNING_TASK_ROTATION */
 #endif /* CONFIG_SCHED_WALT */
-#ifdef CONFIG_HISI_RENDER_RT_DEBUG
-	{
-		.procname	= "sched_enable_render_rt_trace",
-		.data		= &sysctl_sched_enable_render_rt_trace,
-		.maxlen 	= sizeof(unsigned int),
-		.mode		= 0644,
-		.proc_handler	= proc_dointvec,
-	},
-#endif
 #endif /* CONFIG_HISI_DEBUG_FS */
 	{
 		.procname	= "sched_sync_hint_enable",

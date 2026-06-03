@@ -16,18 +16,10 @@
 #ifndef __RENDER_RT_H
 #define __RENDER_RT_H
 
-#ifdef CONFIG_HISI_RENDER_RT
-extern int init_render_rthread(const void __user *uarg);
-extern int destroy_render_rthread(const void __user *uarg);
-extern int stop_render_rthread(const void __user *uarg);
-extern int get_render_rthread(void __user *uarg);
-extern int get_render_hrthread(void __user *uarg);
-#else
 static inline int init_render_rthread(const void __user *uarg) { return -ENODEV; }
 static inline int destroy_render_rthread(const void __user *uarg) { return -ENODEV; }
 static inline int stop_render_rthread(const void __user *uarg) { return -ENODEV; }
 static inline int get_render_rthread(void __user *uarg)  { return -ENODEV; }
 static inline int get_render_hrthread(void __user *uarg)  { return -ENODEV; }
-#endif /* CONFIG_HISI_RENDER_RT */
 
 #endif /* __RENDER_RT_H  */
