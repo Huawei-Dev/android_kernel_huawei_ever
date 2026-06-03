@@ -130,17 +130,4 @@ config HISI_HKADC_MODEM
 	help
 	  Enable hkadc modem temp
 
-config HISI_ITS
-	bool "Hisi ITS driver"
-	default n
-	help
-	  Enable this to enable ITS driver
-
-config HISI_ITS_DEBUG
-	bool "Hisi ITS driver debug message"
-	depends on HISI_ITS
-	default n
-	help
-	  Enable this to print debug power message for ITS driver
-
 source "drivers/thermal/hisi/hw_dpm/Kconfig"
