@@ -31,9 +31,6 @@
 #include "../emcom_netlink.h"
 #include "../emcom_utils.h"
 #include <huawei_platform/emcom/network_evaluation.h>
-#ifdef CONFIG_HUAWEI_OPMP
-#include <huawei_platform/emcom/opmp_heartbeat.h>
-#endif
 
 #ifdef CONFIG_HUAWEI_BASTET
 #include <huawei_platform/net/bastet/bastet_utils.h>
@@ -3075,12 +3072,6 @@ void emcom_xengine_evt_proc(int32_t event, const uint8_t *data, uint16_t len)
 		EMCOM_LOGD("emcom netlink receive fast syn stop");
 		emcom_xengine_stop_fastsyn(data, len);
 		break;
-#ifdef CONFIG_HUAWEI_OPMP
-	case NETLINK_EMCOM_DK_OPMP_INIT_HEARTBEAT:
-		EMCOM_LOGD("emcom netlink received opmp init heartbeat");
-		opmp_event_process(event, data, len);
-		break;
-#endif
 	case NETLINK_EMCOM_DK_ACTIVE_CCALG:
 		EMCOM_LOGD(" emcom netlink active congestion control algorithm");
 		emcom_xengine_active_ccalg(data, len);
