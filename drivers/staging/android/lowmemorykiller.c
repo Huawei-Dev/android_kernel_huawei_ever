@@ -43,7 +43,6 @@
 #include <linux/profile.h>
 #include <linux/notifier.h>
 #include <linux/atomic.h>
-#include <hisi/hisi_lmk/lowmem_killer.h>
 #include <log/log_usertype.h>
 
 #define CREATE_TRACE_POINTS
@@ -154,11 +153,8 @@ static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 				global_node_page_state(NR_SHMEM) -
 				global_node_page_state(NR_UNEVICTABLE) -
 				total_swapcache_pages();
-	int ret_tune;
 
 	static atomic_t atomic_lmk = ATOMIC_INIT(0);
-
-	ret_tune = hisi_lowmem_tune(&other_free, &other_file, sc);
 
 	if (lowmem_adj_size < array_size)
 		array_size = lowmem_adj_size;
@@ -201,16 +197,12 @@ static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 		if (!p)
 			continue;
 
-		if (task_lmk_waiting(p)) {
-			if (time_before_eq(jiffies,
+		if (task_lmk_waiting(p) && time_before_eq(jiffies,
 					lowmem_deathpending_timeout)) {
 				task_unlock(p);
 				rcu_read_unlock();
 				atomic_dec(&atomic_lmk);
 				return 0;
-			} else {
-				hisi_lowmem_dbg_timeout(tsk, p);
-			}
 		}
 
 		oom_score_adj = p->signal->oom_score_adj;
@@ -256,16 +248,15 @@ static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 		lowmem_print(1, "Killing '%s' (%d) (tgid %d), adj %hd,\n"
 				 "   to free %ldkB on behalf of '%s' (%d) because\n"
 				 "   cache %ldkB is below limit %ldkB for oom_score_adj %hd\n"
-				 "   Free memory is %ldkB above reserved (%d 0x%x)\n",
+				 "   Free memory is %ldkB above reserved (0x%x)\n",
 			     selected->comm, selected->pid, selected->tgid,
 			     selected_oom_score_adj,
 			     selected_tasksize * (long)(PAGE_SIZE / 1024),
 			     current->comm, current->pid,
 			     cache_size, cache_limit,
 			     min_score_adj,
-			     free, ret_tune, sc->gfp_mask);
+			     free, sc->gfp_mask);
 
-		hisi_lowmem_dbg(selected_oom_score_adj);
 		memcheck_report_lmk_oom(selected->pid, selected->tgid,
 					selected->comm, KILLTYPE_KERNEL_LMK,
 					selected_oom_score_adj,
