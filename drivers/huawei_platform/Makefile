@@ -35,7 +35,6 @@ obj-$(CONFIG_MADAPT) += madapt/
 obj-$(CONFIG_HUAWEI_IO_TRACING) += iotrace/
 obj-$(CONFIG_HW_HANDPRESS_SWITCH) += handpress_switch/
 obj-$(CONFIG_HW_LED_ALWAYSON) += led_alwayson/
-obj-$(CONFIG_HUAWEI_BOOT_TIME) += boottime/
 obj-$(CONFIG_HUAWEI_EMCOM) += emcom/
 obj-$(CONFIG_DP_AUX_SWITCH) += dp_aux_switch/
 obj-$(CONFIG_HW_DP_SOURCE) += dp_source/
