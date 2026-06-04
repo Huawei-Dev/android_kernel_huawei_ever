@@ -635,7 +635,7 @@ static int drg_cpu_pm_notifier(struct notifier_block *nb, unsigned long action,
 
 	switch (action) {
 	case CPU_PM_ENTER:
-		if (!hisi_cluster_cpu_all_pwrdn())
+		if (!lpcpu_cluster_cpu_all_pwrdn())
 			break;
 
 		list_for_each_entry(master, &freq_dev->master_list, node) {
