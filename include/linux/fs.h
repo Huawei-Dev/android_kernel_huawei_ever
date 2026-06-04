@@ -675,9 +675,6 @@ struct inode {
 #endif
 
 	void			*i_private; /* fs or device private pointer */
-#if defined(CONFIG_TASK_PROTECT_LRU) || defined(CONFIG_MEMCG_PROTECT_LRU)
-	int			i_protect;
-#endif
 
 #ifdef CONFIG_FILE_MAP
 	struct file_map_entry *i_file_map;
