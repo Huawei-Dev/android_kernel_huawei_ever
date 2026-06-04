@@ -21,7 +21,6 @@
 
 #include "queue.h"
 #include "mmc_ops.h"
-#include <linux/mmc/hw_write_protect.h>
 #include <linux/scatterlist.h>
 
 #include <linux/mmc/dsm_emmc.h>
