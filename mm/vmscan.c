@@ -75,11 +75,6 @@
 #include <linux/signal.h>
 #endif
 
-#ifdef CONFIG_HUAWEI_PROMM
-#include <linux/fs.h>
-#define PROMM_BUF_LEN_MAX 22
-#endif
-
 struct scan_control {
 	/* How many pages shrink_list() should reclaim */
 	unsigned long nr_to_reclaim;
@@ -183,12 +178,6 @@ struct scan_control {
 #endif
 
 static unsigned int enough_inactive_file = 1;
-#ifdef CONFIG_HUAWEI_PROMM
-static unsigned int promm_enable;
-static unsigned int promm_priority;
-static unsigned int fine_reclaim;
-static atomic_long_t fine_reclaim_times = ATOMIC_LONG_INIT(0);
-#endif
 
 #ifdef CONFIG_ISOLATE_COUNT
 atomic_long_t compact_file_nums;
@@ -2461,14 +2450,6 @@ enum scan_balance {
 	SCAN_FILE,
 };
 
-#ifdef CONFIG_HUAWEI_PROMM
-static int get_fine_reclaim(void)
-{
-	if (promm_enable == 1 && promm_priority > 0)
-		return 1;
-	return 0;
-}
-#endif
 /*
  * Determine how aggressively the anon and file LRU lists should be
  * scanned.  The relative value of each set of LRU lists is determined
@@ -2492,16 +2473,10 @@ static void get_scan_count(struct lruvec *lruvec, struct mem_cgroup *memcg,
 	unsigned long anon, file;
 	unsigned long ap, fp;
 	enum lru_list lru;
-#ifdef CONFIG_HUAWEI_PROMM
-	fine_reclaim = 0;
-#endif
 
 	/* If we have no swap space, do not bother scanning anon pages. */
 	if (!sc->may_swap || mem_cgroup_get_nr_swap_pages(memcg) <= 0) {
 		scan_balance = SCAN_FILE;
-#ifdef CONFIG_HUAWEI_PROMM
-		fine_reclaim = get_fine_reclaim();
-#endif
 		goto out;
 	}
 
@@ -3667,16 +3642,6 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int classzone_idx)
 	do {
 		unsigned long nr_reclaimed = sc.nr_reclaimed = 0;
 		bool raise_priority = true;
-#ifdef CONFIG_HUAWEI_PROMM
-		int temp_priority = sc.priority;
-
-		if (fine_reclaim == 1) {
-			sc.priority = promm_priority;
-			atomic_long_add(1, &fine_reclaim_times);
-		}
-
-fine_reclaim_begin:
-#endif
 		nr_reclaimed = 0;
 		sc.nr_reclaimed = 0;
 		raise_priority = true;
@@ -3761,11 +3726,6 @@ fine_reclaim_begin:
 		nr_reclaimed = sc.nr_reclaimed - nr_reclaimed;
 		if (raise_priority || !nr_reclaimed) {
 			sc.priority--;
-#ifdef CONFIG_HUAWEI_PROMM
-			if (fine_reclaim == 1 && sc.priority > temp_priority)
-				goto fine_reclaim_begin;
-			sc.priority = temp_priority - 1;
-#endif
 		}
 	} while (sc.priority >= 1);
 
@@ -4132,141 +4092,6 @@ static int kswapd_cpu_online(unsigned int cpu)
 	return 0;
 }
 
-#ifdef CONFIG_HUAWEI_PROMM
-static ssize_t promm_enable_show(struct kobject *kobj,
-				 struct kobj_attribute *attr, char *buf)
-{
-	return snprintf(buf, PROMM_BUF_LEN_MAX, "%d\n", promm_enable);
-}
-
-static ssize_t promm_enable_store(struct kobject *kobj,
-				  struct kobj_attribute *attr,
-				  const char *buf, size_t count)
-{
-	char tmp[PROMM_BUF_LEN_MAX];
-	size_t len;
-	char *p;
-
-	if (count >= PROMM_BUF_LEN_MAX) {
-		pr_err("promm: promm_enable string too long");
-		return -1;
-	}
-	if (!buf)
-		return -1;
-	p = memchr(buf, '\n', count);
-	memset(tmp, 0, sizeof(tmp));
-	len = p ? (size_t)(p - buf) : count;
-	strncpy(tmp, buf, len);
-	if (strncmp(tmp, "1", strlen(tmp)) == 0) {
-		promm_enable = 1;
-		pr_info("promm: promm_enable is set to 1");
-	} else if (strncmp(tmp, "0", strlen(tmp)) == 0) {
-		promm_enable = 0;
-		pr_info("promm: promm_enable is set to 0");
-	} else {
-		pr_info("promm: promm_enable only accept 1 or 0");
-	}
-	enough_inactive_file = promm_enable;
-	return (ssize_t)count;
-}
-
-static ssize_t promm_priority_show(struct kobject *kobj,
-				   struct kobj_attribute *attr, char *buf)
-{
-	return snprintf(buf, PROMM_BUF_LEN_MAX, "%d\n", promm_priority);
-}
-
-static ssize_t promm_priority_store(struct kobject *kobj,
-				    struct kobj_attribute *attr,
-				    const char *buf, size_t count)
-{
-	char tmp[PROMM_BUF_LEN_MAX];
-	size_t len;
-	char *p;
-	int ret;
-	unsigned long priority_tmp = 0;
-
-	if (count >= PROMM_BUF_LEN_MAX) {
-		pr_err("promm: promm_priority string too long");
-		return -1;
-	}
-	if (!buf)
-		return -1;
-	p = memchr(buf, '\n', count);
-	memset(tmp, 0, sizeof(tmp));
-	len = p ? (size_t)(p - buf) : count;
-	strncpy(tmp, buf, len);
-	ret = kstrtoul(tmp, 10, &priority_tmp);
-	if (ret)
-		return -1;
-	if (priority_tmp > DEF_PRIORITY && priority_tmp < PROMM_PRIORITY_MAX)
-		promm_priority = priority_tmp;
-	pr_info("promm: promm_priority is %d", promm_priority);
-	return (ssize_t)count;
-}
-
-static ssize_t fine_reclaim_times_show(struct kobject *kobj,
-				   struct kobj_attribute *attr, char *buf)
-{
-	long ret;
-
-	ret = atomic_long_read(&fine_reclaim_times);
-	return snprintf(buf, PROMM_BUF_LEN_MAX, "%ld\n", ret);
-}
-
-static struct kobj_attribute promm_enable_attribute = {
-	.attr = {
-		.name = "enable",
-		.mode = 0640,
-	},
-	.show = promm_enable_show,
-	.store = promm_enable_store,
-};
-
-static struct kobj_attribute promm_priority_attribute = {
-	.attr = {
-		.name = "priority",
-		.mode = 0640,
-	},
-	.show = promm_priority_show,
-	.store = promm_priority_store,
-};
-
-static struct kobj_attribute fine_reclaim_times_attribute = {
-	.attr = {
-		.name = "times",
-		.mode = 0440,
-	},
-	.show = fine_reclaim_times_show,
-};
-
-static struct attribute *attrs[] = {
-	&promm_enable_attribute.attr,
-	&promm_priority_attribute.attr,
-	&fine_reclaim_times_attribute.attr,
-	NULL
-};
-
-static struct attribute_group promm_attr_group = {
-	.attrs = attrs,
-};
-
-struct kobject *promm_kobject;
-void create_sysfs_promm(void)
-{
-	int ret;
-
-	promm_kobject = kobject_create_and_add("promm", kernel_kobj);
-	if (!promm_kobject) {
-		pr_err("promm: create promm_kobject failed");
-		return;
-	}
-	ret = sysfs_create_group(promm_kobject, &promm_attr_group);
-	if (ret != 0)
-		kobject_put(promm_kobject);
-}
-#endif
-
 /*
  * This kswapd start function will be called by init and node-hot-add.
  * On node-hot-add, kswapd will moved to proper cpus if cpus are hot-added.
@@ -4316,9 +4141,6 @@ static int __init kswapd_init(void)
 					NULL);
 	WARN_ON(ret < 0);
 
-#ifdef CONFIG_HUAWEI_PROMM
-	create_sysfs_promm();
-#endif
 	return 0;
 }
 

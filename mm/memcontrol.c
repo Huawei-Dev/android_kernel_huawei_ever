@@ -890,11 +890,7 @@ static void invalidate_reclaim_iterators(struct mem_cgroup *dead_memcg)
 	int nid;
 	int i;
 	int priority;
-#ifdef CONFIG_HUAWEI_PROMM
-	priority = PROMM_PRIORITY_MAX;
-#else
 	priority = DEF_PRIORITY;
-#endif
 
 	for (; memcg; memcg = parent_mem_cgroup(memcg)) {
 		for_each_node(nid) {

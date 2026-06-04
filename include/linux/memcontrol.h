@@ -31,10 +31,6 @@
 #include <linux/writeback.h>
 #include <linux/page-flags.h>
 
-#ifdef CONFIG_HUAWEI_PROMM
-#define PROMM_PRIORITY_MAX 20
-#endif
-
 struct mem_cgroup;
 struct page;
 struct mm_struct;
@@ -114,11 +110,7 @@ struct mem_cgroup_per_node {
 	struct lruvec		lruvec;
 	struct lruvec_stat __percpu *lruvec_stat;
 	unsigned long		lru_zone_size[MAX_NR_ZONES][NR_LRU_LISTS];
-#ifdef CONFIG_HUAWEI_PROMM
-	struct mem_cgroup_reclaim_iter	iter[PROMM_PRIORITY_MAX + 1];
-#else
 	struct mem_cgroup_reclaim_iter	iter[DEF_PRIORITY + 1];
-#endif
 
 	struct rb_node		tree_node;	/* RB tree node */
 	unsigned long		usage_in_excess;/* Set to the value by which */

@@ -839,10 +839,6 @@ config SPECULATIVE_PAGE_FAULT
 	 allocating, it is failing its processing and a classic page fault
 	 is then tried.
 
-config HUAWEI_PROMM
-	bool "Enable Fine Reclaim"
-	default n
-
 config ISOLATE_COUNT
 	bool "count isolate pages"
 	default n
