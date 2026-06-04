@@ -801,12 +801,6 @@ config HISI_PAGECACHE_DEBUG
 	Select this if you want to optimize your Android system.
 	If unsure, say N.
 
-config HISI_EARLY_RODATA_PROTECTION
-	bool "Write protect const data as early as possible in the boot sequence"
-	default y
-	help
-	  The really constant data doesn't need to wait for completing init, to be protected.
-
 source "mm/hisi/Kconfig"
 
 config PROCESS_RECLAIM
