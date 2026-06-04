@@ -200,12 +200,7 @@ atomic_long_t shrink_file_nums;
  * Kswapd swappiness, from 0 - 200.  Higher means more swappy.
  */
 int vm_swappiness = 60;
-#ifdef CONFIG_HISI_DIRECT_SWAPPINESS
-/*
- * Direct reclaim swappiness, exptct 0 - 60. Higher means more swappy and slower.
- */
-int direct_vm_swappiness = 60;
-#endif
+
 /*
  * The total number of pages which are beyond the high watermark within all
  * zones.
@@ -2499,11 +2494,6 @@ static void get_scan_count(struct lruvec *lruvec, struct mem_cgroup *memcg,
 	enum lru_list lru;
 #ifdef CONFIG_HUAWEI_PROMM
 	fine_reclaim = 0;
-#endif
-
-#ifdef CONFIG_HISI_DIRECT_SWAPPINESS
-	if (!current_is_kswapd())
-		swappiness = direct_vm_swappiness;
 #endif
 
 	/* If we have no swap space, do not bother scanning anon pages. */

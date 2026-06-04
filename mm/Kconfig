@@ -772,14 +772,6 @@ config PERCPU_STATS
 	  information includes global and per chunk statistics, which can
 	  be used to help understand percpu memory usage.
 
-config HISI_DIRECT_SWAPPINESS
-	bool "Allow to adjust direct reclaim swappiness"
-	depends on SWAP && PROC_FS
-	default n
-	help
-	  Used to adjust direct reclaim cmpress priority by /proc/sys/vm/direct_swappiness.
-	  only 0 to 60 is valid. If unsure, say N to use it's original value(60).
-
 config HISI_PAGECACHE_HELPER
 	tristate "KIRIN page cache helper module"
 	default n
