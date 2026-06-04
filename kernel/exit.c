@@ -922,9 +922,6 @@ void __noreturn do_exit(long code)
 
 	lockdep_free_task(tsk);
 
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	exit_proc_reclaim(tsk);
-#endif
 	do_task_dead();
 }
 EXPORT_SYMBOL_GPL(do_exit);

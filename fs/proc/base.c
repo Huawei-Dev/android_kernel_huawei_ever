@@ -106,7 +106,7 @@
 
 #include "../../lib/kstrtox.h"
 
-#if defined(CONFIG_HW_VIP_THREAD) || defined(CONFIG_HISI_SWAP_ZDATA)
+#if defined(CONFIG_HW_VIP_THREAD)
 #define GLOBAL_SYSTEM_UID KUIDT_INIT(1000)
 #define GLOBAL_SYSTEM_GID KGIDT_INIT(1000)
 #endif
@@ -2072,7 +2072,7 @@ int pid_getattr(const struct path *path, struct kstat *stat,
 	return 0;
 }
 
-#if defined(CONFIG_HW_VIP_THREAD) || defined(CONFIG_HISI_SWAP_ZDATA) || defined(CONFIG_HW_RTG_SCHED)
+#if defined(CONFIG_HW_VIP_THREAD) || defined(CONFIG_HW_RTG_SCHED)
 bool is_special_entry(struct dentry *dentry, const char* special_proc)
 {
 	const unsigned char *name;
@@ -2111,20 +2111,6 @@ int pid_revalidate(struct dentry *dentry, unsigned int flags)
 
 	if (task) {
 		task_dump_owner(task, inode->i_mode, &inode->i_uid, &inode->i_gid);
-#ifdef CONFIG_HISI_SWAP_ZDATA
-		if (inode->i_mode == (S_IFDIR|S_IRUGO|S_IXUGO) &&
-		    !(task->flags & PF_KTHREAD)) {
-			const struct cred *cred  = NULL;
-
-			rcu_read_lock();
-			cred = __task_cred(task);
-			if (cred && (cred->egid.val != 0) &&
-			    is_special_entry(dentry, "reclaim_result"))
-				inode->i_gid  = GLOBAL_SYSTEM_GID;
-			rcu_read_unlock();
-		}
-#endif
-
 #ifdef CONFIG_HW_VIP_THREAD
 		if (is_special_entry(dentry, "static_vip")) {
 			inode->i_uid = GLOBAL_SYSTEM_UID;
@@ -3279,10 +3265,6 @@ static const struct pid_entry tgid_base_stuff[] = {
 	REG("mountstats", S_IRUSR, proc_mountstats_operations),
 #ifdef CONFIG_PROCESS_RECLAIM
 	REG("reclaim", S_IWUSR, proc_reclaim_operations),
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	ONE("reclaim_result", S_IRUSR|S_IRGRP, process_reclaim_result_read),
-#endif
-
 #endif
 #ifdef CONFIG_PROC_PAGE_MONITOR
 	REG("clear_refs", S_IWUSR, proc_clear_refs_operations),

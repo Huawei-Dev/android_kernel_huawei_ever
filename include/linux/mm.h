@@ -2810,10 +2810,6 @@ struct reclaim_param {
 	int nr_to_reclaim;
 	/* pages reclaimed */
 	int nr_reclaimed;
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	unsigned nr_writedblock;
-	bool hiber;
-#endif
 	bool inactive_lru;
 };
 extern struct reclaim_param reclaim_task_anon(struct task_struct *task,

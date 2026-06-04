@@ -811,16 +811,6 @@ config PROCESS_RECLAIM
 
 	 Any other vaule is ignored.
 
-config HISI_SWAP_ZDATA
-	bool "Compressed data to swap"
-	depends on SWAP
-	depends on PROCESS_RECLAIM
-	default n
-	help
-	  Save compressed data to swap page.
-
-	  If unsure, say Y to enable swap_zdata.
-
 config SPECULATIVE_PAGE_FAULT
 	bool "Speculative page faults"
 	default n

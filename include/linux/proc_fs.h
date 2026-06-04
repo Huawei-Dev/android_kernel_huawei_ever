@@ -44,10 +44,6 @@ extern void sched_hwstatus_qos_enqueue(struct task_struct *task, int qos_type);
 extern void sched_hwstatus_qos_dequeue(struct task_struct *task, int qos_type);
 #endif
 
-#ifdef CONFIG_HISI_SWAP_ZDATA
-extern void exit_proc_reclaim(struct task_struct *tsk);
-#endif
-
 #else /* CONFIG_PROC_FS */
 
 static inline void proc_root_init(void)

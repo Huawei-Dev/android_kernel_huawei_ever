@@ -104,10 +104,6 @@ struct writeback_control {
 	size_t wb_lcand_bytes;		/* bytes written by last candidate */
 	size_t wb_tcand_bytes;		/* bytes written by this candidate */
 #endif
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	bool ishibernation_rec;
-	unsigned nr_writedblock;  /*the number of blocks that was writebacked*/
-#endif
 };
 
 static inline int wbc_to_write_flags(struct writeback_control *wbc)

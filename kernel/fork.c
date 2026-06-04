@@ -1803,9 +1803,6 @@ static __latent_entropy struct task_struct *copy_process(
 	p->sequential_io	= 0;
 	p->sequential_io_avg	= 0;
 #endif
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	p->proc_reclaimed_result = NULL;
-#endif
 
 #ifdef CONFIG_HW_VIP_THREAD
 	init_task_vip_info(p);

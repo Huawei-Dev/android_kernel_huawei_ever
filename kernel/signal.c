@@ -3770,14 +3770,6 @@ void __init signals_init(void)
 	sigqueue_cachep = KMEM_CACHE(sigqueue, SLAB_PANIC);
 }
 
-#ifdef CONFIG_HISI_SWAP_ZDATA
-int reclaim_sigusr_pending(struct task_struct *tsk)
-{
-	return sigismember(&tsk->pending.signal, SIGUSR2) ||
-		sigismember(&tsk->signal->shared_pending.signal, SIGUSR2);
-}
-#endif
-
 #ifdef CONFIG_KGDB_KDB
 #include <linux/kdb.h>
 /*

@@ -25,9 +25,6 @@
 #include <asm/tlb.h>
 #include <asm/tlbflush.h>
 #include "internal.h"
-#ifdef CONFIG_HISI_SWAP_ZDATA
-#include <linux/signal.h>
-#endif
 
 extern int do_swap_page(struct vm_fault *vmf);
 
@@ -1798,10 +1795,6 @@ static int reclaim_pte_range(pmd_t *pmd, unsigned long addr,
 	if (pmd_trans_unstable(pmd) || !rp->nr_to_reclaim)
 		return 0;
 cont:
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	if (process_reclaim_need_abort(walk))
-		return -EINTR;
-#endif
 	isolated = 0;
 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
 	for (; addr != end; pte++, addr += PAGE_SIZE) {
@@ -1851,12 +1844,7 @@ cont:
 	}
 	pte_unmap_unlock(pte - 1, ptl);
 
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	reclaimed = (int)reclaim_pages_from_list(&page_list, vma,
-				rp->hiber, &rp->nr_writedblock);
-#else
 	reclaimed = reclaim_pages_from_list(&page_list, vma);
-#endif
 	rp->nr_reclaimed += reclaimed;
 	rp->nr_to_reclaim -= reclaimed;
 	if (rp->nr_to_reclaim < 0)
@@ -1937,13 +1925,6 @@ static ssize_t reclaim_write(struct file *file, const char __user *buf,
 	unsigned long start = 0;
 	unsigned long end = 0;
 	struct reclaim_param rp;
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	int walk_ret;
-	struct timeval start_time = {0,0};
-	struct timeval stop_time;
-	s64 elapsed_centisecs64;
-	rp.hiber = false;
-#endif
 
 	memset(buffer, 0, sizeof(buffer));
 	if (count > sizeof(buffer) - 1)
@@ -1965,18 +1946,6 @@ static ssize_t reclaim_write(struct file *file, const char __user *buf,
 		type = RECLAIM_ALL;
 	else if (!strcmp(type_buf, "swapin"))
 		type = RECLAIM_SWAPIN;
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	else if (!strcmp(type_buf, "hiber")) {
-		type = RECLAIM_ALL;
-		rp.hiber = true;
-	} else if (!strcmp(type_buf, "hiber_anon")) {
-		type = RECLAIM_ANON;
-		rp.hiber = true;
-	} else if (!strcmp(type_buf, "hiber_file")) {
-		type = RECLAIM_FILE;
-		rp.hiber = true;
-	}
-#endif
 	else if (isdigit(*type_buf))
 		type = RECLAIM_RANGE;
 	else
@@ -2038,11 +2007,6 @@ static ssize_t reclaim_write(struct file *file, const char __user *buf,
 	rp.nr_to_reclaim = INT_MAX;
 	rp.nr_reclaimed = 0;
 	reclaim_walk.private = &rp;
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	rp.nr_writedblock = 0;
-	if (rp.hiber)
-		do_gettimeofday(&start_time);
-#endif
 
 	down_read(&mm->mmap_sem);
 	if (type == RECLAIM_RANGE) {
@@ -2079,31 +2043,14 @@ static ssize_t reclaim_write(struct file *file, const char __user *buf,
 				continue;
 
 			rp.vma = vma;
-#ifdef CONFIG_HISI_SWAP_ZDATA
-			walk_ret = walk_page_range(vma->vm_start, vma->vm_end,
-				&reclaim_walk);
-			if ((walk_ret == -EINTR) && rp.hiber)
-				break;
-#else
 			walk_page_range(vma->vm_start, vma->vm_end,
 				&reclaim_walk);
-#endif
 		}
 	}
 
 	flush_tlb_mm(mm);
 	up_read(&mm->mmap_sem);
 	mmput(mm);
-#ifdef CONFIG_HISI_SWAP_ZDATA
-	if (rp.hiber) {
-		do_gettimeofday(&stop_time);
-		elapsed_centisecs64 = timeval_to_ns(&stop_time) -
-					timeval_to_ns(&start_time);
-
-		process_reclaim_result_write(task, (unsigned)rp.nr_reclaimed,
-			rp.nr_writedblock, elapsed_centisecs64);
-	}
-#endif
 out:
 	put_task_struct(task);
 	return count;
