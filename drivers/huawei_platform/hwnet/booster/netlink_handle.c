@@ -34,10 +34,6 @@
 
 #include <hwnet/booster/tcp_para_collec.h>
 
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-#include <hwnet/booster/hw_packet_filter_bypass.h>
-#endif
-
 #undef HWLOG_TAG
 #define HWLOG_TAG monitor_handle
 HWLOG_REGIST();
@@ -334,16 +330,6 @@ static int __init netlink_handle_module_init(void)
 		return -1;
 	}
 	g_ctx.model_cb[IP_PARA_COLLEC] = fn;
-#endif
-
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-	/* init the packet filter bypass module */
-	fn = hw_packet_filter_bypass_init(nl_notify_event);
-	if (fn == NULL) {
-		hwlog_err("%s:init packet filter bypass failed\n", __func__);
-		return -1;
-	}
-	g_ctx.model_cb[PACKET_FILTER_BYPASS] = fn;
 #endif
 
 	fn = tcp_para_collec_init(nl_notify_event);

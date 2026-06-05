@@ -81,10 +81,6 @@
 #include <linux/netlink.h>
 #include <linux/tcp.h>
 
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-#include <hwnet/booster/hw_packet_filter_bypass.h>
-#endif
-
 #ifdef CONFIG_HW_BOOSTER
 #include <hwnet/booster/tcp_para_collec.h>
 #endif
@@ -316,11 +312,6 @@ static int ip_finish_output(struct net *net, struct sock *sk, struct sk_buff *sk
 	int ret;
 
 	ret = BPF_CGROUP_RUN_PROG_INET_EGRESS(sk, skb);
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-	if (skb_dst(skb) && hw_bypass_skb(AF_INET, HW_PFB_INET_BPF_EGRESS, sk, skb,
-			NULL, skb_dst(skb)->dev, ret ? DROP : PASS))
-		ret = 0;
-#endif
 	if (ret) {
 		kfree_skb(skb);
 		return ret;
@@ -360,11 +351,6 @@ static int ip_mc_finish_output(struct net *net, struct sock *sk,
 	int ret;
 
 	ret = BPF_CGROUP_RUN_PROG_INET_EGRESS(sk, skb);
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-	if (skb_dst(skb) && hw_bypass_skb(AF_INET, HW_PFB_INET_BPF_EGRESS, sk, skb,
-			NULL, skb_dst(skb)->dev, ret ? DROP : PASS))
-		ret = 0;
-#endif
 	if (ret) {
 		kfree_skb(skb);
 		return ret;
@@ -556,12 +542,6 @@ packet_routed:
 	/* TODO : should we use skb->sk here instead of sk ? */
 	skb->priority = sk->sk_priority;
 	skb->mark = sk->sk_mark;
-
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-	if (skb_dst(skb))
-		hw_bypass_skb(AF_INET, HW_PFB_INET_IP_XMIT, sk, skb, NULL,
-			skb_dst(skb)->dev, PASS);
-#endif
 
 	res = ip_local_out(net, sk, skb);
 	rcu_read_unlock();

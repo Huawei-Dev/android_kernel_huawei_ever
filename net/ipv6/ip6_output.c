@@ -58,9 +58,6 @@
 #include <linux/mroute6.h>
 #include <net/l3mdev.h>
 #include <net/lwtunnel.h>
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-#include <hwnet/booster/hw_packet_filter_bypass.h>
-#endif
 
 #ifdef CONFIG_HW_BOOSTER
 #include <hwnet/booster/tcp_para_collec.h>
@@ -140,11 +137,6 @@ static int ip6_finish_output(struct net *net, struct sock *sk, struct sk_buff *s
 	int ret;
 
 	ret = BPF_CGROUP_RUN_PROG_INET_EGRESS(sk, skb);
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-	if (skb_dst(skb) && hw_bypass_skb(AF_INET6, HW_PFB_INET6_BPF_EGRESS, sk,
-			skb, NULL, skb_dst(skb)->dev, ret ? DROP : PASS))
-		ret = 0;
-#endif
 	if (ret) {
 		kfree_skb(skb);
 		return ret;
@@ -279,10 +271,6 @@ int ip6_xmit(const struct sock *sk, struct sk_buff *skb, struct flowi6 *fl6,
 	if ((skb->len <= mtu) || skb->ignore_df || skb_is_gso(skb)) {
 		IP6_UPD_PO_STATS(net, ip6_dst_idev(skb_dst(skb)),
 			      IPSTATS_MIB_OUT, skb->len);
-#ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-		hw_bypass_skb(AF_INET6, HW_PFB_INET6_IP_XMIT, sk, skb, NULL,
-			dst->dev, PASS);
-#endif
 
 		/* if egress device is enslaved to an L3 master device pass the
 		 * skb to its handler for processing

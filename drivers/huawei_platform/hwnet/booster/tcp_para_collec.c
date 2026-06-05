@@ -33,8 +33,6 @@ void booster_update_tcp_statistics(u_int8_t af, struct sk_buff *skb,
 
 	if (skb == NULL)
 		return;
-	if (!is_ds_rnic(out) && !is_ds_rnic(in))
-		return;
 	if (af == AF_INET6)
 		proto = ipv6_find_hdr(skb, &thoff, -1, NULL, NULL);
 	else if (af == AF_INET)
