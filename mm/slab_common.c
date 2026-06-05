@@ -287,11 +287,6 @@ int slab_unmergeable(struct kmem_cache *s)
 	if (s->refcount < 0)
 		return 1;
 
-#ifdef CONFIG_HISI_PAGE_TRACE
-	if (s->flags & SLAB_HISI_NOTRACE)
-		return 1;
-#endif
-
 	return 0;
 }
 
@@ -314,10 +309,6 @@ struct kmem_cache *find_mergeable(size_t size, size_t align,
 	if (flags & SLAB_NEVER_MERGE)
 		return NULL;
 
-#ifdef CONFIG_HISI_PAGE_TRACE
-	if (flags & SLAB_HISI_NOTRACE)
-		return NULL;
-#endif
 	list_for_each_entry_reverse(s, &slab_root_caches, root_caches_node) {
 		if (slab_unmergeable(s))
 			continue;

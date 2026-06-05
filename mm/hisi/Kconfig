@@ -29,14 +29,3 @@ config DEBUG_HISI_PMALLOC
 	depends on HISI_PMALLOC && HISI_HHEE_DEBUG
 	help
 	Various entries are listed under /sys/kernel/debug/pmalloc
-
-config HISI_PAGE_TRACE
-	bool "HISI page trace"
-	---help---
-	  This option enables hisi page trace, needed by memleak check modules.
-
-config HISI_PAGE_TRACE_TEST
-	bool "HISI page trace test"
-	depends on HISI_PAGE_TRACE
-	---help---
-	  This option enables hisi page trace test, needed by hisi page trace modules.

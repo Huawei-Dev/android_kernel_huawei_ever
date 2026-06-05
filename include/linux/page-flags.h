@@ -116,14 +116,6 @@ enum pageflags {
 #ifdef CONFIG_HISI_LB
 	PG_lb,
 #endif
-#ifdef CONFIG_HISI_PAGE_TRACE
-	PG_lslub,
-	PG_vmalloc,
-	PG_skb,
-	PG_ion,
-	PG_zspage,
-	PG_drv,
-#endif
 #ifdef CONFIG_ZRAM_NON_COMPRESS
 	PG_non_compress,
 #endif
@@ -409,14 +401,6 @@ PAGEFLAG(Idle, idle, PF_ANY)
 PAGEFLAG(LB, lb, PF_ANY)
 #endif
 
-#ifdef CONFIG_HISI_PAGE_TRACE
-PAGEFLAG(Lslub, lslub, PF_ANY)
-PAGEFLAG(Vmalloc, vmalloc, PF_ANY)
-PAGEFLAG(ION, ion, PF_ANY)
-PAGEFLAG(SKB, skb, PF_ANY)
-PAGEFLAG(Zspage, zspage, PF_ANY)
-PAGEFLAG(Drv, drv, PF_ANY)
-#endif
 /*
  * On an anonymous page mapped into a user virtual memory area,
  * page->mapping points to its anon_vma, not to a struct address_space;
