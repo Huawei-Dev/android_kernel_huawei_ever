@@ -59,10 +59,6 @@
 #include <hwnet/ipv4/wifi_delayst.h>
 #endif
 
-#ifdef CONFIG_HW_HIDATA_HIMOS
-#include <huawei_platform/net/himos/hw_himos_udp_stats.h>
-#endif
-
 static bool udp6_lib_exact_dif_match(struct net *net, struct sk_buff *skb)
 {
 #if defined(CONFIG_NET_L3_MASTER_DEV)
@@ -433,9 +429,6 @@ try_again:
 		else
 			UDP6_INC_STATS(sock_net(sk), UDP_MIB_INDATAGRAMS,
 				       is_udplite);
-#ifdef CONFIG_HW_HIDATA_HIMOS
-		himos_udp_stats(sk, ulen, 0);
-#endif
 	}
 
 	sock_recv_ts_and_drops(msg, sk, skb);
@@ -624,9 +617,6 @@ static int udpv6_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
 		encap_rcv = ACCESS_ONCE(up->encap_rcv);
 		if (encap_rcv) {
 			int ret;
-#ifdef CONFIG_HW_HIDATA_HIMOS
-			int len = skb->len;
-#endif
 			/* Verify checksum before giving to encap */
 			if (udp_lib_checksum_complete(skb))
 				goto csum_error;
@@ -636,9 +626,6 @@ static int udpv6_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
 				__UDP_INC_STATS(sock_net(sk),
 						UDP_MIB_INDATAGRAMS,
 						is_udplite);
-#ifdef CONFIG_HW_HIDATA_HIMOS
-				himos_udp_stats(sk, len, 0);
-#endif
 				return -ret;
 			}
 		}
@@ -1070,9 +1057,7 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6)
 	__wsum csum = 0;
 	int offset = skb_transport_offset(skb);
 	int len = skb->len - offset;
-#ifdef CONFIG_HW_HIDATA_HIMOS
-	int skb_len = skb->len;
-#endif
+
 	/*
 	 * Create a UDP header
 	 */
@@ -1110,9 +1095,6 @@ send:
 	} else {
 		UDP6_INC_STATS(sock_net(sk),
 			       UDP_MIB_OUTDATAGRAMS, is_udplite);
-#ifdef CONFIG_HW_HIDATA_HIMOS
-		himos_udp_stats(sk, 0, skb_len);
-#endif
 	}
 	return err;
 }

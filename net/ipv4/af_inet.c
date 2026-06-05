@@ -140,10 +140,6 @@ static inline int current_has_network(void)
 #include <hwnet/hw_dpi_mark/dpi_hw_hook.h>
 #endif
 
-#ifdef CONFIG_HW_HIDATA_HIMOS
-#include <huawei_platform/net/himos/hw_himos_tcp_stats.h>
-#endif
-
 int sysctl_local_reserved_ports_bind_ctrl __read_mostly = 1;
 int sysctl_local_reserved_ports_bind_pid  __read_mostly = 0;
 
@@ -817,10 +813,6 @@ int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
 			return err;
 	}
 #endif
-#ifdef CONFIG_HW_HIDATA_HIMOS
-	if (sk->sk_protocol == IPPROTO_TCP)
-		himos_tcp_stats(sk, NULL, msg, 0, 1);
-#endif
 	return sk->sk_prot->sendmsg(sk, msg, size);
 }
 EXPORT_SYMBOL(inet_sendmsg);
@@ -852,12 +844,6 @@ int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
 #ifdef CONFIG_HW_DPIMARK_MODULE
 	int ret;
 #endif
-#ifdef CONFIG_HW_HIDATA_HIMOS
-		struct msghdr msg_backup;
-		if (msg)
-			msg_backup = *msg;
-#endif
-
 	sock_rps_record_flow(sk);
 
 	err = sk->sk_prot->recvmsg(sk, msg, size, flags & MSG_DONTWAIT,
@@ -869,11 +855,6 @@ int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
 		ret = mplk_recvmsg(sk);
 		if (ret < 0)
 			return ret;
-	}
-#endif
-#ifdef CONFIG_HW_HIDATA_HIMOS
-	if (err > 0 && sk->sk_protocol == IPPROTO_TCP) {
-		himos_tcp_stats(sk, &msg_backup, msg, err, 0);
 	}
 #endif
 	return err;
