@@ -136,10 +136,6 @@ static inline int current_has_network(void)
 }
 #endif
 
-#ifdef CONFIG_HW_DPIMARK_MODULE
-#include <hwnet/hw_dpi_mark/dpi_hw_hook.h>
-#endif
-
 int sysctl_local_reserved_ports_bind_ctrl __read_mostly = 1;
 int sysctl_local_reserved_ports_bind_pid  __read_mostly = 0;
 
@@ -419,11 +415,6 @@ out:
 #ifdef CONFIG_CGROUP_BPF
 	if (!err)
 		get_task_comm(sk->sk_process_name, current->group_leader);
-#endif
-
-#ifdef CONFIG_HW_DPIMARK_MODULE
-	if (!err)
-		mplk_try_nw_bind(sk);
 #endif
 
 	return err;
@@ -796,9 +787,6 @@ EXPORT_SYMBOL(inet_getname);
 int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
 {
 	struct sock *sk = sock->sk;
-#ifdef CONFIG_HW_DPIMARK_MODULE
-	int err;
-#endif
 
 	sock_rps_record_flow(sk);
 
@@ -806,13 +794,6 @@ int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
 	if (!inet_sk(sk)->inet_num && !sk->sk_prot->no_autobind &&
 	    inet_autobind(sk))
 		return -EAGAIN;
-#ifdef CONFIG_HW_DPIMARK_MODULE
-	if (sk->sk_protocol == IPPROTO_UDP || sk->sk_protocol == IPPROTO_UDPLITE) {
-		err = mplk_sendmsg(sk);
-		if (err < 0)
-			return err;
-	}
-#endif
 	return sk->sk_prot->sendmsg(sk, msg, size);
 }
 EXPORT_SYMBOL(inet_sendmsg);
@@ -841,22 +822,13 @@ int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
 	struct sock *sk = sock->sk;
 	int addr_len = 0;
 	int err;
-#ifdef CONFIG_HW_DPIMARK_MODULE
-	int ret;
-#endif
+
 	sock_rps_record_flow(sk);
 
 	err = sk->sk_prot->recvmsg(sk, msg, size, flags & MSG_DONTWAIT,
 				   flags & ~MSG_DONTWAIT, &addr_len);
 	if (err >= 0)
 		msg->msg_namelen = addr_len;
-#ifdef CONFIG_HW_DPIMARK_MODULE
-	if (sk->sk_protocol == IPPROTO_UDP || sk->sk_protocol == IPPROTO_UDPLITE) {
-		ret = mplk_recvmsg(sk);
-		if (ret < 0)
-			return ret;
-	}
-#endif
 	return err;
 }
 EXPORT_SYMBOL(inet_recvmsg);

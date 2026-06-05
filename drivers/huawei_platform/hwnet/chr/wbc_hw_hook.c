@@ -34,9 +34,6 @@
 
 #include <hwnet/chr/wbc_hw_hook.h>
 #include "chr_netlink.h"
-#ifndef CONFIG_CHR_MTK_NETLINK
-#include "net/netbooster/video_acceleration.h"
-#endif
 
 #ifndef DEBUG
 #define DEBUG
@@ -1029,9 +1026,6 @@ void tcp_sock_win_report(struct tcphdr *th, struct sock *sk)
 	rtn_stat_sock[WLAN_INTERFACE].free_space = tcp_space(sk);
 	rtn_stat_sock[WLAN_INTERFACE].mime_type = sk->mime_type;
 	rtn_stat_sock[WLAN_INTERFACE].tcp_srtt = sock->srtt_us;
-#ifdef CONFIG_HW_DPIMARK_MODULE
-	rtn_stat_sock[WLAN_INTERFACE].sock_dura = jiffies - sk->sk_born_stamp;
-#endif
 
 	pr_info("chr_notify_event: %d, %d, %d, %d, %d, %d, %d\n",
 		rtn_stat_sock[WLAN_INTERFACE].sock_uid,
