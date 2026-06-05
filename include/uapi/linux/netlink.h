@@ -72,17 +72,13 @@
 #define NETLINK_RIL_EVENT_SIM  35
 #endif
 
-#ifdef CONFIG_HW_NETBOOSTER_MODULE
-#define NETLINK_NETBOOSTER  36
-#endif
-
 #ifdef CONFIG_HISI_CAMERA_VL53L0_970
-#define NETLINK_ST_LASER_DRIVER 37
+#define NETLINK_ST_LASER_DRIVER 36
 #endif
 
-#define NETLINK_OLLIE 38
+#define NETLINK_OLLIE 37
 
-#define MAX_LINKS 39
+#define MAX_LINKS 38
 
 struct sockaddr_nl {
 	__kernel_sa_family_t	nl_family;	/* AF_NETLINK	*/

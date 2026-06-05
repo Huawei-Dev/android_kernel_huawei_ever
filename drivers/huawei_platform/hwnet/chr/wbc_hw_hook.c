@@ -123,10 +123,6 @@ static uid_t get_uid_from_sock(struct sock *sk);
 static uid_t get_des_addr_from_sock(struct sock *sk);
 static u32 http_response_code(char *pstr);
 static void web_delay_rtt_flag_reset(void);
-#ifdef CONFIG_HW_NETBOOSTER_MODULE
-static void video_chr_stat_report(void);
-extern int chr_video_stat(struct video_chr_para *report);
-#endif
 
 /*us convert to ms*/
 u32 us_cvt_to_ms(u32 seq_rtt_us)
@@ -415,9 +411,6 @@ static void web_stat_timer(unsigned long data)
 		rtn_stat[RMNET_INTERFACE + IPV6_INTERFACE].data_reg_tech =
 			get_data_reg_type_chr_enum(data_reg_tech);
 		spin_unlock_bh(&g_web_stat_lock);
-#ifdef CONFIG_HW_NETBOOSTER_MODULE
-		video_chr_stat_report();
-#endif
 		chr_notify_event(CHR_WEB_STAT_EVENT,
 			g_user_space_pid, 0, rtn_stat);
 		/* notify the IPv6 event */
@@ -1742,19 +1735,4 @@ static void save_app_tcp_rtt(u32 uid, u32 tcp_rtt,u8 interface_type)
 	}
 }
 
-#ifdef CONFIG_HW_NETBOOSTER_MODULE
-static void video_chr_stat_report(void)
-{
-	struct video_chr_para video_chr = {0};
-
-	chr_video_stat(&video_chr);
-	rtn_stat[RMNET_INTERFACE].vod_avg_speed = video_chr.vod_avg_speed;
-	rtn_stat[RMNET_INTERFACE].vod_freez_num = video_chr.vod_freez_num;
-	rtn_stat[RMNET_INTERFACE].vod_time = video_chr.vod_time;
-	rtn_stat[RMNET_INTERFACE].uvod_avg_speed = video_chr.uvod_avg_speed;
-	rtn_stat[RMNET_INTERFACE].uvod_freez_num = video_chr.uvod_freez_num;
-	rtn_stat[RMNET_INTERFACE].uvod_time = video_chr.uvod_time;
-	return;
-}
-#endif
 #undef DEBUG
