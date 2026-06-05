@@ -166,17 +166,6 @@ config HISI_BLK
 	help
 		HISI Block feature
 
-choice
-    prompt "Select hisi IO classify method"
-    depends on HISI_BLK
-
-config HISI_IO_CLASSIFY_FG
-     bool "use iaware FG classification"
-config HISI_IO_CLASSIFY_SCHED_TUNE
-     bool "use AI sched tune"
-     depends on SCHED_TUNE
-endchoice
-
 config HISI_BKOPS
 	bool "HISI BKOPS"
 	depends on HISI_BLK
