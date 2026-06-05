@@ -105,5 +105,3 @@ obj-$(CONFIG_HARDENED_USERCOPY) += usercopy.o
 obj-$(CONFIG_PERCPU_STATS) += percpu-stats.o
 obj-$(CONFIG_HMM) += hmm.o
 obj-$(CONFIG_HISI_MM) += hisi/
-obj-$(CONFIG_HISI_PAGECACHE_HELPER) += pagecache_manage.o pagecache_manage_interface.o
-obj-$(CONFIG_HISI_PAGECACHE_DEBUG) += pagecache_debug.o

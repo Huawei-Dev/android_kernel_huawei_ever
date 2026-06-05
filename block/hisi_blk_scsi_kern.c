@@ -260,3 +260,8 @@ long blk_scsi_kern_ioctl(unsigned int fd, unsigned int cmd, unsigned long arg)
 	fput(pfile);
 	return ret;
 }
+
+int pch_lowmem_check2(void)
+{
+	return 0;
+}

@@ -67,19 +67,6 @@ static inline unsigned long ra_submit(struct file_ra_state *ra,
 					ra->start, ra->size, ra->async_size);
 }
 
-#ifdef CONFIG_HISI_PAGECACHE_HELPER
-unsigned long pch_shrink_read_pages(unsigned long nr);
-unsigned long pch_shrink_mmap_pages(unsigned long nr);
-unsigned long pch_shrink_mmap_async_pages(unsigned long nr);
-void pch_mmap_readextend(struct vm_area_struct *vma,
-                                   struct file_ra_state *ra,
-                                   struct file *file,
-                                   pgoff_t offset);
-extern void pch_read_around(struct file_ra_state *ra,
-                                  struct address_space *mapping,
-                                  struct file *file,
-                                  pgoff_t offset);
-#else
 static inline unsigned long pch_shrink_read_pages(unsigned long nr)
 {
         return nr;
@@ -103,8 +90,6 @@ static inline void pch_mmap_readextend(struct vm_area_struct *vma,
 static inline void pch_read_around(struct file_ra_state *ra,
                                   struct address_space *mapping,
                                   struct file *file, pgoff_t offset) {}
-#endif
-
 
 /*
  * Turn a non-refcounted page (->_refcount == 0) into refcounted with

@@ -772,25 +772,4 @@ config PERCPU_STATS
 	  information includes global and per chunk statistics, which can
 	  be used to help understand percpu memory usage.
 
-config HISI_PAGECACHE_HELPER
-	tristate "KIRIN page cache helper module"
-	default n
-
-	---help---
-	This selects the Kirin page cache helper module.
-
-	Select this if you want to optimize your Android system.
-	If unsure, say N.
-
-config HISI_PAGECACHE_DEBUG
-	tristate "KIRIN page cache trace module"
-	default n
-	depends on HISI_DEBUG_FS
-
-	---help---
-	This selects the Kirin page cache trace module.
-
-	Select this if you want to optimize your Android system.
-	If unsure, say N.
-
 source "mm/hisi/Kconfig"

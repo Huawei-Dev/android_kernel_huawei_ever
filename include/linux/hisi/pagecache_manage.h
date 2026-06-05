@@ -54,14 +54,7 @@
 #define PCH_IOCTL_CMD_Z 	(0)
 #define PCH_IOCTL_CMD_O 	(1)
 
-#ifdef CONFIG_HISI_PAGECACHE_HELPER
-void mount_fs_register_pch(struct vfsmount *mnt);
-void umounting_fs_register_pch(struct super_block *sb);
-void umounted_fs_register_pch(struct super_block *sb);
-#else
 static inline void mount_fs_register_pch(struct vfsmount *mnt) {}
 static inline void umounting_fs_register_pch(struct super_block *sb) {}
 static inline void umounted_fs_register_pch(struct super_block *sb) {}
-#endif
-
 #endif
