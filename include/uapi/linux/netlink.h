@@ -80,13 +80,9 @@
 #define NETLINK_ST_LASER_DRIVER 37
 #endif
 
-#ifdef CONFIG_HW_DC_MODULE
-#define NETLINK_HW_DC 38
-#endif
+#define NETLINK_OLLIE 38
 
-#define NETLINK_OLLIE 39
-
-#define MAX_LINKS 40
+#define MAX_LINKS 39
 
 struct sockaddr_nl {
 	__kernel_sa_family_t	nl_family;	/* AF_NETLINK	*/
