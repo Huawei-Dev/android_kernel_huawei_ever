@@ -107,4 +107,3 @@ obj-$(CONFIG_HMM) += hmm.o
 obj-$(CONFIG_HISI_MM) += hisi/
 obj-$(CONFIG_HISI_PAGECACHE_HELPER) += pagecache_manage.o pagecache_manage_interface.o
 obj-$(CONFIG_HISI_PAGECACHE_DEBUG) += pagecache_debug.o
-obj-$(CONFIG_HISI_MM) += hisi/
