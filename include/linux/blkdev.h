@@ -2489,11 +2489,7 @@ extern void blk_queue_dump_register(
 	struct request_queue *q, lld_dump_status_fn func);
 extern void blk_mq_tagset_dump_register(
 	struct blk_mq_tag_set *tag_set, lld_dump_status_fn func);
-extern void blk_mq_tagset_tz_query_register(
-	struct blk_mq_tag_set *tag_set, lld_tz_query_fn func);
 extern int blk_lld_tz_query(struct block_device *bi_bdev, u8 *buf, u32 buf_len);
-extern void blk_mq_tagset_tz_ctrl_register(
-	struct blk_mq_tag_set *tag_set, lld_tz_ctrl_fn func);
 extern int blk_lld_tz_ctrl(
 	struct block_device *bi_bdev, int desc_id, uint8_t index);
 extern void blk_mq_tagset_latency_warning_set(
@@ -2544,17 +2540,9 @@ static inline void blk_mq_tagset_dump_register(
 	struct blk_mq_tag_set *tag_set, lld_dump_status_fn func)
 {
 }
-static void blk_mq_tagset_tz_query_register(
-	struct blk_mq_tag_set *tag_set, lld_tz_query_fn func)
-{
-}
 static int blk_lld_tz_query(struct block_device *bi_bdev, u8 *buf, u32 buf_len)
 {
 	return 0;
-}
-static void blk_mq_tagset_tz_ctrl_register(
-	struct blk_mq_tag_set *tag_set, lld_tz_ctrl_fn func)
-{
 }
 static int blk_lld_tz_ctrl(
 	struct block_device *bi_bdev, int desc_id, uint8_t index)
@@ -2659,6 +2647,14 @@ static inline void blk_lld_idle_notify(struct blk_dev_lld *lld)
 {
 }
 #endif /* CONFIG_HISI_BLK */
+static void blk_mq_tagset_tz_ctrl_register(
+	struct blk_mq_tag_set *tag_set, lld_tz_ctrl_fn func)
+{
+}
+static void blk_mq_tagset_tz_query_register(
+	struct blk_mq_tag_set *tag_set, lld_tz_query_fn func)
+{
+}
 #else /* CONFIG_BLOCK */
 
 struct block_device;

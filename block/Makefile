@@ -15,8 +15,7 @@ obj-$(CONFIG_HISI_BLK) += hisi-blk-core.o hisi-blk-dump.o hisi-blk-latency.o his
 					hisi-blk-busy-idle-interface.o hisi-blk-core-interface.o hisi-blk-dump-interface.o \
 					hisi-blk-flush-interface.o hisi-blk-latency-interface.o
 obj-$(CONFIG_HISI_BLK_DEBUG) += hisi-blk-ft.o
-obj-$(CONFIG_HISI_BKOPS) += hisi-bkops-core.o hisi-bkops-sysfs.o hisi-bkops-core-interface.o \
-					hisi-bkops-sysfs-interface.o
+
 obj-$(CONFIG_BOUNCE)		+= bounce.o
 obj-$(CONFIG_BLK_SCSI_REQUEST)	+= scsi_ioctl.o
 obj-$(CONFIG_BLK_DEV_BSG)	+= bsg.o
