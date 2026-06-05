@@ -19,7 +19,6 @@ config HW_SYN_LINEAR_RETRY
         default n
 
 source "drivers/huawei_platform/net/hw_netfilter/Kconfig"
-source "drivers/huawei_platform/net/commstat/Kconfig"
 source "drivers/huawei_platform/net/hw_dual_connection/Kconfig"
 source "drivers/huawei_platform/net/netbooster/Kconfig"
 source "drivers/huawei_platform/net/bastet/Kconfig"
