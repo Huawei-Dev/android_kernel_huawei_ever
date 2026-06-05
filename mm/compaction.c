@@ -854,12 +854,8 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
 
 		/* Successfully isolated */
 		del_page_from_lru_list(page, lruvec, page_lru(page));
-#ifdef CONFIG_ISOLATE_COUNT
-		inc_node_page_state(page, NR_ISOLATED_ANON);
-#else
 		inc_node_page_state(page,
 				NR_ISOLATED_ANON + page_is_file_cache(page));
-#endif
 
 isolate_success:
 		list_add(&page->lru, &cc->migratepages);

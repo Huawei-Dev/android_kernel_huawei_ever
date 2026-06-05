@@ -170,12 +170,6 @@ struct scan_control {
 
 static unsigned int enough_inactive_file = 1;
 
-#ifdef CONFIG_ISOLATE_COUNT
-atomic_long_t compact_file_nums;
-atomic_long_t p_reclaim_file_nums;
-atomic_long_t shrink_file_nums;
-#endif
-
 /*
  * Kswapd swappiness, from 0 - 200.  Higher means more swappy.
  */
@@ -1024,9 +1018,6 @@ static unsigned long shrink_page_list(struct list_head *page_list,
 	struct dentry *tmp_dentry = NULL;
 	struct dentry *cur_dentry = NULL;
 #endif
-#ifdef CONFIG_ISOLATE_COUNT
-	int file;
-#endif
 
 	cond_resched();
 
@@ -1440,16 +1431,8 @@ free_it:
 		 * NR_ISOLATED_ANON + x on freed pages in here.
 		 */
 		if (!pgdat) {
-#ifdef CONFIG_ISOLATE_COUNT
-			file = page_is_file_cache(page);
-			dec_node_page_state(page, NR_ISOLATED_ANON +
-					file);
-			if (file)
-				atomic_long_sub(1, &p_reclaim_file_nums);
-#else
 			dec_node_page_state(page, NR_ISOLATED_ANON +
 					page_is_file_cache(page));
-#endif
 		}
 		continue;
 
@@ -1530,9 +1513,7 @@ unsigned long reclaim_clean_pages_from_list(struct zone *zone,
 	ret = shrink_page_list(&clean_pages, zone->zone_pgdat, &sc,
 			TTU_IGNORE_ACCESS, NULL, true);
 	list_splice(&clean_pages, page_list);
-#ifndef CONFIG_ISOLATE_COUNT
 	mod_node_page_state(zone->zone_pgdat, NR_ISOLATED_FILE, -ret);
-#endif
 	return ret;
 }
 
@@ -1926,12 +1907,6 @@ shrink_inactive_list(unsigned long nr_to_scan, struct lruvec *lruvec,
 			return 0;
 
 		atomic64_inc(&shrink_msleep_count);
-#ifdef CONFIG_ISOLATE_COUNT
-		pr_info("compact isolate %ld, process reclaim %ld, shrink %ld\n",
-			atomic_long_read(&compact_file_nums),
-			atomic_long_read(&p_reclaim_file_nums),
-			atomic_long_read(&shrink_file_nums));
-#endif
 
 		/* We are about to die and free our memory. Return now. */
 		if (fatal_signal_pending(current))
@@ -1953,10 +1928,6 @@ shrink_inactive_list(unsigned long nr_to_scan, struct lruvec *lruvec,
 				     &nr_scanned, sc, isolate_mode, lru);
 
 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, nr_taken);
-#ifdef CONFIG_ISOLATE_COUNT
-	if (file)
-		atomic_long_add(nr_taken, &shrink_file_nums);
-#endif
 	reclaim_stat->recent_scanned[file] += nr_taken;
 
 	if (current_is_kswapd()) {
@@ -1995,10 +1966,6 @@ shrink_inactive_list(unsigned long nr_to_scan, struct lruvec *lruvec,
 	putback_inactive_pages(lruvec, &page_list);
 
 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken); /*lint !e501*/
-#ifdef CONFIG_ISOLATE_COUNT
-	if (file)
-		atomic_long_sub(nr_taken, &shrink_file_nums);
-#endif
 
 	spin_unlock_irq(&pgdat->lru_lock);
 
@@ -2182,10 +2149,6 @@ static void shrink_active_list(unsigned long nr_to_scan,
 				     &nr_scanned, sc, isolate_mode, lru);
 
 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, nr_taken);
-#ifdef CONFIG_ISOLATE_COUNT
-	if (file)
-		atomic_long_add(nr_taken, &shrink_file_nums);
-#endif
 	reclaim_stat->recent_scanned[file] += nr_taken;
 
 	__count_vm_events(PGREFILL, nr_scanned);
@@ -2249,10 +2212,6 @@ static void shrink_active_list(unsigned long nr_to_scan,
 	nr_activate = move_active_pages_to_lru(lruvec, &l_active, &l_hold, lru);
 	nr_deactivate = move_active_pages_to_lru(lruvec, &l_inactive, &l_hold, lru - LRU_ACTIVE);
 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken); /*lint !e501*/
-#ifdef CONFIG_ISOLATE_COUNT
-	if (file)
-		atomic_long_sub(nr_taken, &shrink_file_nums);
-#endif
 	spin_unlock_irq(&pgdat->lru_lock);
 
 	mem_cgroup_uncharge_list(&l_hold);

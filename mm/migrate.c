@@ -190,13 +190,8 @@ void putback_movable_pages(struct list_head *l)
 			unlock_page(page);
 			put_page(page);
 		} else {
-#ifdef CONFIG_ISOLATE_COUNT
-			mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON,
-					-hpage_nr_pages(page));
-#else
 			mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
 					page_is_file_cache(page), -hpage_nr_pages(page));
-#endif
 			putback_lru_page(page);
 		}
 	}
@@ -1215,13 +1210,8 @@ out:
 		 * as __PageMovable
 		 */
 		if (likely(!__PageMovable(page)))
-#ifdef CONFIG_ISOLATE_COUNT
-			mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON,
-					-hpage_nr_pages(page));
-#else
 			mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
 					page_is_file_cache(page), -hpage_nr_pages(page));
-#endif
 	}
 
 	/*

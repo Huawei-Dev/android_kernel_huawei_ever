@@ -794,10 +794,3 @@ config HISI_PAGECACHE_DEBUG
 	If unsure, say N.
 
 source "mm/hisi/Kconfig"
-
-config ISOLATE_COUNT
-	bool "count isolate pages"
-	default n
-	help
-	  count where isolate pages come from: process reclaim, compaction & cma_alloc
-	  or shrink_(in)active_list.

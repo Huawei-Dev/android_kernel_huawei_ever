@@ -134,10 +134,6 @@ unsigned long totalcma_pages __read_mostly;
 int percpu_pagelist_fraction;
 gfp_t gfp_allowed_mask __read_mostly = GFP_BOOT_MASK;
 
-#ifdef CONFIG_HISI_SLOW_PATH_COUNT
-#include "hisi/slowpath_count.h"
-#endif
-
 /*
  * A cached value of the page's pageblock's migratetype, used when the page is
  * put on a pcplist. Used to avoid the pageblock migratetype lookup when
@@ -4023,9 +4019,6 @@ retry:
 		goto nopage;
 
 	/* Try direct reclaim and then allocating */
-#ifdef CONFIG_HISI_SLOW_PATH_COUNT
-	pgalloc_count_inc(1, order);
-#endif
 	page = __alloc_pages_direct_reclaim(gfp_mask, order, alloc_flags, ac,
 							&did_some_progress);
 	if (page)
@@ -4161,9 +4154,6 @@ static inline bool prepare_alloc_pages(gfp_t gfp_mask, unsigned int order,
 
 	fs_reclaim_acquire(gfp_mask);
 	fs_reclaim_release(gfp_mask);
-#ifdef CONFIG_HISI_SLOW_PATH_COUNT
-	pgalloc_count_inc(0, order);
-#endif
 
 	might_sleep_if(gfp_mask & __GFP_DIRECT_RECLAIM);
 
@@ -7554,10 +7544,6 @@ static int __alloc_contig_migrate_range(struct compact_control *cc,
 
 		nr_reclaimed = reclaim_clean_pages_from_list(cc->zone,
 							&cc->migratepages);
-#ifdef CONFIG_ISOLATE_COUNT
-		mod_node_page_state(cc->zone->zone_pgdat, NR_ISOLATED_ANON,
-				-nr_reclaimed);
-#endif
 		cc->nr_migratepages -= nr_reclaimed;
 
 		ret = migrate_pages(&cc->migratepages, alloc_migrate_target,
