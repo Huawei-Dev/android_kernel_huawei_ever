@@ -47,8 +47,7 @@ struct key_preparsed_payload {
 	time_t		expiry;		/* Expiry time of key */
 } __randomize_layout;
 
-typedef int (*request_key_actor_t)(struct key_construction *key,
-				   const char *op, void *aux);
+typedef int (*request_key_actor_t)(struct key *auth_key, void *aux);
 
 /*
  * Preparsed matching criterion.
@@ -176,7 +175,7 @@ extern int key_reject_and_link(struct key *key,
 			       unsigned error,
 			       struct key *keyring,
 			       struct key *instkey);
-extern void complete_request_key(struct key_construction *cons, int error);
+extern void complete_request_key(struct key *authkey, int error);
 
 static inline int key_negate_and_link(struct key *key,
 				      unsigned timeout,
