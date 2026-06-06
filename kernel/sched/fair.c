@@ -7451,111 +7451,6 @@ find_idlest_group_cpu(struct sched_group *group, struct task_struct *p, int this
 }
 
 #ifdef CONFIG_HISI_EAS_SCHED
-#ifdef CONFIG_HISI_RTG
-static inline bool rtg_task_misfits(struct task_struct *p, int cpu)
-{
-	bool rtg_task_migration = false;
-	struct related_thread_group *grp = NULL;
-	struct sched_cluster *new_cluster = NULL;
-	unsigned long cpu_orig_cap;
-
-	rcu_read_lock();
-	grp = task_related_thread_group(p);
-	if (!grp || !grp->preferred_cluster)
-		goto out;
-
-	cpu_orig_cap = capacity_orig_of(cpu);
-	/* cpu has max capacity, no need to do balance */
-	if (cpu_orig_cap == cpu_rq(cpu)->rd->max_cpu_capacity.val)
-		goto out;
-
-	new_cluster = grp->preferred_cluster;
-	if (capacity_orig_of(cpumask_first(&new_cluster->cpus)) > cpu_orig_cap)
-		rtg_task_migration = true;
-
-out:
-	rcu_read_unlock();
-
-	return rtg_task_migration;
-}
-
-static inline unsigned long
-spare_capacity(int cpu, struct task_struct *p)
-{
-	long spare;
-
-	spare = capacity_orig_of(cpu) - cpu_util_without(cpu, p);
-	if (unlikely(spare < 0))
-		spare = 0;
-
-	return (unsigned long)spare;
-}
-
-static inline int find_rtg_cpu(struct task_struct *p, struct cpumask *preferred_cpus)
-{
-	int i;
-	cpumask_t search_cpus = CPU_MASK_NONE;
-	int max_spare_cap_cpu =-1;
-	unsigned long max_spare_cap = 0;
-	int idle_backup_cpu = -1;
-
-	cpumask_and(&search_cpus, &p->cpus_allowed, cpu_online_mask);
-#ifdef CONFIG_HISI_CPU_ISOLATION
-	cpumask_andnot(&search_cpus, &search_cpus, cpu_isolated_mask);
-#endif
-
-	/* search the perferred idle cpu */
-	for_each_cpu_and(i, &search_cpus, preferred_cpus) {
-		if (is_reserved(i))
-			continue;
-
-		if (idle_cpu(i) || (i == task_cpu(p) && p->state == TASK_RUNNING)) {
-			trace_find_rtg_cpu(p, preferred_cpus, "prefer_idle", i);
-			return i;
-		}
-	}
-
-	for_each_cpu(i, &search_cpus) {
-		unsigned long spare_cap;
-
-		if (walt_cpu_high_irqload(i))
-			continue;
-
-		if (is_reserved(i))
-			continue;
-
-		/* take the Active LB CPU as idle_backup_cpu */
-		if (idle_cpu(i) || (i == task_cpu(p) && p->state == TASK_RUNNING)) {
-			/* find the idle_backup_cpu with max capacity */
-			if (idle_backup_cpu == -1 ||
-				capacity_orig_of(i) > capacity_orig_of(idle_backup_cpu))
-				idle_backup_cpu = i;
-
-			continue;
-		}
-
-		/* skip little cores for max_spare cpus */
-		if (hisi_test_slow_cpu(i))
-			continue;
-
-		spare_cap = spare_capacity(i, p);
-		if (spare_cap > max_spare_cap) {
-			max_spare_cap = spare_cap;
-			max_spare_cap_cpu = i;
-		}
-	}
-
-	if (idle_backup_cpu != -1) {
-		trace_find_rtg_cpu(p, preferred_cpus, "idle_backup", idle_backup_cpu);
-		return idle_backup_cpu;
-	}
-
-	trace_find_rtg_cpu(p, preferred_cpus, "max_spare", max_spare_cap_cpu);
-
-	return max_spare_cap_cpu;
-}
-#endif
-
 /*
  * find_boost_cpu - find the idlest cpu among the fast_cpus.
  */
@@ -9012,28 +8907,8 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
 	int want_affine = 0;
 	int want_energy = 0;
 	int sync = wake_flags & WF_SYNC;
-#ifdef CONFIG_HISI_RTG
-	struct related_thread_group *grp = NULL;
-	int rtg_cpu = -1;
-#endif
 
 	rcu_read_lock();
-#ifdef CONFIG_HISI_RTG
-	grp = task_related_thread_group(p);
-	if (grp && grp->preferred_cluster) {
-		/*
-		 * We're going to need the task's util for cpu_util_wake
-		 * in find_rtg_cpu. Sync it up to prev_cpu's
-		 * last_update_time.
-		 */
-		sync_entity_load_avg(&p->se);
-		rtg_cpu = find_rtg_cpu(p, &grp->preferred_cluster->cpus);
-		if (rtg_cpu != -1){
-			rcu_read_unlock();
-			return rtg_cpu;
-		}
-	}
-#endif
 
 #ifdef CONFIG_HISI_EAS_SCHED
 	want_energy = wake_energy(p, prev_cpu, sd_flag, wake_flags);
@@ -11667,14 +11542,6 @@ static int need_active_balance(struct lb_env *env)
 			return 1;
 	}
 
-#ifdef CONFIG_HISI_RTG
-	if ((env->idle == CPU_IDLE || env->idle == CPU_NEWLY_IDLE) &&
-		capacity_orig_of(env->src_cpu) < capacity_orig_of(env->dst_cpu) &&
-		rtg_task_misfits(env->src_rq->curr, env->src_cpu))
-			return 1;
-
-#endif
-
 #ifdef CONFIG_HISI_EAS_SCHED
 	if ((env->idle != CPU_NOT_IDLE) &&
 	    (capacity_orig_of(env->src_cpu) < capacity_orig_of(env->dst_cpu)) &&
@@ -12436,11 +12303,6 @@ static inline int nohz_kick_type(int call_cpu, struct sched_domain *sd)
 
 	if (hisi_test_fast_cpu(call_cpu))
 		return NOHZ_KICK_ANY;
-
-#ifdef CONFIG_HISI_RTG
-	if (rtg_task_misfits(cpu_rq(call_cpu)->curr, call_cpu))
-		return NOHZ_KICK_FAST_CPU;
-#endif
 
 	if (energy_aware() && cpu_rq(call_cpu)->misfit_task_load) {
 		type = NOHZ_KICK_BOOST;
@@ -13284,54 +13146,13 @@ void check_for_migration(struct rq *rq, struct task_struct *p)
 	int new_cpu;
 	int active_balance;
 	int cpu = task_cpu(p);
-#ifdef CONFIG_HISI_RTG
-	bool rtg_task_migration = false;
-	struct related_thread_group *grp = NULL;
-	struct sched_cluster *new_cluster = NULL;
-	unsigned long cpu_orig_cap;
 
-	rcu_read_lock();
-	grp = task_related_thread_group(p);
-	if (grp && grp->preferred_cluster) {
-		cpu_orig_cap = capacity_orig_of(cpu);
-		/* cpu has max capacity, no need to do balance */
-		if (cpu_orig_cap == rq->rd->max_cpu_capacity.val) {
-			rcu_read_unlock();
-			return ;
-		}
-
-		new_cluster = grp->preferred_cluster;
-		if (capacity_orig_of(cpumask_first(&new_cluster->cpus)) > cpu_orig_cap) {
-			rtg_task_migration = true;
-		} else {
-			rcu_read_unlock();
-			return ;
-		}
-	}
-	rcu_read_unlock();
-#endif /* CONFIG_HISI_RTG */
-
-#ifdef CONFIG_HISI_RTG
-	if (rq->misfit_task_load  || rtg_task_migration) {
-#else
 	if (rq->misfit_task_load) {
-#endif
-
 		if (rq->curr->state != TASK_RUNNING ||
 		    rq->curr->nr_cpus_allowed == 1)
 			return;
 
 		raw_spin_lock(&migration_lock);
-#ifdef CONFIG_HISI_RTG
-		if (rtg_task_migration) {
-			new_cpu = find_rtg_cpu(p, &new_cluster->cpus);
-			if (new_cpu == -1 || capacity_orig_of(new_cpu) <= capacity_orig_of(cpu))
-				goto out_unlock;
-			else
-				goto do_active_balance;
-		}
-#endif /* CONFIG_HISI_RTG */
-
 		rcu_read_lock();
 		new_cpu = find_energy_efficient_cpu(NULL, p, cpu, cpu, 0);
 		rcu_read_unlock();

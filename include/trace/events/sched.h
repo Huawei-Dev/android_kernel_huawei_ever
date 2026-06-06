@@ -2071,34 +2071,6 @@ TRACE_EVENT(walt_rotation_checkpoint,
 );
 #endif /* CONFIG_SCHED_HISI_RUNNING_TASK_ROTATION */
 
-#ifdef CONFIG_HISI_RTG
-/* note msg size is less than TASK_COMM_LEN */
-TRACE_EVENT(find_rtg_cpu,
-
-	TP_PROTO(struct task_struct *p, const struct cpumask *perferred_cpumask, char *msg, int cpu),
-
-	TP_ARGS(p, perferred_cpumask, msg, cpu),
-
-	TP_STRUCT__entry(
-		__array(char, comm, TASK_COMM_LEN)
-		__field(pid_t, pid)
-		__bitmask(cpus,	num_possible_cpus())
-		__array(char, msg, TASK_COMM_LEN)
-		__field(int, cpu)
-	),
-
-	TP_fast_assign(
-		__entry->pid = p->pid;
-		memcpy_s(__entry->comm, TASK_COMM_LEN, p->comm, TASK_COMM_LEN);
-		__assign_bitmask(cpus, cpumask_bits(perferred_cpumask), num_possible_cpus());
-		memcpy_s(__entry->msg, TASK_COMM_LEN, msg, min((size_t)TASK_COMM_LEN, strlen(msg)+1));
-		__entry->cpu = cpu;
-	),
-
-	TP_printk("comm=%s pid=%d perferred_cpus=%s reason=%s target_cpu=%d",
-		__entry->comm, __entry->pid, __get_bitmask(cpus), __entry->msg, __entry->cpu)
-);
-#endif /* CONFIG_HISI_RTG */
 
 #ifdef CONFIG_SCHED_HISI_PRED_LOAD
 TRACE_EVENT(predl_adjust_runtime,

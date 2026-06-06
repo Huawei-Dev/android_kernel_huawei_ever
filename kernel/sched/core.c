@@ -65,54 +65,11 @@
 DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
 
 #ifdef CONFIG_HISI_ED_TASK
-#ifdef CONFIG_HISI_RTG
-static inline bool is_rtg_ed_task(struct task_struct *p, u64 wall)
-{
-	bool is_ed_task = false;
-	struct related_thread_group *grp = NULL;
-	int cpu = task_cpu(p);
-
-	rcu_read_lock();
-	grp = task_related_thread_group(p);
-	if (!grp || !grp->preferred_cluster || !grp->ed_enabled)
-		goto out;
-
-	/* if the task running on perferred cluster, then igore */
-	if (cpumask_test_cpu(cpu, &grp->preferred_cluster->cpus) ||
-		capacity_orig_of(cpu) > capacity_orig_of(cpumask_first(&grp->preferred_cluster->cpus)))
-		goto out;
-
-	if (p->last_wake_wait_sum >= grp->ed_task_waiting_duration) {
-		is_ed_task = true;
-		goto out;
-	}
-
-	if (wall - p->last_wake_ts >= grp->ed_task_running_duration) {
-		is_ed_task = true;
-		goto out;
-	}
-
-	if (is_new_task(p) && wall - p->last_wake_ts >=
-				grp->ed_new_task_running_duration)
-		is_ed_task = true;
-
-out:
-	rcu_read_unlock();
-	return is_ed_task;
-}
-#endif /* CONFIG_HISI_RTG */
-
 #ifdef CONFIG_SCHED_HISI_RUNNING_TASK_ROTATION
 #define ED_TASK_SHORT_DURATION 8000000 /* 8ms */
 #endif
 static inline bool is_ed_task(struct rq *rq, struct task_struct *p, u64 wall)
 {
-#ifdef CONFIG_HISI_RTG
-	/* handle rtg task */
-	if (is_rtg_ed_task(p, wall))
-		return true;
-#endif
-
 	if (schedtune_prefer_idle(p)) {
 		if (p->last_wake_wait_sum >= rq->ed_task_waiting_duration)
 			return true;
@@ -2560,10 +2517,6 @@ void sched_exit(struct task_struct *p)
 	struct rq_flags flags;
 	struct rq *rq;
 
-#ifdef CONFIG_HISI_RTG
-	_sched_set_group_id(p, DEFAULT_RTG_GRP_ID);
-#endif
-
 	rq = task_rq_lock(p, &flags);
 
 #ifdef CONFIG_SCHED_HISI_TOP_TASK
@@ -2890,10 +2843,6 @@ void wake_up_new_task(struct task_struct *p)
 {
 	struct rq_flags rf;
 	struct rq *rq;
-
-#ifdef CONFIG_HISI_RTG
-	add_new_task_to_grp(p);
-#endif
 
 	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
 
@@ -3520,9 +3469,6 @@ void scheduler_tick(void)
 			wallclock, 0);
 	update_rq_clock(rq);
 	curr->sched_class->task_tick(rq, curr, 0);
-#ifdef CONFIG_HISI_RTG
-	sched_update_rtg_tick(curr);
-#endif
 	cpu_load_update_active(rq);
 	calc_global_load_tick(rq);
 #ifdef CONFIG_HISI_ED_TASK
@@ -6645,11 +6591,6 @@ void __init sched_init(void)
 		init_rq_hrtick(rq);
 		atomic_set(&rq->nr_iowait, 0);
 	}
-
-#ifdef CONFIG_HISI_RTG
-	i = alloc_related_thread_groups();
-	BUG_ON(i);
-#endif
 
 	set_load_weight(&init_task);
 

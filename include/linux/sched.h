@@ -655,10 +655,6 @@ struct ravg {
 	u32 load_sum_history[RAVG_HIST_SIZE_MAX];
 	u32 prev_load, curr_load;
 #endif
-#ifdef CONFIG_HISI_RTG
-	u64 curr_window_load, prev_window_load;
-	u64 curr_window_exec, prev_window_exec;
-#endif
 };
 #endif
 
@@ -774,79 +770,6 @@ struct blk_throtl_wb_stat {
 };
 #endif
 
-#ifdef CONFIG_HISI_RTG
-struct group_cpu_time {
-	u64 window_start;
-	u64 curr_runnable_sum;
-	u64 prev_runnable_sum;
-};
-
-struct group_time {
-	unsigned long curr_window_load;
-	unsigned long curr_window_exec;
-	unsigned long prev_window_load;
-	unsigned long prev_window_exec;
-	unsigned long normalized_util;
-};
-
-enum RTG_GRP_ID {
-	DEFAULT_RTG_GRP_ID,
-	DEFAULT_CGROUP_COLOC_ID = 1,
-	DEFAULT_AI_ID = 2,
-	DEFAULT_AI_RENDER_THREAD_ID = 3,
-	DEFAULT_AI_OTHER_THREAD_ID = 4,
-	DEFAULT_RT_FRAME_ID = 8,
-	DEFAULT_AUX_ID = 9,
-	MAX_NUM_CGROUP_COLOC_ID = 10,
-};
-
-struct grp_load_mode {
-	bool freq_enabled;
-	bool util_enabled;
-};
-
-struct rtg_class;
-
-struct related_thread_group {
-	int id;
-	raw_spinlock_t lock;
-	struct list_head tasks;
-	struct list_head list;
-	struct group_cpu_time * __percpu cpu_time;
-	struct sched_cluster *preferred_cluster;
-	struct group_time time;
-	struct group_time time_pref_cluster;
-	unsigned long freq_update_interval; /*in nanoseconds */
-	unsigned long util_invalid_interval; /*in nanoseconds */
-	unsigned long util_update_timeout; /*in nanoseconds */
-	u64 last_freq_update_time;
-	u64 last_util_update_time;
-	u64 window_start;
-	u64 mark_start;
-	u64 prev_window_time;
-	/* rtg window information for WALT */
-	unsigned int window_size;
-	unsigned int nr_running;
-	/* the min freq set by userspace */
-	unsigned int us_set_min_freq;
-	int max_boost;
-	struct grp_load_mode mode;
-#ifdef CONFIG_HISI_ED_TASK
-	bool ed_enabled;
-	unsigned int ed_task_running_duration;
-	unsigned int ed_task_waiting_duration;
-	unsigned int ed_new_task_running_duration;
-#endif /* CONFIG_HISI_ED_TASK */
-
-	void *private_data;
-	const struct rtg_class *rtg_class;
-};
-
-struct rtg_class {
-	void (*sched_update_rtg_tick)(struct related_thread_group *grp);
-};
-#endif
-
 struct task_struct {
 #ifdef CONFIG_THREAD_INFO_IN_TASK
 	/*
@@ -925,11 +848,6 @@ struct task_struct {
 
 #ifdef CONFIG_HISI_CORE_CTRL
 	bool heavy_task;
-#endif
-
-#ifdef CONFIG_HISI_RTG
-	struct related_thread_group *grp;
-	struct list_head grp_list;
 #endif
 
 #ifdef CONFIG_HISI_ED_TASK

@@ -20,10 +20,6 @@
 #include <linux/hisi/render_rt.h>
 #include <linux/sched/cputime.h>
 
-#ifdef CONFIG_FRAME_RTG
-#include <linux/sched/frame.h>
-#endif
-
 extern int get_ipa_status(struct ipa_stat *status);
 
 #ifdef CONFIG_HISI_DDR_PERF_CTRL
@@ -287,9 +283,6 @@ unsigned long perf_ctrl_get_cap(void)
 	unsigned long cap = 0;
 
 	cap |= BIT(CAP_AI_SCHED_COMM_CMD);
-#ifdef CONFIG_HISI_RTG
-	cap |= BIT(CAP_RTG_CMD);
-#endif
 
 	return cap;
 }
@@ -307,18 +300,6 @@ static long perf_ctrl_ioctl(struct file *file, unsigned int cmd, unsigned long a
 	struct related_tid_info *r_t_info = NULL;
 #ifdef CONFIG_HISI_DRG
 	struct drg_dev_freq dev_freq;
-#endif
-#ifdef CONFIG_HISI_RTG
-	struct rtg_group_task task;
-	struct rtg_cpus cpus;
-	struct rtg_freq freqs;
-	struct rtg_interval interval;
-	struct rtg_load_mode lt_mode;
-	struct rtg_ed_params ed_params;
-#endif
-#ifdef CONFIG_FRAME_RTG
-	int frame_rate, frame_margin;
-	unsigned long frame_status;
 #endif
 	unsigned long cap;
 
@@ -485,114 +466,6 @@ err:
 			return -EFAULT;
 		}
 		break;
-
-#ifdef CONFIG_HISI_RTG
-	case PERF_CTRL_SET_FRAME_RATE:
-#ifdef CONFIG_FRAME_RTG
-		if (copy_from_user(&frame_rate, uarg, sizeof(int))) {
-			pr_err("frame_qos copy_from_user fail.\n");
-			return -EFAULT;
-		}
-		set_frame_rate(frame_rate);
-
-		ret = sched_set_group_window_size(DEFAULT_RT_FRAME_ID, frame_rate);
-#else
-		ret = -EFAULT;
-#endif
-		break;
-
-	case PERF_CTRL_SET_FRAME_MARGIN:
-#ifdef CONFIG_FRAME_RTG
-		if (copy_from_user(&frame_margin, uarg, sizeof(int))) {
-			pr_err("frame_margin copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = set_frame_margin(frame_margin);
-#else
-		ret = -EFAULT;
-#endif
-		break;
-
-	case PERF_CTRL_SET_FRAME_STATUS:
-#ifdef CONFIG_FRAME_RTG
-		if (copy_from_user(&frame_status, uarg, sizeof(unsigned long))) {
-			pr_err("frame_status copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = sched_set_group_window_rollover(DEFAULT_RT_FRAME_ID);
-
-		if (!ret)
-			ret = set_frame_status(frame_status);
-#else
-		ret = -EFAULT;
-#endif
-		break;
-
-	case PERF_CTRL_SET_TASK_RTG:
-		if (copy_from_user(&task, uarg, sizeof(struct rtg_group_task))) {
-			pr_err("set_rtg_task copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = sched_set_group_id(task.pid, task.grp_id);
-		break;
-
-	case PERF_CTRL_SET_RTG_CPUS:
-		if (copy_from_user(&cpus, uarg, sizeof(struct rtg_cpus))) {
-			pr_err("set_rtg_cpus copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = sched_set_preferred_cluster(cpus.grp_id, cpus.cluster_id);
-		break;
-
-	case PERF_CTRL_SET_RTG_FREQ:
-		if (copy_from_user(&freqs, uarg, sizeof(struct rtg_freq))) {
-			pr_err("set_rtg_freq copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = sched_set_group_freq(freqs.grp_id, freqs.freq);
-		break;
-
-	case PERF_CTRL_SET_RTG_FREQ_UPDATE_INTERVAL:
-		if (copy_from_user(&interval, uarg, sizeof(struct rtg_interval))) {
-			pr_err("set_rtg_interval copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = sched_set_group_freq_update_interval(interval.grp_id, interval.interval);
-		break;
-
-	case PERF_CTRL_SET_RTG_UTIL_INVALID_INTERVAL:
-		if (copy_from_user(&interval, uarg, sizeof(struct rtg_interval))) {
-			pr_err("set_rtg_interval copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = sched_set_group_util_invalid_interval(interval.grp_id, interval.interval);
-		break;
-
-	case PERF_CTRL_SET_RTG_LOAD_MODE:
-		if (copy_from_user(&lt_mode, uarg, sizeof(struct rtg_load_mode))) {
-			pr_err("rtg load mode copy_from_user fail.\n");
-			return -EFAULT;
-		}
-
-		ret = sched_set_group_load_mode(&lt_mode);
-		break;
-
-	case PERF_CTRL_SET_RTG_ED_PARAMS:
-		if (copy_from_user(&ed_params, uarg, sizeof(struct rtg_ed_params))) {
-			pr_err("rtg_ed_params copy_from_user fail.\n");
-			return -EFAULT;
-		}
-		ret = sched_set_group_ed_params(&ed_params);
-		break;
-#endif /* CONFIG_HISI_RTG */
-
 	default:
 		pr_err("cmd error, here is default, cmd = %d\n", cmd);
 		ret = -EINVAL;

@@ -88,10 +88,6 @@
 #include <chipset_common/dubai/dubai.h>
 #endif
 
-#ifdef CONFIG_FRAME_RTG
-#include <linux/hisi_rtg.h>
-#endif
-
 #ifdef CONFIG_HUAWEI_KSTATE
 #include <huawei_platform/power/hw_kcollect.h>
 #endif
@@ -1774,10 +1770,6 @@ static void binder_do_set_priority(struct task_struct *task,
 	if (task->policy == policy && task->normal_prio == desired.prio)
 		return;
 
-#ifdef CONFIG_FRAME_RTG
-	if (sched_get_group_id(task) == DEFAULT_RT_FRAME_ID)
-		return;
-#endif
 	if ((task->normal_prio < desired.prio) &&
 		(!strcmp(task->comm, SURFACEFLINGER_NAME)))
 		return;

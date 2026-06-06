@@ -188,10 +188,6 @@ struct sugov_policy {
 	unsigned int max_cpu;
 	unsigned int iowait_boost;
 	u64 last_iowait;
-#ifdef CONFIG_HISI_RTG
-	unsigned long rtg_util;
-	unsigned int rtg_freq;
-#endif
 	bool skip_min_sample_time;
 	bool skip_hispeed_logic;
 	bool util_changed;
@@ -438,9 +434,6 @@ static unsigned int eval_target_freq(struct sugov_policy *sg_policy,
 	}
 
 	new_freq = max(sg_policy->iowait_boost, new_freq);
-#ifdef CONFIG_HISI_RTG
-	new_freq = max(sg_policy->rtg_freq, new_freq);
-#endif
 	trace_cpufreq_schedutil_eval_target(sg_policy->max_cpu,
 					    util, max, cpu_load,
 					    policy->cur, new_freq);
@@ -928,11 +921,6 @@ static unsigned int sugov_next_freq_shared_policy(struct sugov_policy *sg_policy
 
 		i++;
 	}
-
-#ifdef CONFIG_HISI_RTG
-	sched_get_max_group_util(policy->cpus, &sg_policy->rtg_util, &sg_policy->rtg_freq);
-	util = max(sg_policy->rtg_util, util);
-#endif
 
 	return get_next_freq(sg_policy, util, max);
 }

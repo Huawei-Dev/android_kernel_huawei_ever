@@ -1675,14 +1675,6 @@ static struct task_struct *pick_highest_pushable_task(struct rq *rq, int cpu)
 
 static DEFINE_PER_CPU(cpumask_var_t, local_cpu_mask);
 
-#ifdef CONFIG_HISI_RTG
-static unsigned int rtg_up_migration_util_filter = 25;
-static inline bool hisi_favor_litte_core(struct task_struct *p)
-{
-	return task_util(p) * 100 < capacity_orig_of(0) * rtg_up_migration_util_filter;
-}
-#endif
-
 static int find_lowest_rq(struct task_struct *task)
 {
 	struct sched_domain *sd;
@@ -1726,12 +1718,6 @@ static int find_lowest_rq(struct task_struct *task)
 		target_capacity = ULONG_MAX;
 
 		rcu_read_lock();
-#ifdef CONFIG_HISI_RTG
-		grp = task_related_thread_group(task);
-		if (grp && grp->preferred_cluster)
-			rtg_target_cpus = &grp->preferred_cluster->cpus;
-#endif
-
 		sd = rcu_dereference(per_cpu(sd_ea, 0));
 		if (!sd) {
 			rcu_read_unlock();
@@ -1755,26 +1741,6 @@ static int find_lowest_rq(struct task_struct *task)
 			}
 
 			cpu = group_first_cpu(sg);
-#ifdef CONFIG_HISI_RTG
-			/* honor the rtg tasks */
-			if (rtg_target_cpus) {
-				if (cpumask_test_cpu(cpu, rtg_target_cpus)) {
-					sg_target = sg;
-					break;
-				}
-
-				/* active LB or big_task favor cpus with more capacity */
-				if (task->state == TASK_RUNNING || boosted || !hisi_favor_litte_core(task)) {
-					if (capacity_orig_of(cpu) > capacity_orig_of(cpumask_any(rtg_target_cpus))) {
-						sg_target = sg;
-						break;
-					} else {
-						sg_backup = sg;
-						continue;
-					}
-				}
-			}
-#endif
 			/*
 			 * 1. add margin to support task migration.
 			 * 2. if task_util is high then all cpus, make sure the
@@ -2621,11 +2587,6 @@ void check_for_rt_migration(struct rq *rq, struct task_struct *p)
 	bool misfit_task = false;
 	int cpu = task_cpu(p);
 	unsigned long cpu_orig_cap;
-#ifdef CONFIG_HISI_RTG
-	struct related_thread_group *grp = NULL;
-	struct sched_cluster *new_cluster = NULL;
-	int new_cpu = -1;
-#endif
 
 	if (!sysctl_sched_enable_rt_active_lb)
 		return ;
@@ -2640,24 +2601,8 @@ void check_for_rt_migration(struct rq *rq, struct task_struct *p)
 	if (cpu_orig_cap == rq->rd->max_cpu_capacity.val)
 		goto out;
 
-#ifdef CONFIG_HISI_RTG
-	grp = task_related_thread_group(p);
-	if (grp) {
-		if (!grp->preferred_cluster)
-			goto out;
-
-		new_cluster = grp->preferred_cluster;
-		new_cpu = cpumask_first(&new_cluster->cpus);
-		if (capacity_orig_of(new_cpu) > cpu_orig_cap)
-			misfit_task = true;
-	} else {
-		if (task_util(p) * rt_capacity_margin > cpu_orig_cap * SCHED_CAPACITY_SCALE)
-			misfit_task = true;
-	}
-#else
 	if (task_util(p) * rt_capacity_margin > cpu_orig_cap * SCHED_CAPACITY_SCALE)
 		misfit_task = true;
-#endif
 
 	if (misfit_task) {
 		raw_spin_lock(&rq->lock);
