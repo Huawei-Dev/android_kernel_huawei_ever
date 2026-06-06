@@ -1068,12 +1068,6 @@ config HISI_MULTI_MARGIN
 	help
 	  Allow each cluster has its own capacity_margin/sd_capacity_margin.
 
-config HISI_RT_OPT
-	bool "hisilicon rt-threads optimization"
-	default n
-	help
-	  Limit rt-threads to slow cpus for power saving.
-
 config HISI_RT_CAS
 	bool "hisilicon rt-cas optimization"
 	depends on HISI_EAS_SCHED
