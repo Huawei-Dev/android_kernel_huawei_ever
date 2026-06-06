@@ -10,8 +10,3 @@ config HW_WIFIPRO_PROC
 config WIFI_DELAY_STATISTIC
 	bool "wifi delay statistic"
 	default n
-
-config HW_CHR_TCP_SMALL_WIN_PROC
-	bool "Huawei tcp small window monitor proc support"
-	depends on HW_CHR_TCP_SMALL_WIN_MONITOR
-	default n
