@@ -191,10 +191,3 @@ endif
 EXTRA_CFLAGS = $(INCS) $(COPTS) $(DEBFLAGS)
 
 #COPTS +=-D_PRE_WLAN_PROFLING_SOC
-
-
-# for makefile debugging
-ifdef CONFIG_WIFI_DELAY_STATISTIC
-COPTS +=-D_PRE_WLAN_PKT_TIME_STAT
-endif
-

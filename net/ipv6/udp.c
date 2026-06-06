@@ -55,9 +55,6 @@
 #include <linux/seq_file.h>
 #include <trace/events/skb.h>
 #include "udp_impl.h"
-#ifdef CONFIG_WIFI_DELAY_STATISTIC
-#include <hwnet/ipv4/wifi_delayst.h>
-#endif
 
 static bool udp6_lib_exact_dif_match(struct net *net, struct sk_buff *skb)
 {
@@ -468,11 +465,6 @@ try_again:
 	err = copied;
 	if (flags & MSG_TRUNC)
 		err = ulen;
-#ifdef CONFIG_WIFI_DELAY_STATISTIC
-	if(DELAY_STATISTIC_SWITCH_ON) {
-		delay_record_rcv_combine(skb,sk,TP_SKB_TYPE_UDP);
-	}
-#endif
 	skb_consume_udp(sk, skb, peeking ? -err : err);
 	return err;
 
@@ -1357,16 +1349,7 @@ back_from_confirm:
 				   msg->msg_flags, &sockc);
 		err = PTR_ERR(skb);
 		if (!IS_ERR_OR_NULL(skb))
-#ifdef CONFIG_WIFI_DELAY_STATISTIC
-		{
-			if(DELAY_STATISTIC_SWITCH_ON) {
-				delay_record_first_combine(sk,skb,TP_SKB_DIRECT_SND,TP_SKB_TYPE_UDP);
-			}
-#endif
 			err = udp_v6_send_skb(skb, &fl6);
-#ifdef CONFIG_WIFI_DELAY_STATISTIC
-		}
-#endif
 		goto release_dst;
 	}
 
