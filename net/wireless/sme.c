@@ -51,21 +51,6 @@ struct cfg80211_conn {
 	bool auto_auth, prev_bssid_valid;
 };
 
-#ifdef CONFIG_HW_WIFI
-static bool hw_wifi_connect_mode = false;
-
-bool  hw_timestamps_get_wifi_connect_status(void)
-{
-	return hw_wifi_connect_mode;
-}
-
-static void hw_timestamps_set_wifi_connect_status(bool connect)
-{
-	hw_wifi_connect_mode = connect;
-	printk(KERN_ERR "%s: hw_wifi_connect_mode(%d)\n",__FUNCTION__,hw_wifi_connect_mode);
-	return;
-}
-#endif
 static void cfg80211_sme_free(struct wireless_dev *wdev)
 {
 	if (!wdev->conn)
@@ -902,11 +887,6 @@ void cfg80211_connect_done(struct net_device *dev,
 	list_add_tail(&ev->list, &wdev->event_list);
 	spin_unlock_irqrestore(&wdev->event_lock, flags);
 	queue_work(cfg80211_wq, &rdev->event_work);
-#ifdef CONFIG_HW_WIFI
-	if((wdev->iftype == NL80211_IFTYPE_STATION) && (!params->status)){
-		hw_timestamps_set_wifi_connect_status(true);
-	}
-#endif
 }
 EXPORT_SYMBOL(cfg80211_connect_done);
 
@@ -1100,11 +1080,6 @@ void cfg80211_disconnected(struct net_device *dev, u16 reason,
 	list_add_tail(&ev->list, &wdev->event_list);
 	spin_unlock_irqrestore(&wdev->event_lock, flags);
 	queue_work(cfg80211_wq, &rdev->event_work);
-#ifdef CONFIG_HW_WIFI
-	if(wdev->iftype == NL80211_IFTYPE_STATION){
-		hw_timestamps_set_wifi_connect_status(false);
-	}
-#endif
 }
 EXPORT_SYMBOL(cfg80211_disconnected);
 
@@ -1236,11 +1211,6 @@ int cfg80211_disconnect(struct cfg80211_registered_device *rdev,
 			__cfg80211_disconnected(dev, NULL, 0, reason, false);
 		}
 	}
-	#ifdef CONFIG_HW_WIFI
-	if(wdev->iftype == NL80211_IFTYPE_STATION){
-		hw_timestamps_set_wifi_connect_status(false);
-	}
-	#endif
 
 	/*
 	 * Clear ssid_len unless we actually were fully connected,

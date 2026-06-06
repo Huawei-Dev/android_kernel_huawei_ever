@@ -69,11 +69,6 @@ int sysctl_tcp_tso_win_divisor __read_mostly = 3;
 /* By default, RFC2861 behavior.  */
 int sysctl_tcp_slow_start_after_idle __read_mostly = 1;
 
-#ifdef CONFIG_HW_WIFI
-extern unsigned int hw_get_currect_ipv4_sysctl_tcp_timestamps(void);
-extern bool hw_timestamps_get_wifi_connect_status(void);
-#endif
-
 static bool tcp_write_xmit(struct sock *sk, unsigned int mss_now, int nonagle,
 			   int push_one, gfp_t gfp);
 
@@ -3486,17 +3481,6 @@ done:
 	return err;
 }
 
-#ifdef CONFIG_HW_WIFI
-static void hw_tcp_timestamps_recovery(struct net *net)
-{
-	if (net == NULL)
-		return;
-
-	if (!hw_timestamps_get_wifi_connect_status() && !net->ipv4.sysctl_tcp_timestamps)
-		net->ipv4.sysctl_tcp_timestamps = hw_get_currect_ipv4_sysctl_tcp_timestamps();
-}
-#endif
-
 /* Build a SYN and send it off. */
 int tcp_connect(struct sock *sk)
 {
@@ -3509,9 +3493,6 @@ int tcp_connect(struct sock *sk)
 	if (inet_csk(sk)->icsk_af_ops->rebuild_header(sk))
 		return -EHOSTUNREACH; /* Routing failure or similar. */
 
-#ifdef CONFIG_HW_WIFI
-	hw_tcp_timestamps_recovery(sock_net(sk));
-#endif
 	tcp_connect_init(sk);
 
 	if (unlikely(tp->repair)) {

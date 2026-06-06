@@ -133,12 +133,6 @@ int sysctl_tcp_autotuning __read_mostly = 0;
 #define TCP_REMNANT (TCP_FLAG_FIN|TCP_FLAG_URG|TCP_FLAG_SYN|TCP_FLAG_PSH)
 #define TCP_HP_BITS (~(TCP_RESERVED_BITS|TCP_FLAG_PSH))
 
-#ifdef CONFIG_HW_WIFI
-#define HW_TCP_TIMESTAMP_ERR_THRESHOLD    1
-static unsigned int default_ipv4_sysctl_tcp_timestamps;
-extern bool  hw_timestamps_get_wifi_connect_status(void);
-static void hw_tcp_check_and_disable_timestamps(struct net *net, struct sk_buff *skb);
-#endif
 #define REXMIT_NONE	0 /* no loss recovery to do */
 #define REXMIT_LOST	1 /* retransmit packets marked lost */
 #define REXMIT_NEW	2 /* FRTO-style transmit of unsent/new packets */
@@ -5784,46 +5778,6 @@ static bool tcp_rcv_fastopen_synack(struct sock *sk, struct sk_buff *synack,
 	return false;
 }
 
-#ifdef CONFIG_HW_WIFI
-/* "sysctl_tcp_timestamps" is linked to "/proc/sys/net/ipv4/tcp_timestamps".
- * default value of "sysctl_tcp_timestamps" is 2.
- * 0: timestamps check Disabled.
- * 1: enable timestamps as defined in RFC1323 and use random offset for each connection.
- * 2: like 1, but without random offsets.
- * if timestamp error over 1 times here will disable tcp_timestamps(set to 0) in wlan network.
- * WARNING: this function only should be called when timestamp err happened.
- * WARNING: if any more changes for sysctl_tcp_timestamps, please check whole logic.
- */
-static void hw_tcp_check_and_disable_timestamps(struct net *net, struct sk_buff *skb)
-{
-	static int tcp_ts_err;
-	static int last_timestamps;
-
-	if (net == NULL)
-		return;
-
-	/* 0: timestamps check Disabled */
-	if (last_timestamps == 0 && net->ipv4.sysctl_tcp_timestamps != 0) {
-		pr_err("last_ts init or tcp_timestamps resotre to enabled, clear err count.\n");
-		tcp_ts_err = 0;
-	}
-	/* disable sysctl_tcp_timestamps check in wlan dev sock */
-	if (net->ipv4.sysctl_tcp_timestamps && (++tcp_ts_err > HW_TCP_TIMESTAMP_ERR_THRESHOLD)) {
-		pr_err("TCP timestamp error, check network interface and try to disable ts.\n");
-		if (hw_timestamps_get_wifi_connect_status() && net->ipv4.sysctl_tcp_timestamps) {
-			default_ipv4_sysctl_tcp_timestamps = net->ipv4.sysctl_tcp_timestamps;
-			net->ipv4.sysctl_tcp_timestamps = 0; /* 0: timestamps check Disabled */
-		}
-		tcp_ts_err = 0;
-	}
-	last_timestamps = net->ipv4.sysctl_tcp_timestamps;
-}
-
-unsigned int hw_get_currect_ipv4_sysctl_tcp_timestamps(void)
-{
-	return default_ipv4_sysctl_tcp_timestamps;
-}
-#endif
 static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
 					 const struct tcphdr *th)
 {
@@ -5853,10 +5807,6 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
 		if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr &&
 		    !between(tp->rx_opt.rcv_tsecr, tp->retrans_stamp,
 			     tcp_time_stamp(tp))) {
-#ifdef CONFIG_HW_WIFI
-			pr_err("tcp timestamp error, to check and disable tcp_timestamps.\n");
-			hw_tcp_check_and_disable_timestamps(sock_net(sk), skb); /* tcp timestamps workround */
-#endif
 			NET_INC_STATS(sock_net(sk),
 					LINUX_MIB_PAWSACTIVEREJECTED);
 			goto reset_and_undo;
