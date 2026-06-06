@@ -35,7 +35,7 @@
 
 #include <trace/events/sched.h>
 
-#include "frame/frame.h"
+static inline int update_frame_isolation(void) { return 1; }
 
 /*
  * the type definition of cpu is not unified in kernel,
