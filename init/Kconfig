@@ -1094,16 +1094,6 @@ config HISI_CPU_ISOLATION
 	  kthread and IRQS are still allowed to run, this achieve similar
 	  effect as hotplug but at lower latency cost.
 
-config HISI_CPU_ISOLATION_STRICT
-	bool "Hisilicon cpu isolation strict"
-	depends on HISI_CPU_ISOLATION
-	default n
-	help
-	  This option controls isolation policy of pinned user thread, if
-	  this option is enabled, pinned user threads on an isolated cpu will
-	  be migrated to other unisolated cpu, otherwise they can still running
-	  on isolated cpu.
-
 config HISI_CORE_CTRL
 	bool "HIsilicon core control"
 	depends on HISI_CPU_ISOLATION

@@ -1287,9 +1287,6 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
 	struct rq_flags rf;
 	struct rq *rq;
 	int ret = 0;
-#ifdef CONFIG_HISI_CPU_ISOLATION_STRICT
-	cpumask_t allowed_mask;
-#endif
 
 	rq = task_rq_lock(p, &rf);
 	update_rq_clock(rq);
@@ -1313,26 +1310,6 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
 	if (cpumask_equal(&p->cpus_allowed, new_mask))
 		goto out;
 
-#ifdef CONFIG_HISI_CPU_ISOLATION_STRICT
-	cpumask_andnot(&allowed_mask, new_mask, cpu_isolated_mask);
-	cpumask_and(&allowed_mask, &allowed_mask, cpu_valid_mask);
-
-	if (cpumask_empty(&allowed_mask)) {
-		cpumask_and(&allowed_mask, cpu_valid_mask, new_mask);
-		if (cpumask_empty(&allowed_mask)) {
-			ret = -EINVAL;
-			goto out;
-		}
-	}
-
-	do_set_cpus_allowed(p, new_mask);
-
-	/* Can the task run on the task's current CPU? If so, we're done */
-	if (cpumask_test_cpu(task_cpu(p), &allowed_mask))
-		goto out;
-
-	dest_cpu = cpumask_any(&allowed_mask);
-#else
 	if (!cpumask_intersects(new_mask, cpu_valid_mask)) {
 		ret = -EINVAL;
 		goto out;
@@ -1355,7 +1332,6 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
 		goto out;
 
 	dest_cpu = cpumask_any_and(cpu_valid_mask, new_mask);
-#endif
 	if (task_running(rq, p) || p->state == TASK_WAKING) {
 		struct migration_arg arg = { p, dest_cpu };
 		/* Need help from migration thread: drop lock and wait. */
@@ -1822,11 +1798,7 @@ int select_task_rq(struct task_struct *p, int cpu, int sd_flags, int wake_flags,
 		   int sibling_count_hint)
 {
 #ifdef CONFIG_HISI_CPU_ISOLATION
-#ifdef CONFIG_HISI_CPU_ISOLATION_STRICT
-	bool allow_isolated = (p->flags & PF_KTHREAD);
-#else
 	bool allow_isolated = true;
-#endif
 #endif
 
 	lockdep_assert_held(&p->pi_lock);
@@ -5106,9 +5078,6 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
 	int retval;
 #ifdef CONFIG_HISI_CPU_ISOLATION
 	cpumask_t set_mask;
-#ifdef CONFIG_HISI_CPU_ISOLATION_STRICT
-	cpumask_t allowed_mask;
-#endif
 #endif
 
 #ifdef CONFIG_ARCH_HISI
@@ -5181,13 +5150,6 @@ again:
 	cpumask_copy(&set_mask, new_mask);
 #ifdef CONFIG_HISI_CORE_CTRL
 	core_ctl_spread_affinity(&set_mask);
-#endif
-#ifdef CONFIG_HISI_CPU_ISOLATION_STRICT
-	cpumask_andnot(&allowed_mask, &set_mask, cpu_isolated_mask);
-	if (!cpumask_intersects(cpu_active_mask, &allowed_mask)) {
-		retval = -EINVAL;
-		goto out_free_new_mask;
-	}
 #endif
 	retval = __set_cpus_allowed_ptr(p, &set_mask, true);
 #else
@@ -5276,10 +5238,6 @@ long sched_getaffinity(pid_t pid, struct cpumask *mask)
 
 	raw_spin_lock_irqsave(&p->pi_lock, flags);
 	cpumask_and(mask, &p->cpus_allowed, cpu_active_mask);
-#ifdef CONFIG_HISI_CPU_ISOLATION_STRICT
-	if (!(p->flags & PF_KTHREAD))
-		cpumask_andnot(mask, mask, cpu_isolated_mask);
-#endif
 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
 
 out_unlock:
@@ -6022,9 +5980,6 @@ static void migrate_tasks(struct rq *dead_rq, struct rq_flags *rf)
 
 #ifdef CONFIG_HISI_CPU_ISOLATION
 		if (!migrate_pinned_tasks &&
-#ifdef CONFIG_HISI_CPU_ISOLATION_STRICT
-		    (next->flags & PF_KTHREAD) &&
-#endif
 		    !cpumask_intersects(&avail_cpus, &next->cpus_allowed)) {
 			detach_one_task(next, rq, &tasks);
 			num_pinned_kthreads += 1;
