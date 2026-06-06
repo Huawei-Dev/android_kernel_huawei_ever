@@ -281,9 +281,6 @@
 #include <linux/uaccess.h>
 #include <asm/ioctls.h>
 #include <net/busy_poll.h>
-#ifdef CONFIG_HW_WIFIPRO
-#include <hwnet/ipv4/wifipro_tcp_monitor.h>
-#endif
 
 #ifdef CONFIG_TCP_NODELAY
 #include <linux/blk-cgroup.h>
@@ -2120,15 +2117,6 @@ EXPORT_SYMBOL(tcp_recvmsg);
 void tcp_set_state(struct sock *sk, int state)
 {
 	int oldstate = sk->sk_state;
-#ifdef CONFIG_HW_WIFIPRO
-	struct inet_sock *inet_temp = inet_sk(sk);
-	unsigned int dest_addr = 0;
-	unsigned int dest_port = 0;
-	if (NULL != inet_temp) {
-		dest_addr = htonl(inet_temp->inet_daddr);
-		dest_port = htons(inet_temp->inet_dport);
-	}
-#endif
 
 #ifdef CONFIG_HUAWEI_XENGINE
 	emcom_xengine_mpflow_fallback(sk, EMCOM_MPFLOW_FALLBACK_NOPAYLOAD, state);
@@ -2162,16 +2150,6 @@ void tcp_set_state(struct sock *sk, int state)
 	 * socket sitting in hash tables.
 	 */
 	sk_state_store(sk, state);
-#ifdef CONFIG_HW_WIFIPRO
-	if (state == TCP_SYN_SENT) {
-		if (is_wifipro_on && is_mcc_china && wifipro_is_not_local_or_lan_sock(dest_addr)) {
-			if (wifipro_is_google_sock(current, dest_addr)) {
-				sk->wifipro_is_google_sock = 1;
-				WIFIPRO_DEBUG("add a google sock:%s", wifipro_ntoa(dest_addr));
-			}
-		}
-	}
-#endif
 
 #ifdef STATE_TRACE
 	SOCK_DEBUG(sk, "TCP sk=%p, State %s -> %s\n", sk, statename[oldstate], statename[state]);

@@ -40,9 +40,7 @@
 #include <linux/compiler.h>
 #include <linux/gfp.h>
 #include <linux/module.h>
-#ifdef CONFIG_HW_WIFIPRO
-#include <hwnet/ipv4/wifipro_tcp_monitor.h>
-#endif
+
 #ifdef CONFIG_HUAWEI_XENGINE
 #include <huawei_platform/emcom/emcom_xengine.h>
 #endif
@@ -3505,9 +3503,7 @@ int tcp_connect(struct sock *sk)
 	struct tcp_sock *tp = tcp_sk(sk);
 	struct sk_buff *buff;
 	int err;
-#ifdef CONFIG_HW_WIFIPRO
-	int wifipro_dev_max_len = 0;
-#endif
+
 	tcp_call_bpf(sk, BPF_SOCK_OPS_TCP_CONNECT_CB);
 
 	if (inet_csk(sk)->icsk_af_ops->rebuild_header(sk))
@@ -3548,14 +3544,6 @@ int tcp_connect(struct sock *sk)
 	 */
 	tp->snd_nxt = tp->write_seq;
 	tp->pushed_seq = tp->write_seq;
-#ifdef CONFIG_HW_WIFIPRO
-	if (buff->dev) {
-	    wifipro_dev_max_len = strnlen(buff->dev->name, IFNAMSIZ-1);
-	    strncpy(buff->sk->wifipro_dev_name, buff->dev->name, wifipro_dev_max_len);
-	    buff->sk->wifipro_dev_name[wifipro_dev_max_len] = '\0';
-	    WIFIPRO_DEBUG("wifipro_dev_name is %s", buff->dev->name);
-	}
-#endif
 	buff = tcp_send_head(sk);
 	if (unlikely(buff)) {
 		tp->snd_nxt	= TCP_SKB_CB(buff)->seq;

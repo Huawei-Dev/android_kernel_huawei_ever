@@ -85,11 +85,6 @@
 int g_FastGrabDscp = 0;    /*fg app dscp value,get from hilink*/
 #endif
 
-#ifdef CONFIG_HW_WIFIPRO
-#include <linux/snmp.h>
-#include <hwnet/ipv4/wifipro_tcp_monitor.h>
-#endif
-
 static int
 ip_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
 	    unsigned int mtu,
@@ -315,10 +310,6 @@ static int ip_finish_output(struct net *net, struct sock *sk, struct sk_buff *sk
 		IPCB(skb)->flags |= IPSKB_REROUTED;
 		return dst_output(net, sk, skb);
 	}
-#endif
-
-#ifdef CONFIG_HW_WIFIPRO
-	wifipro_update_tcp_statistics(WIFIPRO_TCP_MIB_OUTSEGS, skb, NULL);
 #endif
 
 	mtu = ip_skb_dst_mtu(sk, skb);

@@ -77,10 +77,6 @@
 #include <asm/unaligned.h>
 #include <linux/errqueue.h>
 
-#ifdef CONFIG_HW_WIFIPRO
-#include <hwnet/ipv4/wifipro_tcp_monitor.h>
-#endif
-
 int sysctl_tcp_fack __read_mostly;
 
 #ifdef CONFIG_HUAWEI_XENGINE
@@ -775,12 +771,6 @@ static void tcp_rtt_estimator(struct sock *sk, long mrtt_us)
 	 * does not matter how to _calculate_ it. Seems, it was trap
 	 * that VJ failed to avoid. 8)
 	 */
-#ifdef CONFIG_HW_WIFIPRO
-	if ((is_wifipro_on) && mrtt_us != 0) {
-		unsigned int rtt_jiffies = usecs_to_jiffies(mrtt_us);
-		wifipro_update_rtt(rtt_jiffies<<3, sk);
-	}
-#endif
 	if (srtt != 0) {
 		m -= (srtt >> 3);	/* m is now error in rtt est */
 		srtt += m;		/* rtt = 7/8 rtt + 1/8 new */

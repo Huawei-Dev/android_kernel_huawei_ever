@@ -32,9 +32,7 @@
 
 #define NETLINK_CHR_EVENT_NL  23
 
-#ifdef CONFIG_HW_WIFIPRO
 #define NETLINK_WIFIPRO_EVENT_NL  24
-#endif
 
 #define NETLINK_HW_DPI  25
 

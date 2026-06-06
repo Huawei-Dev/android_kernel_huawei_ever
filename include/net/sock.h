@@ -399,10 +399,6 @@ struct sock {
 	uint8_t acc_state;
 #endif
 
-#ifdef CONFIG_HW_WIFIPRO
-	int wifipro_is_google_sock;
-	char wifipro_dev_name[IFNAMSIZ];
-#endif
 #ifdef CONFIG_XFRM
 	struct xfrm_policy __rcu *sk_policy[2];
 #endif

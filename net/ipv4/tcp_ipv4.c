@@ -85,9 +85,6 @@
 #include <crypto/hash.h>
 #include <linux/scatterlist.h>
 
-#ifdef CONFIG_HW_WIFIPRO
-#include <hwnet/ipv4/wifipro_tcp_monitor.h>
-#endif
 #ifdef CONFIG_HUAWEI_XENGINE
 #include <huawei_platform/emcom/emcom_xengine.h>
 #endif
@@ -1753,9 +1750,6 @@ process:
 		sock_put(sk);
 		return ret;
 	}
-#endif
-#ifdef CONFIG_HW_WIFIPRO
-	wifipro_update_tcp_statistics(WIFIPRO_TCP_MIB_INSEGS, skb, sk);
 #endif
 	if (!sock_owned_by_user(sk)) {
 		ret = tcp_v4_do_rcv(sk, skb);
