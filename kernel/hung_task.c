@@ -23,7 +23,7 @@
 #include <trace/events/sched.h>
 
 #ifdef CONFIG_DETECT_HUAWEI_HUNG_TASK
-#include "huawei_hung_task.h"
+#include <cpu_netlink/huawei_hung_task.h>
 #endif
 /*
  * The number of tasks checked:

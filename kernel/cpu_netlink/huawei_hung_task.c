@@ -54,7 +54,7 @@
 #ifdef CONFIG_HW_ZEROHUNG
 #include <chipset_common/hwzrhung/zrhung.h>
 #endif
-#include "huawei_hung_task.h"
+#include <cpu_netlink/huawei_hung_task.h>
 /* MICRO DEFINITION */
 #define RWSEM_READER_OWNED ((struct task_struct *)1UL)
 #define ENABLE_SHOW_LEN 8

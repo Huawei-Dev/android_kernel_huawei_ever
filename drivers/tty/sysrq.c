@@ -55,7 +55,7 @@
 #include <asm/irq_regs.h>
 
 #ifdef CONFIG_DETECT_HUAWEI_HUNG_TASK
-#include <linux/huawei_hung_task.h>
+#include <cpu_netlink/huawei_hung_task.h>
 #endif
 
 /* Whether we react on sysrq keys or just ignore them */

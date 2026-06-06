@@ -86,8 +86,6 @@ obj-$(CONFIG_KCOV) += kcov.o
 obj-$(CONFIG_KPROBES) += kprobes.o
 obj-$(CONFIG_KGDB) += debug/
 obj-$(CONFIG_DETECT_HUNG_TASK) += hung_task.o
-obj-$(CONFIG_DETECT_HUAWEI_HUNG_TASK) += huawei_hung_task.o
-obj-$(CONFIG_HUAWEI_INIT_WATCHDOG) += huawei_init_watchdog.o
 obj-$(CONFIG_LOCKUP_DETECTOR) += watchdog.o
 obj-$(CONFIG_HARDLOCKUP_DETECTOR_PERF) += watchdog_hld.o
 obj-$(CONFIG_SECCOMP) += seccomp.o
@@ -121,8 +119,6 @@ obj-$(CONFIG_HW_VIP_THREAD) += hwcfs/
 obj-$(CONFIG_HW_QOS_THREAD) += hwqos/
 obj-$(CONFIG_HW_CPULOAD_NOTI) += cpu_netlink/
 obj-$(CONFIG_HW_RTG_SCHED) += hwrtg/
-
-obj-$(CONFIG_HW_CGROUP_WORKINGSET) += cgroup_workingset.o
 
 $(obj)/configs.o: $(obj)/config_data.h
 
