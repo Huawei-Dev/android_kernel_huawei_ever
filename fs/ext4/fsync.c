@@ -34,12 +34,6 @@
 
 #include <trace/events/ext4.h>
 
-#ifdef CONFIG_HUAWEI_IO_TRACING
-#include <trace/iotrace.h>
-DEFINE_TRACE(ext4_sync_write_wait_end);
-DEFINE_TRACE(ext4_sync_file_end);
-#endif
-
 /*
  * If we're not journaling and this is a just-created file, we have to
  * sync our parent directory (if it was freshly created) since
@@ -122,16 +116,8 @@ int ext4_sync_file(struct file *file, loff_t start, loff_t end, int datasync)
 		goto out;
 	}
 
-	ret = file_write_and_wait_range(file, start, end);
-	if (ret)
-		return ret;
-
 	if (!journal) {
-		struct writeback_control wbc = {
-			.sync_mode = WB_SYNC_ALL
-		};
-
-		ret = ext4_write_inode(inode, &wbc);
+		ret = __generic_file_fsync(file, start, end, datasync);
 		if (!ret)
 			ret = ext4_sync_parent(inode);
 		if (test_opt(inode->i_sb, BARRIER))
@@ -139,10 +125,9 @@ int ext4_sync_file(struct file *file, loff_t start, loff_t end, int datasync)
 		goto out;
 	}
 
-#ifdef CONFIG_HUAWEI_IO_TRACING
-               trace_ext4_sync_write_wait_end(file, datasync);
-#endif
-
+	ret = file_write_and_wait_range(file, start, end);
+	if (ret)
+		return ret;
 	/*
 	 * data=writeback,ordered:
 	 *  The caller's filemap_fdatawrite()/wait will sync the data.
@@ -178,10 +163,5 @@ out:
 	if (ret == 0)
 		ret = err;
 	trace_ext4_sync_file_exit(inode, ret);
-
-#ifdef CONFIG_HUAWEI_IO_TRACING
-               trace_ext4_sync_file_end(file, ret);
-#endif
-
-               return ret;
+	return ret;
 }
