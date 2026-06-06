@@ -42,9 +42,6 @@
 #ifdef CONFIG_HISI_AB_PARTITION
 #include "mmc-kirin-lib.h"
 #endif
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-#include <chipset_common/storage_rofa/storage_rofa.h>
-#endif
 
 #define DEFAULT_CMD6_TIMEOUT_MS	500
 
@@ -741,15 +738,6 @@ static int mmc_decode_ext_csd(struct mmc_card *card, u8 *ext_csd)
 		set_bootdevice_life_time_est_typ_b(card->ext_csd.device_life_time_est_typ_b);
 		/* get rpmb configure info */
 		emmc_get_rpmb_info(card, ext_csd);
-	}
-#endif
-
-#if defined(CONFIG_HISI_BOOTDEVICE) && defined(CONFIG_HUAWEI_STORAGE_ROFA)
-	if ((get_bootdevice_type() == BOOT_DEVICE_EMMC) &&
-	    !strncmp(mmc_hostname(card->host), "mmc0", strlen("mmc0"))) {
-		storage_rochk_record_bootdevice_fwrev(card->ext_csd.fwrev);
-		storage_rochk_record_bootdevice_pre_eol_info(
-				card->ext_csd.pre_eol_info);
 	}
 #endif
 
@@ -1783,11 +1771,6 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 		set_bootdevice_cid(cid);
 		set_bootdevice_product_name(card->cid.prod_name);
 		set_bootdevice_manfid(card->cid.manfid);
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-		storage_rochk_record_bootdevice_type(BOOT_DEVICE_EMMC);
-		storage_rochk_record_bootdevice_manfid(card->cid.manfid);
-		storage_rochk_record_bootdevice_model(card->cid.prod_name);
-#endif
 	}
 #endif
 
@@ -1987,10 +1970,6 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	 * Command Queue.
 	 */
 	card->reenable_cmdq = card->ext_csd.cmdq_en;
-
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA_FAULT_INJECT
-	storage_rofi_switch_mmc_card_pwronwp(card);
-#endif
 
 #ifdef CONFIG_HISI_MMC
 	err = mmc_init_card_enable_feature(card);

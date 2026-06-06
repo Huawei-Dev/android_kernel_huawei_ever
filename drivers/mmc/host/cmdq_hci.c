@@ -38,9 +38,6 @@
 extern void sdhci_dsm_handle(struct sdhci_host *host, struct mmc_request *mrq);
 extern void sdhci_dsm_set_host_status(struct sdhci_host *host, u32 error_bits);
 #endif
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-#include <chipset_common/storage_rofa/storage_rofa.h>
-#endif
 
 /* 1 sec FIXME: optimize it */
 #define HALT_TIMEOUT_MS 1000
@@ -1204,11 +1201,6 @@ int cmdq_interrupt_errors_handle(struct mmc_host *mmc, u32 intmask,
 		if(mrq->cmdq_req)
 			mrq->cmdq_req->resp_err = true;
 		pr_err("%s: RED error %d !!!\n", mmc_hostname(mmc), status);
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-		if (storage_rochk_is_monitor_enabled())
-			storage_rochk_monitor_mmc_readonly(mmc->card, mrq,
-				MMC_STATUS_CQIS_RED, cmdq_readl(cq_host, CQCRA));
-#endif
 	}
 
 #ifdef CONFIG_HUAWEI_EMMC_DSM
@@ -1312,12 +1304,6 @@ irqreturn_t cmdq_irq(struct mmc_host *mmc, u32 intmask)
 		for_each_set_bit(tag, &comp_status, cq_host->num_slots) {
 			/* complete the corresponding mrq */
 			mmc->cmdq_task_info[tag].end_dbr_time = ktime_get();
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-			if (storage_rochk_is_monitor_enabled())
-				storage_rochk_monitor_mmc_readonly(mmc->card,
-					cq_host->mrq_slot[tag],
-					MMC_STATUS_OK, MMC_RESP_UNCARE);
-#endif
 			cmdq_finish_data(mmc, tag);
 		}
 		cmdq_ring_dbl_in_irq(mmc);

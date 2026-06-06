@@ -67,10 +67,6 @@
 #include <scsi/scsi_ioctl.h>
 #include <scsi/scsicam.h>
 
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-#include <chipset_common/storage_rofa/storage_rofa.h>
-#endif
-
 #include "sd.h"
 #include "scsi_priv.h"
 #include "scsi_logging.h"
@@ -2036,27 +2032,9 @@ static int sd_done(struct scsi_cmnd *SCpnt)
 	}
 	sdkp->medium_access_timed_out = 0;
 
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA_FAULT_INJECT
-	if (storage_rochk_filter_sd(sdkp->device)) {
-		if (storage_rofi_should_inject_check_condition_sense()) {
-			storage_rofi_inject_fault_check_condition_sense(
-				&SCpnt->result, &sense_valid, &sense_deferred,
-				&good_bytes, req, sdkp->device, &sshdr);
-			result = SCpnt->result;
-		}
-	}
-#endif
-
 	if (driver_byte(result) != DRIVER_SENSE &&
 	    (!sense_valid || sense_deferred))
 		goto out;
-
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-	if (storage_rochk_is_monitor_enabled() &&
-	    storage_rochk_filter_sd(sdkp->device))
-		storage_rochk_monitor_sd_readonly(sdkp->device, req, result,
-			sshdr.sense_key, sshdr.asc, sshdr.ascq); /*lint !e644*/
-#endif
 
 	switch (sshdr.sense_key) { /*lint !e644*/
 	case HARDWARE_ERROR:
@@ -2707,29 +2685,6 @@ sd_read_write_protect_flag(struct scsi_disk *sdkp, unsigned char *buffer)
 			  "Test WP failed, assume Write Enabled\n");
 	} else {
 		sdkp->write_prot = ((data.device_specific & 0x80) != 0);
-
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA_FAULT_INJECT
-		if (storage_rochk_filter_sd(sdp)) {
-			if (storage_rofi_should_inject_write_prot_status())
-				sdkp->write_prot = 1; /* set wp as true */
-		}
-#endif
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-		if (storage_rochk_filter_sd(sdp)) {
-			unsigned int bootopt;
-
-			storage_rochk_record_disk_wp_status(
-				sdkp->disk->disk_name, sdkp->write_prot);
-
-			bootopt = get_storage_rofa_bootopt();
-			if (sdkp->write_prot &&
-			    bootopt == STORAGE_ROFA_BOOTOPT_BYPASS) {
-				sd_printk(KERN_NOTICE, sdkp,
-					"Reset Write Protect\n");
-				sdkp->write_prot = 0;
-			}
-		}
-#endif
 
 		set_disk_ro(sdkp->disk, sdkp->write_prot);
 		if (sdkp->first_scan || old_wp != sdkp->write_prot) {
@@ -3414,14 +3369,6 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
 	sdkp->first_scan = 1;
 	sdkp->max_medium_access_timeouts = SD_MAX_MEDIUM_TIMEOUTS;
 
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-	if (storage_rochk_filter_sd(sdp)) {
-		storage_rochk_record_disk(gd->disk_name,
-			gd->major, gd->first_minor);
-		storage_rochk_record_sd_rev_once(sdp);
-	}
-#endif
-
 	sd_revalidate_disk(gd);
 
 	gd->flags = GENHD_FL_EXT_DEVT;
@@ -3436,12 +3383,6 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
 		sd_dif_config_host(sdkp);
 
 	sd_revalidate_disk(gd);
-
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-	if (storage_rochk_filter_sd(sdp))
-		storage_rochk_record_disk_capacity(sdkp->disk->disk_name,
-			sdkp->capacity * sdp->sector_size);
-#endif
 
 	if (sdkp->security) {
 		sdkp->opal_dev = init_opal_dev(sdp, &sd_sec_submit);

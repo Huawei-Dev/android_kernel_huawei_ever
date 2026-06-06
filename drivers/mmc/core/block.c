@@ -83,10 +83,6 @@
 #include <linux/mmc/dsm_emmc.h>
 #endif
 
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-#include <chipset_common/storage_rofa/storage_rofa.h>
-#endif
-
 MODULE_ALIAS("mmc:block");
 /*not referenced,modified for pclint*/
 /*
@@ -2654,25 +2650,7 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
 	md->disk->private_data = md;
 	md->disk->queue = md->queue.queue;
 	md->parent = parent;
-#ifdef CONFIG_HUAWEI_STORAGE_ROFA
-	if (storage_rochk_is_mmc_card(card) == true &&
-	    area_type != MMC_BLK_DATA_AREA_RPMB) {
-		char disk_name[DISK_NAME_LEN] = {0}; /*lint !e578*/
 
-		snprintf(disk_name, sizeof(disk_name), "mmcblk%u%s",
-			card->host->index, subname ? subname : "");
-		storage_rochk_record_disk(disk_name,
-			md->disk->major, md->disk->first_minor);
-		storage_rochk_record_disk_wp_status(disk_name,
-			(unsigned char)md->read_only);
-		if (get_storage_rofa_bootopt() == STORAGE_ROFA_BOOTOPT_BYPASS) {
-			pr_info("%s: reset mmc readonly flag\n", disk_name);
-			md->read_only = !(card->csd.cmdclass & CCC_BLOCK_WRITE);
-		}
-		storage_rochk_record_disk_capacity(disk_name,
-			size * card->ext_csd.data_sector_size);
-	}
-#endif
 	set_disk_ro(md->disk, md->read_only || default_ro);
 	md->disk->flags = GENHD_FL_EXT_DEVT;
 	if ((unsigned int)area_type & (MMC_BLK_DATA_AREA_RPMB | MMC_BLK_DATA_AREA_BOOT))
