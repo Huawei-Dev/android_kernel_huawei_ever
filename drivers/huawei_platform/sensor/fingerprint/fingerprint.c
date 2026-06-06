@@ -37,7 +37,6 @@
 #include <linux/slab.h>
 #include <linux/atomic.h>
 #include <linux/hisi/hisi_cpufreq_lowtemp.h>
-#include <linux/accurate_delay.h>
 #if defined(CONFIG_FB)
 #include <linux/notifier.h>
 #include <linux/fb.h>
@@ -1981,6 +1980,11 @@ static int finerprint_get_module_info(struct fp_data *fp)
 	ret = finerprint_get_module_vendor_info(fp);
 
 	return ret;
+}
+
+static void accurate_delay_100us(unsigned long us_100)
+{
+	udelay(100*us_100);
 }
 
 static void fingerprint_custom_timing_scheme_one(struct fp_data *fp)
