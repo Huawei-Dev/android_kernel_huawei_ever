@@ -59,10 +59,6 @@
 #include <net/l3mdev.h>
 #include <net/lwtunnel.h>
 
-#ifdef CONFIG_HW_BOOSTER
-#include <hwnet/booster/tcp_para_collec.h>
-#endif
-
 static int ip6_finish_output2(struct net *net, struct sock *sk, struct sk_buff *skb)
 {
 	struct dst_entry *dst = skb_dst(skb);
@@ -148,12 +144,6 @@ static int ip6_finish_output(struct net *net, struct sock *sk, struct sk_buff *s
 		IPCB(skb)->flags |= IPSKB_REROUTED;
 		return dst_output(net, sk, skb);
 	}
-#endif
-
-#ifdef CONFIG_HW_BOOSTER
-	if (skb_dst(skb))
-		booster_update_tcp_statistics(AF_INET6, skb, NULL,
-			skb_dst(skb)->dev);
 #endif
 
 	if ((skb->len > ip6_skb_dst_mtu(skb) && !skb_is_gso(skb)) ||

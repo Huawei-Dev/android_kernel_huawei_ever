@@ -1,2 +1,1 @@
 source "drivers/huawei_platform/hwnet/ipv4/Kconfig"
-source "drivers/huawei_platform/hwnet/booster/Kconfig"

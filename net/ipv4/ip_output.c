@@ -81,10 +81,6 @@
 #include <linux/netlink.h>
 #include <linux/tcp.h>
 
-#ifdef CONFIG_HW_BOOSTER
-#include <hwnet/booster/tcp_para_collec.h>
-#endif
-
 #ifdef CONFIG_HUAWEI_BASTET
 int g_FastGrabDscp = 0;    /*fg app dscp value,get from hilink*/
 #endif
@@ -323,12 +319,6 @@ static int ip_finish_output(struct net *net, struct sock *sk, struct sk_buff *sk
 
 #ifdef CONFIG_HW_WIFIPRO
 	wifipro_update_tcp_statistics(WIFIPRO_TCP_MIB_OUTSEGS, skb, NULL);
-#endif
-
-#ifdef CONFIG_HW_BOOSTER
-	if (skb_dst(skb))
-		booster_update_tcp_statistics(AF_INET, skb, NULL,
-			skb_dst(skb)->dev);
 #endif
 
 	mtu = ip_skb_dst_mtu(sk, skb);
