@@ -1835,21 +1835,6 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 			res = false;
 			goto put_sock_ret_res;
 		}
-#ifdef CONFIG_HUAWEI_KSTATE
-		//Thus (!a && b) || (a && !b) == a ^ b
-	} else if (info->match & XT_QTAGUID_PID) {
-		if ((sk->sk_socket == NULL)) {
-			res = false;
-			goto put_sock_ret_res;
-		}
-
-		if (((sk->sk_socket->pid >= info->xt_pid_min) && (sk->sk_socket->pid <= info->xt_pid_max)) ^ !(info->invert & XT_QTAGUID_PID)) {
-			MT_DEBUG("qtaguid-PID XT_QTAGUID_PID[%d]: leaving Pid not matching\n",
-				parst->hook);
-			res = false;
-			goto put_sock_ret_res;
-		}
-#endif
 	}
 	MT_DEBUG("qtaguid[%d]: leaving matched\n", parst->hook);
 	res = true;

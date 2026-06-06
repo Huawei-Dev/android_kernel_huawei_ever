@@ -34,19 +34,11 @@ void print_process_pid_name(struct inet_sock *inet)
 		return;
 #endif
 
-#if defined(CONFIG_HUAWEI_KSTATE)
-	if (NULL == inet || NULL == inet->sk.sk_socket) {
-		return;
-	}
-
-	pid = inet->sk.sk_socket->pid;
-#else
 	if (NULL == inet) {
 		return;
 	}
 
 	pid = task_tgid_vnr(current);
-#endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 10)
 	uid = sock_i_uid(&inet->sk).val;

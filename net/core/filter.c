@@ -3069,17 +3069,6 @@ static const struct bpf_func_proto bpf_get_socket_uid_proto = {
 
 BPF_CALL_1(bpf_get_socket_pid, struct sk_buff *, skb)
 {
-#if defined(CONFIG_HUAWEI_KSTATE)
-	struct sock *sk = sk_to_full_sk(skb->sk);
-	if (!sk || !sk_fullsock(sk))
-		return 0;
-
-	struct socket *socket = sk->sk_socket;
-	if (!socket)
-		return 0;
-
-	return socket->pid;
-#endif
 	return 0;
 }
 

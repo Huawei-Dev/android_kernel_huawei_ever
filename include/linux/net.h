@@ -119,9 +119,6 @@ struct socket {
 	struct file		*file;
 	struct sock		*sk;
 	const struct proto_ops	*ops;
-#if defined(CONFIG_HUAWEI_KSTATE)
-	pid_t		pid;
-#endif
 };
 
 struct vm_area_struct;

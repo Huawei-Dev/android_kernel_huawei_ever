@@ -45,9 +45,7 @@
 
 #define NETLINK_HW_LOGCAT     29
 
-#ifdef CONFIG_HUAWEI_KSTATE
 #define NETLINK_HW_KSTATE	30	/* kstate send event to user */
-#endif
 
 #define NETLINK_HW_LOGCAT_EXT 31
 
