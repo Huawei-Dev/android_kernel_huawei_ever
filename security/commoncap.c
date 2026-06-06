@@ -30,11 +30,6 @@
 #include <linux/user_namespace.h>
 #include <linux/binfmts.h>
 #include <linux/personality.h>
-#include <linux/hisi/hisi_hkip.h>
-
-#ifdef CONFIG_ANDROID_PARANOID_NETWORK
-#include <linux/android_aid.h>
-#endif
 
 /*
  * If a non-root user executes a setuid-root binary in
@@ -78,9 +73,6 @@ int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
 {
 	struct user_namespace *ns = targ_ns;
 
-	if (unlikely(hkip_check_uid_root()))
-		return -EPERM;
-
 	/* See if cred has the capability in the target user namespace
 	 * by examining the target user namespace and all of the target
 	 * user namespace's parents.
@@ -117,29 +109,7 @@ int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
 int cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
 		int cap, int audit)
 {
-	int ret = __cap_capable(cred, targ_ns, cap, audit);
-
-#ifdef CONFIG_ANDROID_PARANOID_NETWORK
-	if (ret != 0 && cap == CAP_NET_RAW && in_egroup_p(AID_NET_RAW)) {
-		printk("Process %s granted CAP_NET_RAW from Android group net_raw.\n", current->comm);
-		printk("  Please update the .rc file to explictly set 'capabilities NET_RAW'\n");
-		printk("  Implicit grants are deprecated and will be removed in the future.\n");
-		return 0;
-	}
-	if (ret != 0 && cap == CAP_NET_ADMIN && in_egroup_p(AID_NET_ADMIN)) {
-		printk("Process %s granted CAP_NET_ADMIN from Android group net_admin.\n", current->comm);
-		printk("  Please update the .rc file to explictly set 'capabilities NET_ADMIN'\n");
-		printk("  Implicit grants are deprecated and will be removed in the future.\n");
-		return 0;
-	}
-	if (ret != 0 && cap == CAP_NET_BIND_SERVICE && in_egroup_p(AID_VENDOR_NET_BIND_SERVICE)) {
-		printk("Process %s granted CAP_NET_BIND_SERVICE from Android group net_bind_service.\n", current->comm);
-		printk("  Please update the .rc file to explictly set 'capabilities NET_BIND_SERVICE'\n");
-		printk("  Implicit grants are deprecated and will be removed in the future.\n");
-		return 0;
-	}
-#endif
-	return ret;
+	return __cap_capable(cred, targ_ns, cap, audit);
 }
 /**
  * cap_settime - Determine whether the current process may set the system clock
