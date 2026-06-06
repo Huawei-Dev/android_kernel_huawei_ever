@@ -376,11 +376,6 @@ struct tcp_sock {
 /* TCP ARGO */
 	struct tcp_argo *argo;
 #endif /* CONFIG_TCP_ARGO */
-
-#ifdef CONFIG_CHR_NETLINK_MODULE
-	u8 first_data_flag;
-	u8 data_net_flag;
-#endif
 };
 
 enum tsq_enum {

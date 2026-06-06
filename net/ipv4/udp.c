@@ -128,10 +128,6 @@
 #include <huawei_platform/emcom/emcom_xengine.h>
 #endif
 
-#ifdef CONFIG_CHR_NETLINK_MODULE
-#include <hwnet/chr/chr_interface.h>
-#endif
-
 struct udp_table udp_table __read_mostly;
 EXPORT_SYMBOL(udp_table);
 
@@ -1641,9 +1637,6 @@ try_again:
 	if (!skb)
 		return err;
 
-#ifdef CONFIG_CHR_NETLINK_MODULE
-	chr_update_buf_time(ktime_to_ns(skb->tstamp), SOL_UDP);
-#endif
 	ulen = udp_skb_len(skb);
 	copied = len;
 
