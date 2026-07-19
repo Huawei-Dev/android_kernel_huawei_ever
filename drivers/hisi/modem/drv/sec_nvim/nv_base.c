@@ -194,7 +194,7 @@ u32 nv_readEx(u32 modem_id, u32 itemid, u32 offset, u8 *pdata, u32 datalen)
     nv_debug_trace(pdata, datalen);
 
     return NV_OK;
-}
+}
 /************************************************************************
  函 数 名  : nv_readEx
  功能描述  : 读NV接口，作用范围:所有的NV
@@ -228,7 +228,7 @@ u32 nv_readEx_fac_partition(u32 modem_id, u32 itemid, u32 offset, u8 *pdata, u32
     nv_debug_trace(pdata, datalen);
 
     return ret;
-}
+}
 
 u32 nv_readEx_factory(u32 modem_id,u32 itemid,u32 offset,u8* pdata,u32 datalen)
 {

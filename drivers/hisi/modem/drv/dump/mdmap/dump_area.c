@@ -82,7 +82,7 @@ u32 dump_get_mdm_voice_status(void)
     return flag;
 }
 s32 bsp_dump_mem_init(void)
-{
+{
     return BSP_OK;
 }
 #ifndef CONFIG_HISI_BALONG_MODEM_MODULE
