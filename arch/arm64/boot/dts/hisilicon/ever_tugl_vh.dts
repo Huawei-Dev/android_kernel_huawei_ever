@@ -1,6 +1,11 @@
 /dts-v1/;
 
 / {
+	hisi,boardname = "EVER_TUGL_VH";
+	hisi,product_id = <0x37020000>;
+	hisi,product_name = "EVR-AL00";
+	hisi,modem_id = <0x37021000>;
+	hisi,boardid = <0x8 0x4 0x6 0x2>;
 	#address-cells = <0x2>;
 	#size-cells = <0x2>;
 	model = "kirin980";
@@ -594,7 +599,7 @@
 		};
 
 		lcd_kit_ever_samsung_ea8074_ever_vn1 {
-			status = "disabled";
+			status = "ok";
 			phandle = <0x7b7>;
 			compatible = "samsung_ea8074_ever_vn1_7p21_1080plus_cmd";
 			lcd-kit,panel-name = "SAMSUNG_EA8074_EVER_VN1 7.21' CMD TFT 1080 x 2244";
@@ -1562,7 +1567,7 @@
 	};
 
 	huawei,lcd_panel {
-		lcd_panel_type = "auo_otm1901a_5p2_1080p_video";
+		lcd_panel_type = "samsung_ea8074_ever_vn1_7p21_1080plus_cmd";
 		fastboot_record_bit = <0x0>;
 		phandle = <0x30e>;
 		compatible = "huawei,lcd_panel_type";
@@ -1574,7 +1579,7 @@
 
 	memory@0 {
 		device_type = "memory";
-		reg = <0x0 0x400000 0x0 0xbfe00000>;
+		reg = <0x0 0x0 0x0 0xc0000000 0x1 0x0 0x0 0xc0000000>;
 	};
 
 	reserved-memory {
@@ -1777,7 +1782,7 @@
 
 		logo-buffer {
 			reg = <0x0 0x36500000 0x0 0x3f00000>;
-			status = "disabled";
+			status = "ok";
 			visible_to_users;
 		};
 
@@ -22127,7 +22132,7 @@
 		#address-cells = <0x2>;
 		#size-cells = <0x2>;
 		compatible = "hisilicon,hisifb";
-		fastboot_enable_flag = <0x0>;
+		fastboot_enable_flag = <0x1>;
 		fake_lcd_flag = <0x0>;
 		iommus = <0x2a2>;
 		dss_base_phy = <0xe8600000>;
@@ -24342,7 +24347,7 @@
 
 	psci {
 		compatible = "arm,psci";
-		method = "smc";
+		method = "hvc";
 		cpu_suspend = <0xc4000001>;
 		cpu_off = <0x84000002>;
 		cpu_on = <0xc4000003>;
