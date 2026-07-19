@@ -86,6 +86,7 @@ void set_lslub_track(struct page *page,
 	spin_unlock_irqrestore(&buddy_lock, flags);
 	SetPageLslub(page);
 }
+EXPORT_SYMBOL(set_lslub_track);
 
 static unsigned long get_buddy_caller(unsigned long pfn)
 {
