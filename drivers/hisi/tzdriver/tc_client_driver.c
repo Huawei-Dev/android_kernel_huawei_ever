@@ -261,6 +261,11 @@ static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
 					    0xBE, 0x24, 0x5E, 0x30, 0x3C, 0xDD, 0x50, 0x25,
 					    0xF1, 0xD0, 0xB1, 0x3C, 0x36, 0x32, 0xEC, 0x8D};
 
+	static const unsigned char hiaiserver_hash[32] = {0xF2, 0x31, 0x58, 0x79, 0xEE, 0x80, 0xEA, 0x2C,
+					    0x4C, 0xAD, 0xDA, 0xD5, 0xE6, 0x36, 0x15, 0xFB,
+					    0xBA, 0x0E, 0x0A, 0x39, 0x80, 0xE4, 0x1E, 0x40,
+					    0xDF, 0x24, 0x81, 0x39, 0x96, 0xB8, 0xFC, 0xEB};
+
 	if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.gatekeeper@1.0-service")) {
 		apply_spoof_hash(my_pkname, hash_buf, gatekeeper_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.keymaster@3.0-service")) {
@@ -275,6 +280,8 @@ static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
         	apply_spoof_hash(my_pkname, hash_buf, oeminfo_nvm_server_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/aptouch_daemon")) {
         	apply_spoof_hash(my_pkname, hash_buf, aptouch_hash);
+	} else if (!strcmp(my_pkname, "/vendor/bin/hiaiserver")) {
+        	apply_spoof_hash(my_pkname, hash_buf, hiaiserver_hash);
 	}
 }
 
