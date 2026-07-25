@@ -224,8 +224,13 @@ static void apply_spoof_hash(const char *my_pkname,
 	memcpy(hash_buf, src_hash, MAX_SHA_256_SZ);
 }
 
-static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
+static void spoof_hash(const char *my_pkname,
+                       const char *process_path,
+                       unsigned char *hash_buf)
 {
+	if (!my_pkname || !hash_buf)
+		return;
+
 	static const unsigned char keystore_hash[32] = {0xAA, 0x3B, 0x24, 0x94, 0xD7, 0xB8, 0x05, 0x42,
 					   0x34, 0x65, 0x7E, 0x10, 0x6A, 0xC8, 0x5B, 0x64,
 					   0xBD, 0xFE, 0x7F, 0x65, 0x77, 0xED, 0x26, 0x2F,
@@ -299,8 +304,9 @@ static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
         	apply_spoof_hash(my_pkname, hash_buf, hiaiserver_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/CameraDaemon")) {
         	apply_spoof_hash(my_pkname, hash_buf, cameradaemon_hash);
-	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.graphics.allocator@2.0-service")) {
-        	apply_spoof_hash(my_pkname, hash_buf, graphics_allocator_hash);
+	} else if (!strcmp(my_pkname, "sec_mem") && process_path && 
+			!strcmp(process_path, "/vendor/bin/hw/android.hardware.graphics.allocator@2.0-service")) {
+        	apply_spoof_hash(process_path, hash_buf, graphics_allocator_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.graphics.composer@2.2-service")) {
         	apply_spoof_hash(my_pkname, hash_buf, graphics_composer_hash);
 	}
@@ -1666,6 +1672,8 @@ int TC_NS_OpenSession(TC_NS_DEV_File *dev_file, TC_NS_ClientContext *context)
 	struct task_struct *S = NULL;
 	uint8_t flags = TC_CALL_GLOBAL;
 	unsigned char *hash_buf = NULL;
+	char *process_path = NULL;
+	char *path_buf = NULL;
 	bool hidl_access = false;
 
 	CFC_FUNC_ENTRY(TC_NS_OpenSession);
@@ -1785,6 +1793,14 @@ find_service:
 	if (NULL == S) {
 		S = current;
 	}
+
+	path_buf = kmalloc(MAX_PATH_SIZE, GFP_KERNEL);
+	if (path_buf)
+    		process_path = get_process_path(S, path_buf);
+    	tlogd("TEE pkg_name='%s' process='%s'\n",
+      		dev_file->pkg_name,
+      		process_path ? process_path : "<NULL>");
+
 	if (tee_calc_task_hash(hash_buf, true, S)) {
 		tloge("tee calc task hash failed\n");
 		kfree(hash_buf);
@@ -1796,12 +1812,13 @@ find_service:
 	mutex_lock(&g_operate_session_lock);
 
 	dump_hash((const char *)dev_file->pkg_name, hash_buf);
-	spoof_hash((const char *)dev_file->pkg_name, hash_buf);
+	spoof_hash((const char *)dev_file->pkg_name, process_path, hash_buf);
 
 	/*cp hash_buf to global var, it is protected by lock */
 	ret = memcpy_s(g_ca_auth_hash_buf, (size_t)MAX_SHA_256_SZ,
 			hash_buf, (size_t)MAX_SHA_256_SZ);
 	kfree(hash_buf);
+	kfree(path_buf);
 	if (ret) {
 		tloge("memcpy_s to g_hash_buf failed\n");
 		mutex_unlock(&g_operate_session_lock);
