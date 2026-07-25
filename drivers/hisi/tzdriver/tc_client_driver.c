@@ -271,6 +271,16 @@ static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
 					    0x8A, 0x5E, 0x68, 0x2A, 0xA4, 0xAF, 0xD2, 0x5C,
 					    0xBF, 0xFB, 0x94, 0x71, 0xAB, 0x99, 0xFC, 0x28};
 
+	static const unsigned char graphics_allocator_hash[32] = {0x3E, 0x2E, 0x26, 0x87, 0xA9, 0x9B, 0x41, 0x89,
+					    0x4F, 0x7F, 0x2E, 0x65, 0xD1, 0xC3, 0xBF, 0x6D,
+					    0x94, 0x5D, 0x9F, 0x04, 0x6E, 0x8A, 0x26, 0x94,
+					    0xA4, 0x2B, 0xA5, 0x17, 0xFB, 0xC7, 0x85, 0x47};
+
+	static const unsigned char graphics_composer_hash[32] = {0x81, 0xA5, 0x4F, 0x7D, 0x9D, 0x89, 0x8E, 0x15,
+					    0x13, 0xC3, 0x6C, 0x52, 0x68, 0x8D, 0x38, 0xF3,
+					    0x9E, 0x59, 0x83, 0xB4, 0x68, 0x78, 0xA9, 0x92,
+					    0x18, 0x01, 0xCE, 0xFE, 0x7F, 0xEB, 0xDC, 0xE0};
+
 	if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.gatekeeper@1.0-service")) {
 		apply_spoof_hash(my_pkname, hash_buf, gatekeeper_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.keymaster@3.0-service")) {
@@ -289,6 +299,10 @@ static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
         	apply_spoof_hash(my_pkname, hash_buf, hiaiserver_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/CameraDaemon")) {
         	apply_spoof_hash(my_pkname, hash_buf, cameradaemon_hash);
+	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.graphics.allocator@2.0-service")) {
+        	apply_spoof_hash(my_pkname, hash_buf, graphics_allocator_hash);
+	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.graphics.composer@2.2-service")) {
+        	apply_spoof_hash(my_pkname, hash_buf, graphics_composer_hash);
 	}
 }
 
