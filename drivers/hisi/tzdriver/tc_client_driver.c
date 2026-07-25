@@ -266,6 +266,11 @@ static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
 					    0xBA, 0x0E, 0x0A, 0x39, 0x80, 0xE4, 0x1E, 0x40,
 					    0xDF, 0x24, 0x81, 0x39, 0x96, 0xB8, 0xFC, 0xEB};
 
+	static const unsigned char cameradaemon_hash[32] = {0xD5, 0x4D, 0x71, 0xCE, 0x37, 0x5D, 0x39, 0x70,
+					    0x4B, 0x24, 0x5D, 0xB5, 0x68, 0x80, 0xCA, 0x36,
+					    0x8A, 0x5E, 0x68, 0x2A, 0xA4, 0xAF, 0xD2, 0x5C,
+					    0xBF, 0xFB, 0x94, 0x71, 0xAB, 0x99, 0xFC, 0x28};
+
 	if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.gatekeeper@1.0-service")) {
 		apply_spoof_hash(my_pkname, hash_buf, gatekeeper_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.keymaster@3.0-service")) {
@@ -282,6 +287,8 @@ static void spoof_hash(const char *my_pkname, unsigned char *hash_buf)
         	apply_spoof_hash(my_pkname, hash_buf, aptouch_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hiaiserver")) {
         	apply_spoof_hash(my_pkname, hash_buf, hiaiserver_hash);
+	} else if (!strcmp(my_pkname, "/vendor/bin/CameraDaemon")) {
+        	apply_spoof_hash(my_pkname, hash_buf, cameradaemon_hash);
 	}
 }
 
