@@ -228,9 +228,6 @@ static void spoof_hash(const char *my_pkname,
                        const char *process_path,
                        unsigned char *hash_buf)
 {
-	if (!my_pkname || !hash_buf)
-		return;
-
 	static const unsigned char keystore_hash[32] = {0xAA, 0x3B, 0x24, 0x94, 0xD7, 0xB8, 0x05, 0x42,
 					   0x34, 0x65, 0x7E, 0x10, 0x6A, 0xC8, 0x5B, 0x64,
 					   0xBD, 0xFE, 0x7F, 0x65, 0x77, 0xED, 0x26, 0x2F,
@@ -246,7 +243,14 @@ static void spoof_hash(const char *my_pkname,
 					    0xAC, 0x17, 0x97, 0x9B, 0xA1, 0x1A, 0xBF, 0xCF,
 					    0xC3, 0xCA, 0x18, 0x3D, 0xC6, 0x3E, 0x7E, 0x0F};
 
-	static const unsigned char drm_widevine_hash[32] = {0xE1, 0xE5, 0x73, 0x5C, 0x0C, 0x00, 0xA0, 0x0E,
+	/* The actual hash calculated for the Widevine EMUI 10 service,installed under the service name 1.1 */
+	static const unsigned char drm_widevine_emui10_hash[32] = {0x29, 0x51, 0xB9, 0xC7, 0xCD, 0x22, 0x9F, 0x0E,
+					    0x7B, 0x83, 0x55, 0xC5, 0xE9, 0x0F, 0x93, 0xEC,
+					    0x4B, 0xDB, 0x01, 0xC7, 0x77, 0xAA, 0xB1, 0x63,
+					    0x89, 0xDA, 0x1D, 0x1A, 0xAE, 0x7B, 0x90, 0xEB};
+
+	/* Stock EMUI 9.1 Widevine service hash */
+	static const unsigned char drm_widevine_emui91_hash[32] = {0xE1, 0xE5, 0x73, 0x5C, 0x0C, 0x00, 0xA0, 0x0E,
 					    0x09, 0xCA, 0xFF, 0x44, 0x7A, 0xFA, 0xBB, 0x87,
 					    0x15, 0x3A, 0x16, 0x1E, 0xAC, 0x46, 0x09, 0xDB,
 					    0x25, 0xC4, 0xB3, 0x09, 0xE9, 0x41, 0x2E, 0x86};
@@ -281,6 +285,9 @@ static void spoof_hash(const char *my_pkname,
 					    0x9E, 0x59, 0x83, 0xB4, 0x68, 0x78, 0xA9, 0x92,
 					    0x18, 0x01, 0xCE, 0xFE, 0x7F, 0xEB, 0xDC, 0xE0};
 
+	if (!my_pkname || !hash_buf)
+		return;
+
 	if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.gatekeeper@1.0-service")) {
 		apply_spoof_hash(my_pkname, hash_buf, gatekeeper_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.keymaster@3.0-service")) {
@@ -288,22 +295,28 @@ static void spoof_hash(const char *my_pkname,
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/vendor.huawei.hardware.biometrics.fingerprint@2.1-service")) {
 		tlogd("Fingerprint hash already matches whitelist, spoof skipped\n");
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.media.omx@1.0-service")) {
-        	apply_spoof_hash(my_pkname, hash_buf, omx_hash);
+		apply_spoof_hash(my_pkname, hash_buf, omx_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.drm@1.1-service.widevine")) {
-        	apply_spoof_hash(my_pkname, hash_buf, drm_widevine_hash);
+		if (!memcmp(hash_buf, drm_widevine_emui10_hash, sizeof(drm_widevine_emui10_hash))) {
+			apply_spoof_hash(my_pkname, hash_buf, drm_widevine_emui91_hash);
+        	} else if (!memcmp(hash_buf, drm_widevine_emui91_hash, sizeof(drm_widevine_emui91_hash))) {
+			tlogd("Widevine hash already matches EMUI 9.1, spoof skipped\n");
+		} else {
+			tloge("Widevine hash is unknown, spoof skipped\n");
+		}
 	} else if (!strcmp(my_pkname, "/vendor/bin/oeminfo_nvm_server")) {
-        	apply_spoof_hash(my_pkname, hash_buf, oeminfo_nvm_server_hash);
+		apply_spoof_hash(my_pkname, hash_buf, oeminfo_nvm_server_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/aptouch_daemon")) {
-        	apply_spoof_hash(my_pkname, hash_buf, aptouch_hash);
+		apply_spoof_hash(my_pkname, hash_buf, aptouch_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hiaiserver")) {
-        	apply_spoof_hash(my_pkname, hash_buf, hiaiserver_hash);
+		apply_spoof_hash(my_pkname, hash_buf, hiaiserver_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/CameraDaemon")) {
-        	apply_spoof_hash(my_pkname, hash_buf, cameradaemon_hash);
-	} else if (!strcmp(my_pkname, "sec_mem") && process_path && 
+		apply_spoof_hash(my_pkname, hash_buf, cameradaemon_hash);
+	} else if (!strcmp(my_pkname, "sec_mem") && process_path &&
 			!strcmp(process_path, "/vendor/bin/hw/android.hardware.graphics.allocator@2.0-service")) {
-        	apply_spoof_hash(process_path, hash_buf, graphics_allocator_hash);
+		apply_spoof_hash(process_path, hash_buf, graphics_allocator_hash);
 	} else if (!strcmp(my_pkname, "/vendor/bin/hw/android.hardware.graphics.composer@2.2-service")) {
-        	apply_spoof_hash(my_pkname, hash_buf, graphics_composer_hash);
+		apply_spoof_hash(my_pkname, hash_buf, graphics_composer_hash);
 	}
 }
 
