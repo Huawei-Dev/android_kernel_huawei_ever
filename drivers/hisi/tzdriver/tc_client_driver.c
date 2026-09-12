@@ -753,41 +753,54 @@ tee_cfc_rehash(struct shash_desc *shash, unsigned char *digest)
 }
 
 /* Calculate the SHA256 file digest */
-static int tee_calc_task_hash(unsigned char *digest, bool cfc_rehash, struct task_struct *S)
+static int tee_calc_task_hash(unsigned char *digest, bool cfc_rehash,
+			      struct task_struct *S)
 {
 	unsigned long start_code, end_code, code_size, in_size;
+	struct mm_struct *mm = NULL;
+	int rc;
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
+	unsigned char *hash_buf = NULL;
+#else
 	void *ptr_base = NULL;
 	struct page *ptr_page = NULL;
-	struct mm_struct *mm = NULL;
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 9, 0))
 	int locked = 1;
 #endif
-	int rc;
+#endif
+
 	struct sdesc {
 		struct shash_desc shash;
 		char ctx[];
 	};
 	struct sdesc *desc;
 
-	if (NULL == digest) {
+	if (digest == NULL) {
 		tloge("tee hash: input param is error!\n");
 		return -2;
 	}
 
-	desc = kmalloc(sizeof(struct shash_desc)
-			+ crypto_shash_descsize(g_tee_shash_tfm), GFP_KERNEL);
-	if (!desc) {
+	if (S == NULL) {
+		tloge("tee hash: task is NULL!\n");
+		return -2;
+	}
+
+	desc = kmalloc(sizeof(struct shash_desc) +
+		       crypto_shash_descsize(g_tee_shash_tfm),
+		       GFP_KERNEL);
+	if (desc == NULL) {
 		TCERR("alloc desc failed\n");
 		return -ENOMEM;
 	}
 
 	mm = get_task_mm(S);
-        if (mm == NULL) {
+	if (mm == NULL) {
 		errno_t sret;
 
 		sret = memset_s(digest, MAX_SHA_256_SZ, 0,
 				MAX_SHA_256_SZ);
-		if (EOK != sret) {
+		if (sret != EOK) {
 			rc = -2;
 			goto out;
 		}
@@ -800,7 +813,15 @@ static int tee_calc_task_hash(unsigned char *digest, bool cfc_rehash, struct tas
 	}
 
 	start_code = mm->start_code;
-	end_code   = mm->end_code;
+	end_code = mm->end_code;
+
+	if (end_code < start_code) {
+		tloge("tee hash: invalid code range start=0x%lx end=0x%lx\n",
+		      start_code, end_code);
+		rc = -EFAULT;
+		goto out_mm;
+	}
+
 	code_size = end_code - start_code;
 
 	desc->shash.tfm = g_tee_shash_tfm;
@@ -808,24 +829,128 @@ static int tee_calc_task_hash(unsigned char *digest, bool cfc_rehash, struct tas
 
 	rc = crypto_shash_init(&desc->shash);
 	if (rc != 0)
-		goto out;
+		goto out_mm;
 
-        down_read(&mm->mmap_sem);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
+
+	/*
+	 * Kernel 4.14 userspace executables may have separate VMAs
+	 * inside mm->start_code..mm->end_code, with unmapped holes
+	 * between them.
+	 *
+	 * Hash mapped regions individually instead of assuming the
+	 * entire code range is contiguous.
+	 */
+	hash_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
+	if (hash_buf == NULL) {
+		TCERR("tee hash: alloc hash buffer failed\n");
+		rc = -ENOMEM;
+		goto out_mm;
+	}
+
+	while (start_code < end_code) {
+		struct vm_area_struct *vma;
+		unsigned long vma_start;
+		unsigned long vma_end;
+
+		/*
+		 * find_vma() returns the VMA containing start_code or
+		 * the first VMA after it when start_code lies inside
+		 * an unmapped hole.
+		 *
+		 * Do not hold mmap_sem while calling access_process_vm().
+		 */
+		down_read(&mm->mmap_sem);
+
+		vma = find_vma(mm, start_code);
+		if (vma == NULL || vma->vm_start >= end_code) {
+			up_read(&mm->mmap_sem);
+			break;
+		}
+
+		vma_start = vma->vm_start;
+		vma_end = min_t(unsigned long, vma->vm_end, end_code);
+
+		up_read(&mm->mmap_sem);
+
+		/*
+		 * Skip an unmapped hole between VMAs.
+		 */
+		if (start_code < vma_start) {
+			start_code = vma_start;
+			continue;
+		}
+
+		/*
+		 * Hash only the current mapped VMA and never let
+		 * access_process_vm() cross its boundary.
+		 */
+		while (start_code < vma_end) {
+			int copied;
+
+			in_size = min_t(unsigned long,
+					PAGE_SIZE,
+					vma_end - start_code);
+
+			copied = access_process_vm(S,
+						   start_code,
+						   hash_buf,
+						   (int)in_size,
+						   FOLL_FORCE);
+
+			if (copied != (int)in_size) {
+				tloge("tee hash: access_process_vm failed "
+				      "task=%s pid=%d addr=0x%lx "
+				      "size=%lu copied=%d\n",
+				      S->comm,
+				      task_pid_nr(S),
+				      start_code,
+				      in_size,
+				      copied);
+
+				rc = -EFAULT;
+				goto out_hash_buf;
+			}
+
+			rc = crypto_shash_update(&desc->shash,
+						 hash_buf,
+						 in_size);
+			if (rc != 0)
+				goto out_hash_buf;
+
+			start_code += in_size;
+		}
+	}
+
+	rc = 0;
+
+out_hash_buf:
+	kfree(hash_buf);
+	hash_buf = NULL;
+
+	if (rc != 0)
+		goto out_mm;
+
+#else
+
+	/*
+	 * Keep the original implementation for pre-4.14 kernels.
+	 */
+	down_read(&mm->mmap_sem);
+
 	while (start_code < end_code) {
 
 		/* Get a handle of the page we want to read */
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0))
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0))
 		rc = get_user_pages_remote(S, mm,
-			start_code, 1, 0, &ptr_page, NULL);
-#else
-		rc = get_user_pages_remote(S, mm,
-			start_code, 1, 0, &ptr_page, NULL, NULL);
-#endif
+					   start_code, 1, 0,
+					   &ptr_page, NULL);
 #else
 		rc = get_user_pages_locked(S, mm,
-					  start_code, 1, 0, 0, &ptr_page, &locked);
+					   start_code, 1, 0, 0,
+					   &ptr_page, &locked);
 #endif
+
 		if (rc != 1) {
 			tloge("get user pages locked error[0x%x]\n", rc);
 			rc = -EFAULT;
@@ -833,33 +958,54 @@ static int tee_calc_task_hash(unsigned char *digest, bool cfc_rehash, struct tas
 		}
 
 		ptr_base = kmap_atomic(ptr_page);
-		if (NULL == ptr_base) {
+		if (ptr_base == NULL) {
 			rc = -3;
 			put_page(ptr_page);
 			break;
 		}
 
-		in_size = (code_size > PAGE_SIZE) ? PAGE_SIZE : code_size;
-		rc = crypto_shash_update(&desc->shash, ptr_base, in_size);
-		if (rc) {
+		in_size = (code_size > PAGE_SIZE) ?
+			  PAGE_SIZE : code_size;
+
+		rc = crypto_shash_update(&desc->shash,
+					 ptr_base,
+					 in_size);
+		if (rc != 0) {
 			kunmap_atomic(ptr_base);
 			put_page(ptr_page);
 			break;
 		}
+
 		kunmap_atomic(ptr_base);
 		put_page(ptr_page);
 
 		start_code += in_size;
 		code_size = end_code - start_code;
 	}
-        up_read(&mm->mmap_sem);
-	mmput(mm);
-	if (!rc) {
-		rc = crypto_shash_final(&desc->shash, digest);
 
-		if (rc || !cfc_is_enabled || !cfc_rehash)
-			goto out;
-		rc = tee_cfc_rehash(&desc->shash, digest);
+	up_read(&mm->mmap_sem);
+
+	if (rc != 0)
+		goto out_mm;
+
+#endif /* >= 4.14 */
+
+	mmput(mm);
+	mm = NULL;
+
+	rc = crypto_shash_final(&desc->shash, digest);
+
+	if (rc || !cfc_is_enabled || !cfc_rehash)
+		goto out;
+
+	rc = tee_cfc_rehash(&desc->shash, digest);
+
+	goto out;
+
+out_mm:
+	if (mm != NULL) {
+		mmput(mm);
+		mm = NULL;
 	}
 
 out:
