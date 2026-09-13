@@ -103,6 +103,7 @@ int secmem_tee_exec_cmd(TEEC_Session *session,
 	TEEC_Result result;
 	TEEC_Operation op = {0};
 	u32 protect_id = SEC_TASK_MAX;
+	struct tz_pageinfo *pageinfo = NULL;
 	u32 origin = 0;
 
 	if (!session || !mcl)
@@ -116,6 +117,24 @@ int secmem_tee_exec_cmd(TEEC_Session *session,
 	op.params[0].value.b = protect_id;
 
 	switch (cmd) {
+	case ION_SEC_CMD_PGATBLE_INIT:
+		op.paramTypes = TEEC_PARAM_TYPES(
+			TEEC_VALUE_INPUT,
+			TEEC_VALUE_INPUT,
+			TEEC_NONE,
+			TEEC_NONE);
+
+		pageinfo = (struct tz_pageinfo *)mcl->phys_addr;
+		if (!pageinfo) {
+			pr_err("PGTABLE_INIT: pageinfo is NULL\n");
+			return -EINVAL;
+		}
+
+		op.params[1].value.a = (u32)pageinfo->addr;
+		op.params[1].value.b =
+			pageinfo->nr_pages * PAGE_SIZE;
+		break;
+
 	case ION_SEC_CMD_ALLOC:
 		op.paramTypes = TEEC_PARAM_TYPES(
 			TEEC_VALUE_INPUT,

@@ -59,7 +59,30 @@ struct ion_secsg_heap {
 	u32 heap_attr;
 	u32 pool_flag;
 	int TA_init;
+	int pgtable_inited;
 };
+
+static int secsg_drm_pgtable_init(struct ion_secsg_heap *secsg_heap)
+{
+	struct mem_chunk_list mcl = {0};
+	struct tz_pageinfo pageinfo = {0};
+	int ret;
+
+	/*
+	 * Reserved DRM IOMMU page table region used by the secure
+	 * video memory path.
+	 */
+	pageinfo.addr = 0x10D00000ULL;
+	pageinfo.nr_pages = 0x200000 / PAGE_SIZE;
+
+	mcl.protect_id = SEC_TASK_DRM;
+	mcl.phys_addr = &pageinfo;
+
+	ret = secmem_tee_exec_cmd(secsg_heap->session, &mcl,
+				  ION_SEC_CMD_PGATBLE_INIT);
+
+	return ret;
+}
 
 #ifdef CONFIG_SECMEM_TEST
 #define ION_FLAG_ALLOC_TEST (1U << 31)
@@ -179,6 +202,19 @@ static int change_scatter_prop(struct ion_secsg_heap *secsg_heap,
 	if (!secsg_heap->TA_init) {
 		pr_err("[%s] TA not inited.\n", __func__);
 		return -EINVAL;
+	}
+
+	if (cmd == ION_SEC_CMD_ALLOC &&
+	    secsg_heap->heap_attr == SEC_DRM_TEE &&
+	    !secsg_heap->pgtable_inited) {
+		ret = secsg_drm_pgtable_init(secsg_heap);
+		if (ret) {
+			pr_err("%s: DRM pgtable init failed, ret=%d\n",
+			       __func__, ret);
+			return ret;
+		}
+
+		secsg_heap->pgtable_inited = 1;
 	}
 
 	if (cmd == ION_SEC_CMD_ALLOC) {
