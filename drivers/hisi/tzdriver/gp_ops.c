@@ -464,6 +464,7 @@ static int alloc_operation(TC_NS_DEV_File *dev_file,
 				ret = ion_secmem_get_phys(drm_dma_buf, &drm_ion_phys, &drm_ion_size);
 				if (ret)
 				{
+					dma_buf_put(drm_dma_buf);
 					tloge("in %s err:ret=%d fd=%d\n",
 					      __func__, ret, ion_shared_fd);
 					ret = -EFAULT;
@@ -512,7 +513,9 @@ static int alloc_operation(TC_NS_DEV_File *dev_file,
 				operation->params[i].memref.size =
 					(unsigned int)drm_ion_size;
 				trans_paramtype_to_tee[i] = param_type;
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
+				dma_buf_put(drm_dma_buf);
+#else
 				ion_free(drm_ion_client, drm_ion_handle);
 #endif
 			} else {
