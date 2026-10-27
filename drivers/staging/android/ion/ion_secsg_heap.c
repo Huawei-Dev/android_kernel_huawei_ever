@@ -37,6 +37,7 @@
 #include "hisi/ion_tee_op.h"
 #include "hisi/sec_alloc.h"
 #include "hisi_ion_priv.h"
+#include "ion_drm_compat.h"
 
 
 struct ion_secsg_heap {
@@ -447,6 +448,22 @@ static void __secsg_free_scatter(struct ion_secsg_heap *secsg_heap,
 	int ret = 0;
 	u32 i;
 
+	if (secsg_heap->heap_attr == SEC_DRM_TEE &&
+	    buffer->drm_secure_iova_valid) {
+		struct mem_chunk_list mcl = {0};
+
+		/* Already holding secsg_heap->mutex in ion_secsg_heap_free(). */
+		mcl.protect_id = SEC_TASK_DRM;
+		mcl.buff_id = buffer->id;
+		ret = secmem_tee_exec_cmd(secsg_heap->session, &mcl,
+		                           ION_SEC_CMD_UNMAP_IOMMU);
+		if (ret)
+			pr_err("secure DRM IOVA unmap failed: id=%u ret=%d\n",
+			       buffer->id, ret);
+		else
+			buffer->drm_secure_iova_valid = false;
+	}
+
 	if (secsg_heap->heap_attr == SEC_DRM_TEE) {
 		ret = change_scatter_prop(secsg_heap, buffer, ION_SEC_CMD_FREE);
 		if (ret) {
@@ -503,6 +520,53 @@ int ion_secsg_heap_phys(struct ion_heap *heap, struct ion_buffer *buffer,
 	*addr = buffer->id;
 	*len = buffer->size;
 
+	return 0;
+}
+
+/* Called with a live DMA-BUF reference by the ION DRM compat IOCTL.
+ * No IOVA mapping is exposed for non-secure or non-SECSG buffers.
+ */
+int ion_secsg_map_iommu_dmabuf(struct dma_buf *dmabuf, u32 *iova)
+{
+	struct ion_buffer *buffer;
+	struct ion_secsg_heap *secsg_heap;
+	struct mem_chunk_list mcl = {0};
+	int ret;
+
+	if (!dmabuf || !iova || !is_ion_dma_buf(dmabuf))
+		return -EINVAL;
+
+	buffer = dmabuf->priv;
+	if (!buffer || !buffer->heap ||
+	    buffer->heap->type != ION_HEAP_TYPE_SECSG ||
+	    !(buffer->flags & ION_FLAG_SECURE_BUFFER) ||
+	    !buffer->size || buffer->size > (size_t)~0U)
+		return -EINVAL;
+
+	secsg_heap = container_of(buffer->heap, struct ion_secsg_heap, heap);
+	if (secsg_heap->heap_attr != SEC_DRM_TEE)
+		return -EINVAL;
+
+	mcl.protect_id = SEC_TASK_DRM;
+	mcl.buff_id = buffer->id;
+	mcl.size = (u32)buffer->size;
+	mcl.phys_addr = NULL;
+
+	mutex_lock(&secsg_heap->mutex);
+	if (!secsg_heap->TA_init)
+		ret = -ENODEV;
+	else
+		ret = secmem_tee_exec_cmd(secsg_heap->session, &mcl,
+		                           ION_SEC_CMD_MAP_IOMMU);
+	mutex_unlock(&secsg_heap->mutex);
+
+	if (ret) {
+		pr_err("secure DRM IOVA map failed: id=%u ret=%d\n",
+		       buffer->id, ret);
+		return ret;
+	}
+
+	*iova = mcl.va;
 	return 0;
 }
 

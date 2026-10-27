@@ -52,6 +52,7 @@
 
 #include "ion.h"
 #include "hisi_ion_priv.h"
+#include "ion_drm_compat.h"
 
 #define HISI_ION_FLUSH_ALL_CPUS_CACHES	0x800000 /*8MB*/
 #define HISI_ION_ALLOC_MAX_LATENCY_US	(500 * 1000) /* 500ms */
@@ -661,6 +662,63 @@ bool is_ion_dma_buf(struct dma_buf *dmabuf)
 			&& (dmabuf->ops == &dma_buf_ops))
 		return true;
 	return false;
+}
+
+/* Map a protected DMA-BUF through the existing SEC_TASK_DRM / TZMP2 TA.
+ * The map stays live until DMA-BUF release, not until the shim session closes.
+ * buffer->lock serializes duplicate requests for the same allocation.
+ */
+int ion_drm_map_fd(int fd, u32 requested_size, u32 *iova, u32 *mapped_size)
+{
+#ifdef CONFIG_ION_HISI_SECSG
+	struct dma_buf *dmabuf;
+	struct ion_buffer *buffer;
+	int ret = 0;
+
+	if (!iova || !mapped_size || !requested_size || fd < 0)
+		return -EINVAL;
+
+	dmabuf = dma_buf_get(fd);
+	if (IS_ERR(dmabuf))
+		return PTR_ERR(dmabuf);
+
+	if (!is_ion_dma_buf(dmabuf)) {
+		ret = -EINVAL;
+		goto out_put;
+	}
+
+	buffer = dmabuf->priv;
+	if (!buffer || !buffer->heap ||
+	    buffer->heap->type != ION_HEAP_TYPE_SECSG ||
+	    !(buffer->flags & ION_FLAG_SECURE_BUFFER) ||
+	    !buffer->size || buffer->size > (size_t)~0U ||
+	    requested_size > buffer->size) {
+		ret = -EINVAL;
+		goto out_put;
+	}
+
+	mutex_lock(&buffer->lock);
+	if (!buffer->drm_secure_iova_valid) {
+		u32 secure_iova = 0;
+
+		ret = ion_secsg_map_iommu_dmabuf(dmabuf, &secure_iova);
+		if (!ret) {
+			buffer->drm_secure_iova = secure_iova;
+			buffer->drm_secure_iova_valid = true;
+		}
+	}
+	if (!ret) {
+		*iova = buffer->drm_secure_iova;
+		*mapped_size = (u32)buffer->size;
+	}
+	mutex_unlock(&buffer->lock);
+
+out_put:
+	dma_buf_put(dmabuf);
+	return ret;
+#else
+	return -EOPNOTSUPP;
+#endif
 }
 
 int ion_query_heaps(struct ion_heap_query *query)

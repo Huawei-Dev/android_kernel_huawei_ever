@@ -91,6 +91,9 @@ struct ion_buffer {
 	pid_t pid;
 #ifdef CONFIG_ION_HISI_SECSG
 	unsigned int id;
+	/* Protected DRM mapping owned by the DMA-BUF lifecycle. */
+	u32 drm_secure_iova;
+	bool drm_secure_iova_valid;
 #endif
 
 #ifdef CONFIG_HISI_LB
