@@ -11,7 +11,7 @@
 #include <net/netlink.h>
 #include <net/tcp.h>
 
-#include "tcp_small_window_chr_monitor.h"
+#include <hwnet/ipv4/tcp_small_window_chr_monitor.h>
 
 #ifdef CONFIG_HW_CHR_TCP_SMALL_WIN_PROC
 #include <net/net_namespace.h>
