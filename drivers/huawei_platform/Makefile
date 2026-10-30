@@ -53,3 +53,4 @@ obj-$(CONFIG_HISI_SPMI)		+= spmi_hisi/
 obj-$(CONFIG_HW_ZEROHUNG) += hwzerohung/
 obj-$(CONFIG_HW_XCOLLIE) += hwxcollie/
 obj-$(CONFIG_HW_GADGET) += hwusb/
+obj-$(CONFIG_HW_WIFI)       += hwnet/

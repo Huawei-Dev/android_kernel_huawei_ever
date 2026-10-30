@@ -32,7 +32,7 @@
 #include <hwnet/ipv4/tcp_small_window_chr_monitor.h>
 #endif
 
-#include "wbc_hw_hook.h"
+#include <hwnet/chr/wbc_hw_hook.h>
 #include "chr_netlink.h"
 #ifndef CONFIG_CHR_MTK_NETLINK
 #include "net/netbooster/video_acceleration.h"

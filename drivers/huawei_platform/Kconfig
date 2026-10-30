@@ -58,6 +58,7 @@ source "drivers/huawei_platform/log/Kconfig"
 source "drivers/huawei_platform/hwzerohung/Kconfig"
 source "drivers/huawei_platform/hwxcollie/Kconfig"
 source "drivers/huawei_platform/hwusb/Kconfig"
+source "drivers/huawei_platform/hwnet/Kconfig"
 endif #HUAWEI_PLATFORM
 
 endmenu

@@ -11,7 +11,7 @@
  * Create: 2019-03-19
  */
 
-#include "netlink_handle.h"
+#include <hwnet/booster/netlink_handle.h>
 #ifdef CONFIG_HW_NETWORK_QOE
 #include "ip_para_collec_ex.h"
 #endif
@@ -32,10 +32,10 @@
 #include <linux/kthread.h>
 #include <linux/list.h>
 
-#include "tcp_para_collec.h"
+#include <hwnet/booster/tcp_para_collec.h>
 
 #ifdef CONFIG_HW_PACKET_FILTER_BYPASS
-#include "hw_packet_filter_bypass.h"
+#include <hwnet/booster/hw_packet_filter_bypass.h>
 #endif
 
 #undef HWLOG_TAG

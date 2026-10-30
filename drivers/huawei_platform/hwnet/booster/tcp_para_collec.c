@@ -5,7 +5,7 @@
  * Create: 2019-04-18
  */
 
-#include "tcp_para_collec.h"
+#include <hwnet/booster/tcp_para_collec.h>
 
 #include <linux/net.h>
 #include <net/sock.h>
@@ -13,7 +13,7 @@
 #include <linux/ip.h>
 #include <linux/ipv6.h>
 #include <net/tcp.h>
-#include "hw_packet_filter_bypass.h"
+#include <hwnet/booster/hw_packet_filter_bypass.h>
 
 #define ASSIGN_SHORT(p, val) (*(s16 *)(p) = (val))
 #define ASSIGN_LONG(p, val) (*(s64 *)(p) = (val))

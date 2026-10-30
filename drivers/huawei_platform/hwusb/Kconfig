@@ -1,1 +1,1 @@
-source "drivers/hwusb/hw_gadget/Kconfig"
+source "drivers/huawei_platform/hwusb/hw_gadget/Kconfig"

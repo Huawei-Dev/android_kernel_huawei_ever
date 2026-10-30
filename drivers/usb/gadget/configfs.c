@@ -1574,7 +1574,7 @@ static void configfs_composite_unbind(struct usb_gadget *gadget)
 #endif
 }
 
-#include "../../hwusb/hw_gadget/hw_controlrequest_handle.c"
+#include "../../huawei_platform/hwusb/hw_gadget/hw_controlrequest_handle.c"
 
 #ifdef CONFIG_USB_CONFIGFS_NCM
 static int mirrorlink_ctrlrequest(struct usb_composite_dev *cdev,

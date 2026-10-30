@@ -13,7 +13,7 @@
 #include <linux/netlink.h>
 #include <uapi/linux/netlink.h>
 #include <linux/kthread.h>
-#include "wbc_hw_hook.h"
+#include <hwnet/chr/wbc_hw_hook.h>
 #include "chr_netlink.h"
 
 #undef HWLOG_TAG

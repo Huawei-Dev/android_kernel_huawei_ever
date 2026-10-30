@@ -225,8 +225,6 @@ source "drivers/hwbfm/Kconfig"
 
 source "drivers/contexthub/Kconfig"
 
-source "drivers/hwnet/Kconfig"
-
 source "drivers/hwfdleak/Kconfig"
 
 source "drivers/hwerecovery/Kconfig"
