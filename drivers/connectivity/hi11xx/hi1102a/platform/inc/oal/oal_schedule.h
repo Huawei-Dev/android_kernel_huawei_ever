@@ -3,7 +3,7 @@
 #ifndef __OAL_SCHEDULE_H__
 #define __OAL_SCHEDULE_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_types.h"
 #include "oal_hardware.h"
 #include "oal_mm.h"
@@ -13,13 +13,13 @@
 #if ((LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) && (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION))
 #include <linux/pm_wakeup.h>
 #endif
-/* 宏定义 */
+/* ?????? */
 #if (_PRE_CHIP_BITS_MIPS32 == _PRE_CHIP_BITS)
-/* 32位寄存器最大长度 */
+/* 32???????????????? */
 #define OAL_TIME_US_MAX_LEN 0xFFFFFFFF
 
 #elif (_PRE_CHIP_BITS_MIPS64 == _PRE_CHIP_BITS)
-/* 64位寄存器最大长度 */
+/* 64???????????????? */
 #define OAL_TIME_US_MAX_LEN 0xFFFFFFFFFFFFFFFF
 
 #endif
@@ -93,7 +93,7 @@ OAL_STATIC OAL_INLINE oal_void oal_dft_trace_key_info_func(oal_dft_trace_item* p
     }
 }
 
-/* 关键流程发生时间点记录，有加锁动作，慎用 */
+/* ???????????????????????????????????????? */
 #define DECLARE_DFT_TRACE_KEY_INFO(dname, dtype)                                               \
     do {                                                                                       \
         OAL_STATIC oal_dft_trace_item st_dft_item = {{0}, NULL, 0, 0, 0, {0}, {0}};    \
@@ -128,8 +128,8 @@ OAL_STATIC OAL_INLINE int oal_print_rate_limit_func(int* first_print, oal_ulong*
 }
 
 /*
- * 微妙超时，当timeout=1000 说明当打印频率高于1000ms时返回true
- * 否者压制打印返回false, 当timeout=0 侧不压制打印
+ * ????????????timeout=1000 ??????????????????1000ms??????true
+ * ????????????????false, ??timeout=0 ????????????
  */
 #define oal_print_rate_limit(timeout) ({                                                  \
     int ret__;                                                                            \
@@ -149,24 +149,24 @@ OAL_STATIC OAL_INLINE oal_int32 oal_print_rate_limit(oal_ulong timeout)
 
 typedef struct _oal_wakelock_stru_ {
 #if ((LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) && (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION))
-    struct wakeup_source st_wakelock;  // wakelock锁
-    oal_spin_lock_stru lock;           // wakelock锁操作spinlock锁
+    struct wakeup_source st_wakelock;  // wakelock??
+    oal_spin_lock_stru lock;           // wakelock??????spinlock??
     oal_dlist_head_stru list;
 #endif
-    oal_ulong lock_count;  // 持有wakelock锁的次数
+    oal_ulong lock_count;  // ????wakelock????????
     uintptr_t locked_addr; /* the locked address */
     oal_uint32 debug;      // debug flag
 } oal_wakelock_stru;
 
-/* 获取从_ul_start到_ul_end的时间差 */
+/* ??????_ul_start??_ul_end???????? */
 #define OAL_TIME_GET_RUNTIME(_ul_start, _ul_end) \
     (((_ul_start) > (_ul_end)) ? (OAL_TIME_CALC_RUNTIME((_ul_start), (_ul_end))) : ((_ul_end) - (_ul_start)))
 
-/* 全局变量声明 */
+/* ???????????? */
 extern oal_spin_lock_stru g_wakelock_lock;
 extern oal_dlist_head_stru g_wakelock_head;
 
-/* 函数声明 */
+/* ???????? */
 #ifdef _PRE_CONFIG_HISI_CONN_SOFTWDFT
 extern oal_int32 oal_softwdt_init(oal_void);
 extern oal_void oal_softwdt_exit(oal_void);

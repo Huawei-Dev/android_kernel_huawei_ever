@@ -72,7 +72,7 @@ extern "C" {
 #endif
 
 /*****************************************************************************
-#pragma pack(*)    设置字节对齐方式
+#pragma pack(*)    ????????????????
 *****************************************************************************/
 #if (VOS_OS_VER != VOS_WIN32)
 #pragma pack(4)
@@ -88,7 +88,7 @@ extern "C" {
 #define VOICEAGENT_FAIL                       (1)
 #define VOICEAGENT_TRUE                       (1)
 #define VOICEAGENT_FALSE                      (0)
-/* IOCTL CMD 定义 */
+/* IOCTL CMD ???? */
 #define VOICEAGENT_IOCTL_SET_WRITE_CB      0x7F001000
 #define VOICEAGENT_IOCTL_SET_READ_CB       0x7F001001
 #define VOICEAGENT_IOCTL_SET_EVT_CB        0x7F001002
@@ -136,7 +136,7 @@ extern "C" {
  */
 
 #else
-/*打印转层间打开*/
+/*??????????????*/
 #if (!defined(_lint) && (PRINT_SWITCH == PRINT_OFF) && (VOS_WIN32 != VOS_OS_VER))
 #define VOICEAGENT_INFO_LOG(String)
 #define VOICEAGENT_INFO_LOG1(String, Para1)
@@ -167,7 +167,7 @@ extern "C" {
 #endif
 #endif
 
-/* 内存拷贝宏定义 */
+/* ?????????????? */
 
 #if (VOS_OS_VER == VOS_WIN32)
 
@@ -230,7 +230,7 @@ typedef VOS_UINT16 VOICE_AGENT_DEVICE_ID_ENUM_UINT16;
 typedef struct
 {
     UDI_DEVICE_ID_E                         enUdiDevId;
-    VOICE_AGENT_HANDLE                      slVoiceagentHdl;                 /* 设备对应的句柄 */
+    VOICE_AGENT_HANDLE                      slVoiceagentHdl;                 /* ?????????????? */
     VOS_UINT32                              *pNvVirAddr;
     VOS_UINT32                              *pNvPhyAddr;
     VOS_UINT32                              ulDataSize;
@@ -238,8 +238,8 @@ typedef struct
 
 typedef struct
 {
-    VOICE_AGENT_DEVICE_ID_ENUM_UINT16       enUdiDevId;                           /* 设备ID */
-    VOS_VOID                               *pPrivate;                            /* 模块特有的数据 */
+    VOICE_AGENT_DEVICE_ID_ENUM_UINT16       enUdiDevId;                           /* ????ID */
+    VOS_VOID                               *pPrivate;                            /* ?????????????? */
 } VOICE_AGENT_OPEN_PARAM_S;
 
 

@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include <linux/version.h>
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 #define HISI_NVRAM_SUPPORT
@@ -33,8 +33,8 @@
 #include "oal_util.h"
 #include "securec.h"
 
-/* 全局变量定义 */
-#define CUST_PATH_INI_CONN "/data/vendor/cust_conn/ini_cfg" /* 某运营商在不同产品的差异配置 */
+/* ???????????? */
+#define CUST_PATH_INI_CONN "/data/vendor/cust_conn/ini_cfg" /* ???????????????????????????? */
 /* mutex for open ini file */
 struct mutex file_mutex_etc;
 #if (_PRE_TARGET_PRODUCT_TYPE_E5 == _PRE_CONFIG_TARGET_PRODUCT)
@@ -76,7 +76,7 @@ static int32 ko_read_line(INI_FILE *fp, char *addr, int32 buf_len)
     }
 
     cnt = 0;
-    /* -2预留换行符和结束符 */
+    /* -2?????????????????? */
     cnt_limit = (buf_len - 2) > MAX_READ_LINE_NUM ? MAX_READ_LINE_NUM : (buf_len - 2);
     while ((cnt < cnt_limit) && (auc_tmp[cnt] != '\n')) {
         *addr++ = auc_tmp[cnt++];
@@ -248,7 +248,7 @@ static int32 ini_check_value(int8 *puc_value, uint32 value_len)
         return INI_FAILED;
     }
 
-    /* 替换尾部空格和换行符为'\0' */
+    /* ??????????????????????'\0' */
     cnt = value_len - 1;
     while ((cnt != 0) && (puc_value[cnt] == '\n' || puc_value[cnt] == '\r' || puc_value[cnt] == ' ')) {
         puc_value[cnt--] = '\0';
@@ -750,11 +750,11 @@ int32 get_ini_file_name_from_dts_etc(int8 *dts_prop, int8 *prop_value, uint32 si
 #endif
 
 /*
- * 函 数 名 : bin_mem_check
- * 功能描述  : 二进制内存检查
- * 输入参数  : int8 *pc_dest需要对比的内存地址
- *             int8 *pc_src比较的内存地址
- *             int16 us_lenth需要比较的内存长度
+ * ?? ?? ?? : bin_mem_check
+ * ????????  : ??????????????
+ * ????????  : int8 *pc_dest??????????????????
+ *             int8 *pc_src??????????????
+ *             int16 us_lenth??????????????????
  */
 STATIC int32 bin_mem_check(int8 *pc_dest, const int8 *pc_src, uint16 us_lenth)
 {
@@ -782,7 +782,7 @@ static int8 *search_target_str(int8* read_buf, uint32 buf_len, const int8 *targe
     uint16 target_len = OAL_STRLEN(target_str);
 
     for (loop = 0; loop < buf_len - target_len; loop++) {
-        /* 判断首尾减少bin_mem_check调用次数 */
+        /* ????????????bin_mem_check???????? */
         if (!bin_mem_check(&read_buf[loop], target_str, target_len)) {
             return &read_buf[loop];
         }
@@ -792,10 +792,10 @@ static int8 *search_target_str(int8* read_buf, uint32 buf_len, const int8 *targe
 
 
 /*
- * 函 数 名  : get_str_from_file
- * 功能描述  : 从文件中获取固定字符串，保存到另外的位置
- * 输入参数  : char *file_path 文件绝对路径
- *             const int8 *target_str 查找内容
+ * ?? ?? ??  : get_str_from_file
+ * ????????  : ????????????????????????????????????????
+ * ????????  : char *file_path ????????????
+ *             const int8 *target_str ????????
  */
 int8 *get_str_from_file_etc(int8 *pc_file_path, const int8 * target_str)
 {
@@ -824,7 +824,7 @@ int8 *get_str_from_file_etc(int8 *pc_file_path, const int8 * target_str)
     }
     INI_INFO("open file %s success to find str \"%s\"!", pc_file_path, target_str);
 
-    /* 由于每次比较都会留uc_str_check_len不比较所以不是0 */
+    /* ??????????????????uc_str_check_len??????????????0 */
     do {
         read_bytes = oal_file_read_ext(fp, fp->f_pos, read_buf, INI_KERNEL_READ_LEN);
         if (read_bytes <= target_len) {
@@ -839,7 +839,7 @@ int8 *get_str_from_file_etc(int8 *pc_file_path, const int8 * target_str)
             fp->f_pos += (version_str - read_buf);
             fp->f_pos += target_len;
             memset_s(read_buf, sizeof(read_buf), 0, sizeof(read_buf));
-            /* 读取到‘\n’或者最大192B数据到ac_read_buf */
+            /* ????????\n??????????192B??????ac_read_buf */
             ko_read_line(fp, read_buf, sizeof(read_buf));
             break;
 

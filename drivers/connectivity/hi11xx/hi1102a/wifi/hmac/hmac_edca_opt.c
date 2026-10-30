@@ -8,26 +8,26 @@ extern "C" {
 
 #ifdef _PRE_WLAN_FEATURE_EDCA_OPT_AP
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "hmac_edca_opt.h"
 #include "hmac_vap.h"
 #include "oam_wdk.h"
 
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_EDCA_OPT_C
-/* 2 结构体定义 */
-/* 3 宏定义 */
+/* 2 ?????????? */
+/* 3 ?????? */
 #define HMAC_EDCA_OPT_ADJ_STEP 2
 
 /* (3-a)/3*X + a/3*Y */
 #define WLAN_EDCA_OPT_MOD(X, Y, a) (((X) * (WLAN_EDCA_OPT_MAX_WEIGHT_STA - a) + (Y) * (a)) / WLAN_EDCA_OPT_MAX_WEIGHT_STA);
 
-/* 4 全局变量定义 */
-/* 5 内部静态函数声明 */
+/* 4 ???????????? */
+/* 5 ???????????????? */
 OAL_STATIC oal_bool_enum_uint8 hmac_edca_opt_check_is_tcp_data(mac_ip_header_stru *pst_ip);
 OAL_STATIC oal_uint32 hmac_edca_opt_stat_traffic_num(hmac_vap_stru *pst_hmac_vap, oal_uint8 (*ppuc_traffic_num)[WLAN_TXRX_DATA_BUTT]);
 
-/* 6 函数实现 */
+/* 6 ???????? */
 
 OAL_STATIC oal_bool_enum_uint8 hmac_edca_opt_check_is_tcp_data(mac_ip_header_stru *pst_ip)
 {
@@ -36,11 +36,11 @@ OAL_STATIC oal_bool_enum_uint8 hmac_edca_opt_check_is_tcp_data(mac_ip_header_str
     oal_uint8    uc_ip_header_len   = ((*puc_ip) & 0x0F) << 2; /* IP_HDR_LEN */
     oal_uint8    uc_tcp_header_len  = 0;
 
-    /* 获取ip报文长度 */
+    /* ????ip???????? */
     us_ip_len = (*(puc_ip + 2 /* length in ip header */)) << 8;
     us_ip_len |= *(puc_ip + 2 /* length in ip header */ + 1);
 
-    /* 获取tcp header长度 */
+    /* ????tcp header???? */
     uc_tcp_header_len = *(puc_ip + uc_ip_header_len + 12 /* length in tcp header */);
     uc_tcp_header_len = (uc_tcp_header_len >> 4) << 2;
 
@@ -88,7 +88,7 @@ OAL_STATIC oal_uint32 hmac_edca_opt_stat_traffic_num(hmac_vap_stru *pst_hmac_vap
                     ppuc_traffic_num[uc_ac_idx][uc_data_idx]++;
                 }
 
-                /* 统计完毕置0 */
+                /* ??????????0 */
                 pst_hmac_user->aaul_txrx_data_stat[uc_ac_idx][uc_data_idx] = 0;
             }
         }
@@ -113,14 +113,14 @@ oal_uint32 hmac_edca_opt_timeout_fn(oal_void *p_arg)
 
     pst_hmac_vap = (hmac_vap_stru *)p_arg;
 
-    /* 计数初始化 */
+    /* ?????????? */
     OAL_MEMZERO(aast_uc_traffic_num, OAL_SIZEOF(aast_uc_traffic_num));
 
-    /* 统计device下所有用户上/下行 TPC/UDP条数目 */
+    /* ????device????????????/???? TPC/UDP?????? */
     hmac_edca_opt_stat_traffic_num(pst_hmac_vap, aast_uc_traffic_num);
 
     /***************************************************************************
-        抛事件到dmac模块,将统计信息报给dmac
+        ????????dmac????,??????????????dmac
     ***************************************************************************/
 
     pst_event_mem = FRW_EVENT_ALLOC(OAL_SIZEOF(aast_uc_traffic_num));
@@ -131,7 +131,7 @@ oal_uint32 hmac_edca_opt_timeout_fn(oal_void *p_arg)
 
     pst_event = (frw_event_stru *)pst_event_mem->puc_data;
 
-    /* 填写事件头 */
+    /* ?????????? */
     FRW_EVENT_HDR_INIT(&(pst_event->st_event_hdr),
                        FRW_EVENT_TYPE_WLAN_CTX,
                        DMAC_WLAN_CTX_EVENT_SUB_TYPR_EDCA_OPT,
@@ -141,10 +141,10 @@ oal_uint32 hmac_edca_opt_timeout_fn(oal_void *p_arg)
                        pst_hmac_vap->st_vap_base_info.uc_device_id,
                        pst_hmac_vap->st_vap_base_info.uc_vap_id);
 
-    /* 拷贝参数 */
+    /* ???????? */
     oal_memcopy(frw_get_event_payload(pst_event_mem), (oal_uint8 *)aast_uc_traffic_num, OAL_SIZEOF(aast_uc_traffic_num));
 
-    /* 分发事件 */
+    /* ???????? */
     frw_event_dispatch_event(pst_event_mem);
     FRW_EVENT_FREE(pst_event_mem);
 
@@ -162,7 +162,7 @@ oal_void hmac_edca_opt_rx_pkts_stat(oal_uint16 us_assoc_id, oal_uint8 uc_tidno, 
     }
     OAM_INFO_LOG0(0, OAM_SF_RX, "{hmac_edca_opt_rx_pkts_stat}");
 
-    /* 过滤IP_LEN 小于 HMAC_EDCA_OPT_MIN_PKT_LEN的报文 */
+    /* ????IP_LEN ???? HMAC_EDCA_OPT_MIN_PKT_LEN?????? */
     if (OAL_NET2HOST_SHORT(pst_ip->us_tot_len) < HMAC_EDCA_OPT_MIN_PKT_LEN) {
         return;
     }
@@ -194,7 +194,7 @@ oal_void hmac_edca_opt_tx_pkts_stat(mac_tx_ctl_stru *pst_tx_ctl, oal_uint8 uc_ti
     }
     OAM_INFO_LOG0(0, OAM_SF_RX, "{hmac_edca_opt_tx_pkts_stat}");
 
-    /* 过滤IP_LEN 小于 HMAC_EDCA_OPT_MIN_PKT_LEN的报文 */
+    /* ????IP_LEN ???? HMAC_EDCA_OPT_MIN_PKT_LEN?????? */
     if (OAL_NET2HOST_SHORT(pst_ip->us_tot_len) < HMAC_EDCA_OPT_MIN_PKT_LEN) {
         return;
     }

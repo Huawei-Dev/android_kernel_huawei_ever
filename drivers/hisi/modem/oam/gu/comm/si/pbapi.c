@@ -54,7 +54,7 @@
 #include "product_config.h"
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define      THIS_FILE_ID     PS_FILE_ID_PBAPI_C
 
@@ -68,7 +68,7 @@ VOS_UINT32 SI_PB_GetReceiverPid(MN_CLIENT_ID_T  ClientId, VOS_UINT32 *pulReceive
 #if ( FEATURE_MULTI_MODEM == FEATURE_ON )
     MODEM_ID_ENUM_UINT16    enModemID;
 
-    /* 调用接口获取Modem ID */
+    /* ????????????Modem ID */
     if(VOS_OK != AT_GetModemIdFromClient(ClientId,&enModemID))
     {
         return VOS_ERR;
@@ -323,7 +323,7 @@ SI_UINT32 SI_PB_Add(    MN_CLIENT_ID_T          ClientId,
     pMsg->ucOpID        = OpId;
 
 #if( FEATURE_MULTI_MODEM == FEATURE_ON )
-    pMsg->ulStorage = SI_PB_STORAGE_FD;     /*只能够操作FDN号码*/
+    pMsg->ulStorage = SI_PB_STORAGE_FD;     /*??????????FDN????*/
 #else
     if(SI_PB_STORAGE_UNSPECIFIED == Storage)
     {
@@ -442,7 +442,7 @@ SI_UINT32 SI_PB_Modify(    MN_CLIENT_ID_T          ClientId,
     pMsg->ucOpID        = OpId;
 
 #if( FEATURE_MULTI_MODEM == FEATURE_ON )
-    pMsg->ulStorage = SI_PB_STORAGE_FD;     /*只能够操作FDN号码*/
+    pMsg->ulStorage = SI_PB_STORAGE_FD;     /*??????????FDN????*/
 #else
     if(SI_PB_STORAGE_UNSPECIFIED == Storage)
     {
@@ -552,7 +552,7 @@ SI_UINT32 SI_PB_Delete(     MN_CLIENT_ID_T             ClientId,
     pMsg->usIndex       = Index;
 
 #if( FEATURE_MULTI_MODEM == FEATURE_ON )
-    pMsg->ulStorage = SI_PB_STORAGE_FD;     /*只能够操作FDN号码*/
+    pMsg->ulStorage = SI_PB_STORAGE_FD;     /*??????????FDN????*/
 #else
     if(SI_PB_STORAGE_UNSPECIFIED == Storage)
     {
@@ -623,7 +623,7 @@ SI_UINT32 SI_PB_Search(    MN_CLIENT_ID_T             ClientId,
 VOS_UINT32 SI_PB_GetStorateType(VOS_VOID)
 {
 #if (( FEATURE_MULTI_MODEM == FEATURE_ON )&&(!defined(DMT)))
-    return SI_PB_STORAGE_UNSPECIFIED;   /*返回当前未指定*/
+    return SI_PB_STORAGE_UNSPECIFIED;   /*??????????????*/
 #else
     return (VOS_UINT32)gstPBCtrlInfo.enPBCurType;
 #endif
@@ -633,7 +633,7 @@ VOS_UINT32 SI_PB_GetStorateType(VOS_VOID)
 VOS_UINT32 SI_PB_GetSPBFlag(VOS_VOID)
 {
 #if (( FEATURE_MULTI_MODEM == FEATURE_ON )&&(!defined(DMT)))
-    return VOS_FALSE;   /*返回状态关闭*/
+    return VOS_FALSE;   /*????????????*/
 #else
     return (VOS_UINT32)gstPBConfigInfo.ucSPBFlag;
 #endif
@@ -655,7 +655,7 @@ VOS_UINT32 SI_PB_GetEccNumber(SI_PB_ECC_DATA_STRU *pstEccData)
 
     ulResult = SI_PB_LocateRecord(PB_ECC, 1, 1, &ucPBOffset);
 
-    if(VOS_OK != ulResult)     /*当前电话本不存在或者初始化未完成*/
+    if(VOS_OK != ulResult)     /*????????????????????????????????*/
     {
         PB_ERROR_LOG("SI_PB_GetEccNumber Error: SI_PB_LocateRecord Return Failed");
 
@@ -671,15 +671,15 @@ VOS_UINT32 SI_PB_GetEccNumber(SI_PB_ECC_DATA_STRU *pstEccData)
 
     ptemp = gastPBContent[ucPBOffset].pContent;
 
-    for(i=0,j=0; i<ulNum; i++)   /*根据数据结构最大长度循环*/
+    for(i=0,j=0; i<ulNum; i++)   /*????????????????????????*/
     {
         ulResult = SI_PB_CheckEccValidity(ptemp);
 
-        if(VOS_ERR == ulResult)     /*当前记录内容无效*/
+        if(VOS_ERR == ulResult)     /*????????????????*/
         {
             PB_INFO_LOG("SI_PB_GetEccNumber Info: The Ecc Number is Empty");
         }
-        else                                /*转换当前记录内容*/
+        else                                /*????????????????*/
         {
             PB_INFO_LOG("SI_PB_GetEccNumber Info: The Ecc Number is Not Empty");
 
@@ -722,7 +722,7 @@ VOS_UINT32 SI_PB_GetXeccNumber(SI_PB_ECC_DATA_STRU *pstEccData)
     VOS_UINT32                          i;
     VOS_UINT32                          j;
 
-    /* 输入参数检测 */
+    /* ???????????? */
     if (VOS_NULL_PTR == pstEccData)
     {
         PB_ERROR_LOG("SI_PB_GetXeccNumber Error: Para is incorrect.");
@@ -734,7 +734,7 @@ VOS_UINT32 SI_PB_GetXeccNumber(SI_PB_ECC_DATA_STRU *pstEccData)
 
     ulResult = SI_PB_LocateRecord(PB_XECC, 1, 1, &ucPBOffset);
 
-    /* 当前电话本不存在或者初始化未完成 */
+    /* ???????????????????????????????? */
     if (VOS_OK != ulResult)
     {
         PB_ERROR_LOG("SI_PB_GetXeccNumber Error: SI_PB_LocateRecord Return Failed");
@@ -751,15 +751,15 @@ VOS_UINT32 SI_PB_GetXeccNumber(SI_PB_ECC_DATA_STRU *pstEccData)
 
     pucTemp = gastPBContent[ucPBOffset].pContent;
 
-    for (i = 0, j = 0; i < ulNum; i++)   /* 根据数据结构最大长度循环 */
+    for (i = 0, j = 0; i < ulNum; i++)   /* ???????????????????????? */
     {
         ulResult = SI_PB_CheckEccValidity(pucTemp);
 
-        if (VOS_ERR == ulResult)     /* 当前记录内容无效 */
+        if (VOS_ERR == ulResult)     /* ???????????????? */
         {
             PB_INFO_LOG("SI_PB_GetXeccNumber Info: The Ecc Number is Empty");
         }
-        else                                /* 转换当前记录内容 */
+        else                                /* ???????????????? */
         {
             PB_INFO_LOG("SI_PB_GetXeccNumber Info: The Ecc Number is Not Empty");
 

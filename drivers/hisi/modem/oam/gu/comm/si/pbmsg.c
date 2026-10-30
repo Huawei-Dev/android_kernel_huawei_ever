@@ -52,7 +52,7 @@
   Author       : zhuli
   Version      : V100R002
   Date         : 2008-5-15
-  Description  : 该C文件给出了---完成消息处理模块实现
+  Description  : ??C??????????---????????????????????
   Function List:
   History      :
  ************************************************************************/
@@ -70,7 +70,7 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID PS_FILE_ID_PB_MSG_C
 
@@ -78,12 +78,12 @@
 #if (FEATURE_OFF == FEATURE_PHONE_SC)
 
 /*****************************************************************************
-    全局变量定义
+    ????????????
 *****************************************************************************/
 
 SI_PB_REQ_UINT_STRU             gstPBReqUnit;
 
-/*双核都需要的全局变量，A 上面的通过消息和 C 的同步*/
+/*??????????????????????A ???????????????? C ??????*/
 SI_PB_CONTROL_STRU              gstPBCtrlInfo;
 SI_PB_CTRL_INFO_ST              gstPBConfigInfo;
 
@@ -181,7 +181,7 @@ VOS_VOID SI_PB_ReadXeccProc(VOS_UINT16 usIndexNum,VOS_UINT16 usIndexStar,SI_PB_E
             ulValidFlag = VOS_TRUE;
 
             SI_PB_BcdToAscii(3, pucContent, pstCnfData->PBEvent.PBReadCnf.PBRecord.Number,
-                            &pstCnfData->PBEvent.PBReadCnf.PBRecord.NumberLength);/*Ecc号码在姓名前面*/
+                            &pstCnfData->PBEvent.PBReadCnf.PBRecord.NumberLength);/*Ecc??????????????*/
 
             pstCnfData->PBEvent.PBReadCnf.PBRecord.NumberType = PB_NUMBER_TYPE_NORMAL;
 
@@ -212,7 +212,7 @@ VOS_VOID SI_PB_ReadXeccProc(VOS_UINT16 usIndexNum,VOS_UINT16 usIndexStar,SI_PB_E
 
         (VOS_VOID)SI_PBCallback(pstCnfData);
 
-        pucContent += gastPBContent[PB_XECC_CONTENT].ucRecordLen;/*内容指针按照记录长度偏移*/
+        pucContent += gastPBContent[PB_XECC_CONTENT].ucRecordLen;/*????????????????????????*/
     }
 
     return;
@@ -246,7 +246,7 @@ VOS_VOID SI_PB_ReadEccProc(VOS_UINT16 usIndexNum,VOS_UINT16 usIndexStar,SI_PB_EV
             ulValidFlag = VOS_TRUE;
 
             SI_PB_BcdToAscii(3, pucContent, pstCnfData->PBEvent.PBReadCnf.PBRecord.Number,
-                            &pstCnfData->PBEvent.PBReadCnf.PBRecord.NumberLength);/*Ecc号码在姓名前面*/
+                            &pstCnfData->PBEvent.PBReadCnf.PBRecord.NumberLength);/*Ecc??????????????*/
 
             pstCnfData->PBEvent.PBReadCnf.PBRecord.NumberType = PB_NUMBER_TYPE_NORMAL;
 
@@ -277,7 +277,7 @@ VOS_VOID SI_PB_ReadEccProc(VOS_UINT16 usIndexNum,VOS_UINT16 usIndexStar,SI_PB_EV
 
         (VOS_VOID)SI_PBCallback(pstCnfData);
 
-        pucContent += gastPBContent[PB_ECC_CONTENT].ucRecordLen;/*内容指针按照记录长度偏移*/
+        pucContent += gastPBContent[PB_ECC_CONTENT].ucRecordLen;/*????????????????????????*/
     }
 
     return;
@@ -339,7 +339,7 @@ VOS_UINT32 SI_PB_ReadProc(PBMsgBlock *pMsg)
 
     ulResult = SI_PB_LocateRecord(pstMsg->ulStorage, pstMsg->usIndex1, pstMsg->usIndex2, &ucPBoffset);
 
-    if(VOS_OK != ulResult) /*当前电话本内容未找到*/
+    if(VOS_OK != ulResult) /*????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_ReadProc: SI_PB_LocateRecord Return Error");
 
@@ -354,18 +354,18 @@ VOS_UINT32 SI_PB_ReadProc(PBMsgBlock *pMsg)
     {
         usIndexNum       = gastPBContent[ucPBoffset].usTotalNum;
 
-        pstMsg->usIndex1 = 1;/*从第一条开始读取*/
+        pstMsg->usIndex1 = 1;/*????????????????*/
 
         pstMsg->usIndex2 = gastPBContent[ucPBoffset].usTotalNum;
     }
     else
     {
-        usIndexNum = (pstMsg->usIndex2 - pstMsg->usIndex1) + 1;/*计算两个索引之间的记录数*/
+        usIndexNum = (pstMsg->usIndex2 - pstMsg->usIndex1) + 1;/*????????????????????????*/
     }
 
     stCnfData.PBEvent.PBReadCnf.RecordNum = 1;
 
-    /*紧急呼叫号码在华山和Balong上面都有缓冲*/
+    /*????????????????????Balong????????????*/
 
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
     if ((PB_XECC == pstMsg->ulStorage))
@@ -391,7 +391,7 @@ VOS_UINT32 SI_PB_ReadProc(PBMsgBlock *pMsg)
 
     stCnfData.PBLastTag = VOS_FALSE;
 
-    for(i=0; i<usIndexNum; i++)     /*根据读取的电话本索引范围循环*/
+    for(i=0; i<usIndexNum; i++)     /*????????????????????????????*/
     {
         PAM_MEM_SET_S((VOS_UINT8 *)&stCnfData.PBEvent.PBReadCnf,
                      sizeof(SI_PB_EVENT_READ_CNF_STRU),
@@ -400,9 +400,9 @@ VOS_UINT32 SI_PB_ReadProc(PBMsgBlock *pMsg)
 
         SI_PB_TransPBFromate(&gastPBContent[ucPBoffset], (VOS_UINT16)(pstMsg->usIndex1+i), pucContent, &stCnfData.PBEvent.PBReadCnf.PBRecord);
 
-        pucContent += gastPBContent[ucPBoffset].ucRecordLen;/*内容指针按照记录长度偏移*/
+        pucContent += gastPBContent[ucPBoffset].ucRecordLen;/*????????????????????????*/
 
-        if(SI_PB_CONTENT_VALID == SI_PB_GetBitFromBuf(gastPBContent[ucPBoffset].pIndex,pstMsg->usIndex1+i))/*根据Index判断SI_PB_CONTENT_VALID == stCnfData.PBEvent.PBReadCnf.PBRecord.ValidFlag) */
+        if(SI_PB_CONTENT_VALID == SI_PB_GetBitFromBuf(gastPBContent[ucPBoffset].pIndex,pstMsg->usIndex1+i))/*????Index????SI_PB_CONTENT_VALID == stCnfData.PBEvent.PBReadCnf.PBRecord.ValidFlag) */
         {
             ulValidFlag = VOS_TRUE;
         }
@@ -413,7 +413,7 @@ VOS_UINT32 SI_PB_ReadProc(PBMsgBlock *pMsg)
             stCnfData.PBError = ((VOS_TRUE == ulValidFlag)?TAF_ERR_NO_ERROR:TAF_ERR_PB_NOT_FOUND);
         }
 
-        (VOS_VOID)SI_PBCallback(&stCnfData); /*返回转换结果*/
+        (VOS_VOID)SI_PBCallback(&stCnfData); /*????????????*/
     }
 
     return VOS_OK;
@@ -515,18 +515,18 @@ VOS_UINT32 SI_PB_SearchReq(SI_PB_SEARCH_REQ_STRU *pMsg,
 
     if (PB_REQ_SEND == ucSendReqFlag)
     {
-        if(SI_PB_STORAGE_SM == pMsg->ulStorage)   /*如果是ADN需要转换为记录号*/
+        if(SI_PB_STORAGE_SM == pMsg->ulStorage)   /*??????ADN????????????????*/
         {
             ulResult = SI_PB_CountADNRecordNum(gstPBReqUnit.usCurIndex, &usFileId, &ucRecord);
         }
-        else                                                                    /*访问其它电话本*/
+        else                                                                    /*??????????????*/
         {
             ulResult = SI_PB_GetXDNFileID(pMsg->ulStorage, &usFileId);
 
             ucRecord = (VOS_UINT8)gstPBReqUnit.usCurIndex;
         }
 
-        if(VOS_ERR == ulResult)         /*转换结果失败*/
+        if(VOS_ERR == ulResult)         /*????????????*/
         {
             PB_WARNING_LOG("SI_PB_SearchReq: Get the XDN File ID and Record Number is Error");
 
@@ -560,18 +560,18 @@ VOS_UINT32 SI_PB_SearchProc(PBMsgBlock *pMsg)
     stCnfData.PBEventType           = SI_PB_EVENT_SEARCH_CNF;
     stCnfData.PBLastTag             = VOS_TRUE;
 
-    if( TAF_ERR_NO_ERROR != (ulResult = SI_PB_ErrorProc()))/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != (ulResult = SI_PB_ErrorProc()))/*??????????????????????????????*/
     {
         stCnfData.PBError  = ulResult;
         stCnfData.PBLastTag = VOS_TRUE;
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     if(VOS_OK != SI_PB_FindPBOffset(((SI_PB_SEARCH_REQ_STRU*)pMsg)->ulStorage, &ucOffset))
     {
         stCnfData.PBError  = TAF_ERR_UNSPECIFIED_ERROR;
 
-        return SI_PBCallback(&stCnfData); /*返回转换结果*/
+        return SI_PBCallback(&stCnfData); /*????????????*/
     }
 
     if( VOS_NULL_PTR == gastPBContent[ucOffset].pContent )
@@ -581,7 +581,7 @@ VOS_UINT32 SI_PB_SearchProc(PBMsgBlock *pMsg)
         {
             stCnfData.PBError  = ulResult;
 
-            (VOS_VOID)SI_PBCallback(&stCnfData); /*返回转换结果*/
+            (VOS_VOID)SI_PBCallback(&stCnfData); /*????????????*/
         }
 
         return VOS_OK;
@@ -592,7 +592,7 @@ VOS_UINT32 SI_PB_SearchProc(PBMsgBlock *pMsg)
     {
         stCnfData.PBError  = ulResult;
 
-        (VOS_VOID)SI_PBCallback(&stCnfData); /*返回转换结果*/
+        (VOS_VOID)SI_PBCallback(&stCnfData); /*????????????*/
     }
 
     return VOS_OK;
@@ -607,18 +607,18 @@ VOS_UINT32 SI_PB_SReadEMLProc(VOS_UINT16 usIndex, VOS_UINT16 usOffset, SI_PB_REC
     VOS_UINT8 ucType2EMLFileCnt;
     VOS_UINT8   i;
 
-    /*Email,区分Type1和2，先看是否有USED, 如果存在读内存
-    Type1 直接根据Index读
-    Type2 根据Index及IAP缓存转换出实际记录号，如果记录号无效则退出*/
+    /*Email,????Type1??2????????????USED, ??????????????
+    Type1 ????????Index??
+    Type2 ????Index??IAP??????????????????????????????????????????*/
     if(0 == gstPBCtrlInfo.ulEMLFileNum)
     {
         PB_WARNING_LOG("SI_PB_SReadEMLProc: No Valid Email Record");
         return VOS_OK;
     }
 
-    if(PB_FILE_TYPE1 == gstPBCtrlInfo.astEMLInfo[0].enEMLType)/*Email文件类型，*/
+    if(PB_FILE_TYPE1 == gstPBCtrlInfo.astEMLInfo[0].enEMLType)/*Email??????????*/
     {
-        /* 对于TYPE1类型的文件，转入的参数usIndex + usOffset不能超过EMAIL的总记录数 */
+        /* ????TYPE1??????????????????????usIndex + usOffset????????EMAIL?????????? */
         if ((usIndex + usOffset) > gstEMLContent.usTotalNum)
         {
             PB_WARNING_LOG("SI_PB_SReadEMLProc: Email Record Index Large than Total Number.");
@@ -636,7 +636,7 @@ VOS_UINT32 SI_PB_SReadEMLProc(VOS_UINT16 usIndex, VOS_UINT16 usOffset, SI_PB_REC
             return TAF_ERR_PB_STORAGE_OP_FAIL;
         }
 
-        /*Type2 Email文件，需在gstIAPContent.pIAPContent中找到ADN 记录和EML记录对应关系*/
+        /*Type2 Email??????????gstIAPContent.pIAPContent??????ADN ??????EML????????????*/
         /*lint -e679*/
         ucEMLRecordNum = gstIAPContent.pIAPContent[(((usIndex+usOffset)-1)*gstIAPContent.ucRecordLen)
                                                     +(gstPBCtrlInfo.astEMLInfo[0].ulEMLTagNum - 1)];
@@ -658,7 +658,7 @@ VOS_UINT32 SI_PB_SReadEMLProc(VOS_UINT16 usIndex, VOS_UINT16 usOffset, SI_PB_REC
         ulEMLContentOffset = (ucEMLRecordNum - 1)
                         * gstPBCtrlInfo.astEMLInfo[ucType2EMLFileCnt - 1].ucRecordLen;
 
-        /* 由于EMAIL文件每个记录数可能不一致，需要逐个累加来计算偏移量 */
+        /* ????EMAIL?????????????????????????????????????????????????? */
         for (i = 0; i < (ucType2EMLFileCnt - 1); i++)
         {
             ulEMLContentOffset += gstPBCtrlInfo.astEMLInfo[i].ucRecordLen
@@ -683,8 +683,8 @@ VOS_UINT32 SI_PB_SReadANRProc(VOS_UINT16 usIndex, VOS_UINT16 usOffset, SI_PB_REC
     VOS_UINT8                           ucType2ANRRecord;
     VOS_UINT8                           ucType2ANRFileCnt;
 
-    /*ANR,先根据缓存个数判断是否存在USED，如果存在读内存，内存为空则出错，
-    内存内容读上来后判断*/
+    /*ANR,??????????????????????????USED??????????????????????????????????
+    ????????????????????*/
     for(i = 0; i < gstPBCtrlInfo.ulANRStorageNum; i++)
     {
         if(VOS_NULL == gastANRContent[i].pContent)
@@ -693,7 +693,7 @@ VOS_UINT32 SI_PB_SReadANRProc(VOS_UINT16 usIndex, VOS_UINT16 usOffset, SI_PB_REC
             return TAF_ERR_PB_STORAGE_OP_FAIL;
         }
 
-        /*如果为Type2类型ANR，需要通过IAP找到真实需要读取的*/
+        /*??????Type2????ANR??????????IAP??????????????????*/
         if(PB_FILE_TYPE2 == gstPBCtrlInfo.astANRInfo[0][i].enANRType)
         {
             if(VOS_NULL == gstIAPContent.pIAPContent)
@@ -714,7 +714,7 @@ VOS_UINT32 SI_PB_SReadANRProc(VOS_UINT16 usIndex, VOS_UINT16 usOffset, SI_PB_REC
                 continue;
             }
 
-            /*Index对应的Type2 ANR无效*/
+            /*Index??????Type2 ANR????*/
             if ((gstPBCtrlInfo.astANRInfo[ucType2ANRFileCnt - 1][i].ucRecordNum < ucType2ANRRecord)
                 ||(0 == ucType2ANRRecord)||(0xFF == ucType2ANRRecord))
             {
@@ -735,7 +735,7 @@ VOS_UINT32 SI_PB_SReadANRProc(VOS_UINT16 usIndex, VOS_UINT16 usOffset, SI_PB_REC
         }
         else
         {
-            /* 对于TYPE1类型的ANR文件，转入的参数usIndex + usOffset不能超过ANR的总记录数 */
+            /* ????TYPE1??????ANR????????????????usIndex + usOffset????????ANR?????????? */
             if ((usIndex + usOffset) > gastANRContent[i].usTotalNum)
             {
                 continue;
@@ -778,7 +778,7 @@ VOS_UINT32 SI_PB_SReadProc(PBMsgBlock *pMsg)
 
     if((0 == gstPBConfigInfo.ucSPBFlag)||(SI_PB_STORAGE_SM != pstMsg->ulStorage))
     {
-        /*改为Operation not allowed*/
+        /*????Operation not allowed*/
         stCnfData.PBError = TAF_ERR_CMD_TYPE_ERROR;
 
         PB_WARNING_LOG("SI_PB_SReadProc: Proc is Not Allow");
@@ -799,7 +799,7 @@ VOS_UINT32 SI_PB_SReadProc(PBMsgBlock *pMsg)
 
     ulResult = SI_PB_LocateRecord(pstMsg->ulStorage, pstMsg->usIndex1, pstMsg->usIndex2, &ucPBoffset);
 
-    if(VOS_OK != ulResult) /*当前电话本内容未找到*/
+    if(VOS_OK != ulResult) /*????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_SReadProc: SI_PB_LocateRecord Return Error");
 
@@ -814,16 +814,16 @@ VOS_UINT32 SI_PB_SReadProc(PBMsgBlock *pMsg)
     {
         usIndexNum       = gastPBContent[ucPBoffset].usTotalNum;
 
-        pstMsg->usIndex1 = 1;/*从第一条开始读取*/
+        pstMsg->usIndex1 = 1;/*????????????????*/
 
         pstMsg->usIndex2 = gastPBContent[ucPBoffset].usTotalNum;
     }
     else
     {
-        usIndexNum = (pstMsg->usIndex2 - pstMsg->usIndex1) + 1;/*计算两个索引之间的记录数*/
+        usIndexNum = (pstMsg->usIndex2 - pstMsg->usIndex1) + 1;/*????????????????????????*/
     }
 
-    if(VOS_NULL == gastPBContent[ucPBoffset].pContent)/*ADN一定存在缓存*/
+    if(VOS_NULL == gastPBContent[ucPBoffset].pContent)/*ADN????????????*/
     {
         stCnfData.PBError = TAF_ERR_PB_STORAGE_OP_FAIL;
 
@@ -836,7 +836,7 @@ VOS_UINT32 SI_PB_SReadProc(PBMsgBlock *pMsg)
 
     stCnfData.PBLastTag = VOS_FALSE;
 
-    for(i=0; i<usIndexNum; i++)     /*根据读取的电话本索引范围循环*/
+    for(i=0; i<usIndexNum; i++)     /*????????????????????????????*/
     {
         stCnfData.PBError = VOS_OK;
 
@@ -849,10 +849,10 @@ VOS_UINT32 SI_PB_SReadProc(PBMsgBlock *pMsg)
 
         stCnfData.PBEvent.PBReadCnf.PBRecord.Index = (VOS_UINT16)(pstMsg->usIndex1+i);
 
-        /*此条记录无效，且不是最后一条*/
-        if(SI_PB_CONTENT_INVALID == SI_PB_GetBitFromBuf(gastPBContent[ucPBoffset].pIndex,pstMsg->usIndex1+i))/*从Index中获取有效信息*/
+        /*????????????????????????????*/
+        if(SI_PB_CONTENT_INVALID == SI_PB_GetBitFromBuf(gastPBContent[ucPBoffset].pIndex,pstMsg->usIndex1+i))/*??Index??????????????*/
         {
-            if(i == (usIndexNum-1))/*最后一条记录无效*/
+            if(i == (usIndexNum-1))/*????????????????*/
             {
                 stCnfData.PBError = ((VOS_TRUE == ulValidFlag)?TAF_ERR_NO_ERROR:TAF_ERR_PB_NOT_FOUND);
                 stCnfData.PBLastTag = VOS_TRUE;
@@ -867,12 +867,12 @@ VOS_UINT32 SI_PB_SReadProc(PBMsgBlock *pMsg)
 
         ulValidFlag = VOS_TRUE;
 
-        pucTempContent = pucContent + (i*gastPBContent[ucPBoffset].ucRecordLen);/*内容指针按照记录长度偏移*/
+        pucTempContent = pucContent + (i*gastPBContent[ucPBoffset].ucRecordLen);/*????????????????????????*/
 
         SI_PB_TransPBFromate(&gastPBContent[ucPBoffset], (VOS_UINT16)(pstMsg->usIndex1+i), pucTempContent, &stCnfData.PBEvent.PBReadCnf.PBRecord);
 
-        /*ANR,先根据缓存个数判断是否存在USED，如果存在读内存，内存为空则出错，
-        内存内容读上来后判断*/
+        /*ANR,??????????????????????????USED??????????????????????????????????
+        ????????????????????*/
         ulResult = SI_PB_SReadANRProc(pstMsg->usIndex1, i, &stCnfData.PBEvent.PBReadCnf.PBRecord);
 
         if(VOS_OK != ulResult)
@@ -895,13 +895,13 @@ VOS_UINT32 SI_PB_SReadProc(PBMsgBlock *pMsg)
             return SI_PBCallback(&stCnfData);
         }
 
-        /*读取的已是最后一条记录，则置标志位为True*/
+        /*????????????????????????????????????True*/
         if(i == (usIndexNum-1))
         {
             stCnfData.PBLastTag = VOS_TRUE;
         }
 
-        (VOS_VOID)SI_PBCallback(&stCnfData); /*返回转换结果*/
+        (VOS_VOID)SI_PBCallback(&stCnfData); /*????????????*/
     }
 
     return VOS_OK;
@@ -1054,7 +1054,7 @@ VOS_UINT8 SI_PB_AlphaTagTruncation(SI_PB_RECORD_STRU *pstRecord, VOS_UINT8 ucOff
     VOS_UINT8  uctemp;
     VOS_UINT8  ucLen;
 
-    /*如果姓名长度为0，则返回Copy长度为0*/
+    /*??????????????0????????Copy??????0*/
     if (0 == pstRecord->ucAlphaTagLength)
     {
         PB_INFO_LOG("SI_PB_AlphaTagTruncation: The Name Len is 0");
@@ -1064,9 +1064,9 @@ VOS_UINT8 SI_PB_AlphaTagTruncation(SI_PB_RECORD_STRU *pstRecord, VOS_UINT8 ucOff
     if (SI_PB_ALPHATAG_TYPE_UCS2_80 == pstRecord->AlphaTagType)
     {
         uctemp = gastPBContent[ucOffset].ucNameLen\
-                    - ((gastPBContent[ucOffset].ucNameLen - 1)%2); /* [false alarm]:误断  */
+                    - ((gastPBContent[ucOffset].ucNameLen - 1)%2); /* [false alarm]:????  */
 
-        return (pstRecord->ucAlphaTagLength > uctemp)?uctemp:pstRecord->ucAlphaTagLength; /* [false alarm]:误断  */
+        return (pstRecord->ucAlphaTagLength > uctemp)?uctemp:pstRecord->ucAlphaTagLength; /* [false alarm]:????  */
     }
     else if (SI_PB_ALPHATAG_TYPE_GSM == pstRecord->AlphaTagType)
     {
@@ -1083,9 +1083,9 @@ VOS_UINT8 SI_PB_AlphaTagTruncation(SI_PB_RECORD_STRU *pstRecord, VOS_UINT8 ucOff
 
         return ucLen;
     }
-    else/*剩下81、82编码两种情况*/
+    else/*????81??82????????????*/
     {
-        /*计算被截去的长度*/
+        /*????????????????*/
         uctemp = (pstRecord->ucAlphaTagLength > gastPBContent[ucOffset].ucNameLen)?\
                   gastPBContent[ucOffset].ucNameLen:pstRecord->ucAlphaTagLength;
 
@@ -1121,7 +1121,7 @@ VOS_UINT32 SI_PB_UpdataXDNFile(VOS_UINT8 ucPBOffset, VOS_UINT16 usFileId, VOS_UI
         return VOS_ERR;
     }
 
-    /* 为避免aucXDNContent中内存被越界访问，需要对NameLen长度进行判断，从后面流程看出需要预留13字节 */
+    /* ??????aucXDNContent????????????????????????NameLen????????????????????????????????????13???? */
     if ((sizeof(gstPBReqUnit.aucXDNContent) - 13) <= gastPBContent[ucPBOffset].ucNameLen)
     {
         PB_WARNING_LOG("SI_PB_UpdataXDNFile: the name length is too long.");
@@ -1147,14 +1147,14 @@ VOS_UINT32 SI_PB_UpdataXDNFile(VOS_UINT8 ucPBOffset, VOS_UINT16 usFileId, VOS_UI
                 (ulXDNContentOffset += gastPBContent[ucPBOffset].ucRecordLen - 2):
                 (ulXDNContentOffset += gastPBContent[ucPBOffset].ucRecordLen - 1);
 
-        /* 检查当前更新的记录是否已经占用了一个EXT文件记录 */
+        /* ????????????????????????????????????EXT???????? */
         ucExtRecord  = gastPBContent[ucPBOffset].pContent[ulXDNContentOffset];
         ulExtInfoNum = gastPBContent[ucPBOffset].ulExtInfoNum;
 
-        /* 如果XDN记录对应已经存在了EXT记录，则不需要去查找空闲的EXT记录 */
+        /* ????XDN??????????????????EXT??????????????????????????EXT???? */
         if((0xFF == ucExtRecord)||(0 == ucExtRecord))
         {
-            /* 找得到空闲的EXT文件记录时才更新EXT文件，找不到就不更新，超长号码也不报错 */
+            /* ????????????EXT????????????????EXT?????????????????????????????????????? */
             ulResult = SI_PB_FindUnusedExtRecord( gastEXTContent + ulExtInfoNum, &ucExtRecord, 1);
         }
         else
@@ -1180,7 +1180,7 @@ VOS_UINT32 SI_PB_UpdataXDNFile(VOS_UINT8 ucPBOffset, VOS_UINT16 usFileId, VOS_UI
             ulResult = SI_PB_SetFileReq(&stUpdateReq);
         }
 
-        /* 先更新EXT文件再更新ADN文件内容，如果更新EXT文件失败，对应的标志位设置为FF */
+        /* ??????EXT??????????ADN??????????????????EXT????????????????????????????FF */
         if(VOS_OK != ulResult)
         {
             gstPBReqUnit.aucXDNContent[gastPBContent[ucPBOffset].ucNameLen+13] = 0xFF;
@@ -1196,7 +1196,7 @@ VOS_UINT32 SI_PB_UpdataXDNFile(VOS_UINT8 ucPBOffset, VOS_UINT16 usFileId, VOS_UI
         stUpdateReq.ulEfLen         = gastPBContent[ucPBOffset].ucRecordLen;
         stUpdateReq.usEfId          = usFileId;
 
-        /* 如果更新XDN文件成功，则认为更新EXT文件也是成功的 */
+        /* ????????XDN????????????????????EXT?????????????? */
         return SI_PB_SetFileReq(&stUpdateReq);
     }
 
@@ -1235,17 +1235,17 @@ VOS_UINT32 SI_PB_UpdataADN(SI_PB_RECORD_STRU        *pstRecord,
 
     ucCopyLen = SI_PB_AlphaTagTruncation(pstRecord, PB_ADN_CONTENT);
 
-    /*拷贝待更新的姓名内容到本地*/
+    /*??????????????????????????*/
     PAM_MEM_CPY_S(gstPBReqUnit.aucXDNContent, sizeof(gstPBReqUnit.aucXDNContent), pstRecord->AlphaTag, ucCopyLen);
 
-    /*处理ADN号码*/
+    /*????ADN????*/
     if(0 != pstRecord->NumberLength)
     {
         gstPBReqUnit.aucXDNContent[gastPBContent[PB_ADN_CONTENT].ucNameLen+1] = pstRecord->NumberType;
 
         ucNumberLen = (pstRecord->NumberLength > SI_PB_NUM_LEN)?SI_PB_NUM_LEN:pstRecord->NumberLength;
 
-        /*转换并拷贝待更新号码内容到本地*/
+        /*??????????????????????????????*/
         SI_PB_AsciiToBcd(pstRecord->Number, ucNumberLen,
                         &gstPBReqUnit.aucXDNContent[gastPBContent[PB_ADN_CONTENT].ucNameLen+2],&ucCopyLen);
 
@@ -1256,27 +1256,27 @@ VOS_UINT32 SI_PB_UpdataADN(SI_PB_RECORD_STRU        *pstRecord,
 
     ulEXTContentOffset += gastPBContent[PB_ADN_CONTENT].ucRecordLen - 1;
 
-    /* 检查当前更新的记录是否已经占用了一个EXT文件记录 */
+    /* ????????????????????????????????????EXT???????? */
     ucExtRecord  = gastPBContent[PB_ADN_CONTENT].pContent[ulEXTContentOffset];
     ucExtRecord = ((ucExtRecord <= gastEXTContent[PB_ADN_CONTENT].usExtTotalNum) ? (ucExtRecord) : 0xFF);
 
     SI_PB_InitContent(sizeof(gstPBReqUnit.aucEXTContent), 0xFF, gstPBReqUnit.aucEXTContent);
 
-    /*ADN超长号码处理*/
+    /*ADN????????????*/
     if(pstRecord->NumberLength > SI_PB_NUM_LEN)
     {
         if ( VOS_NULL_PTR == gastEXTContent[PB_ADN_CONTENT].pExtContent)
         {
-            /*出错处理*/
+            /*????????*/
             /*Operation not allowed*/
             PB_WARNING_LOG("SI_PB_UpdataADN:Ext Content NULL");
             return TAF_ERR_PB_STORAGE_OP_FAIL;
         }
 
-        /*如果没有对应的EXT文件记录需要寻找空闲EXT记录*/
+        /*??????????????EXT????????????????????EXT????*/
         if(0xFF == ucExtRecord)
         {
-            /* 找得到空闲的EXT文件记录时才更新EXT文件，找不到就不更新，超长号码也不报错 */
+            /* ????????????EXT????????????????EXT?????????????????????????????????????? */
             ulResult = SI_PB_FindUnusedExtRecord( &gastEXTContent[PB_ADN_CONTENT], &ucExtRecord, (VOS_UINT8)*pusExtUsedNum);
 
             (*pusExtUsedNum)++;
@@ -1293,7 +1293,7 @@ VOS_UINT32 SI_PB_UpdataADN(SI_PB_RECORD_STRU        *pstRecord,
             gstPBReqUnit.aucEXTContent[1] = ucCopyLen;
             gstPBReqUnit.aucXDNContent[gastPBContent[PB_ADN_CONTENT].ucRecordLen-1] = ucExtRecord;
 
-            /*记录待更新的EXT记录信息*/
+            /*????????????EXT????????*/
             pstSPBReq->usFileID[*pusFileNum]  = pstPBFid->usExtFileId;
             pstSPBReq->usDataLen[*pusFileNum] = SI_PB_EXT_LEN;
             pstSPBReq->ucRecordNum[*pusFileNum] = ucExtRecord;
@@ -1309,7 +1309,7 @@ VOS_UINT32 SI_PB_UpdataADN(SI_PB_RECORD_STRU        *pstRecord,
     }
     else
     {
-        /*如果更新文件时号码长度小于20，可能需要将EXT号码删除*/
+        /*??????????????????????????20????????????EXT????????*/
         if((0xFF != ucExtRecord)&&(0xFFFF != pstPBFid->usExtFileId))
         {
             gstPBReqUnit.aucEXTContent[0] = 0;
@@ -1325,7 +1325,7 @@ VOS_UINT32 SI_PB_UpdataADN(SI_PB_RECORD_STRU        *pstRecord,
         gstPBReqUnit.aucXDNContent[gastPBContent[PB_ADN_CONTENT].ucRecordLen-1] = 0xFF;
     }
 
-    /*记录待更新的ADN记录信息,在更新EXT文件之后*/
+    /*????????????ADN????????,??????EXT????????*/
     pstSPBReq->usFileID[*pusFileNum]  = pstPBFid->usADNFileId;
     pstSPBReq->ucRecordNum[*pusFileNum] = pstPBFid->ucRecordNum;
     pstSPBReq->usDataLen[*pusFileNum] = gastPBContent[PB_ADN_CONTENT].ucRecordLen;
@@ -1372,7 +1372,7 @@ VOS_UINT32 SI_PB_UpdataType2ANR(SI_PB_RECORD_STRU       *pstRecord,
         }
 
 
-        /*最多支持20个Type2类型文件*/
+        /*????????20??Type2????????*/
         if(20 < gstIAPContent.ucRecordLen)
         {
             PB_ERROR_LOG("SI_PB_UpdataType2ANR:IAP ucRecordLen too long");
@@ -1388,7 +1388,7 @@ VOS_UINT32 SI_PB_UpdataType2ANR(SI_PB_RECORD_STRU       *pstRecord,
         gstPBReqUnit.stSPBReq.aucIAPContent[gstPBCtrlInfo.astANRInfo[0][i].ulANRTagNum-1] =
              *pucFreeANRRecord;
 
-        /*需要及时更新内存中IAP内容*/
+        /*??????????????????IAP????*/
         gstIAPContent.pIAPContent[ulType2ANROffset] = *pucFreeANRRecord;
 
         pstSPBReq->ucRecordNum[pstSPBReq->usFileNum] = pstPBFid->ucRecordNum;
@@ -1397,20 +1397,20 @@ VOS_UINT32 SI_PB_UpdataType2ANR(SI_PB_RECORD_STRU       *pstRecord,
 
         pstSPBReq->usFileNum++;
     }
-    /*没有需要更新的记录*/
+    /*??????????????????*/
     else if((0xFF == gstIAPContent.pIAPContent[ulType2ANROffset])
         &&(0 == pstRecord->AdditionNumber[i].NumberLength))
     {
         PB_INFO_LOG("SI_PB_UpdataType2ANR: The Record is not found");
         return TAF_ERR_PB_NOT_FOUND;
     }
-    /*ANR号码填为空，需要删除IAP中对应关系*/
+    /*ANR????????????????????IAP??????????*/
     else if((0xFF != gstIAPContent.pIAPContent[ulType2ANROffset])
         &&(0 == pstRecord->AdditionNumber[i].NumberLength))
     {
         *pucFreeANRRecord = gstIAPContent.pIAPContent[ulType2ANROffset];
 
-        /*最多支持20个Type2类型文件*/
+        /*????????20??Type2????????*/
         if(20 < gstIAPContent.ucRecordLen)
         {
             PB_ERROR_LOG("SI_PB_DeleteHandleEmail:IAP ucRecordLen too long");
@@ -1432,7 +1432,7 @@ VOS_UINT32 SI_PB_UpdataType2ANR(SI_PB_RECORD_STRU       *pstRecord,
 
         gstPBReqUnit.stSPBReq.aucIAPContent[gstPBCtrlInfo.astANRInfo[0][i].ulANRTagNum-1] = 0xFF;
 
-        /*需要及时更新内存中IAP内容*/
+        /*??????????????????IAP????*/
         gstIAPContent.pIAPContent[ulType2ANROffset] = 0xFF;
 
         pstSPBReq->ucRecordNum[pstSPBReq->usFileNum] = pstPBFid->ucRecordNum;
@@ -1469,16 +1469,16 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
 
     pusFileId = &pstSPBReq->usFileNum;
 
-    /*ANR文件更新的数据根据NV项控制*/
+    /*ANR??????????????????NV??????*/
     for(i = 0; i < gstPBConfigInfo.ucAnrMaxNum; i++)
     {
-        /*此ANR在缓存中不存在*/
+        /*??ANR??????????????*/
         if(0 == pstPBFid->ausANRFileId[i])
         {
             continue;
         }
 
-        /*如果Type2类型ANR*/
+        /*????Type2????ANR*/
         if(PB_FILE_TYPE2 == gstPBCtrlInfo.astANRInfo[0][i].enANRType)
         {
 
@@ -1486,7 +1486,7 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
 
             if(VOS_OK != ulResult)
             {
-                /*该条ANR不需要更新*/
+                /*????ANR??????????*/
                 if(TAF_ERR_PB_NOT_FOUND == ulResult)
                 {
                     continue;
@@ -1498,30 +1498,30 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
 
             if(VOS_OK != SI_PB_GetADNSfi(&ucADNSfi, pstPBFid->usADNFileId))
             {
-                /*出错处理*/
+                /*????????*/
                 PB_WARNING_LOG("SI_PB_UpdataANR: The SI_PB_GetADNSfi is not found SFI");
                 return TAF_ERR_PB_STORAGE_OP_FAIL;
             }
 
-            /*获取当前要更新的是第几个Type2 ANR文件*/
+            /*????????????????????????Type2 ANR????*/
             ulFileCnt = (pstRecord->Index-1)/gstPBCtrlInfo.astADNInfo[0].ucRecordNum;
 
-            /*获取需要更新的Type2 ANR记录在缓存中的偏移*/
+            /*??????????????Type2 ANR??????????????????*/
             ulANROffset = (ulFileCnt*(gstPBCtrlInfo.astANRInfo[0][i].ucRecordNum*gstPBCtrlInfo.astANRInfo[0][i].ucRecordLen))
                           + ((ucFreeANRRecord-1)*gstPBCtrlInfo.astANRInfo[0][i].ucRecordLen);
 
-            /*获取需要更新的Type2 ANR记录中扩展号码的信息在缓存中的偏移*/
+            /*??????????????Type2 ANR??????????????????????????????????*/
             ulEXTContentOffset = ulANROffset + (gastANRContent[i].ucRecordLen - 3);
         }
         else
         {
-            /*获取当前要更新的是第几个Type1 ANR文件*/
+            /*????????????????????????Type1 ANR????*/
             ucFreeANRRecord = pstPBFid->ucRecordNum;
 
-            /*获取需要更新的Type1 ANR记录在缓存中的偏移*/
+            /*??????????????Type1 ANR??????????????????*/
             ulANROffset = (pstRecord->Index-1)*gastANRContent[i].ucRecordLen;
 
-            /*获取需要更新的Type1 ANR记录中扩展号码的信息在缓存中的偏移*/
+            /*??????????????Type1 ANR??????????????????????????????????*/
             ulEXTContentOffset = ulANROffset + (gastANRContent[i].ucRecordLen - 1);
         }
 
@@ -1530,7 +1530,7 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
                      &gastANRContent[i].pContent[ulANROffset],
                       gastANRContent[i].ucRecordLen);
 
-        /*非删除请求*/
+        /*??????????*/
         if((0 != pstRecord->AdditionNumber[i].NumberLength)
            &&(PB_FILE_TYPE2 == gstPBCtrlInfo.astANRInfo[0][i].enANRType))
         {
@@ -1538,10 +1538,10 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
             gstPBReqUnit.stSPBReq.aucANRContent[i][gastANRContent[i].ucRecordLen-1] = pstPBFid->ucRecordNum;
         }
 
-        /*将ANR记录的2到13共12字节都设置为0xFF*/
+        /*??ANR??????2??13??12????????????0xFF*/
         PAM_MEM_SET_S(gstPBReqUnit.stSPBReq.aucANRContent[i]+1, 12, (VOS_CHAR)0xFF, 12);
 
-        /*处理ANR号码*/
+        /*????ANR????*/
         if(0xFF == gstPBReqUnit.stSPBReq.aucANRContent[i][0])
         {
             gstPBReqUnit.stSPBReq.aucANRContent[i][0] = 0;
@@ -1556,7 +1556,7 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
 
         gstPBReqUnit.stSPBReq.aucANRContent[i][1] = ucCopyLen + 1;
 
-        /* 检查当前更新的记录是否已经占用了一个EXT文件记录，并且EXT的记录号不能越界 */
+        /* ????????????????????????????????????EXT??????????????EXT???????????????? */
 
         ucExtRecord  = gastANRContent[i].pContent[ulEXTContentOffset];
         ucExtRecord = ((ucExtRecord <= gastEXTContent[PB_ADN_CONTENT].usExtTotalNum) ? (ucExtRecord) : 0xFF);
@@ -1565,16 +1565,16 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
         {
             if ( VOS_NULL_PTR == gastEXTContent[PB_ADN_CONTENT].pExtContent)
             {
-                /*出错处理*/
+                /*????????*/
                 /*Operation not allowed*/
                 PB_WARNING_LOG("SI_PB_UpdataSPBFile:ANR Ext Content NULL");
                 return TAF_ERR_PB_STORAGE_OP_FAIL;
             }
 
-            /* 如果XDN记录对应已经存在了EXT记录，则不需要去查找空闲的EXT记录 */
+            /* ????XDN??????????????????EXT??????????????????????????EXT???? */
             if(0xFF == ucExtRecord)
             {
-                /* 找得到空闲的EXT文件记录时才更新EXT文件，找不到就不更新，超长号码也不报错 */
+                /* ????????????EXT????????????????EXT?????????????????????????????????????? */
                 ulResult = SI_PB_FindUnusedExtRecord( &gastEXTContent[PB_ADN_CONTENT], &ucExtRecord, (VOS_UINT8)*pusExtUsedNum);
 
                 (*pusExtUsedNum)++;
@@ -1594,7 +1594,7 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
                 gstPBReqUnit.stSPBReq.aucANRContent[i][gastANRContent[i].ucRecordLen
                 - ((PB_FILE_TYPE2 == gstPBCtrlInfo.astANRInfo[0][i].enANRType)?3:1)] = ucExtRecord;
 
-                /*记录待更新的EXT记录信息*/
+                /*????????????EXT????????*/
                 pstSPBReq->usFileID[*pusFileId]  = pstPBFid->usExtFileId;
                 pstSPBReq->usDataLen[*pusFileId] = SI_PB_EXT_LEN;
                 pstSPBReq->ucRecordNum[*pusFileId] = ucExtRecord;
@@ -1609,7 +1609,7 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
         }
         else
         {
-            /*如果更新文件时号码长度小于20，可能需要将EXT号码删除*/
+            /*??????????????????????????20????????????EXT????????*/
             if((0xFF != ucExtRecord)&&(0xFFFF != pstPBFid->usExtFileId))
             {
                 PAM_MEM_SET_S(gstPBReqUnit.stSPBReq.aucANRExtContent[i], SI_PB_EXT_LEN, (VOS_CHAR)0xFF, SI_PB_EXT_LEN);
@@ -1628,7 +1628,7 @@ VOS_UINT32 SI_PB_UpdataANR(SI_PB_RECORD_STRU        *pstRecord,
                 - ((PB_FILE_TYPE2 == gstPBCtrlInfo.astANRInfo[0][i].enANRType)?3:1)] = 0xFF;
         }
 
-        /*记录待更新的ANR记录信息*/
+        /*????????????ANR????????*/
         pstSPBReq->usFileID[*pusFileId]  = pstPBFid->ausANRFileId[i];
         pstSPBReq->ucRecordNum[*pusFileId] = ucFreeANRRecord;
         pstSPBReq->usDataLen[*pusFileId] = gastANRContent[i].ucRecordLen;
@@ -1650,7 +1650,7 @@ VOS_UINT32 SI_PB_UpdataEML(SI_PB_RECORD_STRU        *pstRecord,
     VOS_UINT8  ucCopyLen;
     VOS_UINT8  ucFreeEMLRecord;
 
-    /*Email文件更新*/
+    /*Email????????*/
     if(0 == pstPBFid->usEMLFileId)
     {
         if(0 == pstRecord->Email.EmailLen)
@@ -1686,7 +1686,7 @@ VOS_UINT32 SI_PB_UpdataEML(SI_PB_RECORD_STRU        *pstRecord,
         ulType2EMLOffset = ((pstRecord->Index-1)*gstIAPContent.ucRecordLen)
                 + (gstPBCtrlInfo.astEMLInfo[0].ulEMLTagNum - 1);
 
-        /*规避因IAP文件内容不合协议导致的异常*/
+        /*??????IAP??????????????????????????*/
         if(0 == gstIAPContent.pIAPContent[ulType2EMLOffset])
         {
             gstIAPContent.pIAPContent[ulType2EMLOffset] = 0xFF;
@@ -1703,7 +1703,7 @@ VOS_UINT32 SI_PB_UpdataEML(SI_PB_RECORD_STRU        *pstRecord,
             }
 
 
-            /*将缓存中的IAP文件*/
+            /*??????????IAP????*/
             if(20 < gstIAPContent.ucRecordLen)
             {
                 PB_ERROR_LOG("SI_PB_UpdataEML:IAP ucRecordLen too long");
@@ -1719,7 +1719,7 @@ VOS_UINT32 SI_PB_UpdataEML(SI_PB_RECORD_STRU        *pstRecord,
             gstPBReqUnit.stSPBReq.aucIAPContent[gstPBCtrlInfo.astEMLInfo[0].ulEMLTagNum-1] =
                  ucFreeEMLRecord;
 
-            /*避免后面ANR也为Type2类型，导致拷贝缓存时内容不正确，及时更新IAP缓存，*/
+            /*????????ANR????Type2????????????????????????????????????????IAP??????*/
             gstIAPContent.pIAPContent[ulType2EMLOffset] = ucFreeEMLRecord;
 
             pstSPBReq->ucRecordNum[*pusFileId] = pstPBFid->ucRecordNum;
@@ -1734,13 +1734,13 @@ VOS_UINT32 SI_PB_UpdataEML(SI_PB_RECORD_STRU        *pstRecord,
             PB_INFO1_LOG("SI_PB_UpdataEML:The Email is Null or Email Len is %d", (long)pstRecord->Email.EmailLen);
             return VOS_OK;
         }
-        /*Email填为空，需要删除IAP中对应关系*/
+        /*Email????????????????IAP??????????*/
         else if((0xFF != gstIAPContent.pIAPContent[ulType2EMLOffset])
             &&(0 == pstRecord->Email.EmailLen))
         {
             ucFreeEMLRecord = gstIAPContent.pIAPContent[ulType2EMLOffset];
 
-            /*将缓存中的IAP文件*/
+            /*??????????IAP????*/
             if(20 < gstIAPContent.ucRecordLen)
             {
                 PB_ERROR_LOG("SI_PB_UpdataEML:IAP ucRecordLen too long");
@@ -1756,7 +1756,7 @@ VOS_UINT32 SI_PB_UpdataEML(SI_PB_RECORD_STRU        *pstRecord,
 
             gstPBReqUnit.stSPBReq.aucIAPContent[gstPBCtrlInfo.astEMLInfo[0].ulEMLTagNum-1] = 0xFF;
 
-            /*避免后面ANR也为Type2类型，导致拷贝缓存时内容不正确，及时更新IAP缓存，*/
+            /*????????ANR????Type2????????????????????????????????????????IAP??????*/
             gstIAPContent.pIAPContent[ulType2EMLOffset] = 0xFF;
 
             pstSPBReq->ucRecordNum[*pusFileId] = pstPBFid->ucRecordNum;
@@ -1774,12 +1774,12 @@ VOS_UINT32 SI_PB_UpdataEML(SI_PB_RECORD_STRU        *pstRecord,
 
         if(VOS_OK != SI_PB_GetADNSfi(&ucADNSfi, pstPBFid->usADNFileId))
         {
-            /*出错处理*/
+            /*????????*/
             PB_ERROR_LOG("SI_PB_UpdataEML:IAP ucRecordLen too long");
             return TAF_ERR_PB_STORAGE_OP_FAIL;
         }
 
-        /*非删除请求*/
+        /*??????????*/
         if(0 != pstRecord->Email.EmailLen)
         {
             gstPBReqUnit.stSPBReq.aucEMLContent[gstEMLContent.ucRecordLen-2] = ucADNSfi;/*ADN SFI*/
@@ -1820,11 +1820,11 @@ VOS_UINT32 SI_PB_UpdataSPBFile(SI_PB_SPB_UPDATE_STRU *pstPBFid,
 {
     VOS_UINT32            ulResult = VOS_OK;
     VOS_UINT16            usExtUsedNum = 1;
-    SI_PB_SPBDATA_STRU    stSPBReq;/*最多九个文件*/
+    SI_PB_SPBDATA_STRU    stSPBReq;/*????????????*/
 
     PAM_MEM_SET_S((VOS_VOID*)(&stSPBReq), sizeof(SI_PB_SPBDATA_STRU), 0, sizeof(SI_PB_SPBDATA_STRU));
 
-    /*更新Email文件,根据NV项的值为判断是否可以更新*/
+    /*????Email????,????NV????????????????????????*/
     if(gstPBConfigInfo.ucEmailFlag)
     {
         ulResult = SI_PB_UpdataEML(pstRecord,&stSPBReq,pstPBFid);
@@ -1836,7 +1836,7 @@ VOS_UINT32 SI_PB_UpdataSPBFile(SI_PB_SPB_UPDATE_STRU *pstPBFid,
         }
     }
 
-    /*更新ANR文件*/
+    /*????ANR????*/
     ulResult = SI_PB_UpdataANR(pstRecord,&stSPBReq,&usExtUsedNum,pstPBFid);
 
     if(VOS_OK != ulResult)
@@ -1845,7 +1845,7 @@ VOS_UINT32 SI_PB_UpdataSPBFile(SI_PB_SPB_UPDATE_STRU *pstPBFid,
         return ulResult;
     }
 
-    /*更新ADN文件*/
+    /*????ADN????*/
     ulResult = SI_PB_UpdataADN(pstRecord,&stSPBReq,&usExtUsedNum,pstPBFid);
 
     if(VOS_OK != ulResult)
@@ -1854,7 +1854,7 @@ VOS_UINT32 SI_PB_UpdataSPBFile(SI_PB_SPB_UPDATE_STRU *pstPBFid,
         return ulResult;
     }
 
-    /*调用USIMM接口更新文件*/
+    /*????USIMM????????????*/
     if (VOS_OK != SI_PB_SetSPBFileReq(&stSPBReq))
     {
         PB_WARNING_LOG("SI_PB_UpdataSPBFile: SI_PB_SetSPBFileReq Fail");
@@ -1877,27 +1877,27 @@ VOS_VOID SI_PB_DeleteHandleAnr(VOS_UINT16          usFileId,
     VOS_UINT32            ulRecordOffset;
     VOS_UINT32            ulType2ANRFileCnt;
     VOS_UINT32            ulXDNContentOffset;
-    VOS_UINT8             aucContent[20] = {0}; /*删除的内容添全F*/
+    VOS_UINT8             aucContent[20] = {0}; /*??????????????F*/
 
-    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*初始化局部变量*/
+    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*??????????????*/
 
     for(i = 0; i < SI_PB_ANR_MAX; i++)
     {
-        /*根据ADN FID和ANR电话本编号获取需要删除的ANR电话本FID*/
+        /*????ADN FID??ANR????????????????????????ANR??????FID*/
         (VOS_VOID)SI_PB_GetANRFidFromADN((VOS_UINT8)i,usFileId,&usANRFileId);
 
-        if(0 == usANRFileId)/*该ANR电话本不存在*/
+        if(0 == usANRFileId)/*??ANR????????????*/
         {
             continue;
         }
 
-        /*Type2 类型 ANR处理*/
+        /*Type2 ???? ANR????*/
         if(PB_FILE_TYPE2 == gstPBCtrlInfo.astANRInfo[0][i].enANRType)
         {
             ucANRRecord = gstIAPContent.pIAPContent[((usIndex-1)*gstIAPContent.ucRecordLen)
                             + (gstPBCtrlInfo.astANRInfo[0][i].ulANRTagNum-1)];
 
-            /*该条ANR无效，删除下一条*/
+            /*????ANR????????????????*/
             if(0xFF == ucANRRecord)
             {
                 continue;
@@ -1908,10 +1908,10 @@ VOS_VOID SI_PB_DeleteHandleAnr(VOS_UINT16          usFileId,
                          &gstIAPContent.pIAPContent[(usIndex-1)*gstIAPContent.ucRecordLen],
                           gstIAPContent.ucRecordLen);
 
-            /*将缓存中的IAP文件*/
+            /*??????????IAP????*/
             gstPBReqUnit.stSPBReq.aucIAPContent[gstPBCtrlInfo.astANRInfo[0][i].ulANRTagNum-1] = 0xFF;
 
-            /*及时更新缓存，防止Email也为Type2类型，从而导致拷贝的缓存内容不正确*/
+            /*??????????????????Email????Type2??????????????????????????????????*/
             gstIAPContent.pIAPContent[((usIndex-1)*gstIAPContent.ucRecordLen)
                                 + (gstPBCtrlInfo.astANRInfo[0][i].ulANRTagNum-1)] = 0xFF;
 
@@ -1923,7 +1923,7 @@ VOS_VOID SI_PB_DeleteHandleAnr(VOS_UINT16          usFileId,
 
             pstSPBReq->usFileNum++;
 
-            /*处理ANR的EXT号码*/
+            /*????ANR??EXT????*/
             if (0 == gstPBCtrlInfo.astADNInfo[0].ucRecordNum)
             {
                 ulType2ANRFileCnt = 0;
@@ -1942,22 +1942,22 @@ VOS_VOID SI_PB_DeleteHandleAnr(VOS_UINT16          usFileId,
         {
             ucANRRecord = ucRecord;
 
-            /*处理ANR的EXT号码*/
+            /*????ANR??EXT????*/
             ulRecordOffset = (usIndex -1) * gastANRContent[i].ucRecordLen;
 
             ulXDNContentOffset = gastANRContent[i].ucRecordLen - 1;
         }
 
-        /* 判断ANR文件内容是否为空 */
+        /* ????ANR???????????????? */
         if (VOS_NULL_PTR == gastANRContent[i].pContent)
         {
             continue;
         }
 
-        /*检查当前更新的记录是否已经占用了一个EXT文件记录*/
+        /*????????????????????????????????????EXT????????*/
         ucExtRecord  = gastANRContent[i].pContent[ulRecordOffset+ulXDNContentOffset];
 
-        /*如果待删除的ANR号码存在扩展号码，可能需要将EXT号码删除，且EXT的记录号不能越界，超过EXT的最大值*/
+        /*????????????ANR????????????????????????????EXT????????????EXT??????????????????????EXT????????*/
         if ( (ucExtRecord <= gastEXTContent[PB_ADN_CONTENT].usExtTotalNum)
             && (0xFF != ucExtRecord) )
         {
@@ -1974,12 +1974,12 @@ VOS_VOID SI_PB_DeleteHandleAnr(VOS_UINT16          usFileId,
             pstSPBReq->usFileNum++;
         }
 
-        /*ANR记录有效，则加入待删除列表*/
+        /*ANR??????????????????????????*/
         if(VOS_OK == SI_PB_CheckANRValidity(gastANRContent[i].pContent+ulRecordOffset))
         {
             PAM_MEM_CPY_S(gstPBReqUnit.stSPBReq.aucANRContent[i], sizeof(gstPBReqUnit.stSPBReq.aucANRContent[i]), aucContent, gastANRContent[i].ucRecordLen);
 
-            /*记录待删除的ANR记录信息*/
+            /*????????????ANR????????*/
             pstSPBReq->usFileID[pstSPBReq->usFileNum]       = usANRFileId;
             pstSPBReq->ucRecordNum[pstSPBReq->usFileNum]    = ucANRRecord;
             pstSPBReq->usDataLen[pstSPBReq->usFileNum]      = gastANRContent[i].ucRecordLen;
@@ -2001,10 +2001,10 @@ VOS_VOID SI_PB_DeleteHandleEmail(VOS_UINT16         usIndex,
     VOS_UINT32            ulType2EMLIndex;
     VOS_UINT8             ucEMLRecord;
     VOS_UINT8             *pucEMLContent = VOS_NULL_PTR;
-    VOS_UINT8             aucContent[64] = {0}; /*删除的内容添全F*/
+    VOS_UINT8             aucContent[64] = {0}; /*??????????????F*/
     VOS_UINT32            ulFreeSize = 0;
 
-    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*初始化局部变量*/
+    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*??????????????*/
 
     (VOS_VOID)SI_PB_GetEMLFIdFromADN(&usEMLFileId, usFileId);
 
@@ -2025,9 +2025,9 @@ VOS_VOID SI_PB_DeleteHandleEmail(VOS_UINT16         usIndex,
             return;
         }
 
-        /*放在Refresh MEM中做 */
+        /*????Refresh MEM???? */
 
-        /*将缓存中的IAP文件*/
+        /*??????????IAP????*/
         if(20 < gstIAPContent.ucRecordLen)
         {
             PB_ERROR_LOG("SI_PB_DeleteHandleEmail:IAP ucRecordLen too long");
@@ -2042,7 +2042,7 @@ VOS_VOID SI_PB_DeleteHandleEmail(VOS_UINT16         usIndex,
 
         gstPBReqUnit.stSPBReq.aucIAPContent[gstPBCtrlInfo.astEMLInfo[0].ulEMLTagNum-1] = 0xFF;
 
-        /*及时更新缓存，防止Email和ANR删除顺序变化后，拷贝的缓存内容不正确*/
+        /*??????????????????Email??ANR????????????????????????????????????*/
         gstIAPContent.pIAPContent[ulType2EMLIndex+(gstPBCtrlInfo.astEMLInfo[0].ulEMLTagNum-1)] = 0xFF;
 
         (VOS_VOID)SI_PB_GetIAPFidFromEML(usEMLFileId,&usIAPFileid);
@@ -2065,11 +2065,11 @@ VOS_VOID SI_PB_DeleteHandleEmail(VOS_UINT16         usIndex,
         return;
     }
 
-    if(0xFF != pucEMLContent[0])/*有效Email*/
+    if(0xFF != pucEMLContent[0])/*????Email*/
     {
         PAM_MEM_CPY_S(gstPBReqUnit.stSPBReq.aucEMLContent, sizeof(gstPBReqUnit.stSPBReq.aucEMLContent), aucContent, gstEMLContent.ucRecordLen);
 
-        /*记录待删除的EML记录信息*/
+        /*????????????EML????????*/
         pstSPBReq->usFileID[pstSPBReq->usFileNum]       = usEMLFileId;
         pstSPBReq->ucRecordNum[pstSPBReq->usFileNum]    = ucEMLRecord;
         pstSPBReq->usDataLen[pstSPBReq->usFileNum]      = gstEMLContent.ucRecordLen;
@@ -2091,25 +2091,25 @@ VOS_UINT32 SI_PB_DeleteHandle(VOS_UINT16 usFileId, VOS_UINT8 ucRecord,
     VOS_UINT8             ucRecordLen;
     VOS_UINT32            ulRecordOffset;
     VOS_UINT32            ulResult = VOS_OK;
-    SI_PB_SPBDATA_STRU    stSPBReq = {{0}};/*最多九个文件*/
-    VOS_UINT8             aucContent[242] = {0}; /*删除的内容添全F*/
+    SI_PB_SPBDATA_STRU    stSPBReq = {{0}};/*????????????*/
+    VOS_UINT8             aucContent[242] = {0}; /*??????????????F*/
 
-    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*初始化局部变量*/
+    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*??????????????*/
 
     PAM_MEM_SET_S((VOS_VOID*)(&stSPBReq), sizeof(SI_PB_SPBDATA_STRU), 0, sizeof(SI_PB_SPBDATA_STRU));
 
-    /*XDN 及 EXT处理*/
+    /*XDN ?? EXT????*/
     ucRecordLen = gastPBContent[ucOffset].ucRecordLen;
     ulRecordOffset = (usIndex -1) * ucRecordLen;
     pucRecord = gastPBContent[ucOffset].pContent + ulRecordOffset;
 
-    /*存在复合电话本情况下，可能ADN为无效值*/
+    /*??????????????????????????ADN????????*/
     if((1 == gstPBConfigInfo.ucSPBFlag)&&(PB_ADN_CONTENT == ucOffset))
     {
-        /*ANR 及 EXT处理*/
+        /*ANR ?? EXT????*/
         SI_PB_DeleteHandleAnr(usFileId, usIndex, &stSPBReq, ucRecord);
 
-        /*Email 处理*/
+        /*Email ????*/
         SI_PB_DeleteHandleEmail(usIndex, &stSPBReq, ucRecord, usFileId);
 
         ulResult = SI_PB_CheckContentValidity(&gastPBContent[ucOffset], pucRecord);
@@ -2133,7 +2133,7 @@ VOS_UINT32 SI_PB_DeleteHandle(VOS_UINT16 usFileId, VOS_UINT8 ucRecord,
         stSPBReq.usFileNum++;
     }
 
-    /*在记录有效时才放入待删除文件列表*/
+    /*????????????????????????????????*/
     if(VOS_OK == ulResult)
     {
         PAM_MEM_CPY_S(gstPBReqUnit.aucXDNContent, sizeof(gstPBReqUnit.aucXDNContent), aucContent, ucRecordLen);
@@ -2145,7 +2145,7 @@ VOS_UINT32 SI_PB_DeleteHandle(VOS_UINT16 usFileId, VOS_UINT8 ucRecord,
         stSPBReq.usFileNum++;
     }
 
-    /*调用USIMM接口更新文件*/
+    /*????USIMM????????????*/
     if (VOS_OK != SI_PB_SetSPBFileReq(&stSPBReq))
     {
         return TAF_ERR_USIM_SIM_CARD_NOTEXIST;/*SIM Fail*/
@@ -2165,11 +2165,11 @@ VOS_UINT32 SI_PB_QueryProc(PBMsgBlock *pMsg)
 
     pstMsg = (SI_PB_QUERY_REQ_STRU*)pMsg;
 
-    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*初始化当前的局部变量*/
+    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*????????????????????*/
 
-    ulResult = SI_PB_FindPBOffset(pstMsg->ulStorage, &ucPBOffset);/*定位当前电话本位置*/
+    ulResult = SI_PB_FindPBOffset(pstMsg->ulStorage, &ucPBOffset);/*??????????????????*/
 
-    stCnfData.ClientId          = pstMsg->usClient;        /*根据消息内容填充回复数据*/
+    stCnfData.ClientId          = pstMsg->usClient;        /*????????????????????????*/
     stCnfData.OpId              = pstMsg->ucOpID;
     stCnfData.PBEventType       = SI_PB_EVENT_QUERY_CNF;
     stCnfData.Storage           = pstMsg->ulStorage;
@@ -2180,23 +2180,23 @@ VOS_UINT32 SI_PB_QueryProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = TAF_ERR_PB_NOT_FOUND;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     stCnfData.PBError = SI_PB_ErrorProc();
 
-    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*??????????????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_QUERYProc: Proc Error");
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     if( PB_INIT_FINISHED != gstPBInitState.enPBInitStep )
     {
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     if(PB_INITIALISED != gastPBContent[ucPBOffset].enInitialState)
@@ -2205,7 +2205,7 @@ VOS_UINT32 SI_PB_QueryProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     gstPBReqUnit.enPBLock = PB_LOCKED;
@@ -2226,7 +2226,7 @@ VOS_UINT32 SI_PB_QueryProc(PBMsgBlock *pMsg)
     stCnfData.PBEvent.PBQueryCnf.EMAILTextLen = gstEMLContent.ucDataLen;
     stCnfData.PBEvent.PBQueryCnf.ANRNumberLen = gastANRContent[0].ucNumberLen;
 
-    return SI_PBCallback(&stCnfData);/*调用回调函数*/
+    return SI_PBCallback(&stCnfData);/*????????????*/
 }
 
 
@@ -2237,14 +2237,14 @@ VOS_VOID SI_PB_SendSetCurPB(VOS_VOID)
     pstMsg = (SI_PB_SETPB_IND_STRU*)VOS_AllocMsg(MAPS_PB_PID,
                                 sizeof(SI_PB_SETPB_IND_STRU)-VOS_MSG_HEAD_LENGTH);
 
-    if(VOS_NULL_PTR == pstMsg)  /*申请内存失败会重启*/
+    if(VOS_NULL_PTR == pstMsg)  /*??????????????????*/
     {
         return;
     }
 
     pstMsg->ulReceiverPid = ACPU_PID_PB;
     pstMsg->ulMsgName     = SI_PB_UPDATE_CURPB;
-    pstMsg->enPBCurType   = gstPBCtrlInfo.enPBCurType; /* 当前全局变量内容已经更新 */
+    pstMsg->enPBCurType   = gstPBCtrlInfo.enPBCurType; /* ???????????????????????? */
 
     if(VOS_OK != VOS_SendMsg(MAPS_PB_PID, pstMsg))
     {
@@ -2264,9 +2264,9 @@ VOS_UINT32 SI_PB_SetProc(PBMsgBlock *pMsg)
 
     pstMsg = (SI_PB_SET_REQ_STRU*)pMsg;
 
-    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*初始化局部变量*/
+    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*??????????????*/
 
-    stCnfData.ClientId          = pstMsg->usClient;        /*根据消息内容填充回复数据*/
+    stCnfData.ClientId          = pstMsg->usClient;        /*????????????????????????*/
     stCnfData.OpId              = pstMsg->ucOpID;
     stCnfData.PBEventType       = SI_PB_EVENT_SET_CNF;
     stCnfData.Storage           = pstMsg->ulStorage;
@@ -2279,23 +2279,23 @@ VOS_UINT32 SI_PB_SetProc(PBMsgBlock *pMsg)
 
         PB_WARNING_LOG("SI_PB_SetProc: Find the PhoneBook Content is Error");
 
-        return SI_PBCallback(&stCnfData);                   /*调用回调函数*/
+        return SI_PBCallback(&stCnfData);                   /*????????????*/
     }
 
     stCnfData.PBError = SI_PB_ErrorProc();
 
-    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*??????????????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_SetProc: Proc Error");
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     if( PB_INIT_FINISHED != gstPBInitState.enPBInitStep )
     {
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     if(PB_INITIALISED != gastPBContent[ucPBOffset].enInitialState)
@@ -2304,7 +2304,7 @@ VOS_UINT32 SI_PB_SetProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     gstPBReqUnit.enPBLock = PB_LOCKED;
@@ -2316,11 +2316,11 @@ VOS_UINT32 SI_PB_SetProc(PBMsgBlock *pMsg)
     stCnfData.PBEvent.PBSetCnf.ANRNumberLen   = gastANRContent[0].ucNumberLen;
     stCnfData.PBEvent.PBQueryCnf.EMAILTextLen = gstEMLContent.ucDataLen;
 
-    gstPBCtrlInfo.enPBCurType = pstMsg->ulStorage;      /*设置当前全局变量内容*/
+    gstPBCtrlInfo.enPBCurType = pstMsg->ulStorage;      /*????????????????????*/
 
     SI_PB_SendSetCurPB();
 
-    return SI_PBCallback(&stCnfData);                   /*调用回调函数*/
+    return SI_PBCallback(&stCnfData);                   /*????????????*/
 }
 
 
@@ -2328,7 +2328,7 @@ VOS_UINT32 SI_PB_FindFreeIndex(VOS_UINT8 ucPBOffset, VOS_UINT16 *pusIndex)
 {
     VOS_UINT16 i;
 
-    for(i=1; i<=gastPBContent[ucPBOffset].usTotalNum; i++)/*根据当前的总索引查询空记录*/
+    for(i=1; i<=gastPBContent[ucPBOffset].usTotalNum; i++)/*??????????????????????????*/
     {
         if(SI_PB_CONTENT_INVALID == SI_PB_GetBitFromBuf(gastPBContent[ucPBOffset].pIndex, i))
         {
@@ -2336,9 +2336,9 @@ VOS_UINT32 SI_PB_FindFreeIndex(VOS_UINT8 ucPBOffset, VOS_UINT16 *pusIndex)
         }
     }
 
-    if(i > gastPBContent[ucPBOffset].usTotalNum) /*内容全满*/
+    if(i > gastPBContent[ucPBOffset].usTotalNum) /*????????*/
     {
-        return TAF_ERR_PB_STORAGE_FULL;/*调用回调函数*/
+        return TAF_ERR_PB_STORAGE_FULL;/*????????????*/
     }
 
     *pusIndex = i;
@@ -2361,9 +2361,9 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
 
     pstMsg = (SI_PB_ADD_REP_STRU *)pMsg;
 
-    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*初始化局部变量*/
+    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*??????????????*/
 
-    stCnfData.ClientId      = pstMsg->usClient;    /*根据消息填充回复数据*/
+    stCnfData.ClientId      = pstMsg->usClient;    /*????????????????????*/
     stCnfData.OpId          = pstMsg->ucOpID;
     stCnfData.PBEventType   = SI_PB_EVENT_ADD_CNF;
     stCnfData.Storage       = pstMsg->ulStorage;
@@ -2376,7 +2376,7 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
     }
 
-    /*紧急呼叫号码不能更新*/
+    /*????????????????????*/
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
     if ((PB_ECC == pstMsg->ulStorage)
      || (PB_XECC == pstMsg->ulStorage))
@@ -2390,11 +2390,11 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
     }
 #endif
 
-    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*??????????????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_ADDProc: Proc Error");
 
-        return SI_PBCallback(&stCnfData);       /*调用回调函数*/
+        return SI_PBCallback(&stCnfData);       /*????????????*/
     }
 
     ulResult = SI_PB_LocateRecord(pstMsg->ulStorage, pstMsg->stRecord.Index, pstMsg->stRecord.Index, &ucPBOffset);
@@ -2404,7 +2404,7 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
         PB_WARNING_LOG("SI_PB_ADDProc: Find the PhoneBook Content is Error");
         stCnfData.PBError = ulResult;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     if(pstMsg->stRecord.NumberLength > gastPBContent[ucPBOffset].ucNumberLen)
@@ -2412,20 +2412,20 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
         PB_WARNING_LOG("SI_PB_ADDProc: Number Too Long");
         stCnfData.PBError = TAF_ERR_PB_DIAL_STRING_TOO_LONG;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    if(VOS_NULL_PTR == gastPBContent[ucPBOffset].pContent)/*定位缓冲失败*/
+    if(VOS_NULL_PTR == gastPBContent[ucPBOffset].pContent)/*????????????*/
     {
         PB_WARNING_LOG("SI_PB_ADDProc: Content is NULL");
         stCnfData.PBError = TAF_ERR_UNSPECIFIED_ERROR;
 
-        return SI_PBCallback(&stCnfData);       /*调用回调函数*/
+        return SI_PBCallback(&stCnfData);       /*????????????*/
     }
 
     gstPBReqUnit.enPBLock = PB_LOCKED;
 
-    /*找到空闲记录*/
+    /*????????????*/
     ulResult = SI_PB_FindFreeIndex(ucPBOffset, &i);
 
     if(VOS_OK != ulResult)
@@ -2435,24 +2435,24 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    if(SI_PB_STORAGE_SM == pstMsg->ulStorage)   /*如果是ADN需要转换为记录号*/
+    if(SI_PB_STORAGE_SM == pstMsg->ulStorage)   /*??????ADN????????????????*/
     {
         ulResult = SI_PB_CountADNRecordNum(i, &usFileId, &ucRecord);
     }
-    else                                                                    /*访问其它电话本*/
+    else                                                                    /*??????????????*/
     {
         ulResult = SI_PB_GetXDNFileID(pstMsg->ulStorage, &usFileId);
 
         ucRecord = (VOS_UINT8)i;
     }
 
-    if(VOS_ERR == ulResult)         /*转换结果失败*/
+    if(VOS_ERR == ulResult)         /*????????????*/
     {
         PB_WARNING_LOG("SI_PB_ADDProc: Get the XDN File ID and Record Number is Error");
 
         stCnfData.PBError = TAF_ERR_PARA_ERROR;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     ulExtInfoNum = gastPBContent[ucPBOffset].ulExtInfoNum;
@@ -2460,7 +2460,7 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
     pstMsg->stRecord.Index  = i;
 
     ulResult = SI_PB_UpdataXDNFile(ucPBOffset, usFileId, usExtFileId,
-                                    ucRecord, &pstMsg->stRecord);/*, (VOS_UINT32)SI_PB_ADD_REQ);调用更新文件API*/
+                                    ucRecord, &pstMsg->stRecord);/*, (VOS_UINT32)SI_PB_ADD_REQ);????????????API*/
 
     if(VOS_OK != ulResult)
     {
@@ -2468,10 +2468,10 @@ VOS_UINT32 SI_PB_AddProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = TAF_ERR_USIM_SIM_CARD_NOTEXIST;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    gstPBReqUnit.enPBEventType     = SI_PB_EVENT_ADD_CNF;    /*填充缓冲结构*/
+    gstPBReqUnit.enPBEventType     = SI_PB_EVENT_ADD_CNF;    /*????????????*/
 
     gstPBReqUnit.enPBStoateType    = pstMsg->ulStorage;
 
@@ -2491,14 +2491,14 @@ VOS_UINT32 SI_PB_GetANRInfo(SI_PB_ADDITION_NUM_STRU *pstANRNum,
 {
     VOS_UINT16 i;
 
-    /*第二电话本参数检查及FID获取*/
+    /*????????????????????FID????*/
     for(i = 0; i < gstPBConfigInfo.ucAnrMaxNum; i++)
     {
         if((0 < pstANRNum[i].NumberLength)&&(i >= gstPBCtrlInfo.ulANRStorageNum))
         {
             PB_WARNING_LOG("SI_PB_GetANRInfo:Not Allowed");
 
-            return TAF_ERR_PB_STORAGE_OP_FAIL;/*调用回调函数*/
+            return TAF_ERR_PB_STORAGE_OP_FAIL;/*????????????*/
         }
 
         if(pstANRNum[i].NumberLength > gastANRContent[i].ucNumberLen)
@@ -2510,7 +2510,7 @@ VOS_UINT32 SI_PB_GetANRInfo(SI_PB_ADDITION_NUM_STRU *pstANRNum,
 
         pusANRFileId[i] = 0;
 
-        (VOS_VOID)SI_PB_GetANRFidFromADN((VOS_UINT8)i, usADNFid, &pusANRFileId[i]);/*根据ADN FID获取ANR FID*/
+        (VOS_VOID)SI_PB_GetANRFidFromADN((VOS_UINT8)i, usADNFid, &pusANRFileId[i]);/*????ADN FID????ANR FID*/
 
         if((0 == pusANRFileId[i])&&(0 != pstANRNum[i].NumberLength))
         {
@@ -2538,16 +2538,16 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
 
     pstMsg = (SI_PB_ADD_REP_STRU *)pMsg;
 
-    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*初始化局部变量*/
+    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*??????????????*/
 
-    stCnfData.ClientId      = pstMsg->usClient;    /*根据消息填充回复数据*/
+    stCnfData.ClientId      = pstMsg->usClient;    /*????????????????????*/
     stCnfData.OpId          = pstMsg->ucOpID;
     stCnfData.PBEventType   = SI_PB_EVENT_SADD_CNF;
     stCnfData.Storage       = pstMsg->ulStorage;
 
     if((0 == gstPBConfigInfo.ucSPBFlag)||(SI_PB_STORAGE_SM != pstMsg->ulStorage))
     {
-        /*改为Operation not allowed*/
+        /*????Operation not allowed*/
         stCnfData.PBError = TAF_ERR_CMD_TYPE_ERROR;
 
         return SI_PBCallback(&stCnfData);
@@ -2561,11 +2561,11 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
     }
 
-    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*??????????????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_SAddProc: Proc Error");
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     ulResult = SI_PB_LocateRecord(pstMsg->ulStorage, pstMsg->stRecord.Index, pstMsg->stRecord.Index, &ucPBOffset);
@@ -2586,7 +2586,7 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    if(VOS_NULL_PTR == gastPBContent[ucPBOffset].pContent)/*定位缓冲失败*/
+    if(VOS_NULL_PTR == gastPBContent[ucPBOffset].pContent)/*????????????*/
     {
         PB_WARNING_LOG("SI_PB_SAddProc: Content is NULL");
         stCnfData.PBError = TAF_ERR_UNSPECIFIED_ERROR;
@@ -2595,7 +2595,7 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
     }
 
 
-    /*找到空闲记录*/
+    /*????????????*/
     ulResult = SI_PB_FindFreeIndex(ucPBOffset, &usIndex);
 
     if(VOS_OK != ulResult)
@@ -2605,22 +2605,22 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    /*记录需要更新的Index号*/
+    /*??????????????Index??*/
     pstMsg->stRecord.Index = usIndex;
 
-    /*ADN电话本FID及记录号获取*/
+    /*ADN??????FID????????????*/
     ulResult = SI_PB_CountADNRecordNum(usIndex, &stSPBFid.usADNFileId, &ucRecord);
 
-    if(VOS_ERR == ulResult)/*转换失败*/
+    if(VOS_ERR == ulResult)/*????????*/
     {
         PB_WARNING_LOG("SI_PB_SAddProc: Get the XDN File ID and Record Number is Error");
 
         stCnfData.PBError = TAF_ERR_PARA_ERROR;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    /*第二电话本参数检查及ID获取*/
+    /*????????????????????ID????*/
     ulResult = SI_PB_GetANRInfo(pstMsg->stRecord.AdditionNumber,stSPBFid.usADNFileId,stSPBFid.ausANRFileId);
 
     if(VOS_OK != ulResult)
@@ -2629,10 +2629,10 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = ulResult;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    /*Email 文件FID获取,根据NV项的值为判断是否可以更新*/
+    /*Email ????FID????,????NV????????????????????????*/
     if(gstPBConfigInfo.ucEmailFlag)
     {
         if(0 < pstMsg->stRecord.Email.EmailLen)
@@ -2650,7 +2650,7 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
         }
     }
 
-    /*EXT 文件FID获取*/
+    /*EXT ????FID????*/
     ulExtInfoNum          = gastPBContent[ucPBOffset].ulExtInfoNum;
     stSPBFid.usExtFileId  = gastEXTContent[ulExtInfoNum].usExtFileId;
 
@@ -2658,7 +2658,7 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
 
     stSPBFid.ucRecordNum = ucRecord;
 
-    ulResult = SI_PB_UpdataSPBFile(&stSPBFid,&pstMsg->stRecord);/*调用更新文件的API*/
+    ulResult = SI_PB_UpdataSPBFile(&stSPBFid,&pstMsg->stRecord);/*??????????????API*/
 
     if(VOS_OK != ulResult)
     {
@@ -2666,10 +2666,10 @@ VOS_UINT32 SI_PB_SAddProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = ulResult;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    gstPBReqUnit.enPBEventType     = SI_PB_EVENT_ADD_CNF;    /*填充缓冲结构*/
+    gstPBReqUnit.enPBEventType     = SI_PB_EVENT_ADD_CNF;    /*????????????*/
 
     gstPBReqUnit.enPBStoateType    = pstMsg->ulStorage;
 
@@ -2696,9 +2696,9 @@ VOS_UINT32 SI_PB_ModifyProc(PBMsgBlock *pMsg)
 
     pstMsg = (SI_PB_ADD_REP_STRU *)pMsg;
 
-    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*初始化局部变量*/
+    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*??????????????*/
 
-    stCnfData.ClientId     = pstMsg->usClient;    /*根据消息填充回复数据*/
+    stCnfData.ClientId     = pstMsg->usClient;    /*????????????????????*/
     stCnfData.OpId         = pstMsg->ucOpID;
     stCnfData.PBEventType  = SI_PB_EVENT_MODIFY_CNF;
     stCnfData.Storage      = pstMsg->ulStorage;
@@ -2711,7 +2711,7 @@ VOS_UINT32 SI_PB_ModifyProc(PBMsgBlock *pMsg)
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
     }
 
-    /*紧急呼叫号码不能更新*/
+    /*????????????????????*/
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
     if ((PB_ECC == pstMsg->ulStorage)
      || (PB_XECC == pstMsg->ulStorage))
@@ -2725,21 +2725,21 @@ VOS_UINT32 SI_PB_ModifyProc(PBMsgBlock *pMsg)
     }
 #endif
 
-    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*??????????????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_ModifyProc: Proc Error");
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     ulResult = SI_PB_LocateRecord(pstMsg->ulStorage, pstMsg->stRecord.Index, pstMsg->stRecord.Index, &ucPBOffset);
 
-    if(VOS_OK != ulResult)  /*定位电话本信息失败*/
+    if(VOS_OK != ulResult)  /*??????????????????*/
     {
         PB_WARNING_LOG("SI_PB_ModifyProc: Find the PhoneBook Content is Error");
         stCnfData.PBError = ulResult;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     if(pstMsg->stRecord.NumberLength > gastPBContent[ucPBOffset].ucNumberLen)
@@ -2747,35 +2747,35 @@ VOS_UINT32 SI_PB_ModifyProc(PBMsgBlock *pMsg)
         PB_WARNING_LOG("SI_PB_ModifyProc: Number Too Long");
         stCnfData.PBError = TAF_ERR_PB_DIAL_STRING_TOO_LONG;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     gstPBReqUnit.enPBLock = PB_LOCKED;
 
-    if(SI_PB_STORAGE_SM == pstMsg->ulStorage)/*访问的是ADN需要转换记录号*/
+    if(SI_PB_STORAGE_SM == pstMsg->ulStorage)/*????????ADN??????????????*/
     {
         ulResult = SI_PB_CountADNRecordNum(pstMsg->stRecord.Index, &usFileId, &ucRecord);
     }
-    else                                                            /*访问其它电话本*/
+    else                                                            /*??????????????*/
     {
         ulResult = SI_PB_GetXDNFileID(pstMsg->ulStorage, &usFileId);
 
         ucRecord = (VOS_UINT8)pstMsg->stRecord.Index;
     }
 
-    if(VOS_ERR == ulResult)                         /*转换失败*/
+    if(VOS_ERR == ulResult)                         /*????????*/
     {
         PB_WARNING_LOG("SI_PB_ModifyProc: Get the XDN File ID and Record Number is Error");
 
         stCnfData.PBError = TAF_ERR_PARA_ERROR;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     ulExtInfoNum = gastPBContent[ucPBOffset].ulExtInfoNum;
     usExtFileId  = gastEXTContent[ulExtInfoNum].usExtFileId;
 
-    ulResult = SI_PB_UpdataXDNFile(ucPBOffset, usFileId, usExtFileId, ucRecord, &pstMsg->stRecord);/*调用更新文件的API*/
+    ulResult = SI_PB_UpdataXDNFile(ucPBOffset, usFileId, usExtFileId, ucRecord, &pstMsg->stRecord);/*??????????????API*/
 
     if(VOS_OK != ulResult)
     {
@@ -2783,10 +2783,10 @@ VOS_UINT32 SI_PB_ModifyProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = TAF_ERR_USIM_SIM_CARD_NOTEXIST;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    gstPBReqUnit.enPBEventType          = SI_PB_EVENT_MODIFY_CNF;/*相关内容在全局变量中保存*/
+    gstPBReqUnit.enPBEventType          = SI_PB_EVENT_MODIFY_CNF;/*????????????????????????*/
 
     gstPBReqUnit.enPBStoateType         = pstMsg->ulStorage;
 
@@ -2814,16 +2814,16 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
 
     pstMsg = (SI_PB_ADD_REP_STRU *)pMsg;
 
-    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*初始化局部变量*/
+    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*??????????????*/
 
-    stCnfData.ClientId     = pstMsg->usClient;    /*根据消息填充回复数据*/
+    stCnfData.ClientId     = pstMsg->usClient;    /*????????????????????*/
     stCnfData.OpId         = pstMsg->ucOpID;
     stCnfData.PBEventType  = SI_PB_EVENT_SMODIFY_CNF;
     stCnfData.Storage      = pstMsg->ulStorage;
 
     if((0 == gstPBConfigInfo.ucSPBFlag)||(SI_PB_STORAGE_SM != pstMsg->ulStorage))
     {
-        /*改为Operation not allowed*/
+        /*????Operation not allowed*/
         stCnfData.PBError = TAF_ERR_CMD_TYPE_ERROR;
 
         return SI_PBCallback(&stCnfData);
@@ -2837,16 +2837,16 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
     }
 
-    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*??????????????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_SModifyProc: Proc Error");
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     ulResult = SI_PB_LocateRecord(pstMsg->ulStorage, pstMsg->stRecord.Index, pstMsg->stRecord.Index, &ucPBOffset);
 
-    if(VOS_OK != ulResult)  /*定位电话本信息失败*/
+    if(VOS_OK != ulResult)  /*??????????????????*/
     {
         PB_WARNING_LOG("SI_PB_SModifyProc: Find the PhoneBook Content is Error");
         stCnfData.PBError = ulResult;
@@ -2854,7 +2854,7 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    /*ADN电话本号码长度检查*/
+    /*ADN??????????????????*/
     if(pstMsg->stRecord.NumberLength > gastPBContent[ucPBOffset].ucNumberLen)
     {
         PB_WARNING_LOG("SI_PB_SModifyProc: Number Too Long");
@@ -2863,18 +2863,18 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    if(VOS_NULL_PTR == gastPBContent[ucPBOffset].pContent)/*定位缓冲失败*/
+    if(VOS_NULL_PTR == gastPBContent[ucPBOffset].pContent)/*????????????*/
     {
         PB_WARNING_LOG("SI_PB_SModifyProc: Content is NULL");
         stCnfData.PBError = TAF_ERR_UNSPECIFIED_ERROR;
 
-        return SI_PBCallback(&stCnfData);       /*调用回调函数*/
+        return SI_PBCallback(&stCnfData);       /*????????????*/
     }
 
-    /*ADN电话本FID及记录号获取*/
+    /*ADN??????FID????????????*/
     ulResult = SI_PB_CountADNRecordNum(pstMsg->stRecord.Index, &stSPBFid.usADNFileId, &ucRecord);
 
-    if(VOS_ERR == ulResult)/*转换失败*/
+    if(VOS_ERR == ulResult)/*????????*/
     {
         PB_WARNING_LOG("SI_PB_SModifyProc: Get the XDN File ID and Record Number is Error");
 
@@ -2883,7 +2883,7 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    /*第二电话本参数检查及FID获取*/
+    /*????????????????????FID????*/
     ulResult = SI_PB_GetANRInfo(pstMsg->stRecord.AdditionNumber,stSPBFid.usADNFileId,stSPBFid.ausANRFileId);
 
     if(VOS_OK != ulResult)
@@ -2895,7 +2895,7 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    /*Email 文件FID获取,不对返回值，用户更新的Email是否存在放在SI_PB_UpdataSPBFile中判断*/
+    /*Email ????FID????,??????????????????????Email????????????SI_PB_UpdataSPBFile??????*/
     if(gstPBConfigInfo.ucEmailFlag)
     {
         (VOS_VOID)SI_PB_GetEMLFIdFromADN(&stSPBFid.usEMLFileId,stSPBFid.usADNFileId);
@@ -2905,7 +2905,7 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
         stSPBFid.usEMLFileId = 0;
     }
 
-    /*EXT文件FID获取*/
+    /*EXT????FID????*/
     ulExtInfoNum          = gastPBContent[ucPBOffset].ulExtInfoNum;
     stSPBFid.usExtFileId  = gastEXTContent[ulExtInfoNum].usExtFileId;
 
@@ -2913,7 +2913,7 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
 
     stSPBFid.ucRecordNum = ucRecord;
 
-    ulResult = SI_PB_UpdataSPBFile(&stSPBFid,&pstMsg->stRecord);/*调用更新文件的API*/
+    ulResult = SI_PB_UpdataSPBFile(&stSPBFid,&pstMsg->stRecord);/*??????????????API*/
 
     if(VOS_OK != ulResult)
     {
@@ -2921,10 +2921,10 @@ VOS_UINT32 SI_PB_SModifyProc(PBMsgBlock *pMsg)
 
         stCnfData.PBError = ulResult;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    gstPBReqUnit.enPBEventType          = SI_PB_EVENT_MODIFY_CNF;/*相关内容在全局变量中保存*/
+    gstPBReqUnit.enPBEventType          = SI_PB_EVENT_MODIFY_CNF;/*????????????????????????*/
 
     gstPBReqUnit.enPBStoateType         = pstMsg->ulStorage;
 
@@ -2946,15 +2946,15 @@ VOS_UINT32 SI_PB_DeleteProc(PBMsgBlock *pMsg)
     VOS_UINT16            usFileId;
     VOS_UINT8             ucRecord;
     VOS_UINT8             ucPBOffset;
-    VOS_UINT8             aucContent[100]; /*删除的内容添全F*/
+    VOS_UINT8             aucContent[100]; /*??????????????F*/
 
     pstMsg = (SI_PB_DELETE_REQ_STRU *)pMsg;
 
-    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*初始化局部变量*/
+    SI_PB_InitContent(sizeof(aucContent), 0xFF, aucContent);/*??????????????*/
 
-    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*初始化局部变量*/
+    PAM_MEM_SET_S(&stCnfData, sizeof(SI_PB_EVENT_INFO_STRU), 0, sizeof(SI_PB_EVENT_INFO_STRU));/*??????????????*/
 
-    stCnfData.ClientId      = pstMsg->usClient;        /*根据消息内容填充回复数据*/
+    stCnfData.ClientId      = pstMsg->usClient;        /*????????????????????????*/
     stCnfData.OpId          = pstMsg->ucOpID;
     stCnfData.PBEventType   = SI_PB_EVENT_DELETE_CNF;
     stCnfData.Storage       = pstMsg->ulStorage;
@@ -2967,7 +2967,7 @@ VOS_UINT32 SI_PB_DeleteProc(PBMsgBlock *pMsg)
         stCnfData.PBError = TAF_ERR_SIM_BUSY;
     }
 
-    /*紧急呼叫号码不能删除*/
+    /*????????????????????*/
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
     if ((PB_ECC == pstMsg->ulStorage)
      || (PB_XECC == pstMsg->ulStorage))
@@ -2981,42 +2981,42 @@ VOS_UINT32 SI_PB_DeleteProc(PBMsgBlock *pMsg)
     }
 #endif
 
-    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*如果定位失败或者缓冲内容不存在*/
+    if( TAF_ERR_NO_ERROR != stCnfData.PBError )/*??????????????????????????????*/
     {
         PB_WARNING_LOG("SI_PB_DeleteProc: Proc Error");
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     ulResult = SI_PB_LocateRecord(pstMsg->ulStorage, pstMsg->usIndex, pstMsg->usIndex, &ucPBOffset);
 
-    if(VOS_OK != ulResult)     /*定位缓冲信息失败*/
+    if(VOS_OK != ulResult)     /*????????????????*/
     {
         PB_WARNING_LOG("SI_PB_DeleteProc: Find the PhoneBook Content is Error");
 
         stCnfData.PBError = ulResult;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
-    if(SI_PB_STORAGE_SM == pstMsg->ulStorage) /*如果当前访问的是ADN需要转换记录号*/
+    if(SI_PB_STORAGE_SM == pstMsg->ulStorage) /*????????????????ADN??????????????*/
     {
         ulResult = SI_PB_CountADNRecordNum(pstMsg->usIndex, &usFileId, &ucRecord);
     }
-    else                                                        /*当前访问的是其它电话本*/
+    else                                                        /*??????????????????????*/
     {
         ulResult = SI_PB_GetXDNFileID(pstMsg->ulStorage, &usFileId);
 
         ucRecord = (VOS_UINT8)pstMsg->usIndex;
     }
 
-    if(VOS_ERR == ulResult)         /*转换错误*/
+    if(VOS_ERR == ulResult)         /*????????*/
     {
         PB_WARNING_LOG("SI_PB_DeleteProc: Get the XDN File ID and Record Number is Error");
 
         stCnfData.PBError = TAF_ERR_PARA_ERROR;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
 
@@ -3030,7 +3030,7 @@ VOS_UINT32 SI_PB_DeleteProc(PBMsgBlock *pMsg)
 
     gstPBReqUnit.enPBLock = PB_LOCKED;
 
-    /*调用函数删除，判断如果为ADN，需要删除复合电话本*/
+    /*????????????????????????ADN????????????????????*/
     ulResult = SI_PB_DeleteHandle(usFileId,ucRecord,ucPBOffset,pstMsg->usIndex);
 
     if(VOS_OK != ulResult)
@@ -3040,7 +3040,7 @@ VOS_UINT32 SI_PB_DeleteProc(PBMsgBlock *pMsg)
         return SI_PBCallback(&stCnfData);
     }
 
-    gstPBReqUnit.enPBEventType      = SI_PB_EVENT_DELETE_CNF;/*相关内容保存*/
+    gstPBReqUnit.enPBEventType      = SI_PB_EVENT_DELETE_CNF;/*????????????*/
 
     gstPBReqUnit.enPBStoateType     = pstMsg->ulStorage;
 
@@ -3068,18 +3068,18 @@ VOS_UINT32 SI_PB_RefreshALLContent(VOS_VOID)
 
     gulPBFileCnt = 0;
 
-    if ( VOS_OK != SI_PB_InitPBStatusJudge())/*根据卡类型设定初始化步骤*/
+    if ( VOS_OK != SI_PB_InitPBStatusJudge())/*????????????????????????*/
     {
         PB_ERROR_LOG("SI_PB_RefreshProc:Card Status Error");
 
         return VOS_ERR;
     }
 
-    if ( PB_INIT_EFPBR == gstPBInitState.enPBInitStep )/*USIM卡*/
+    if ( PB_INIT_EFPBR == gstPBInitState.enPBInitStep )/*USIM??*/
     {
         ulResult = SI_PB_InitEFpbrReq();
     }
-    else                                        /*SIM卡*/
+    else                                        /*SIM??*/
     {
         ulResult = SI_PB_InitXDNSpaceReq();
     }
@@ -3111,7 +3111,7 @@ VOS_UINT32 SI_PB_FDNCheckProc(PBMsgBlock *pMsg)
 
     enSlotId = USIMM_GetSlotIdByModemId(MODEM_ID_0);
 
-    /*如果FDN未使能直接返回VOS_OK*/
+    /*????FDN??????????????VOS_OK*/
     USIMM_FdnQuery(enSlotId, &ulUsimFdnStatus, &ulCsimFdnStatus);
 
     pstFDNCheckCnf->ulReceiverPid   = pstFDNCheckReq->ulSenderPid;
@@ -3142,10 +3142,10 @@ VOS_UINT32 SI_PB_FDNCheckProc(PBMsgBlock *pMsg)
         {
             PB_INFO_LOG("SI_PB_CheckFdn: USIM FDN is Enable.");
 
-            /* 检测第一个号码 */
+            /* ?????????????? */
             ulResult1 = SI_PB_CheckFdn(pstFDNCheckReq->stFDNNum.aucNum1, pstFDNCheckReq->stFDNNum.ulNum1Len);
 
-            /* 如果第二个号码长度大于0，检测第二个号码 */
+            /* ??????????????????????0???????????????? */
             if (pstFDNCheckReq->stFDNNum.ulNum2Len > 0)
             {
                 ulResult2 = SI_PB_CheckFdn(pstFDNCheckReq->stFDNNum.aucNum2, pstFDNCheckReq->stFDNNum.ulNum2Len);
@@ -3187,7 +3187,7 @@ VOS_UINT32 SI_PB_EcallNumberQryProc(PBMsgBlock *pMsg)
 
     ulRslt = SI_PB_EcallNumberErrProc(pstEcallQryReq->enStorage, pstEcallQryReq->ucListLen, pstEcallQryReq->aucList, &ucPBOffset);
 
-    /* 如果检查出错，返回只有结果。检查正确，按NAS要求的记录数返回FDN/SDN记录 */
+    /* ????????????????????????????????????????NAS????????????????FDN/SDN???? */
     ulRecordNum = (TAF_ERR_NO_ERROR == ulRslt)?pstEcallQryReq->ucListLen:0;
 
 /*lint -save -e961 */
@@ -3284,8 +3284,8 @@ VOS_VOID SI_PB_JudgeTotalUsedNum(VOS_UINT8 ucPBOffset,SI_PB_EVENT_INFO_STRU *pst
 
 VOS_VOID SI_PB_RefreshADNUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq,VOS_UINT8 ucOffset)
 {
-   /*该电话本缓存(需判断缓存是否为空)和PBreq比较*/
-    /*如果原来有效，现在无效，则有效值减减*/
+   /*????????????(??????????????????)??PBreq????*/
+    /*????????????????????????????????????*/
     if(VOS_OK == SI_PB_CheckContentValidity(&gastPBContent[ucOffset],
                                             pucDstStorage))
     {
@@ -3295,7 +3295,7 @@ VOS_VOID SI_PB_RefreshADNUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq,
             gastPBContent[ucOffset].usUsedNum--;
         }
     }
-    /*如果原来无效，现在有效，则有效值加加*/
+    /*????????????????????????????????????*/
     else
     {
         if(VOS_OK == SI_PB_CheckContentValidity(&gastPBContent[ucOffset],
@@ -3311,7 +3311,7 @@ VOS_VOID SI_PB_RefreshADNUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq,
 
 VOS_VOID SI_PB_RefreshEXTUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq, VOS_UINT8 ucOffset)
 {
-    if((0x0 != pucDstStorage[0])&&(0xFF != pucDstStorage[1]))/*有效*/
+    if((0x0 != pucDstStorage[0])&&(0xFF != pucDstStorage[1]))/*????*/
     {
         if((0x0 == pucSrcReq[0])||(0xFF == pucSrcReq[1]))
         {
@@ -3332,7 +3332,7 @@ VOS_VOID SI_PB_RefreshEXTUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq,
 
 VOS_VOID SI_PB_RefreshANRUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq, VOS_UINT8 ucOffset)
 {
-    if(VOS_OK == SI_PB_CheckANRValidity(pucDstStorage))/*有效*/
+    if(VOS_OK == SI_PB_CheckANRValidity(pucDstStorage))/*????*/
     {
         if(VOS_OK != SI_PB_CheckANRValidity(pucSrcReq))
         {
@@ -3353,7 +3353,7 @@ VOS_VOID SI_PB_RefreshANRUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq,
 
 VOS_VOID SI_PB_RefreshEMLUsedNum(VOS_UINT8 *pucDstStorage, VOS_UINT8 *pucSrcReq)
 {
-    if(0xFF != pucDstStorage[0])/*有效*/
+    if(0xFF != pucDstStorage[0])/*????*/
     {
         if(0xFF == pucSrcReq[0])
         {
@@ -3426,7 +3426,7 @@ VOS_UINT32 SI_PB_RefreshMemory(VOS_UINT16 usFileId,VOS_UINT16 usRecordLen,VOS_UI
     VOS_UINT32 ulFreeSize = 0;
     VOS_UINT32 ulDestOffset = 0;
 
-    /*解析出该文件属于哪个电话本*/
+    /*??????????????????????????*/
     if(VOS_OK == SI_PB_JudgeADNFid(usFileId))/*ADN*/
     {
         usMemOffset   = (VOS_UINT16)((gstPBReqUnit.usIndex1-1)*gastPBContent[ucOffset].ucRecordLen);
@@ -3445,7 +3445,7 @@ VOS_UINT32 SI_PB_RefreshMemory(VOS_UINT16 usFileId,VOS_UINT16 usRecordLen,VOS_UI
     }
     else if(VOS_OK == SI_PB_JudgeEXTFid(usFileId, ucOffset))/*EXT*/
     {
-        /*根据EXT的回复Record，取出在其在gstPBReqUnit中的对应位置*/
+        /*????EXT??????Record????????????gstPBReqUnit????????????*/
         if(VOS_OK != SI_PB_GetEXTContentFromReq(ucRecordNum,&pucSrcReq))
         {
             PB_WARNING_LOG("SI_PB_RefreshMemory:SI_PB_GetEXTContentFromReq ERROR.");
@@ -3643,7 +3643,7 @@ VOS_VOID SI_PB_RefreshCardIndMsgSnd(VOS_VOID)
 
     enSlotId = USIMM_GetSlotIdByModemId(MODEM_ID_0);
 
-    pUsimMsg->ulMsgName                         = USIMM_CARDSTATUS_IND;    /* 设置消息名称 */
+    pUsimMsg->ulMsgName                         = USIMM_CARDSTATUS_IND;    /* ???????????? */
     pUsimMsg->enPhyCardType                     = USIMM_CCB_GetCardType(enSlotId);
     pUsimMsg->stUsimSimInfo.enCardAppService    = USIMM_CCB_GetAppService(enSlotId, USIMM_GUTL_APP);
     pUsimMsg->stCsimUimInfo.enCardAppService    = USIMM_CARDAPP_SERVIC_ABSENT;
@@ -3802,7 +3802,7 @@ VOS_VOID SI_PB_UsimSetSPBFileProc(USIMM_SETMUTILFILE_CNF_STRU *pstPBMsg,
 {
     VOS_UINT32 i;
 
-    /*如果USIMM回复失败，则直接退出，不对内存进行操作*/
+    /*????USIMM??????????????????????????????????????*/
     if(VOS_OK != pstPBMsg->stCmdResult.ulResult)
     {
         pstCnfData->PBError = TAF_ERR_PB_STORAGE_OP_FAIL;
@@ -3812,7 +3812,7 @@ VOS_VOID SI_PB_UsimSetSPBFileProc(USIMM_SETMUTILFILE_CNF_STRU *pstPBMsg,
 
     SI_PB_JudgeTotalUsedNum(ucOffset,pstCnfData);
 
-    /*针对复合电话本中的每个电话本需要比较更改前后的内存具体内容确认使用情况，并更新内存*/
+    /*??????????????????????????????????????????????????????????????????????????????????*/
     for(i = 0; i < pstPBMsg->ucFileNum; i++)
     {
         if(VOS_OK != SI_PB_RefreshMemory(pstPBMsg->ausEfId[i],
@@ -3926,7 +3926,7 @@ VOS_VOID SI_PB_UsimGetIndexFile(VOS_UINT8 ucPBOffset, SI_PB_EVENT_INFO_STRU *pst
     VOS_UINT16                  usFileId;
     SI_PB_GETFILE_INFO_STRU     stGetFileInfo;
 
-    /*所有记录已经读完,或者出错则退出*/
+    /*????????????????,??????????????*/
     if ((VOS_OK != pstCnfData->PBError)||(VOS_TRUE == pstCnfData->PBLastTag))
     {
         return;
@@ -3946,18 +3946,18 @@ VOS_VOID SI_PB_UsimGetIndexFile(VOS_UINT8 ucPBOffset, SI_PB_EVENT_INFO_STRU *pst
 
     if (PB_REQ_SEND == ucSendReqFlag)
     {
-        if(SI_PB_STORAGE_SM == gstPBReqUnit.enPBStoateType)   /*如果是ADN需要转换为记录号*/
+        if(SI_PB_STORAGE_SM == gstPBReqUnit.enPBStoateType)   /*??????ADN????????????????*/
         {
             ulResult = SI_PB_CountADNRecordNum(gstPBReqUnit.usCurIndex, &usFileId, &ucRecord);
         }
-        else                                                                    /*访问其它电话本*/
+        else                                                                    /*??????????????*/
         {
             ulResult = SI_PB_GetXDNFileID(gstPBReqUnit.enPBStoateType, &usFileId);
 
             ucRecord = (VOS_UINT8)gstPBReqUnit.usCurIndex;
         }
 
-        if(VOS_ERR == ulResult)         /*转换结果失败*/
+        if(VOS_ERR == ulResult)         /*????????????*/
         {
             PB_WARNING_LOG("SI_PB_SearchReq: Get the XDN File ID and Record Number is Error");
 
@@ -3997,7 +3997,7 @@ VOS_VOID SI_PBSendGlobalToAcpu(VOS_VOID)
     VOS_UINT32                          i;
     NAS_NVIM_SYSTEM_APP_CONFIG_STRU     stSystemAppConfig = {0};
 
-    /* 规避ANDROID 64位指针的问题，不把指针发到A核去 */
+    /* ????ANDROID 64??????????????????????????A???? */
     if (VOS_OK != mdrv_nv_read(en_NV_Item_System_APP_Config, &stSystemAppConfig, sizeof(NAS_NVIM_SYSTEM_APP_CONFIG_STRU)))
     {
         return;
@@ -4019,7 +4019,7 @@ VOS_VOID SI_PBSendGlobalToAcpu(VOS_VOID)
     pstMsg->ulReceiverPid = ACPU_PID_PB;
     pstMsg->ulMsgName     = SI_PB_UPDATE_AGOBAL;
 
-    /*拷贝全局 Acpu 需要的全局变量内容*/
+    /*???????? Acpu ??????????????????*/
     PAM_MEM_CPY_S(&pstMsg->stPBCtrlInfo,   sizeof(gstPBCtrlInfo),      &gstPBCtrlInfo,  sizeof(gstPBCtrlInfo));
     PAM_MEM_CPY_S(&pstMsg->stPBConfigInfo, sizeof(gstPBConfigInfo),    &gstPBConfigInfo,sizeof(gstPBConfigInfo));
     PAM_MEM_CPY_S(pstMsg->astPBContent,    sizeof(gastPBContent),      gastPBContent,   sizeof(gastPBContent));
@@ -4117,7 +4117,7 @@ VOS_UINT32 SI_PBUsimCnfMsgProc(PBMsgBlock *pMsg)
     {
         stCnfData.PBError = TAF_ERR_PB_STORAGE_OP_FAIL;
 
-        return SI_PBCallback(&stCnfData);/*调用回调函数*/
+        return SI_PBCallback(&stCnfData);/*????????????*/
     }
 
     switch (pMsg->ulMsgName)
@@ -4164,7 +4164,7 @@ VOS_UINT32 SI_PBUsimCnfMsgProc(PBMsgBlock *pMsg)
             return VOS_ERR;
     }
 
-    return SI_PBCallback(&stCnfData);/*调用回调函数*/
+    return SI_PBCallback(&stCnfData);/*????????????*/
 }
 
 
@@ -4173,10 +4173,10 @@ VOS_UINT32 SI_PBUsimMsgProc(PBMsgBlock *pMsg)
     VOS_UINT32                   ulResult;
     USIMM_CARDSTATUS_IND_STRU   *pStStatusMsg;
 
-    /* 在Refresh命令过程中还会收到ECC号码的上报，需要处理 */
+    /* ??Refresh??????????????????ECC???????????????????? */
     if (USIMM_ECCNUMBER_IND == pMsg->ulMsgName)
     {
-        /* 如果之前有申请过内存，释放内存防止内存泄漏 */
+        /* ?????????????????????????????????????????? */
         if(VOS_NULL_PTR != gastPBContent[PB_ECC_CONTENT].pContent)
         {
             (VOS_VOID)PB_FREE(gastPBContent[PB_ECC_CONTENT].pContent);
@@ -4189,7 +4189,7 @@ VOS_UINT32 SI_PBUsimMsgProc(PBMsgBlock *pMsg)
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
     else if (USIMM_XECCNUMBER_IND == pMsg->ulMsgName)
     {
-        /* 如果之前有申请过内存，释放内存防止内存泄漏 */
+        /* ?????????????????????????????????????????? */
         if(VOS_NULL_PTR != gastPBContent[PB_XECC_CONTENT].pContent)
         {
             (VOS_VOID)PB_FREE(gastPBContent[PB_XECC_CONTENT].pContent);
@@ -4218,7 +4218,7 @@ VOS_UINT32 SI_PBUsimMsgProc(PBMsgBlock *pMsg)
     }
     else if (USIMM_STKREFRESH_IND == pMsg->ulMsgName)
     {
-        /* 上报Pb状态给MMA */
+        /* ????Pb??????MMA */
         SI_PB_PbStatusInd(VOS_FALSE);
 
         SI_PB_PihRefreshIndProc((USIMM_STKREFRESH_IND_STRU *)pMsg);
@@ -4271,7 +4271,7 @@ VOS_UINT32 SI_PBInitMsgProc (PBMsgBlock *pMsg)
 
     switch (pMsg->ulMsgName)
     {
-        case USIMM_CARDSTATUS_IND:/*这部分处理有待讨论，暂时这么写*/
+        case USIMM_CARDSTATUS_IND:/*??????????????????????????????*/
         case USIMM_QUERYFILE_CNF:
         case USIMM_READFILE_CNF:
         case USIMM_UPDATEFILE_CNF:
@@ -4352,11 +4352,11 @@ VOS_VOID SI_PB_InitGlobeVariable(VOS_VOID)
 
     PAM_MEM_SET_S(&gstPBSearchCtrlInfo, sizeof(SI_PB_SEARCH_CTRL_STRU), (VOS_CHAR)0xFF, sizeof(SI_PB_SEARCH_CTRL_STRU));
 
-    /*读取PB控制信息NV项*/
+    /*????PB????????NV??*/
     if(NV_OK != mdrv_nv_read(en_NV_Item_Usim_PB_Ctrl_Info,
                         (VOS_VOID*)&gstPBConfigInfo, sizeof(SI_PB_CTRL_INFO_ST)))
     {
-        /*不支持复合电话本*/
+        /*????????????????*/
         gstPBConfigInfo.ucSPBFlag = 0;
 
         PB_ERROR_LOG("SI_PB_InitGlobeVariable:Read NV Fail!!");
@@ -4380,7 +4380,7 @@ VOS_VOID SI_PB_InitGlobeVariable(VOS_VOID)
 
     gstPBCtrlInfo.enPBCurType = SI_PB_STORAGE_SM;
 
-    /*设置电话本类型和其在缓冲中偏移的对应关系*/
+    /*????????????????????????????????????????*/
     gastPBContent[PB_ECC_CONTENT].enPBType         = PB_ECC;
 
     gastPBContent[PB_ECC_CONTENT].enActiveStatus   = SI_PB_ACTIVE;
@@ -4445,26 +4445,26 @@ VOS_UINT32 WuepsPBPidInit(enum VOS_INIT_PHASE_DEFINE InitPhrase)
 #if (OSA_CPU_ACPU == VOS_OSA_CPU)
 SI_PB_PROC_LIST_STRU    gastPBReqProc[] =
 {
-    {SI_PB_READ_REQ,        SI_PB_ReadProc},        /*读取电话本*/
-    {SI_PB_SEARCH_REQ,      SI_PB_SearchProc},      /*搜索电话本*/
-    {SI_PB_SREAD_REQ,       SI_PB_SReadProc},       /*读取扩展电话本*/
-    {SI_PB_UPDATE_AGOBAL,   SI_PBUpdateAGlobal},    /*同步全局变量*/
-    {SI_PB_UPDATE_CURPB,    SI_PBUpdateACurPB},     /*更新当前电话本设置*/
+    {SI_PB_READ_REQ,        SI_PB_ReadProc},        /*??????????*/
+    {SI_PB_SEARCH_REQ,      SI_PB_SearchProc},      /*??????????*/
+    {SI_PB_SREAD_REQ,       SI_PB_SReadProc},       /*??????????????*/
+    {SI_PB_UPDATE_AGOBAL,   SI_PBUpdateAGlobal},    /*????????????*/
+    {SI_PB_UPDATE_CURPB,    SI_PBUpdateACurPB},     /*??????????????????*/
 };
 #endif    /*(OSA_CPU_ACPU == VOS_OSA_CPU)*/
 
 #if (OSA_CPU_CCPU == VOS_OSA_CPU)
 SI_PB_PROC_LIST_STRU    gastPBReqProc[] =
 {
-    {SI_PB_SET_REQ,         SI_PB_SetProc},         /*设置当前电话本*/
-    {SI_PB_MODIFY_REQ,      SI_PB_ModifyProc},      /*更改电话本*/
-    {SI_PB_DELETE_REQ,      SI_PB_DeleteProc},      /*删除电话本*/
-    {SI_PB_QUERY_REQ,       SI_PB_QueryProc},       /*查询当前电话本信息*/
-    {SI_PB_ADD_REQ,         SI_PB_AddProc},         /*添加电话本*/
-    {SI_PB_SMODIFY_REQ,     SI_PB_SModifyProc},     /*更新扩展电话本*/
-    {SI_PB_SADD_REQ,        SI_PB_SAddProc},        /*添加电话本*/
-    {SI_PB_FDN_CHECK_REQ,   SI_PB_FDNCheckProc},    /*FDN号码检查*/
-    {SI_PB_ECALL_QRY_REQ,   SI_PB_EcallNumberQryProc}, /*ECALL号码获取*/
+    {SI_PB_SET_REQ,         SI_PB_SetProc},         /*??????????????*/
+    {SI_PB_MODIFY_REQ,      SI_PB_ModifyProc},      /*??????????*/
+    {SI_PB_DELETE_REQ,      SI_PB_DeleteProc},      /*??????????*/
+    {SI_PB_QUERY_REQ,       SI_PB_QueryProc},       /*??????????????????*/
+    {SI_PB_ADD_REQ,         SI_PB_AddProc},         /*??????????*/
+    {SI_PB_SMODIFY_REQ,     SI_PB_SModifyProc},     /*??????????????*/
+    {SI_PB_SADD_REQ,        SI_PB_SAddProc},        /*??????????*/
+    {SI_PB_FDN_CHECK_REQ,   SI_PB_FDNCheckProc},    /*FDN????????*/
+    {SI_PB_ECALL_QRY_REQ,   SI_PB_EcallNumberQryProc}, /*ECALL????????*/
 };
 #endif    /*(OSA_CPU_CCPU == VOS_OSA_CPU)*/
 
@@ -4473,7 +4473,7 @@ VOS_VOID I0_SI_PB_PidMsgProc(struct MsgCB *pstPBMsg)
     VOS_UINT32 ulResult = VOS_ERR;
     VOS_UINT32 i;
 
-    /*只有Ccpu才处理从USIMM模块的消息*/
+    /*????Ccpu????????USIMM??????????*/
 #if (OSA_CPU_CCPU == VOS_OSA_CPU)
     USIMM_CARDSTATUS_IND_STRU          *pstCardMsg;
 
@@ -4493,7 +4493,7 @@ VOS_VOID I0_SI_PB_PidMsgProc(struct MsgCB *pstPBMsg)
 
         OM_RecordInfoStart(VOS_EXC_DUMP_MEM_NUM_2, pstPBMsg->ulSenderPid, MAPS_PB_PID, ((PBMsgBlock*)pstPBMsg)->ulMsgName);
 
-        if(PB_INIT_FINISHED != gstPBInitState.enPBInitStep) /*初始化的读文件消息等*/
+        if(PB_INIT_FINISHED != gstPBInitState.enPBInitStep) /*????????????????????*/
         {
             ulResult = SI_PBInitMsgProc((PBMsgBlock*)pstPBMsg);
         }
@@ -4511,7 +4511,7 @@ VOS_VOID I0_SI_PB_PidMsgProc(struct MsgCB *pstPBMsg)
         {
             if(gastPBReqProc[i].ulMsgType == ((PBMsgBlock*)pstPBMsg)->ulMsgName)
             {
-                ulResult = gastPBReqProc[i].pProcFun((PBMsgBlock*)pstPBMsg); /*处理外部请求*/
+                ulResult = gastPBReqProc[i].pProcFun((PBMsgBlock*)pstPBMsg); /*????????????*/
                 break;
             }
         }
@@ -4531,22 +4531,22 @@ extern TAF_VOID At_PbCallBackFunc(SI_PB_EVENT_INFO_STRU  *pEvent);
 VOS_UINT32 SI_PBCallback(SI_PB_EVENT_INFO_STRU *pstEvent)
 {
 #if (OSA_CPU_CCPU == VOS_OSA_CPU)
-    MN_APP_PB_AT_CNF_STRU   *pstMsg; /*发送给AT的消息*/
+    MN_APP_PB_AT_CNF_STRU   *pstMsg; /*??????AT??????*/
 #endif
 
     if(pstEvent->PBError != TAF_ERR_NO_ERROR)
     {
-        gstPBReqUnit.enPBLock = PB_UNLOCK;/*解锁*/
+        gstPBReqUnit.enPBLock = PB_UNLOCK;/*????*/
     }
     else if((pstEvent->PBEventType != SI_PB_EVENT_READ_CNF)&&
             (pstEvent->PBEventType != SI_PB_EVENT_SREAD_CNF)&&
             (pstEvent->PBEventType != SI_PB_EVENT_SEARCH_CNF))
     {
-        gstPBReqUnit.enPBLock = PB_UNLOCK;/*解锁*/
+        gstPBReqUnit.enPBLock = PB_UNLOCK;/*????*/
     }
     else if(pstEvent->PBLastTag == VOS_TRUE)
     {
-        gstPBReqUnit.enPBLock = PB_UNLOCK;/*解锁*/
+        gstPBReqUnit.enPBLock = PB_UNLOCK;/*????*/
     }
     else
     {
@@ -4561,7 +4561,7 @@ VOS_UINT32 SI_PBCallback(SI_PB_EVENT_INFO_STRU *pstEvent)
     pstMsg = (MN_APP_PB_AT_CNF_STRU*)VOS_AllocMsg(MAPS_PB_PID,
                                     sizeof(MN_APP_PB_AT_CNF_STRU)-VOS_MSG_HEAD_LENGTH);
 
-    if(VOS_NULL_PTR == pstMsg)  /*每次申请失败会复位*/
+    if(VOS_NULL_PTR == pstMsg)  /*??????????????????*/
     {
         return VOS_ERR;
     }

@@ -6,7 +6,7 @@ extern "C" {
 #endif
 #endif
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "oal_ext_if.h"
 #include "oal_types.h"
 #include "oal_net.h"
@@ -41,8 +41,8 @@ extern "C" {
 #define CIPHER_SUITE_IS_TKIP(i)   (((i & WLAN_TKIP_BIT) == WLAN_TKIP_BIT) ? 1 : 0)
 #define CIPHER_SUITE_IS_CCMP(i)   (((i & WLAN_CCMP_BIT) == WLAN_CCMP_BIT) ? 1 : 0)
 
-/* 2 全局变量定义 */
-/* 3 函数实现 */
+/* 2 ???????????? */
+/* 3 ???????? */
 
 OAL_STATIC wlan_priv_key_param_stru *hmac_get_key_info(mac_vap_stru *pst_mac_vap, oal_uint8 *puc_mac_addr,
                                                        oal_bool_enum_uint8 en_pairwise, oal_uint8 uc_key_index)
@@ -52,14 +52,14 @@ OAL_STATIC wlan_priv_key_param_stru *hmac_get_key_info(mac_vap_stru *pst_mac_vap
     mac_user_stru          *pst_mac_user = OAL_PTR_NULL;
     oal_bool_enum_uint8     en_macaddr_is_zero;
 
-    /* 1.1 根据mac addr 找到对应sta索引号 */
+    /* 1.1 ????mac addr ????????sta?????? */
     en_macaddr_is_zero = mac_addr_is_zero(puc_mac_addr);
 
     if (!MAC_11I_IS_PTK(en_macaddr_is_zero, en_pairwise)) {
-        /* 如果是组播用户，不能使用mac地址来查找 */
-        /* 根据索引找到组播user内存区域 */
+        /* ????????????????????????mac?????????? */
+        /* ????????????????user???????? */
         us_user_idx = pst_mac_vap->us_multi_user_idx;
-    } else { /* 单播用户 */
+    } else { /* ???????? */
         ul_ret = mac_vap_find_user_by_macaddr(pst_mac_vap, puc_mac_addr, &us_user_idx);
         if (ul_ret != OAL_SUCC) {
             OAM_WARNING_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
@@ -195,7 +195,7 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
     mac_device_stru *pst_mac_device;
 #endif
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if ((pst_mac_vap == OAL_PTR_NULL) || (puc_param == OAL_PTR_NULL)) {
         OAM_ERROR_LOG2(0, OAM_SF_WPA, "{hmac_config_11i_add_key::param null,pst_mac_vap=%x, puc_param=%x.}",
                        (uintptr_t)pst_mac_vap, (uintptr_t)puc_param);
@@ -208,7 +208,7 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 2.1 获取参数 */
+    /* 2.1 ???????? */
     pst_payload_addkey_params = (mac_addkey_param_stru *)puc_param;
     uc_key_index = pst_payload_addkey_params->uc_key_index;
     en_pairwise = pst_payload_addkey_params->en_pairwise;
@@ -221,7 +221,7 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
     }
 #endif
 
-    /* 2.2 索引值最大值检查 */
+    /* 2.2 ???????????????? */
     if (uc_key_index >= WLAN_NUM_TK + WLAN_NUM_IGTK) {
         OAM_ERROR_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                        "{hmac_config_11i_add_key::invalid uc_key_index[%d].}", uc_key_index);
@@ -238,14 +238,14 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
                   puc_mac_addr[0], puc_mac_addr[3], puc_mac_addr[4], puc_mac_addr[5]);
 
     if (en_pairwise == OAL_TRUE) {
-        /* 单播密钥存放在单播用户中 */
+        /* ???????????????????????? */
         ul_ret = mac_vap_find_user_by_macaddr(pst_mac_vap, puc_mac_addr, &us_user_idx);
         if (ul_ret != OAL_SUCC) {
             OAM_WARNING_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA, "{hmac_config_11i_add_key::find_user_by_macaddr fail[%d].}", ul_ret);
             return ul_ret;
         }
     } else {
-        /* 组播密钥存放在组播用户中 */
+        /* ???????????????????????? */
         us_user_idx = pst_mac_vap->us_multi_user_idx;
     }
 
@@ -256,7 +256,7 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
     }
 
 #ifdef _PRE_WLAN_FEATURE_WAPI
-    /* 11i的情况下，关掉wapi端口 */
+    /* 11i??????????????wapi???? */
     hmac_wapi_reset_port(&pst_hmac_user->st_wapi);
 
     pst_mac_device = mac_res_get_dev(pst_mac_vap->uc_device_id);
@@ -267,7 +267,7 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
     pst_mac_device->uc_wapi = OAL_FALSE;
 #endif
 
-    /* 3.1 将加密属性更新到用户中 */
+    /* 3.1 ?????????????????????? */
     ul_ret = mac_vap_add_key(pst_mac_vap, &pst_hmac_user->st_user_base_info, uc_key_index, pst_key);
     if (ul_ret != OAL_SUCC) {
         OAM_ERROR_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA, "{hmac_config_11i_add_key::mac_11i_add_key fail[%d].}", ul_ret);
@@ -279,7 +279,7 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
         mac_user_set_key(&pst_hmac_user->st_user_base_info, WLAN_KEY_TYPE_RX_GTK, pst_key->cipher, uc_key_index);
     }
 
-    /* 设置用户8021x端口合法性的状态为合法 */
+    /* ????????8021x?????????????????????? */
     mac_user_set_port(&pst_hmac_user->st_user_base_info, OAL_TRUE);
 
 #ifdef _PRE_WLAN_FEATURE_ROAM
@@ -289,7 +289,7 @@ oal_uint32 hmac_config_11i_add_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
         hmac_roam_add_key_done(pst_hmac_vap);
     }
 #endif  // _PRE_WLAN_FEATURE_ROAM
-    /* 抛事件到DMAC层, 同步DMAC数据 */
+    /* ????????DMAC??, ????DMAC???? */
     ul_ret = hmac_config_send_event(pst_mac_vap, WLAN_CFGID_ADD_KEY, us_len, puc_param);
     if (OAL_UNLIKELY(ul_ret != OAL_SUCC)) {
         OAM_WARNING_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
@@ -311,7 +311,7 @@ oal_uint32 hmac_config_11i_get_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
     void (*callback)(void *, oal_key_params_stru *);
     mac_getkey_param_stru *pst_payload_getkey_params = OAL_PTR_NULL;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if ((pst_mac_vap == OAL_PTR_NULL) || (puc_param == OAL_PTR_NULL)) {
         OAM_ERROR_LOG2(0, OAM_SF_WPA,
                        "{hmac_config_11i_get_key::param null, pst_mac_vap=%x, puc_param=%x.}",
@@ -319,7 +319,7 @@ oal_uint32 hmac_config_11i_get_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 2.1 获取参数 */
+    /* 2.1 ???????? */
     pst_payload_getkey_params = (mac_getkey_param_stru *)puc_param;
     uc_key_index = pst_payload_getkey_params->uc_key_index;
     en_pairwise = pst_payload_getkey_params->en_pairwise;
@@ -327,14 +327,14 @@ oal_uint32 hmac_config_11i_get_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
     cookie = pst_payload_getkey_params->cookie;
     callback = pst_payload_getkey_params->callback;
 
-    /* 2.2 索引值最大值检查 */
+    /* 2.2 ???????????????? */
     if (uc_key_index >= WLAN_NUM_TK + WLAN_NUM_IGTK) {
         OAM_ERROR_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                        "{hmac_config_11i_get_key::uc_key_index invalid[%d].}", uc_key_index);
         return OAL_ERR_CODE_SECURITY_KEY_ID;
     }
 
-    /* 3.1 获取密钥 */
+    /* 3.1 ???????? */
     pst_priv_key = hmac_get_key_info(pst_mac_vap, puc_mac_addr, en_pairwise, uc_key_index);
     if (pst_priv_key == OAL_PTR_NULL) {
         OAM_ERROR_LOG2(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
@@ -348,7 +348,7 @@ oal_uint32 hmac_config_11i_get_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
                       en_pairwise, uc_key_index);
         return OAL_ERR_CODE_SECURITY_KEY_LEN;
     }
-    /* 4.1 密钥赋值转换 */
+    /* 4.1 ???????????? */
     oal_memset(&st_key, 0, sizeof(st_key));
     st_key.key = pst_priv_key->auc_key;
     st_key.key_len = (oal_int32)pst_priv_key->ul_key_len;
@@ -356,7 +356,7 @@ oal_uint32 hmac_config_11i_get_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_len,
     st_key.seq_len = (oal_int32)pst_priv_key->ul_seq_len;
     st_key.cipher = pst_priv_key->ul_cipher;
 
-    /* 5.1 调用回调函数 */
+    /* 5.1 ???????????? */
     if (callback) {
         callback(cookie, &st_key);
     }
@@ -377,14 +377,14 @@ oal_uint32 hmac_config_11i_remove_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_l
     mac_user_stru            *pst_mac_user;
     oal_bool_enum_uint8       en_macaddr_is_zero;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if ((pst_mac_vap == OAL_PTR_NULL) || (puc_param == OAL_PTR_NULL)) {
         OAM_ERROR_LOG2(0, OAM_SF_WPA, "{hmac_config_11i_remove_key::param null,pst_mac_vap=%x, puc_param=%x.}",
                        (uintptr_t)pst_mac_vap, (uintptr_t)puc_param);
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 2.1 获取参数 */
+    /* 2.1 ???????? */
     pst_payload_removekey_params = (mac_removekey_param_stru *)puc_param;
     uc_key_index = pst_payload_removekey_params->uc_key_index;
     en_pairwise = pst_payload_removekey_params->en_pairwise;
@@ -393,16 +393,16 @@ oal_uint32 hmac_config_11i_remove_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_l
     OAM_INFO_LOG2(pst_mac_vap->uc_vap_id, OAM_SF_WPA, "{hmac_config_11i_remove_key::uc_key_index=%d, en_pairwise=%d.}",
                   uc_key_index, en_pairwise);
 
-    /* 2.2 索引值最大值检查 */
+    /* 2.2 ???????????????? */
     if (uc_key_index >= WLAN_NUM_TK + WLAN_NUM_IGTK) {
-        /* 内核会下发删除6 个组播密钥，驱动现有6个组播密钥保存空间 */
-        /* 对于检测到key idx > 最大密钥数，不做处理 */
+        /* ??????????????6 ????????????????????6?????????????????? */
+        /* ??????????key idx > ???????????????????? */
         OAM_INFO_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                       "{hmac_config_11i_remove_key::invalid uc_key_index[%d].}", uc_key_index);
         return OAL_SUCC;
     }
 
-    /* 3.1 获取本地密钥信息 */
+    /* 3.1 ???????????????? */
     pst_priv_key = hmac_get_key_info(pst_mac_vap, puc_mac_addr, en_pairwise, uc_key_index);
     if (pst_priv_key == OAL_PTR_NULL) {
         OAM_WARNING_LOG0(pst_mac_vap->uc_vap_id, OAM_SF_WPA, "{hmac_config_11i_remove_key::pst_priv_key null.}");
@@ -410,12 +410,12 @@ oal_uint32 hmac_config_11i_remove_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_l
     }
 
     if (pst_priv_key->ul_key_len == 0) {
-        /* 如果检测到密钥没有使用， 则直接返回正确 */
+        /* ???????????????????????? ?????????????? */
         OAM_INFO_LOG0(pst_mac_vap->uc_vap_id, OAM_SF_WPA, "{hmac_config_11i_remove_key::ul_key_len=0.}");
         return OAL_SUCC;
     }
 
-    /* 4.1 区分是wep还是wpa */
+    /* 4.1 ??????wep????wpa */
     if ((pst_priv_key->ul_cipher == WLAN_CIPHER_SUITE_WEP40) || (pst_priv_key->ul_cipher == WLAN_CIPHER_SUITE_WEP104)) {
         mac_mib_set_wep(pst_mac_vap, uc_key_index);
         en_cfgid = WLAN_CFGID_REMOVE_WEP_KEY;
@@ -443,7 +443,7 @@ oal_uint32 hmac_config_11i_remove_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_l
         }
     }
 
-    /* 4.2 抛事件到dmac层处理 */
+    /* 4.2 ????????dmac?????? */
     ul_ret = hmac_config_send_event(pst_mac_vap, en_cfgid, us_len, puc_param);
     if (OAL_UNLIKELY(ul_ret != OAL_SUCC)) {
         OAM_ERROR_LOG2(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
@@ -452,7 +452,7 @@ oal_uint32 hmac_config_11i_remove_key(mac_vap_stru *pst_mac_vap, oal_uint16 us_l
         return ul_ret;
     }
 
-    /* 5.1 删除密钥成功，设置密钥长度为0 */
+    /* 5.1 ????????????????????????????0 */
     pst_priv_key->ul_key_len = 0;
 
     return ul_ret;
@@ -467,33 +467,33 @@ oal_uint32 hmac_config_11i_set_default_key(mac_vap_stru *pst_mac_vap, oal_uint16
     oal_bool_enum_uint8              en_multicast;
     mac_setdefaultkey_param_stru    *pst_payload_setdefaultkey_params;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if ((pst_mac_vap == OAL_PTR_NULL) || (puc_param == OAL_PTR_NULL)) {
         OAM_ERROR_LOG0(0, OAM_SF_WPA, "{hmac_config_11i_set_default_key::param null.}");
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 2.1 获取参数 */
+    /* 2.1 ???????? */
     pst_payload_setdefaultkey_params = (mac_setdefaultkey_param_stru *)puc_param;
     uc_key_index = pst_payload_setdefaultkey_params->uc_key_index;
     en_unicast = pst_payload_setdefaultkey_params->en_unicast;
     en_multicast = pst_payload_setdefaultkey_params->en_multicast;
 
-    /* 2.2 索引值最大值检查 */
+    /* 2.2 ???????????????? */
     if (uc_key_index >= (WLAN_NUM_TK + WLAN_NUM_IGTK)) {
         OAM_ERROR_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA, "{hmac_config_11i_set_default_key::invalid uc_key_index[%d].}",
                        uc_key_index);
         return OAL_ERR_CODE_SECURITY_KEY_ID;
     }
 
-    /* 2.3 参数有效性检查 */
+    /* 2.3 ?????????????? */
     if ((en_multicast == OAL_FALSE) && (en_unicast == OAL_FALSE)) {
         OAM_ERROR_LOG0(pst_mac_vap->uc_vap_id, OAM_SF_WPA, "{hmac_config_11i_set_default_key::not ptk or gtk,invalid mode.}");
         return OAL_ERR_CODE_SECURITY_PARAMETERS;
     }
 
     if (uc_key_index >= WLAN_NUM_TK) {
-        /* 3.1 设置default mgmt key属性 */
+        /* 3.1 ????default mgmt key???? */
         ul_ret = mac_vap_set_default_mgmt_key(pst_mac_vap, uc_key_index);
     } else {
         ul_ret = mac_vap_set_default_key(pst_mac_vap, uc_key_index);
@@ -505,7 +505,7 @@ oal_uint32 hmac_config_11i_set_default_key(mac_vap_stru *pst_mac_vap, oal_uint16
         return ul_ret;
     }
 
-    /* 抛事件到DMAC层, 同步DMAC数据 */
+    /* ????????DMAC??, ????DMAC???? */
     ul_ret = hmac_config_send_event(pst_mac_vap, WLAN_CFGID_DEFAULT_KEY, us_len, puc_param);
     if (OAL_UNLIKELY(ul_ret != OAL_SUCC)) {
         OAM_ERROR_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
@@ -540,14 +540,14 @@ oal_uint32 hmac_config_11i_add_wep_entry(mac_vap_stru *pst_mac_vap, oal_uint16 u
                        "{hmac_config_11i_add_wep_entry::mac_wep_add_usr_key failed[%d].}", ul_ret);
         return ul_ret;
     }
-    /* 抛事件到DMAC层, 同步DMAC数据 */
+    /* ????????DMAC??, ????DMAC???? */
     ul_ret = hmac_config_send_event(pst_mac_vap, WLAN_CFGID_ADD_WEP_ENTRY, us_len, puc_param);
     if (OAL_UNLIKELY(ul_ret != OAL_SUCC)) {
         OAM_WARNING_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                          "{hmac_config_11i_add_wep_entry::hmac_config_send_event failed[%d].}", ul_ret);
     }
 
-    /* 设置用户的发送加密套件 */
+    /* ?????????????????????? */
     OAM_INFO_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                   "{hmac_config_11i_add_wep_entry:: usridx[%d] OK.}", pst_mac_user->us_assoc_id);
 
@@ -603,7 +603,7 @@ oal_uint32 hmac_check_rsn_capability(mac_vap_stru *pst_mac_vap, mac_user_stru *p
     oal_bool_enum_uint8          en_dot11RSNAMFPR;
     oal_bool_enum_uint8          en_dot11RSNAMFPC;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if (pst_mac_vap == OAL_PTR_NULL) {
         *pen_status_code = MAC_INVALID_RSN_INFO_CAP;
         OAM_ERROR_LOG0(0, OAM_SF_WPA, "{hmac_check_rsn_capability::pst_mac_vap null.}");
@@ -619,7 +619,7 @@ oal_uint32 hmac_check_rsn_capability(mac_vap_stru *pst_mac_vap, mac_user_stru *p
 
     us_rsn_capability = mac_get_rsn_capability(puc_rsn_ie);
 
-    /* 2.1 预认证能力检查 */
+    /* 2.1 ?????????????? */
     en_PreauthActivated = us_rsn_capability & BIT0;
     if (en_PreauthActivated) {
         *pen_status_code = MAC_INVALID_RSN_INFO_CAP;
@@ -628,17 +628,17 @@ oal_uint32 hmac_check_rsn_capability(mac_vap_stru *pst_mac_vap, mac_user_stru *p
         return OAL_ERR_CODE_SECURITY_AUTH_TYPE;
     }
 
-    /* 3.1 管理帧加密(80211w)能力检查 */
+    /* 3.1 ??????????(80211w)???????? */
     en_dot11RSNAMFPR = (us_rsn_capability & BIT6) ? OAL_TRUE : OAL_FALSE;
     en_dot11RSNAMFPC = (us_rsn_capability & BIT7) ? OAL_TRUE : OAL_FALSE;
-    /* 3.1.1 本地强制，对端没有MFP能力 */
+    /* 3.1.1 ??????????????????MFP???? */
     if ((pst_mib_info->st_wlan_mib_privacy.en_dot11RSNAMFPR == OAL_TRUE) && (en_dot11RSNAMFPC == OAL_FALSE)) {
         *pen_status_code = MAC_MFP_VIOLATION;
         OAM_WARNING_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                          "{hmac_check_rsn_capability::refuse with NON MFP[%d].}", en_PreauthActivated);
         return OAL_ERR_CODE_SECURITY_CAP_MFP;
     }
-    /* 3.1.2 对端强制，本地没有MFP能力 */
+    /* 3.1.2 ??????????????????MFP???? */
     if ((pst_mib_info->st_wlan_mib_privacy.en_dot11RSNAMFPC == OAL_FALSE) && (en_dot11RSNAMFPR == OAL_TRUE)) {
         *pen_status_code = MAC_MFP_VIOLATION;
         OAM_WARNING_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
@@ -687,7 +687,7 @@ oal_uint8 hmac_get_pcip_policy_auth(oal_uint8 *puc_frame, oal_uint8 *puc_pcip_po
 
     us_cipher_count = OAL_MAKE_WORD16(puc_frame[0], puc_frame[1]);
 
-    /* 关联请求秘钥套件个数字段非1时，拒绝对端关联 */
+    /* ??????????????????????????1???????????????? */
     if (us_cipher_count != 1) {
         OAM_WARNING_LOG0(0, OAM_SF_WPA, "{hmac_get_pcip_policy_auth::pairwise cipher count != 1!}");
         return 0;
@@ -724,7 +724,7 @@ oal_uint8 hmac_get_auth_policy_auth(oal_uint8 *puc_frame, oal_uint8 *puc_auth_po
 
     us_cipher_count = OAL_MAKE_WORD16(puc_frame[0], puc_frame[1]);
 
-    /* 关联请求AKM套件个数字段非1时，拒绝对端关联 */
+    /* ????????AKM??????????????1???????????????? */
     if (us_cipher_count != 1) {
         OAM_WARNING_LOG0(0, OAM_SF_WPA, "{hmac_get_auth_policy_auth::akm cipher count != 1!}");
         return 0;
@@ -755,7 +755,7 @@ oal_uint32 hmac_check_capability_mac_phy_supplicant(mac_vap_stru *pst_mac_vap,
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 根据协议模式重新初始化STA HT/VHT mib值 */
+    /* ??????????????????????STA HT/VHT mib?? */
     mac_vap_config_vht_ht_mib_by_protocol(pst_mac_vap);
 
     ul_ret = hmac_check_bss_cap_info(pst_bss_dscr->us_cap_info, pst_mac_vap);
@@ -764,7 +764,7 @@ oal_uint32 hmac_check_capability_mac_phy_supplicant(mac_vap_stru *pst_mac_vap,
                          "{hmac_check_capability_mac_phy_supplicant::hmac_check_bss_cap_info failed[%d].}", ul_ret);
     }
 
-    /* check bss capability info PHY,忽略PHY能力不匹配的AP */
+    /* check bss capability info PHY,????PHY????????????AP */
     mac_vap_check_bss_cap_info_phy_ap(pst_bss_dscr->us_cap_info, pst_mac_vap);
 
     return OAL_SUCC;
@@ -779,7 +779,7 @@ oal_uint32 hmac_sta_protocol_down_by_chipher(mac_vap_stru *pst_mac_vap, mac_bss_
     oal_bool_enum_uint8         en_legcy_only = OAL_FALSE;
 
     if (pst_mac_vap->en_protocol >= WLAN_HT_MODE) {
-        /* 在WEP / TKIP 加密模式下，不能工作在HT MODE */
+        /* ??WEP / TKIP ??????????????????????HT MODE */
         if (OAL_TRUE == mac_mib_get_privacyinvoked(pst_mac_vap) &&
             OAL_FALSE == mac_mib_get_rsnaactivated(pst_mac_vap)) {
             en_legcy_only = OAL_TRUE;
@@ -857,7 +857,7 @@ oal_uint32 hmac_en_mic(hmac_vap_stru *pst_hmac_vap,
     wlan_cipher_key_type_enum_uint8         en_key_type = 0;
     mac_tx_ctl_stru                        *pst_tx_ctl;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if ((pst_hmac_vap == OAL_PTR_NULL) ||
         (pst_hmac_user == OAL_PTR_NULL) ||
         (pst_netbuf == OAL_PTR_NULL) ||
@@ -883,7 +883,7 @@ oal_uint32 hmac_en_mic(hmac_vap_stru *pst_hmac_vap,
             }
 
             pst_tx_ctl = (mac_tx_ctl_stru *)OAL_NETBUF_CB(pst_netbuf);
-            /* TIKPmic加密data指针指向帧体，不包含帧头  */
+            /* TIKPmic????data????????????????????????  */
             if (pst_tx_ctl->bit_80211_mac_head_type == 1) {
                 oal_netbuf_pull(pst_netbuf, MAC_80211_QOS_HTC_4ADDR_FRAME_LEN);
             }
@@ -893,7 +893,7 @@ oal_uint32 hmac_en_mic(hmac_vap_stru *pst_hmac_vap,
                                "{hmac_en_mic::hmac_crypto_tkip_enmic failed[%d].}", ul_ret);
                 return ul_ret;
             }
-            /* data指针挪向帧头，为后续dmac offload模式的分片&核间通讯做准备  */
+            /* data????????????????????dmac offload??????????&??????????????  */
             if (pst_tx_ctl->bit_80211_mac_head_type == 1) {
                 oal_netbuf_push(pst_netbuf, MAC_80211_QOS_HTC_4ADDR_FRAME_LEN);
             }
@@ -921,7 +921,7 @@ oal_uint32 hmac_en_mic(hmac_vap_stru *pst_hmac_vap,
     wlan_ciper_protocol_type_enum_uint8     en_cipher_type = WLAN_80211_CIPHER_SUITE_NO_ENCRYP;
     wlan_cipher_key_type_enum_uint8         en_key_type;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if ((pst_hmac_vap == OAL_PTR_NULL) ||
         (pst_hmac_user == OAL_PTR_NULL) ||
         (pst_netbuf == OAL_PTR_NULL) ||
@@ -972,7 +972,7 @@ oal_uint32 hmac_de_mic(hmac_user_stru *pst_hmac_user, oal_netbuf_stru *pst_netbu
     wlan_ciper_protocol_type_enum_uint8     en_cipher_type = WLAN_80211_CIPHER_SUITE_NO_ENCRYP;
     wlan_cipher_key_type_enum_uint8         en_key_type;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if ((pst_hmac_user == OAL_PTR_NULL) ||
         (pst_netbuf == OAL_PTR_NULL)) {
         OAM_ERROR_LOG0(0, OAM_SF_WPA, "{hmac_de_mic::param null.}");
@@ -1020,19 +1020,19 @@ oal_uint32 hmac_rx_tkip_mic_failure_process(frw_event_mem_stru *pst_event_mem)
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 获取事件头和事件结构体指针 */
+    /* ?????????????????????????? */
     pst_event = (frw_event_stru *)pst_event_mem->puc_data;
     pst_event_hdr = &(pst_event->st_event_hdr);
     pst_mic_event = (dmac_to_hmac_mic_event_stru *)&(pst_event->auc_event_data);
 
-    /* 将mic事件抛到WAL */
+    /* ??mic????????WAL */
     pst_hmac_event_mem = FRW_EVENT_ALLOC(OAL_SIZEOF(dmac_to_hmac_mic_event_stru));
     if (pst_hmac_event_mem == OAL_PTR_NULL) {
         OAM_ERROR_LOG0(pst_event_hdr->uc_vap_id, OAM_SF_WPA, "{hmac_rx_tkip_mic_failure_process::pst_hmac_event_mem null.}");
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 填写事件 */
+    /* ???????? */
     pst_event = (frw_event_stru *)pst_hmac_event_mem->puc_data;
 
     FRW_EVENT_HDR_INIT(&(pst_event->st_event_hdr),
@@ -1044,12 +1044,12 @@ oal_uint32 hmac_rx_tkip_mic_failure_process(frw_event_mem_stru *pst_event_mem)
                        pst_event_hdr->uc_device_id,
                        pst_event_hdr->uc_vap_id);
 
-    /* 去关联的STA mac地址 */
+    /* ????????STA mac???? */
     oal_memcopy((oal_uint8 *)frw_get_event_payload(pst_event_mem),
                 (oal_uint8 *)pst_mic_event,
                 sizeof(dmac_to_hmac_mic_event_stru));
 
-    /* 分发事件 */
+    /* ???????? */
     frw_event_dispatch_event(pst_hmac_event_mem);
     FRW_EVENT_FREE(pst_hmac_event_mem);
     return OAL_SUCC;
@@ -1068,16 +1068,16 @@ oal_uint32 hmac_11i_ether_type_filter(hmac_vap_stru *pst_vap, mac_user_stru *pst
 
     pst_mac_vap = &(pst_vap->st_vap_base_info);
 
-    if (OAL_TRUE == mac_mib_get_rsnaactivated(pst_mac_vap)) { /* 判断是否使能WPA/WPA2 */
-        if (pst_mac_user->en_port_valid != OAL_TRUE) { /* 判断端口是否打开 */
-            /* 接收数据时，针对非EAPOL 的数据帧做过滤 */
+    if (OAL_TRUE == mac_mib_get_rsnaactivated(pst_mac_vap)) { /* ????????????WPA/WPA2 */
+        if (pst_mac_user->en_port_valid != OAL_TRUE) { /* ???????????????? */
+            /* ??????????????????EAPOL ?????????????? */
             if (us_ether_type != oal_byteorder_host_to_net_uint16(ETHER_TYPE_PAE)) {
                 OAM_WARNING_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                                  "{hmac_11i_ether_type_filter::TYPE 0x%04x not permission.}", us_ether_type);
                 ul_ret = OAL_ERR_CODE_SECURITY_PORT_INVALID;
             }
         }
-        /* EAPOL收发维测信息 */
+        /* EAPOL???????????? */
         else if (us_ether_type == oal_byteorder_host_to_net_uint16(ETHER_TYPE_PAE)) {
             OAM_INFO_LOG0(pst_mac_vap->uc_vap_id, OAM_SF_WPA,
                           "{hmac_11i_ether_type_filter::rx EAPOL.}");

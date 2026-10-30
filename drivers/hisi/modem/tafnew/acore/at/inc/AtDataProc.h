@@ -52,7 +52,7 @@
 
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 #include "mdrv.h"
 #include "AtCtx.h"
@@ -83,12 +83,12 @@ extern "C" {
 #endif
 
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *****************************************************************************/
 
 /*lint -e778 */
 /*lint -e572 */
-#ifndef VOS_NTOHL                   /* 大小字节序转换*/
+#ifndef VOS_NTOHL                   /* ??????????????*/
 #if VOS_BYTE_ORDER==VOS_BIG_ENDIAN
 #define VOS_NTOHL(x)    (x)
 #define VOS_HTONL(x)    (x)
@@ -146,9 +146,9 @@ extern "C" {
 #define AT_MAX_IPV4V6_STR_COLON_NUM     (6)
 #define AT_MAX_IPV6_STR_COLON_NUM       (7)
 
-#define AT_IPV6_STR_MAX_TOKENS          (16)                            /* IPV6字符串格式使用的分隔符标记最大个数 */
-#define AT_IPV4_STR_DELIMITER           '.'                             /* RFC协议使用的IPV4文本表达方式使用的分隔符 */
-#define AT_IPV6_STR_DELIMITER           ':'                             /* RFC2373使用的IPV6文本表达方式使用的分隔符 */
+#define AT_IPV6_STR_MAX_TOKENS          (16)                            /* IPV6?????????????????????????????????? */
+#define AT_IPV4_STR_DELIMITER           '.'                             /* RFC??????????IPV4???????????????????????? */
+#define AT_IPV6_STR_DELIMITER           ':'                             /* RFC2373??????IPV6???????????????????????? */
 
 #if (FEATURE_ON == FEATURE_IPV6)
 #define AT_GetIpv6Capability()          (AT_GetCommPsCtxAddr()->ucIpv6Capability)
@@ -156,7 +156,7 @@ extern "C" {
 
 #define AT_PS_GET_SHARE_PDP_FLG()       (AT_GetCommPsCtxAddr()->ucSharePdpFlag)
 
-/* 获取APP客户端ID */
+/* ????APP??????ID */
 #define AT_APP_GET_CLIENT_ID()          (gastAtClientTab[AT_CLIENT_TAB_APP_INDEX].usClientId)
 
 /*----------------------------------------------------------------------
@@ -169,7 +169,7 @@ extern "C" {
 *---------------------------------------------------------------------*/
 #define AT_NDISSTAT_ERR_UNKNOWN         (0)
 
-/* NDIS拨号命令NDISCONN，NDISDUP的输入参数的 index */
+/* NDIS????????NDISCONN??NDISDUP???????????? index */
 #define AT_NDIS_CID_IDX                 (0)
 #define AT_NDIS_CONN_IDX                (1)
 #define AT_NDIS_APN_IDX                 (2)
@@ -177,7 +177,7 @@ extern "C" {
 #define AT_NDIS_PWD_IDX                 (4)
 #define AT_NDIS_AUTH_IDX                (5)
 
-/* 获取NDIS客户端ID */
+/* ????NDIS??????ID */
 #define AT_NDIS_GET_CLIENT_ID()         (gastAtClientTab[AT_CLIENT_TAB_NDIS_INDEX].usClientId)
 
 #define AT_APS_IP6_ADDR_PREFIX_BYTE_LEN (8)
@@ -196,25 +196,25 @@ extern "C" {
 #define AT_QOS_TRAFFIC_CLASS_INTERACTIVE    (3)
 #define AT_QOS_TRAFFIC_CLASS_BACKGROUND     (4)
 
-#define AT_IPV6_STR_RFC2373_TOKENS      (8)                 /* 分隔符标记的最大个数 */
+#define AT_IPV6_STR_RFC2373_TOKENS      (8)                 /* ???????????????????? */
 
-#define AT_IPPROTO_UDP                  (0x11)              /* IP头部中UDP协议号*/
-#define AT_IP_VERSION                   (4)                 /* IP头部中IP V4版本号 */
-#define AT_IP_DEF_TTL                   (0xFF)              /* IP头部中IP TTL缺省值 */
-#define AT_IP_RAND_ID                   (61468)             /* IP头部ID值，随机取*/
-#define AT_IP_HDR_LEN                   (20)                /* IP 头部长度 */
-#define AT_UDP_HDR_LEN                  (8)                 /* UDP 头部长度 */
+#define AT_IPPROTO_UDP                  (0x11)              /* IP??????UDP??????*/
+#define AT_IP_VERSION                   (4)                 /* IP??????IP V4?????? */
+#define AT_IP_DEF_TTL                   (0xFF)              /* IP??????IP TTL?????? */
+#define AT_IP_RAND_ID                   (61468)             /* IP????ID??????????*/
+#define AT_IP_HDR_LEN                   (20)                /* IP ???????? */
+#define AT_UDP_HDR_LEN                  (8)                 /* UDP ???????? */
 
-/* 定义用户的CID，目前应用只会下发1，2，3 */
+/* ??????????CID??????????????????1??2??3 */
 #define AT_PS_USER_CID_1                (1)
 #define AT_PS_USER_CID_2                (2)
 #define AT_PS_USER_CID_3                (3)
 
-/* PS域呼叫无效CID */
+/* PS??????????CID */
 #define AT_PS_CALL_INVALID_CID          (0xFF)
 #define AT_PS_CALL_INVALID_CALLID       (0xFF)
 
-/* IPV6地址后8个字节全零，则认为是无效的 */
+/* IPV6??????8?????????????????????????? */
 #define AT_PS_IS_IPV6_ADDR_IID_VALID(aucIpv6Addr)\
             !((aucIpv6Addr[8] == 0x00) && (aucIpv6Addr[9] == 0x00)\
              && (aucIpv6Addr[10] == 0x00) && (aucIpv6Addr[11] == 0x00)\
@@ -222,7 +222,7 @@ extern "C" {
              && (aucIpv6Addr[14] == 0x00) && (aucIpv6Addr[15] == 0x00))
 
 #if (FEATURE_ON == FEATURE_IPV6)
-/* IPv6 接口ID, 长度为64bit */
+/* IPv6 ????ID, ??????64bit */
 #define AT_PS_IPV6_IID_LEN              (8)
 #define AT_PS_IPV6_IID_OFFSET           (8)
 #endif
@@ -288,106 +288,106 @@ extern "C" {
 #define AT_IP_STR_DOT_DELIMITER                 '.'
 #define AT_IP_STR_COLON_DELIMITER               ':'
 
-#define AT_WAIT_WLAN_ACT_PDN_CNF_TIMER_LEN       (25 * 1000)                    /* AT等待Wlan 回复active cnf 定时器时长 */
+#define AT_WAIT_WLAN_ACT_PDN_CNF_TIMER_LEN       (25 * 1000)                    /* AT????Wlan ????active cnf ?????????? */
 
-/* AT_WAIT_WLAN_ACT_PDN_CNF_TIMER定时器名称 */
+/* AT_WAIT_WLAN_ACT_PDN_CNF_TIMER?????????? */
 #define AT_SET_WLAN_ACT_PDN_CNF_TMR_NAME(ulTmrName)\
             (ulTmrName)  = AT_WAIT_WLAN_ACT_PDN_CNF_TIMER;\
             (ulTmrName) |= AT_INTERNAL_PROCESS_TYPE
 
-/* AT_WAIT_WLAN_ACT_PDN_CNF_TIMER定时器参数 */
+/* AT_WAIT_WLAN_ACT_PDN_CNF_TIMER?????????? */
 #define AT_SET_WLAN_ACT_PDN_CNF_TMR_PARAM(ulTmrParam, ucIndex, ucCallId)\
             ((ulTmrParam) = ((ucCallId) << 8) | (ucIndex))
 
-/* 从AT_WAIT_WLAN_ACT_PDN_CNF_TIMER定时器超时消息中获取CALLID */
+/* ??AT_WAIT_WLAN_ACT_PDN_CNF_TIMER????????????????????CALLID */
 #define AT_GET_WLAN_ACT_PDN_CNF_CALLID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)(((ulTmrParam) & 0x0000FF00) >> 8))
 
-/* 从AT_WAIT_WLAN_ACT_PDN_CNF_TIMER定时器超时消息中获取端口ID */
+/* ??AT_WAIT_WLAN_ACT_PDN_CNF_TIMER????????????????????????ID */
 #define AT_GET_WLAN_ACT_PDN_CNF_CLIENTID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)((ulTmrParam) & 0x000000FF))
 
-#define AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER_LEN       (7 * 1000)                   /* AT等待Wlan 回复deactive cnf 定时器时长 */
+#define AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER_LEN       (7 * 1000)                   /* AT????Wlan ????deactive cnf ?????????? */
 
-/* AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER定时器名称 */
+/* AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER?????????? */
 #define AT_SET_WLAN_DEACT_PDN_CNF_TMR_NAME(ulTmrName)\
             (ulTmrName)  = AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER;\
             (ulTmrName) |= AT_INTERNAL_PROCESS_TYPE
 
-/* AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER定时器参数 */
+/* AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER?????????? */
 #define AT_SET_WLAN_DEACT_PDN_CNF_TMR_PARAM(ulTmrParam, ucIndex, ucCallId)\
             ((ulTmrParam) = ((ucCallId) << 8) | (ucIndex))
 
-/* 从AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER定时器超时消息中获取CALLID */
+/* ??AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER????????????????????CALLID */
 #define AT_GET_WLAN_DEACT_PDN_CNF_CALLID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)(((ulTmrParam) & 0x0000FF00) >> 8))
 
-/* 从AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER定时器超时消息中获取端口ID */
+/* ??AT_WAIT_WLAN_DEACT_PDN_CNF_TIMER????????????????????????ID */
 #define AT_GET_WLAN_DEACT_PDN_CNF_CLIENTID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)((ulTmrParam) & 0x000000FF))
 
 
-/* AT_PROTECT_PDN_IN_DATA_SYS_TIMER定时器名称 */
+/* AT_PROTECT_PDN_IN_DATA_SYS_TIMER?????????? */
 #define AT_SET_PROTECT_PDN_IN_DATA_SYS_TMR_NAME(ulTmrName)\
             (ulTmrName)  = AT_PROTECT_PDN_IN_DATA_SYS_TIMER;\
             (ulTmrName) |= AT_INTERNAL_PROCESS_TYPE
 
-/* AT_PROTECT_PDN_IN_DATA_SYS_TIMER定时器参数 */
+/* AT_PROTECT_PDN_IN_DATA_SYS_TIMER?????????? */
 #define AT_SET_PROTECT_PDN_IN_DATA_SYS_TMR_PARAM(ulTmrParam, ucIndex, ucCallId)\
             ((ulTmrParam) = ((ucCallId) << 8) | (ucIndex))
 
-/* 从AT_PROTECT_PDN_IN_DATA_SYS_TIMER定时器超时消息中获取CALLID */
+/* ??AT_PROTECT_PDN_IN_DATA_SYS_TIMER????????????????????CALLID */
 #define AT_GET_PROTECT_PDN_IN_DATA_SYS_CALLID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)(((ulTmrParam) & 0x0000FF00) >> 8))
 
-/* 从AT_PROTECT_PDN_IN_DATA_SYS_TIMER定时器超时消息中获取端口ID */
+/* ??AT_PROTECT_PDN_IN_DATA_SYS_TIMER????????????????????????ID */
 #define AT_GET_PROTECT_PDN_IN_DATA_SYS_CLIENTID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)((ulTmrParam) & 0x000000FF))
 
-/* 从CID获得SERVICE TYPE */
+/* ??CID????SERVICE TYPE */
 #define AT_PS_CALL_GET_SERVICE_TYPE_FROM_CID(ucCid)\
             ((VOS_INT8)(ucCid + 0x20))
 
-/* 从SERVICE TYPE获得CID */
+/* ??SERVICE TYPE????CID */
 #define AT_PS_CALL_GET_CID_FROM_SERVICE_TYPE(cServiceType)\
             ((VOS_UINT8)(cServiceType - 0x20))
 
-/* SERVICE TYPE是否无效 */
+/* SERVICE TYPE???????? */
 #define AT_PS_IS_SERVICE_TYPE_VALID(cServiceType) \
             (cServiceType > 0x20)
 
-/* A类地址0.0.0.0 ~ 127.255.255.255 */
+/* A??????0.0.0.0 ~ 127.255.255.255 */
 #define AT_IPV4_CLASS_A_BEGIN           (0x00000000)
 #define AT_IPV4_CLASS_A_END             (0x7FFFFFFF)
 
-/* B类地址128.0.0.0 ~ 191.255.255.255 */
+/* B??????128.0.0.0 ~ 191.255.255.255 */
 #define AT_IPV4_CLASS_B_BEGIN           (0x80000000)
 #define AT_IPV4_CLASS_B_END             (0xBFFFFFFF)
 
-/* C类地址192.0.0.0 ~ 223.255.255.255 */
+/* C??????192.0.0.0 ~ 223.255.255.255 */
 #define AT_IPV4_CLASS_C_BEGIN           (0xC0000000)
 #define AT_IPV4_CLASS_C_END             (0xDFFFFFFF)
 
-/* IPV4 是否为A类地址 */
+/* IPV4 ??????A?????? */
 #define AT_IS_CLASS_A_IPV4_ADDR(ulIpv4Addr)  \
             (ulIpv4Addr <= AT_IPV4_CLASS_A_END)
 
-/* IPV4 是否为B类地址 */
+/* IPV4 ??????B?????? */
 #define AT_IS_CLASS_B_IPV4_ADDR(ulIpv4Addr)  \
             ((ulIpv4Addr >= AT_IPV4_CLASS_B_BEGIN) && (ulIpv4Addr <= AT_IPV4_CLASS_B_END))
 
-/* A类地址默认子网掩码 255.0.0.0 */
+/* A?????????????????? 255.0.0.0 */
 #define AT_IPV4_CLASS_A_SUBNET_MASK     (0xFF000000)
 
-/* B类地址默认子网掩码 255.255.0.0 */
+/* B?????????????????? 255.255.0.0 */
 #define AT_IPV4_CLASS_B_SUBNET_MASK     (0xFFFF0000)
 
-/* C类地址默认子网掩码 255.255.255.0 */
+/* C?????????????????? 255.255.255.0 */
 #define AT_IPV4_CLASS_C_SUBNET_MASK     (0xFFFFFF00)
 
 
 /*****************************************************************************
-  3 枚举定义
+  3 ????????
 *****************************************************************************/
 
 enum AT_PDP_STATUS_ENUM
@@ -399,10 +399,10 @@ enum AT_PDP_STATUS_ENUM
 typedef VOS_UINT32 AT_PDP_STATUS_ENUM_UINT32;
 
 /*****************************************************************************
- 枚举名称   : AT_PDP_TYPE_ENUM_ENUM
- 协议表格   :
- ASN.1 描述 :
- 枚举说明   : PDP类型
+ ????????   : AT_PDP_TYPE_ENUM_ENUM
+ ????????   :
+ ASN.1 ???? :
+ ????????   : PDP????
 *****************************************************************************/
 enum AT_PDP_TYPE_ENUM
 {
@@ -415,12 +415,12 @@ enum AT_PDP_TYPE_ENUM
 typedef VOS_UINT8 AT_PDP_TYPE_ENUM_ENUM_U8;
 
 /*****************************************************************************
- 结构名称   : AT_IPV6_STR_TYPE_ENUM
- 协议表格   :
- ASN.1 描述 :
- 结构说明   : IPV6 String格式枚举
-              HEX为RFC2373要求使用':'作为分隔符
-              DEX为RFC要求使用'.'作为分隔符
+ ????????   : AT_IPV6_STR_TYPE_ENUM
+ ????????   :
+ ASN.1 ???? :
+ ????????   : IPV6 String????????
+              HEX??RFC2373????????':'??????????
+              DEX??RFC????????'.'??????????
 *****************************************************************************/
 enum AT_IPV6_STR_TYPE_ENUM
 {
@@ -432,10 +432,10 @@ enum AT_IPV6_STR_TYPE_ENUM
 typedef VOS_UINT8 AT_IPV6_STR_TYPE_ENUM_UINT8;
 
 /*****************************************************************************
- 结构名称   : AT_IP_ADDR_TYPE_ENUM
- 协议表格   :
- ASN.1 描述 :
- 结构说明   : 区分是SOURCE还是LOCAL的IP ADDR
+ ????????   : AT_IP_ADDR_TYPE_ENUM
+ ????????   :
+ ASN.1 ???? :
+ ????????   : ??????SOURCE????LOCAL??IP ADDR
 *****************************************************************************/
 enum AT_IP_ADDR_TYPE_ENUM
 {
@@ -447,10 +447,10 @@ enum AT_IP_ADDR_TYPE_ENUM
 typedef VOS_UINT8 AT_IP_ADDR_TYPE_ENUM_UINT8;
 
 /*****************************************************************************
- 枚举名称   : AT_HILINK_MODE_ENUM
- 协议表格   :
- ASN.1 描述 :
- 枚举说明   : HiLink模式
+ ????????   : AT_HILINK_MODE_ENUM
+ ????????   :
+ ASN.1 ???? :
+ ????????   : HiLink????
 *****************************************************************************/
 enum AT_HILINK_MODE_ENUM
 {
@@ -460,12 +460,12 @@ enum AT_HILINK_MODE_ENUM
 };
 typedef VOS_UINT8 AT_HILINK_MODE_ENUM_U8;
 
-/* APP拨号状态*/
+/* APP????????*/
 /*****************************************************************************
- 枚举名称   : AT_APP_CONN_STATE_ENUM
- 协议表格   :
- ASN.1 描述 :
- 枚举说明   : APP拨号状态
+ ????????   : AT_APP_CONN_STATE_ENUM
+ ????????   :
+ ASN.1 ???? :
+ ????????   : APP????????
 *****************************************************************************/
 enum AT_APP_CONN_STATE_ENUM
 {
@@ -477,17 +477,17 @@ enum AT_APP_CONN_STATE_ENUM
 typedef VOS_UINT32 AT_APP_CONN_STATE_ENUM_U32;
 
 /*****************************************************************************
- PPP拨号后的速率气泡显示，分两种情况处理:
- 1.2G模式下，则根据当前驻留的小区模式是GSM/GPRS/EDGE来决定速率气泡的显示,对应如下:
+ PPP????????????????????????????????????:
+ 1.2G??????????????????????????????????GSM/GPRS/EDGE????????????????????,????????:
      GSM          - 9600
      GPRS         - 85600
      GPRS Class33 - 107800
      EDGE         - 236800
      EDGE Class33 - 296000
-     默认 -
- 2.3g模式下，则根据RRC版本和HSDPA的category信息来决定速率气泡的显示，对应如下:
-     RRC版本为R99   - 384000
-     RRC版本为非R99 - 判断HSDPA的category信息
+     ???? -
+ 2.3g??????????????RRC??????HSDPA??category??????????????????????????????????:
+     RRC??????R99   - 384000
+     RRC????????R99 - ????HSDPA??category????
                    6  - 3600000
                    8  - 7200000
                    9  - 10200000
@@ -498,8 +498,8 @@ typedef VOS_UINT32 AT_APP_CONN_STATE_ENUM_U32;
                    24 - 43200000
                    26 - 57600000
                    28 - 86400000
-     有扩展的category的话，默认 - 21600000
-     无扩展的category的话，默认 - 7200000
+     ????????category?????????? - 21600000
+     ????????category?????????? - 7200000
 *****************************************************************************/
 enum PPP_RATE_DISPLAY_ENUM
 {
@@ -526,8 +526,8 @@ enum PPP_RATE_DISPLAY_ENUM
 typedef VOS_UINT32 PPP_RATE_DISPLAY_ENUM_UINT32;
 
 /*****************************************************************************
- 枚举名    : AT_CH_DATA_CHANNEL_ENUM
- 结构说明  : AT^CHDATA命令设置的<datachannelid>的取值
+ ??????    : AT_CH_DATA_CHANNEL_ENUM
+ ????????  : AT^CHDATA??????????<datachannelid>??????
 *****************************************************************************/
 enum AT_CH_DATA_CHANNEL_ENUM
 {
@@ -556,35 +556,35 @@ typedef VOS_UINT8 AT_PS_DATA_SYS_ENUM_UINT32;
 
 
 /*****************************************************************************
-  4 消息头定义
+  4 ??????????
 *****************************************************************************/
 
 /*****************************************************************************
-  5 消息定义
+  5 ????????
 *****************************************************************************/
 
 /*****************************************************************************
-  6 STRUCT定义
+  6 STRUCT????
 *****************************************************************************/
 
 typedef struct
 {
-    VOS_UINT32                          ulDLEnqueuedPkts;                       /*下行数据包总个数*/
-    VOS_UINT32                          ulDLDequeuedPkts;                       /*下行发送个数*/
-    VOS_UINT32                          ulDLDroppedPkts;                        /*下行丢包个数*/
-    VOS_UINT32                          ulDLMaxBlkPkts;                         /*下行队列最大阻塞个数*/
-    VOS_UINT32                          ulDLMaxDequeueOnce;                     /*下行单次发送包个数最大值*/
+    VOS_UINT32                          ulDLEnqueuedPkts;                       /*????????????????*/
+    VOS_UINT32                          ulDLDequeuedPkts;                       /*????????????*/
+    VOS_UINT32                          ulDLDroppedPkts;                        /*????????????*/
+    VOS_UINT32                          ulDLMaxBlkPkts;                         /*????????????????????*/
+    VOS_UINT32                          ulDLMaxDequeueOnce;                     /*????????????????????????*/
 } AT_AP_DL_DATA_Q_STAT_ST;
 
 
-/* DHCP配置，全主机序*/
+/* DHCP??????????????*/
 typedef struct
 {
-    VOS_UINT32                          ulIPAddr;                               /* IP 地址，网侧分配*/
-    VOS_UINT32                          ulSubNetMask;                           /* 子网掩码地址，根据IP地址计算*/
-    VOS_UINT32                          ulGateWay;                              /* 网关地址，也是本DHCP Server的地址*/
-    VOS_UINT32                          ulPrimDNS;                              /* 主 DNS地址，网侧分配*/
-    VOS_UINT32                          ulSndDNS;                               /* 次 DNS地址，网侧分配*/
+    VOS_UINT32                          ulIPAddr;                               /* IP ??????????????*/
+    VOS_UINT32                          ulSubNetMask;                           /* ??????????????????IP????????*/
+    VOS_UINT32                          ulGateWay;                              /* ????????????????DHCP Server??????*/
+    VOS_UINT32                          ulPrimDNS;                              /* ?? DNS??????????????*/
+    VOS_UINT32                          ulSndDNS;                               /* ?? DNS??????????????*/
 }AT_DHCP_CONFIG_STRU;
 
 
@@ -598,11 +598,11 @@ typedef struct
     VOS_UINT32                          ulFlowCtrlState;                        /* Flow Ctrl State ; 1: flow ctrl ,0: no flow ctrl*/
     VOS_UINT32                          ulSpeed;                                /* Um Speed*/
 
-    VOS_UINT32                          ulDLMaxRate;                            /* 理论最大下行速率*/
-    VOS_UINT32                          ulULMaxRate;                            /* 理论最大上行速率*/
-    VOS_UINT32                          ulDLCurrentRate;                        /* 当前下行速率*/
-    VOS_UINT32                          ulULCurrentRate;                        /* 当前上行速率*/
-    VOS_UINT32                          ulRateCalcPeriod;                       /* 速率统计周期*/
+    VOS_UINT32                          ulDLMaxRate;                            /* ????????????????*/
+    VOS_UINT32                          ulULMaxRate;                            /* ????????????????*/
+    VOS_UINT32                          ulDLCurrentRate;                        /* ????????????*/
+    VOS_UINT32                          ulULCurrentRate;                        /* ????????????*/
+    VOS_UINT32                          ulRateCalcPeriod;                       /* ????????????*/
     AT_DHCP_CONFIG_STRU                 stDhcpCfg;
 }AT_CTRL_ENTITY_STRU;
 
@@ -612,8 +612,8 @@ typedef struct AT_DHCP_PARA
     VOS_UINT8                           ucRabID;                                /* Rab ID*/
     VOS_UINT8                           ucCid;                                  /* CID*/
     VOS_UINT32                          ulSpeed;                                /* Um Speed*/
-    VOS_UINT32                          ulDLMaxRate;                            /* 理论最大下行速率*/
-    VOS_UINT32                          ulULMaxRate;                            /* 理论最大上行速率*/
+    VOS_UINT32                          ulDLMaxRate;                            /* ????????????????*/
+    VOS_UINT32                          ulULMaxRate;                            /* ????????????????*/
     AT_DHCP_CONFIG_STRU                 stDhcpCfg;
 }AT_DHCP_PARA_STRU;
 
@@ -624,10 +624,10 @@ typedef struct
   VOS_UINT16                            usLength;                               /* Length of packet */
 }AT_PPP_FRAME_HEAD_STRU;
 
-/* IP地址结构 U32类型，网络字节序存储*/
+/* IP???????? U32????????????????????*/
 typedef struct
 {
-    VOS_UINT32                          ulIpAddr;                               /*U32类型，网络字节序存储*/
+    VOS_UINT32                          ulIpAddr;                               /*U32????????????????????*/
 }IN_ADDR_ST;
 
 
@@ -642,33 +642,33 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulIPAddr;                               /* IP 地址*/
-    VOS_UINT32                          ulPrimDNS;                              /* 主 DNS地址*/
-    VOS_UINT32                          ulSndDNS;                               /* 次 DNS地址*/
-    VOS_UINT32                          ulPrimWINNS;                            /* 鱓INNS*/
-    VOS_UINT32                          ulSncWINNS;                             /* 副WINNS */
+    VOS_UINT32                          ulIPAddr;                               /* IP ????*/
+    VOS_UINT32                          ulPrimDNS;                              /* ?? DNS????*/
+    VOS_UINT32                          ulSndDNS;                               /* ?? DNS????*/
+    VOS_UINT32                          ulPrimWINNS;                            /* ?WINNS*/
+    VOS_UINT32                          ulSncWINNS;                             /* ??WINNS */
 }AT_DHCP_SETUP_PARAM_ST;
 
 
-/* DHCP 服务器信息结构*/
+/* DHCP ??????????????*/
 typedef struct
 {
-    AT_DHCP_CONFIG_STRU                 stDHCPConfig;                           /* DHCP服务器配置*/
-    VOS_UINT32                          ulDHCPServerOn;                         /* DHCP是否已经打开*/
+    AT_DHCP_CONFIG_STRU                 stDHCPConfig;                           /* DHCP??????????*/
+    VOS_UINT32                          ulDHCPServerOn;                         /* DHCP????????????*/
 }AT_DHCP_ENTITY_ST;
 
-/* PDP状态上报函数使用的结构体*/
+/* PDP????????????????????????*/
 typedef struct
 {
-    VOS_UINT32                          ulspeed;                                /* 连接速度，单位bps */
-    AT_PDP_STATUS_ENUM_UINT32           enActiveSatus;                          /* 激活结果，0为成功，其他为失败 */
+    VOS_UINT32                          ulspeed;                                /* ??????????????bps */
+    AT_PDP_STATUS_ENUM_UINT32           enActiveSatus;                          /* ??????????0?????????????????? */
 }AT_NDIS_PRO_STRU;
 
 /*****************************************************************************
- 结构名称   : AT_PDP_SAVE_STATE_STRU
- 协议表格   :
- ASN.1 描述 :
- 结构说明   : 保存拨号状态
+ ????????   : AT_PDP_SAVE_STATE_STRU
+ ????????   :
+ ASN.1 ???? :
+ ????????   : ????????????
 *****************************************************************************/
 typedef struct
 {
@@ -680,79 +680,79 @@ typedef struct
 } AT_PDP_SAVE_STATE_INFO_STRU;
 
 /*****************************************************************************
- 结构名    : AT_CLINTID_RABID_MAP_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  :
+ ??????    : AT_CLINTID_RABID_MAP_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  :
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT32                          ulUsed;   /* 指定FCID对应的结点是否有效，VOS_TRUE:有效，VOS_FALSE:无效 */
+    VOS_UINT32                          ulUsed;   /* ????FCID????????????????????VOS_TRUE:??????VOS_FALSE:???? */
     VOS_UINT32                          ulRabIdMask;
     MODEM_ID_ENUM_UINT16                enModemId;
     FC_PRI_ENUM_UINT8                   enFcPri;
-    VOS_UINT8                           aucReserve[1];                          /* 保留 */
+    VOS_UINT8                           aucReserve[1];                          /* ???? */
 } AT_FCID_MAP_STRU;
 
 /*****************************************************************************
- 结构名     : AT_IPHDR_STRU
- 协议表格   :
- ASN.1描述  :
- 结构说明   : IPv4 packet header 结构
+ ??????     : AT_IPHDR_STRU
+ ????????   :
+ ASN.1????  :
+ ????????   : IPv4 packet header ????
 *****************************************************************************/
 typedef struct
 {
-#if (VOS_LITTLE_ENDIAN == VOS_BYTE_ORDER)                   /* 小端字节序*/
-    VOS_UINT8                           ucIpHdrLen  :4;     /* IP头部长度 */
-    VOS_UINT8                           ucIpVer     :4;     /* IP版本号*/
-#elif (VOS_BIG_ENDIAN == VOS_BYTE_ORDER)                    /* 大端字节序*/
-    VOS_UINT8                           ucIpVer     :4;     /* IP版本号*/
-    VOS_UINT8                           ucIpHdrLen  :4;     /* IP头部长度 */
+#if (VOS_LITTLE_ENDIAN == VOS_BYTE_ORDER)                   /* ??????????*/
+    VOS_UINT8                           ucIpHdrLen  :4;     /* IP???????? */
+    VOS_UINT8                           ucIpVer     :4;     /* IP??????*/
+#elif (VOS_BIG_ENDIAN == VOS_BYTE_ORDER)                    /* ??????????*/
+    VOS_UINT8                           ucIpVer     :4;     /* IP??????*/
+    VOS_UINT8                           ucIpHdrLen  :4;     /* IP???????? */
 #else
-#error  "Please fix Macro VOS_BYTE_ORDER"                   /* VOS_BYTE_ORDER未定义*/
+#error  "Please fix Macro VOS_BYTE_ORDER"                   /* VOS_BYTE_ORDER??????*/
 #endif
-    VOS_UINT8                           ucServiceType;      /* IP TOS字段*/
-    VOS_UINT16                          usTotalLen;         /* IP数据包总长度*/
-    VOS_UINT16                          usIdentification;   /* IP数据包ID*/
-    VOS_UINT16                          usOffset;           /* IP分片偏移量*/
+    VOS_UINT8                           ucServiceType;      /* IP TOS????*/
+    VOS_UINT16                          usTotalLen;         /* IP????????????*/
+    VOS_UINT16                          usIdentification;   /* IP??????ID*/
+    VOS_UINT16                          usOffset;           /* IP??????????*/
     VOS_UINT8                           ucTTL;              /* IPTTL*/
-    VOS_UINT8                           ucProtocol;         /* IP数据载荷部分协议*/
-    VOS_UINT16                          usCheckSum;         /* IP头部校验和*/
-    VOS_UINT32                          ulSrcAddr;          /* 源IP地址*/
-    VOS_UINT32                          ulDstAddr;          /* 目的IP地址*/
+    VOS_UINT8                           ucProtocol;         /* IP????????????????*/
+    VOS_UINT16                          usCheckSum;         /* IP??????????*/
+    VOS_UINT32                          ulSrcAddr;          /* ??IP????*/
+    VOS_UINT32                          ulDstAddr;          /* ????IP????*/
 } AT_IPHDR_STRU;
 
 /*****************************************************************************
- 结构名     : AT_UDP_HDR_STRU
- 协议表格   :
- ASN.1描述  :
- 结构说明   : UDP header 结构
+ ??????     : AT_UDP_HDR_STRU
+ ????????   :
+ ASN.1????  :
+ ????????   : UDP header ????
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT16                          usSrcPort;          /* 源端口 */
-    VOS_UINT16                          usDstPort;          /* 目的端口 */
-    VOS_UINT16                          usLen;              /* UDP包长度 */
-    VOS_UINT16                          usChecksum;         /* UDP校验和 */
+    VOS_UINT16                          usSrcPort;          /* ?????? */
+    VOS_UINT16                          usDstPort;          /* ???????? */
+    VOS_UINT16                          usLen;              /* UDP?????? */
+    VOS_UINT16                          usChecksum;         /* UDP?????? */
 } AT_UDP_HDR_STRU;
 
 /*****************************************************************************
- 结构名     : AT_UDP_PACKET_FORMAT_STRU
- 协议表格   :
- ASN.1描述  :
- 结构说明   : UDP packet 结构
+ ??????     : AT_UDP_PACKET_FORMAT_STRU
+ ????????   :
+ ASN.1????  :
+ ????????   : UDP packet ????
 *****************************************************************************/
 typedef struct
 {
 
-    AT_IPHDR_STRU                       stIpHdr;            /* IP头 */
-    AT_UDP_HDR_STRU                     stUdpHdr;           /* UDP头 */
+    AT_IPHDR_STRU                       stIpHdr;            /* IP?? */
+    AT_UDP_HDR_STRU                     stUdpHdr;           /* UDP?? */
     VOS_UINT32                          ulBody;
 } AT_UDP_PACKET_FORMAT_STRU;
 
 /*****************************************************************************
- 结构名    : AT_PS_RMNET_ID_TAB
- 结构说明  : PS域拨号网卡和ModemId,cid,FcId的映射表
+ ??????    : AT_PS_RMNET_ID_TAB
+ ????????  : PS????????????ModemId,cid,FcId????????
 *****************************************************************************/
 typedef struct
 {
@@ -762,8 +762,8 @@ typedef struct
 }AT_PS_RMNET_ID_TAB;
 
 /*****************************************************************************
- 结构名    : AT_CHDATA_RNIC_RMNET_ID_STRU
- 结构说明  : AT^CHDATA与RNIC网卡映射关系的结构
+ ??????    : AT_CHDATA_RNIC_RMNET_ID_STRU
+ ????????  : AT^CHDATA??RNIC??????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -775,8 +775,8 @@ typedef struct
 }AT_CHDATA_RNIC_RMNET_ID_STRU;
 
 /*****************************************************************************
- 结构名    : AT_PS_APP_CALL_RNIC_IFACE_ID_STRU
- 结构说明  : WAN PS APP CALL与RNIC网卡映射关系的结构
+ ??????    : AT_PS_APP_CALL_RNIC_IFACE_ID_STRU
+ ????????  : WAN PS APP CALL??RNIC??????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -787,8 +787,8 @@ typedef struct
 }AT_PS_APP_CALL_RNIC_IFACE_ID_STRU;
 
 /*****************************************************************************
- 结构名    : AT_PS_NDIS_CALL_IFACE_ID_STRU
- 结构说明  : WAN PS NDIS CALL与IFACE映射关系的结构
+ ??????    : AT_PS_NDIS_CALL_IFACE_ID_STRU
+ ????????  : WAN PS NDIS CALL??IFACE??????????????
 *****************************************************************************/
 typedef struct
 {
@@ -799,8 +799,8 @@ typedef struct
 }AT_PS_NDIS_CALL_IFACE_ID_STRU;
 
 /*****************************************************************************
- 结构名    : AT_PS_FC_IFACE_ID_STRU
- 结构说明  : FC与IFACE ID映射关系的结构
+ ??????    : AT_PS_FC_IFACE_ID_STRU
+ ????????  : FC??IFACE ID??????????????
 *****************************************************************************/
 typedef struct
 {
@@ -811,8 +811,8 @@ typedef struct
 }AT_PS_FC_IFACE_ID_STRU;
 
 /*****************************************************************************
- 结构名    : AT_DISPLAY_RATE_STRU
- 结构说明  : 速率显示分为上行和下行速率
+ ??????    : AT_DISPLAY_RATE_STRU
+ ????????  : ??????????????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -822,8 +822,8 @@ typedef struct
 }AT_DISPLAY_RATE_STRU;
 
 /*****************************************************************************
- 结构名  : AT_PS_WLAN_PDN_ACT_ERR_CODE_MAP_STRU
- 结构说明: PS错误码与WLAN PDN ACT错误码映射结构
+ ??????  : AT_PS_WLAN_PDN_ACT_ERR_CODE_MAP_STRU
+ ????????: PS????????WLAN PDN ACT??????????????
 *****************************************************************************/
 typedef struct
 {
@@ -832,8 +832,8 @@ typedef struct
 } AT_PS_WLAN_PDN_ACT_ERR_CODE_MAP_STRU;
 
 /*****************************************************************************
- 结构名  : AT_PS_WLAN_PDN_DEACT_ERR_CODE_MAP_STRU
- 结构说明: PS错误码与WLAN PDN DEACT错误码映射结构
+ ??????  : AT_PS_WLAN_PDN_DEACT_ERR_CODE_MAP_STRU
+ ????????: PS????????WLAN PDN DEACT??????????????
 *****************************************************************************/
 typedef struct
 {
@@ -843,18 +843,18 @@ typedef struct
 
 
 /*****************************************************************************
-  7 UNION定义
+  7 UNION????
 *****************************************************************************/
 
 /*****************************************************************************
-  8 OTHERS定义
+  8 OTHERS????
 *****************************************************************************/
 
 /*****************************************************************************
-  9 全局变量声明
+  9 ????????????
 *****************************************************************************/
 
-/*记录闪电卡版本从上电到拨号成功启动时间，单位秒 */
+/*?????????????????????????????????????????????? */
 extern VOS_UINT32                       g_ulLcStartTime;
 
 extern AT_HILINK_MODE_ENUM_U8           g_enHiLinkMode;
@@ -869,17 +869,17 @@ extern CONST AT_CHDATA_RNIC_RMNET_ID_STRU     g_astAtChdataRnicRmNetIdTab[];
 
 
 /*****************************************************************************
-  10 函数声明
+  10 ????????
 *****************************************************************************/
 
 /*****************************************************************************
- 函 数 名  : AT_GetDhcpPara
- 功能描述  : 获取DHCP参数(DHCP参数为网络序)
- 输入参数  : pstConfig                  - DHCP参数(网络序)
- 输出参数  : 无
- 返 回 值  : VOS_VOID
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_GetDhcpPara
+ ????????  : ????DHCP????(DHCP????????????)
+ ????????  : pstConfig                  - DHCP????(??????)
+ ????????  : ??
+ ?? ?? ??  : VOS_VOID
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_VOID AT_GetDhcpPara(
     AT_DHCP_PARA_STRU                  *pstConfig,
@@ -887,13 +887,13 @@ VOS_VOID AT_GetDhcpPara(
 );
 
 /******************************************************************************
- 函 数 名  : AT_GetDisplayRate
- 功能描述  : 获取空口理论带宽，从NAS获取，且将字符串型式转为整形
- 输入参数  : *pstSpeed     ----    上下行速率结构
- 输出参数  : 无
- 返 回 值  : 无
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_GetDisplayRate
+ ????????  : ????????????????????NAS????????????????????????????
+ ????????  : *pstSpeed     ----    ??????????????
+ ????????  : ??
+ ?? ?? ??  : ??
+ ????????  :
+ ????????  :
 ******************************************************************************/
 VOS_UINT32 AT_GetDisplayRate(
     VOS_UINT16                          usClientId,
@@ -902,12 +902,12 @@ VOS_UINT32 AT_GetDisplayRate(
 
 /******************************************************************************
  Function:      AT_CtrlGetPDPAuthType
- Description:    获取PC设置的PDP上下文中对应类型的数据
+ Description:    ????PC??????PDP??????????????????????
  Calls:
  Data Accessed:
  Data Updated:
  Input:
-                 usTotalLen     PDP上下文内存长度
+                 usTotalLen     PDP??????????????
  Output:
  Return:        0   no auth
                 1   pap
@@ -930,11 +930,11 @@ VOS_UINT32 AT_Ipv4AddrAtoi(VOS_CHAR *pcString, VOS_UINT8 *pucNumber);
 VOS_UINT32 AT_Ipv4AddrItoa(VOS_CHAR *pcString, VOS_UINT8 *pucNumber);
 
 /*****************************************************************************
- 函 数 名  : AT_Ipv4Addr2Str
- 功能描述  : IPV4类型的地址转换为字符串类型
- 输入参数  : pucNumber      - IPV4地址
- 输出参数  : pcString       - 字符串
- 返 回 值  : VOS_UINT32
+ ?? ?? ??  : AT_Ipv4Addr2Str
+ ????????  : IPV4??????????????????????????
+ ????????  : pucNumber      - IPV4????
+ ????????  : pcString       - ??????
+ ?? ?? ??  : VOS_UINT32
 
 *****************************************************************************/
 VOS_UINT32 AT_Ipv4Addr2Str(
@@ -963,15 +963,15 @@ VOS_UINT32  AT_Ipv6PcscfDataToAddr(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_Ipv6AddrToStr
- 功能描述  : 将IPV6地址格式转换为字符串格式
- 输入参数  : aucIpAddr[]    - IPV6地址(协议格式)
-             enIpStrType    - IPV6字符串格式表达类型
- 输出参数  : aucAddrStr[]   - IPV6地址(字符串格式)
- 返 回 值  : VOS_OK         - 转换成功
-             VOS_ERR        - 转换失败
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_Ipv6AddrToStr
+ ????????  : ??IPV6????????????????????????
+ ????????  : aucIpAddr[]    - IPV6????(????????)
+             enIpStrType    - IPV6??????????????????
+ ????????  : aucAddrStr[]   - IPV6????(??????????)
+ ?? ?? ??  : VOS_OK         - ????????
+             VOS_ERR        - ????????
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_UINT32 AT_Ipv6AddrToStr(
     VOS_UINT8                           aucAddrStr[],
@@ -980,15 +980,15 @@ VOS_UINT32 AT_Ipv6AddrToStr(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_Itoa
- 功能描述  : 根据转换基数(10或16), 将整数转换为ASCII码, 将结果输出至字符串
- 输入参数  : usValue    - 待转换为ASCII码的整数
-             pcStr      - 输出结果的字符串
-             usRadix    - 转换基数
- 输出参数  : 无
- 返 回 值  : VOS_CHAR*
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_Itoa
+ ????????  : ????????????(10??16), ????????????ASCII??, ??????????????????
+ ????????  : usValue    - ????????ASCII????????
+             pcStr      - ????????????????
+             usRadix    - ????????
+ ????????  : ??
+ ?? ?? ??  : VOS_CHAR*
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_CHAR* AT_Itoa(
     VOS_UINT16                          usValue,
@@ -997,13 +997,13 @@ VOS_CHAR* AT_Itoa(
     VOS_UINT32                          ulLength
 );
 /******************************************************************************
- 函 数 名  : AT_AtoI
- 功能描述  : 字符串转整形
- 输入参数  : pString 字符串
- 输出参数  : 无
- 返 回 值  : 整形 IP地址
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_AtoI
+ ????????  : ????????????
+ ????????  : pString ??????
+ ????????  : ??
+ ?? ?? ??  : ???? IP????
+ ????????  :
+ ????????  :
 ******************************************************************************/
 VOS_UINT64  AT_AtoI(
     VOS_UINT8                         *pString
@@ -1011,13 +1011,13 @@ VOS_UINT64  AT_AtoI(
 
 
 /******************************************************************************
- 函 数 名  : AT_AtoI
- 功能描述  : 字符串转整形(可以带符号转换)
- 输入参数  : pString 字符串
- 输出参数  : 无
- 返 回 值  : 整形 IP地址
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_AtoI
+ ????????  : ????????????(??????????????)
+ ????????  : pString ??????
+ ????????  : ??
+ ?? ?? ??  : ???? IP????
+ ????????  :
+ ????????  :
 ******************************************************************************/
 VOS_INT32  AT_AtoInt(
     VOS_UINT8                          *pString,
@@ -1025,15 +1025,15 @@ VOS_INT32  AT_AtoInt(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_ConvertIpv6AddrToCompressedStr
- 功能描述  : 将IPV6地址格式转换为字符串压缩格式
- 输入参数  : aucIpAddr[]    - IPV6地址(协议格式)
-             ucTokensNum    - 地址段个数
- 输出参数  : aucAddrStr[]   - IPV6地址(字符串格式)
- 返 回 值  : VOS_OK         - 转换成功
-             VOS_ERR        - 转换失败
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_ConvertIpv6AddrToCompressedStr
+ ????????  : ??IPV6????????????????????????????
+ ????????  : aucIpAddr[]    - IPV6????(????????)
+             ucTokensNum    - ??????????
+ ????????  : aucAddrStr[]   - IPV6????(??????????)
+ ?? ?? ??  : VOS_OK         - ????????
+             VOS_ERR        - ????????
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_UINT32 AT_ConvertIpv6AddrToCompressedStr(
     VOS_UINT8                           aucAddrStr[],
@@ -1042,19 +1042,19 @@ VOS_UINT32 AT_ConvertIpv6AddrToCompressedStr(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_BuildUdpHdr
- 功能描述  : 构造IP和UDP头部信息(用于构造测试使用的UDP包)
- 输入参数  : pstUdpPkt  - UDP包信息
-             usLen      - UDP包长度
-             ulSrcAddr  - 源IP地址
-             ulDstAddr  - 目标IP地址
-             usSrcPort  - 源端口号
-             usDstPort  - 目标端口号
- 输出参数  : 无
- 返 回 值  : VOS_OK     - 构造成功
-             VOS_ERR    - 构造失败
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_BuildUdpHdr
+ ????????  : ????IP??UDP????????(??????????????????UDP??)
+ ????????  : pstUdpPkt  - UDP??????
+             usLen      - UDP??????
+             ulSrcAddr  - ??IP????
+             ulDstAddr  - ????IP????
+             usSrcPort  - ????????
+             usDstPort  - ??????????
+ ????????  : ??
+ ?? ?? ??  : VOS_OK     - ????????
+             VOS_ERR    - ????????
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_UINT32 AT_BuildUdpHdr(
     AT_UDP_PACKET_FORMAT_STRU          *pstUdpPkt,
@@ -1067,14 +1067,14 @@ VOS_UINT32 AT_BuildUdpHdr(
 
 
 /*****************************************************************************
- 函 数 名  : AT_NidsGet3gppSmCauseByPsCause
- 功能描述  : 将PS域呼叫错误码转换成3GPP协议定义的(E)SM Cause, 非3GPP协议定义
-             的错误码统一转换成0(Unknown error/Unspecified error)
- 输入参数  : enCause - PS域呼叫错误码
- 输出参数  : 无
- 返 回 值  : VOS_UINT16
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_NidsGet3gppSmCauseByPsCause
+ ????????  : ??PS??????????????????3GPP??????????(E)SM Cause, ??3GPP????????
+             ??????????????????0(Unknown error/Unspecified error)
+ ????????  : enCause - PS????????????
+ ????????  : ??
+ ?? ?? ??  : VOS_UINT16
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_UINT32 AT_Get3gppSmCauseByPsCause(
     TAF_PS_CAUSE_ENUM_UINT32            enCause
@@ -1123,12 +1123,12 @@ VOS_VOID  AT_ModemPsRspPdpDeactEvtCnfProc(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_MODEM_ProcCallEndedEvent
- 功能描述  : 处理PS_CALL_END_CNF事件
- 输入参数  : ucIndex  - 端口索引
-             pstEvent - ID_EVT_TAF_PS_CALL_END_CNF事件指针
- 输出参数  : 无
- 返 回 值  : VOS_VOID
+ ?? ?? ??  : AT_MODEM_ProcCallEndedEvent
+ ????????  : ????PS_CALL_END_CNF????
+ ????????  : ucIndex  - ????????
+             pstEvent - ID_EVT_TAF_PS_CALL_END_CNF????????
+ ????????  : ??
+ ?? ?? ??  : VOS_VOID
 *****************************************************************************/
 VOS_VOID AT_MODEM_ProcCallEndCnfEvent(
     VOS_UINT8                           ucIndex,
@@ -1137,11 +1137,11 @@ VOS_VOID AT_MODEM_ProcCallEndCnfEvent(
 
 
 /*****************************************************************************
- 函 数 名  : AT_MODEM_HangupCall
- 功能描述  : 挂断PPP拨号连接
- 输入参数  : ucIndex - 端口索引
- 输出参数  : 无
- 返 回 值  : AT_XXX  - ATC返回码
+ ?? ?? ??  : AT_MODEM_HangupCall
+ ????????  : ????PPP????????
+ ????????  : ucIndex - ????????
+ ????????  : ??
+ ?? ?? ??  : AT_XXX  - ATC??????
 *****************************************************************************/
 VOS_UINT32 AT_MODEM_HangupCall(VOS_UINT8 ucIndex);
 
@@ -1158,14 +1158,14 @@ VOS_VOID  AT_ModemPsRspPdpDeactivatedEvtProc(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_DeRegModemPsDataFCPoint
- 功能描述  : 去注册Modem端口流控点。
- 输入参数  : MN_CLIENT_ID_T                      usClientID,
+ ?? ?? ??  : AT_DeRegModemPsDataFCPoint
+ ????????  : ??????Modem????????????
+ ????????  : MN_CLIENT_ID_T                      usClientID,
              VOS_UINT8                           ucRabId
- 输出参数  : 无
- 返 回 值  : VOS_UINT32
- 调用函数  :
- 被调函数  :
+ ????????  : ??
+ ?? ?? ??  : VOS_UINT32
+ ????????  :
+ ????????  :
 *****************************************************************************/
 extern VOS_UINT32 AT_DeRegModemPsDataFCPoint(
     VOS_UINT8                           ucIndex,
@@ -1174,13 +1174,13 @@ extern VOS_UINT32 AT_DeRegModemPsDataFCPoint(
 
 #if( FEATURE_ON == FEATURE_CSD )
 /*****************************************************************************
- 函 数 名  : AT_RegModemVideoPhoneFCPoint
- 功能描述  : 注册Modem端口CST流控点。
- 输入参数  : FC_ID_ENUM_UINT8                    enFcId
- 输出参数  : 无
- 返 回 值  : VOS_UINT32
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_RegModemVideoPhoneFCPoint
+ ????????  : ????Modem????CST????????
+ ????????  : FC_ID_ENUM_UINT8                    enFcId
+ ????????  : ??
+ ?? ?? ??  : VOS_UINT32
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_UINT32 AT_RegModemVideoPhoneFCPoint(
     VOS_UINT8                           ucIndex,
@@ -1188,13 +1188,13 @@ VOS_UINT32 AT_RegModemVideoPhoneFCPoint(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_DeRegModemVideoPhoneFCPoint
- 功能描述  : 去注册Modem端口CST流控点。
- 输入参数  :
- 输出参数  : 无
- 返 回 值  : VOS_UINT32
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : AT_DeRegModemVideoPhoneFCPoint
+ ????????  : ??????Modem????CST????????
+ ????????  :
+ ????????  : ??
+ ?? ?? ??  : VOS_UINT32
+ ????????  :
+ ????????  :
 *****************************************************************************/
 VOS_UINT32 AT_DeRegModemVideoPhoneFCPoint(VOS_UINT8 ucIndex);
 #endif
@@ -1219,17 +1219,17 @@ VOS_VOID AT_NotifyFcWhenPdpModify(
 );
 
 #if (FEATURE_ON == FEATURE_LTE)
-/* AT模块给FTM 模块发送消息 */
+/* AT??????FTM ???????????? */
 VOS_UINT32 atSendFtmDataMsg(VOS_UINT32 TaskId, VOS_UINT32 MsgId, VOS_UINT32 ulClientId, VOS_VOID* pData, VOS_UINT32 uLen);
 #endif
 
 /*****************************************************************************
- 函 数 名  : AT_PS_AddIpAddrRabIdMap
- 功能描述  : 添加承载IP与RABID的映射
- 输入参数  : usClientId - 客户端ID
-             pstEvent   - PS域呼叫事件
- 输出参数  : 无
- 返 回 值  : VOS_VOID
+ ?? ?? ??  : AT_PS_AddIpAddrRabIdMap
+ ????????  : ????????IP??RABID??????
+ ????????  : usClientId - ??????ID
+             pstEvent   - PS??????????
+ ????????  : ??
+ ?? ?? ??  : VOS_VOID
 *****************************************************************************/
 VOS_VOID AT_PS_AddIpAddrRabIdMap(
     VOS_UINT16                          usClientId,
@@ -1238,12 +1238,12 @@ VOS_VOID AT_PS_AddIpAddrRabIdMap(
 
 
 /*****************************************************************************
- 函 数 名  : AT_PS_DeleteIpAddrRabIdMap
- 功能描述  : 删除承载IP与RABID的映射
- 输入参数  : usClientId - 客户端ID
-             pstEvent   - PS域呼叫事件
- 输出参数  : 无
- 返 回 值  : VOS_VOID
+ ?? ?? ??  : AT_PS_DeleteIpAddrRabIdMap
+ ????????  : ????????IP??RABID??????
+ ????????  : usClientId - ??????ID
+             pstEvent   - PS??????????
+ ????????  : ??
+ ?? ?? ??  : VOS_VOID
 *****************************************************************************/
 VOS_VOID AT_PS_DeleteIpAddrRabIdMap(
     VOS_UINT16                          usClientId,
@@ -1252,12 +1252,12 @@ VOS_VOID AT_PS_DeleteIpAddrRabIdMap(
 
 
 /*****************************************************************************
- 函 数 名  : AT_PS_GetIpAddrByRabId
- 功能描述  : 根据RABID获取承载IP地址
- 输入参数  : usClientId - 客户端ID
+ ?? ?? ??  : AT_PS_GetIpAddrByRabId
+ ????????  : ????RABID????????IP????
+ ????????  : usClientId - ??????ID
              ucRabId    - RABID [5,15]
- 输出参数  : 无
- 返 回 值  : ulIpAddr   - IP地址(主机序)
+ ????????  : ??
+ ?? ?? ??  : ulIpAddr   - IP????(??????)
 *****************************************************************************/
 VOS_UINT32 AT_PS_GetIpAddrByRabId(
     VOS_UINT16                          usClientId,
@@ -1435,12 +1435,12 @@ VOS_UINT32 AT_CheckApnFormat(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_PS_SndCallConnectedResult
- 功能描述  : 连接建立状态上报
- 输入参数  : ucCallId  - 呼叫实体索引
-             enPdpType - PDP类型
- 输出参数  : 无
- 返 回 值  : VOS_VOID
+ ?? ?? ??  : AT_PS_SndCallConnectedResult
+ ????????  : ????????????????
+ ????????  : ucCallId  - ????????????
+             enPdpType - PDP????
+ ????????  : ??
+ ?? ?? ??  : VOS_VOID
 *****************************************************************************/
 VOS_VOID AT_PS_SndCallConnectedResult(
     VOS_UINT16                          usClientId,
@@ -1468,20 +1468,20 @@ VOS_UINT32 AT_PS_IsNeedClearCurrCall(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_PS_BuildExClientId
- 功能描述  : 生成扩展的ClientId(ModemId + ClientId)
- 输入参数  : usClientId                 - ClientId
- 输出参数  : 无
- 返 回 值  : VOS_UINT16                 - 生成的扩展ClientId
+ ?? ?? ??  : AT_PS_BuildExClientId
+ ????????  : ??????????ClientId(ModemId + ClientId)
+ ????????  : usClientId                 - ClientId
+ ????????  : ??
+ ?? ?? ??  : VOS_UINT16                 - ??????????ClientId
 *****************************************************************************/
 VOS_UINT16 AT_PS_BuildExClientId(VOS_UINT16 usClientId);
 
 /*****************************************************************************
- 函 数 名  : AT_PS_BuildPsCallExClientId
- 功能描述  : 生成扩展的ClientId(ModemId + ClientId)
- 输入参数  : usClientId                 - ClientId
- 输出参数  : 无
- 返 回 值  : VOS_UINT16                 - 生成的扩展ClientId
+ ?? ?? ??  : AT_PS_BuildPsCallExClientId
+ ????????  : ??????????ClientId(ModemId + ClientId)
+ ????????  : usClientId                 - ClientId
+ ????????  : ??
+ ?? ?? ??  : VOS_UINT16                 - ??????????ClientId
 *****************************************************************************/
 VOS_UINT16 AT_PS_BuildPsCallExClientId(
     VOS_UINT16                          usClientId,
@@ -1489,12 +1489,12 @@ VOS_UINT16 AT_PS_BuildPsCallExClientId(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_PS_BuildNdisExClientId
- 功能描述  : 生成扩展的ClientId(ModemId + ClientId)
- 输入参数  : usPortIndex                - 拨号端口
+ ?? ?? ??  : AT_PS_BuildNdisExClientId
+ ????????  : ??????????ClientId(ModemId + ClientId)
+ ????????  : usPortIndex                - ????????
              usClientId                 - ClientId
- 输出参数  : 无
- 返 回 值  : VOS_UINT16                 - 生成的扩展ClientId
+ ????????  : ??
+ ?? ?? ??  : VOS_UINT16                 - ??????????ClientId
 *****************************************************************************/
 VOS_UINT16 AT_PS_BuildNdisExClientId(
     VOS_UINT16                          usPortIndex,

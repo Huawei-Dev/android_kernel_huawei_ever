@@ -13,11 +13,11 @@
 #define OS_WAITQUEUE_ACTIVE(wq)                                  waitqueue_active(wq)
 #define OS_WAKE_UP_INTERRUPTIBLE(wq)                             wake_up_interruptible(wq)
 
-#define SOH 0x01 /* 开始字符 */
-#define EOT 0x04 /* 发送完成 */
-#define ACK 0x06 /* 正确接收应答 */
-#define NAK 0x15 /* 校验错误重新发送，通讯开始时用于接收方协商累加校验 */
-#define CAN 0x18 /* 结束下载 */
+#define SOH 0x01 /* ???????? */
+#define EOT 0x04 /* ???????? */
+#define ACK 0x06 /* ???????????? */
+#define NAK 0x15 /* ?????????????????????????????????????????????????? */
+#define CAN 0x18 /* ???????? */
 
 #define PATCH_INTEROP_TIMEOUT HZ
 
@@ -83,14 +83,14 @@
 
 /* Enum Type Definition */
 enum PATCH_INFO_TYPE_ENUM {
-    ENUM_INFO_UART = 0, /* uart接口下载patch */
+    ENUM_INFO_UART = 0, /* uart????????patch */
 
-    ENUM_INFO_TOTAL /* 接口总数 */
+    ENUM_INFO_TOTAL /* ???????? */
 };
 
 enum PATCH_WAIT_RESPONSE_ENUM {
-    NO_RESPONSE = 0, /* 不等待device响应 */
-    WAIT_RESPONSE    /* 等待device响应 */
+    NO_RESPONSE = 0, /* ??????device???? */
+    WAIT_RESPONSE    /* ????device???? */
 };
 
 typedef wait_queue_head_t OS_WAIT_QUEUE_HEAD_T_STRU;
@@ -114,21 +114,21 @@ typedef struct patch_globals {
     OS_WAIT_QUEUE_HEAD_T_STRU *pst_wait;
 } PATCH_GLOBALS_STUR;
 
-/* xmodem每包数据的结构，CRC校验 */
+/* xmodem????????????????CRC???? */
 typedef struct xmodem_crc_pkt {
-    int8 Head;                        /* 开始字符 */
-    int8 PacketNum;                   /* 包序号 */
-    int8 PacketAnt;                   /* 包序号补码 */
-    int8 packet_data[XMODE_DATA_LEN]; /* 数据 */
-    int8 CRCValue_H;                  /* CRC校验码高位 */
-    int8 CRCValue_L;                  /* CRC校验码低位 */
+    int8 Head;                        /* ???????? */
+    int8 PacketNum;                   /* ?????? */
+    int8 PacketAnt;                   /* ?????????? */
+    int8 packet_data[XMODE_DATA_LEN]; /* ???? */
+    int8 CRCValue_H;                  /* CRC?????????? */
+    int8 CRCValue_L;                  /* CRC?????????? */
 } XMODEM_CRC_PKT_STRU;
 
-/* xmodem每包数据的结构，CRC校验 */
+/* xmodem????????????????CRC???? */
 typedef struct xmodem_head_pkt {
-    int8 Head;      /* 开始字符 */
-    int8 PacketNum; /* 包序号 */
-    int8 PacketAnt; /* 包序号补码 */
+    int8 Head;      /* ???????? */
+    int8 PacketNum; /* ?????? */
+    int8 PacketAnt; /* ?????????? */
 } XMODEM_HEAD_PKT_STRU;
 
 typedef struct ringbuf {

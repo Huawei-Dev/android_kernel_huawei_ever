@@ -70,7 +70,7 @@
 #include "scm_ind_dst.h"
 #include "diag_system_debug.h"
 
-/* debug提示信息的长度 */
+/* debug?????????????? */
 #define DIAG_DEBUG_INFO_LEN     (32)
 
 #define    DIAG_LOG_PATH       MODEM_LOG_ROOT"/drv/DIAG/"
@@ -87,8 +87,8 @@ DIAG_DRV_DEBUG_INFO_STRU   g_stDiagDrvDebugInfo = {0};
 *****************************************************************************/
 
 /*****************************************************************************
- Function Name   : PTR : Process Trace Record (流程跟踪记录)
- Description     : 跟踪整个处理流程
+ Function Name   : PTR : Process Trace Record (????????????)
+ Description     : ????????????????
 *****************************************************************************/
 DIAG_PTR_INFO_STRU g_stPtrInfo = {0};
 u32 g_DiagLogLevel = 0;
@@ -178,7 +178,7 @@ u32 diag_get_usb_type(void)
 
 /*****************************************************************************
  Function Name   : DIAG_DebugPTR
- Description        : DIAG处理流程的打点信息
+ Description        : DIAG??????????????????
 *****************************************************************************/
 void DIAG_DebugPTR(void)
 {
@@ -188,7 +188,7 @@ void DIAG_DebugPTR(void)
     s8 *DirPath = DIAG_LOG_PATH;
     s8 *FilePath = DIAG_LOG_PATH"DIAG_PTR.bin";
 
-    /* 如果DIAG目录不存在则先创建目录 */
+    /* ????DIAG?????????????????????? */
     if (BSP_OK != mdrv_file_access(DirPath, RFILE_RDONLY))
     {
         if (BSP_OK != mdrv_file_mkdir(DirPath))
@@ -213,7 +213,7 @@ void DIAG_DebugPTR(void)
         return ;
     }
 
-    /* 打点信息长度 */
+    /* ???????????? */
     ulValue = DIAG_DEBUG_SIZE_FLAG | sizeof(g_stPtrInfo);
     ret = mdrv_file_write(pFile, 1, sizeof(ulValue), (s8 *)&ulValue);
     if(ret != sizeof(ulValue))
@@ -221,7 +221,7 @@ void DIAG_DebugPTR(void)
         diag_error("write sizeof g_stPtrInfo failed.\n");
     }
 
-    /* 再写入打点信息 */
+    /* ?????????????? */
     ret = mdrv_file_write(pFile, 1, sizeof(g_stPtrInfo), (s8 *)&g_stPtrInfo);
     if(ret != sizeof(g_stPtrInfo))
     {
@@ -281,7 +281,7 @@ u32 DIAG_DebugFileHeader(void *pFile)
 
     ulValue = bsp_get_slice_value();
 
-    /* 当前的slice */
+    /* ??????slice */
     ret = (u32)mdrv_file_write(&ulValue, 1, sizeof(ulValue), pFile);
     if(ret != sizeof(ulValue))
     {
@@ -313,18 +313,18 @@ u32 g_astThroughput[EN_DIAG_THRPUT_MAX] = {};
 
 /*****************************************************************************
  Function Name   : diag_ThroughputIn
- Description     : 吞吐率记录
+ Description     : ??????????
 *****************************************************************************/
 u32 DIAG_GetThrputInfo(DIAG_THRPUT_ID_ENUM type)
 {
     return g_astThroughput[type];
 }
 
-/*目的端丢包定时上报*************************************************************************/
+/*??????????????????*************************************************************************/
 DIAG_MNTN_DST_INFO_STRU g_ind_dst_mntn_info = {};
 u32              g_ulSendUSBStartSlice = 0;
 u32              g_ulSendPcdevStartSlice = 0;
-/*复位维测信息记录*/
+/*????????????????*/
 void diag_reset_dst_mntn_info(void)
 {
     memset_s(&g_ind_dst_mntn_info, sizeof(g_ind_dst_mntn_info), 0, sizeof(g_ind_dst_mntn_info));
@@ -352,7 +352,7 @@ s32 diag_system_debug_event_cb(unsigned int u32ChanID, SOCP_EVENT_ENUM_UIN32 u32
         }
 
         busy_size = stSocpBuff.u32RbSize + stSocpBuff.u32Size;
-        /* 目的通道buff 80%上溢次数统计 */
+        /* ????????buff 80%???????????? */
         if(busy_size*100 >= dst_size*80)
         {
             g_ind_dst_mntn_info.ulDeltaPartOverFlowCnt++;
@@ -421,13 +421,13 @@ void diag_SaveDFR(DIAG_DFR_INFO_STRU *pDfr, u8 *pData, u32 ulLen)
         return ;
     }
 
-    /* 如果有任务正在进行中，需要等待其完成 */
+    /* ???????????????????????????????????? */
     osl_sem_down(&pDfr->semid);
 
     stDfrHeader.ulStart = DIAG_DFR_START_NUM;
     stDfrHeader.ulTime  = bsp_get_slice_value();
 
-    /* 拷贝开始标记和时间戳 */
+    /* ???????????????????? */
     if((pDfr->ulCur + sizeof(DIAG_DFR_HEADER_STRU)) <= pDfr->ulLen)
     {
         if(memcpy_s(&(pDfr->pData[pDfr->ulCur]), pDfr->ulLen-pDfr->ulCur, &stDfrHeader, sizeof(stDfrHeader)))
@@ -450,7 +450,7 @@ void diag_SaveDFR(DIAG_DFR_INFO_STRU *pDfr, u8 *pData, u32 ulLen)
     }
     pDfr->ulCur = (DFR_ALIGN_WITH_4BYTE(pDfr->ulCur + sizeof(DIAG_DFR_HEADER_STRU))) % pDfr->ulLen;
 
-    /* 拷贝码流 */
+    /* ???????? */
     if((pDfr->ulCur + ulLen) <= pDfr->ulLen)
     {
         if(memcpy_s(&(pDfr->pData[pDfr->ulCur]), pDfr->ulLen-pDfr->ulCur, pData, ulLen))
@@ -493,7 +493,7 @@ void diag_GetDFR(DIAG_DFR_INFO_STRU *pDfr)
         return ;
     }
 
-    /* 如果DIAG目录不存在则先创建目录 */
+    /* ????DIAG?????????????????????? */
     if (BSP_OK != mdrv_file_access(DirPath, 0))
     {
         if (BSP_OK != mdrv_file_mkdir(DirPath))
@@ -530,21 +530,21 @@ void diag_GetDFR(DIAG_DFR_INFO_STRU *pDfr)
     (void)memset_s(aucInfo, sizeof(aucInfo), 0, sizeof(aucInfo));
     (void)memcpy_s(aucInfo, sizeof(aucInfo), "DIAG DFR info", strnlen(("DIAG DFR info"),(DIAG_DEBUG_INFO_LEN-1)));
 
-    /* 通用信息 */
+    /* ???????? */
     ret = (u32)mdrv_file_write(aucInfo, 1, DIAG_DEBUG_INFO_LEN, pFile);
     if(ret != DIAG_DEBUG_INFO_LEN)
     {
         diag_error(" mdrv_file_write DIAG number info failed.\n");
     }
 
-    /* 当前指针 */
+    /* ???????? */
     ret = (u32)mdrv_file_write(&pDfr->ulCur, 1, sizeof(pDfr->ulCur), pFile);
     if(ret != sizeof(pDfr->ulCur))
     {
         diag_error(" mdrv_file_write pData failed.\n");
     }
 
-    /* 缓冲区长度 */
+    /* ?????????? */
     ret = (u32)mdrv_file_write(&pDfr->ulLen, 1, sizeof(pDfr->ulCur), pFile);
     if(ret != sizeof(pDfr->ulCur))
     {
@@ -604,15 +604,15 @@ DIAG_DRV_DEBUG_INFO_STRU * diag_DebugGetSrcMntnInfo(void)
 }
 
 /*****************************************************************************
- Function Name   : LNR : Last N Ring buffer store (最后N条信息循环存储功能)
- Description     : 保存最近的N条信息
+ Function Name   : LNR : Last N Ring buffer store (????N??????????????????)
+ Description     : ??????????N??????
 *****************************************************************************/
 
 DRV_DIAG_LNR_INFO_TBL_STRU g_astDrvLNRInfoTbl[EN_DIAG_DRV_LNR_INFO_MAX] = {{0}};
 
 /*****************************************************************************
  Function Name   : diag_LNR
- Description     : 最后NV条信息的记录接口
+ Description     : ????NV????????????????
 *****************************************************************************/
 void diag_DrvLNR(DIAG_DRV_LNR_ID_ENUM ulType, u32 ulRserved1, u32 ulRserved2)
 {

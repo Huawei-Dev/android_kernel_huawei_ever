@@ -3,7 +3,7 @@
 #ifndef __OAL_HCC_BUS_H
 #define __OAL_HCC_BUS_H
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_sdio_comm.h"
 #include "oal_mem.h"
 #include "oal_schedule.h"
@@ -11,18 +11,18 @@
 #include "oal_hcc_comm.h"
 #include "oal_workqueue.h"
 
-/* 宏定义 */
+/* ?????? */
 #define OAL_BUS_RX_THREAD_POLICY        SCHED_NORMAL
 #define OAL_BUS_RXDATA_THREAD_PRIORITY  0
 #define OAL_BUS_DISPOSE_THREAD_PRIORITY 10
 
-/* 一些事件的优先级定义 */
+/* ???????????????????? */
 #define OAL_BUS_TEST_WORK_NICE                 (-10)
 #define OAL_BUS_TEST_WORK_PRIORITY             97
 #define OAL_BUS_SWITCH_THREAD_PRIORITY         97
 #define OAL_BUS_TEST_INIT_PRIORITY             98
 #define OAL_BUS_SWITCH_THREAD_CREATE_PRIORITY  99
-/* 高性能CPU，默认值 */
+/* ??????CPU???????? */
 #define OAL_BUS_HPCPU_NUM  4
 #define OAL_BUS_MAXCPU_NUM 8
 
@@ -65,10 +65,10 @@ struct bus_msg_stru {
     oal_uint64 cpu_time; /* the time of the last come! */
 };
 
-/* 全局变量声明 */
+/* ???????????? */
 extern oal_atomic wakeup_dev_wait_ack;
 
-/* 一种类型对应一种IP驱动，PCIE驱动不同SOC架构驱动差异较大 */
+/* ????????????????IP??????PCIE????????SOC???????????????? */
 #define HCC_BUS_SDIO  0
 #define HCC_BUS_PCIE  1 /* 110x PCIE */
 #define HCC_BUS_PCIE2 2 /* reserved for 118x's PCIE */
@@ -88,7 +88,7 @@ extern oal_atomic wakeup_dev_wait_ack;
 
 #define HCC_BUS_PPS_COUNT_TIMEOUT 100 /* 100ms */
 
-/* 队列优先级 */
+/* ?????????? */
 typedef enum _HCC_BUS_Q_PRIO_ {
     HCC_BUS_Q_HIGH,
     HCC_BUS_Q_NORMAL,
@@ -145,9 +145,9 @@ typedef struct _hcc_bus_opt_ops {
     oal_int32 (*lock)(hcc_bus *pst_bus);
     oal_int32 (*unlock)(hcc_bus *pst_bus);
 
-    oal_int32 (*sleep_request)(hcc_bus *pst_bus);      /* 硬件行为 通知DEV睡眠 */
-    oal_int32 (*sleep_request_host)(hcc_bus *pst_bus); /* 检查Host是否满足睡眠条件 */
-    oal_int32 (*wakeup_request)(hcc_bus *pst_bus);     /* 硬件行为 唤醒DEV */
+    oal_int32 (*sleep_request)(hcc_bus *pst_bus);      /* ???????? ????DEV???? */
+    oal_int32 (*sleep_request_host)(hcc_bus *pst_bus); /* ????Host???????????????? */
+    oal_int32 (*wakeup_request)(hcc_bus *pst_bus);     /* ???????? ????DEV */
     oal_int32 (*get_sleep_state)(hcc_bus *pst_bus);
     oal_int32 (*wakeup_complete)(hcc_bus *pst_bus);
 
@@ -174,7 +174,7 @@ typedef struct _hcc_bus_opt_ops {
     oal_int32 (*patch_read)(hcc_bus *pst_bus, oal_uint8 *buff, oal_int32 len, oal_uint32 timeout);
     oal_int32 (*patch_write)(hcc_bus *pst_bus, oal_uint8 *buff, oal_int32 len);
 
-    oal_int32 (*bindcpu)(hcc_bus *pst_bus, oal_uint32 chan, oal_int32 is_bind); /* 绑定相关任务，提高处理能力 */
+    oal_int32 (*bindcpu)(hcc_bus *pst_bus, oal_uint32 chan, oal_int32 is_bind); /* ?????????????????????????? */
 
     oal_int32 (*voltage_bias_init)(hcc_bus *pst_bus);
 
@@ -182,18 +182,18 @@ typedef struct _hcc_bus_opt_ops {
 
     oal_void (*print_trans_info)(hcc_bus *pst_bus, oal_uint64 print_flag);
     oal_void (*reset_trans_info)(hcc_bus *pst_bus);
-    oal_int32 (*pending_signal_check)(hcc_bus *pst_bus);   /* 调度中检查process条件是否符合, 0:不符合   非0:符合 */
-    oal_int32 (*pending_signal_process)(hcc_bus *pst_bus); /* process中要清掉调度标记，否者会死循环 */
+    oal_int32 (*pending_signal_check)(hcc_bus *pst_bus);   /* ??????????process????????????, 0:??????   ??0:???? */
+    oal_int32 (*pending_signal_process)(hcc_bus *pst_bus); /* process?????????????????????????????? */
 } hcc_bus_opt_ops;
 
 typedef struct _hcc_bus_cap_ {
-    /* 接口是否为全双工,全双工软件收发不能相互阻塞 */
-    oal_int32 is_full_duplex; /* 预留 */
+    /* ????????????????,?????????????????????????? */
+    oal_int32 is_full_duplex; /* ???? */
 
-    /* TX/RX 长度对齐要求，业务使用 */
+    /* TX/RX ?????????????????????? */
     oal_uint32 align_size[HCC_DIR_COUNT]; /* bus align request */
 
-    oal_uint32 max_trans_size; /* IP层一次可以传输的最大长度 */
+    oal_uint32 max_trans_size; /* IP???????????????????????? */
 } hcc_bus_cap;
 
 struct _hcc_bus_ {
@@ -208,7 +208,7 @@ struct _hcc_bus_ {
 
     char name[OAL_BUS_HCC_NAME_LEN];
 
-    /* IP 私有结构体索引 */
+    /* IP ?????????????? */
     oal_void *data; /* dev driver strut reference, sdio~usb */
 
     oal_void *hcc; /* reference to hcc */
@@ -260,10 +260,10 @@ struct _hcc_bus_dev_ {
     oal_uint32 bus_cap;       /* support bus type */
 
     oal_uint32 bus_switch_enable;         /* 1 for enable */
-    oal_uint32 bus_auto_switch;           /* 自动切换 */
+    oal_uint32 bus_auto_switch;           /* ???????? */
     oal_wakelock_stru st_switch_wakelock; /* wake lock for switch */
 
-    oal_uint32 bus_auto_bindcpu; /* 动态绑核 */
+    oal_uint32 bus_auto_bindcpu; /* ???????? */
 
     oal_ulong bus_pps_start_time;
     oal_timer_list_stru bus_pps_timer;
@@ -320,7 +320,7 @@ typedef struct _hcc_switch_response_ {
     oal_uint8 is_succ;
 } hcc_switch_response;
 
-/* 函数声明 */
+/* ???????? */
 extern hcc_bus *hcc_get_current_110x_bus(oal_void);
 extern oal_int32 hcc_bus_resource_alloc(hcc_bus *pst_bus);
 extern oal_void hcc_bus_resource_free(hcc_bus *pst_bus);
@@ -335,23 +335,23 @@ extern void hisi_get_fast_cpus(struct cpumask *cpumask);
 extern oal_uint32 hcc_bus_flowctrl_init(oal_uint8 uc_hcc_flowctrl_type);
 
 /*
- * 函 数 名  : hcc_bus_wake_lock
- * 功能描述  : 获取wifi wakelock锁
- * 返 回 值  : 成功或失败原因
+ * ?? ?? ??  : hcc_bus_wake_lock
+ * ????????  : ????wifi wakelock??
+ * ?? ?? ??  : ??????????????
  */
 #define hcc_bus_wake_lock(pst_hi_bus) oal_wake_lock(&(pst_hi_bus)->st_bus_wakelock)
 
 /*
- * 函 数 名  : hcc_bus_wake_unlock
- * 功能描述  : 释放wifi wakelock锁
- * 返 回 值  : 成功或失败原因
+ * ?? ?? ??  : hcc_bus_wake_unlock
+ * ????????  : ????wifi wakelock??
+ * ?? ?? ??  : ??????????????
  */
 #define hcc_bus_wake_unlock(pst_hi_bus) oal_wake_unlock(&(pst_hi_bus)->st_bus_wakelock)
 
 /*
- * 函 数 名  : hcc_bus_wakelock_active
- * 功能描述  : 判断 wifi wakelock锁是否active
- * 返 回 值  : 成功或失败原因
+ * ?? ?? ??  : hcc_bus_wakelock_active
+ * ????????  : ???? wifi wakelock??????active
+ * ?? ?? ??  : ??????????????
  */
 #define hcc_bus_wakelock_active(pst_hi_bus) oal_wakelock_active(&(pst_hi_bus)->st_bus_wakelock)
 extern struct task_struct *oal_thread_create(int (*threadfn)(void *data),
@@ -794,7 +794,7 @@ OAL_STATIC OAL_INLINE oal_int32 hcc_bus_check_tx_condition(hcc_bus *hi_bus, hcc_
     }
 
     if (OAL_UNLIKELY(hi_bus->opt_ops->tx_condition == NULL)) {
-        /* 没有回调说明 发送不受限制 直接返回1 */
+        /* ???????????? ???????????? ????????1 */
         return OAL_TRUE;
     }
 
@@ -904,7 +904,7 @@ OAL_STATIC OAL_INLINE oal_void hcc_bus_print_trans_info(hcc_bus *hi_bus, oal_uin
         return;
     }
 
-    /* 打印device信息要保证打印过程中 不会进入深睡 */
+    /* ????device???????????????????? ???????????? */
     hi_bus->opt_ops->print_trans_info(hi_bus, print_flag);
 }
 

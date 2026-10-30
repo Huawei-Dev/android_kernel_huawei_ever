@@ -3,7 +3,7 @@
 #ifndef __OAL_WINDOWS_NET_H__
 #define __OAL_WINDOWS_NET_H__
 
-/* 宏定义 */
+/* ?????? */
 #define OAL_BITFIELD_LITTLE_ENDIAN  0
 #define OAL_BITFIELD_BIG_ENDIAN     1
 #define OAL_WIN32_NETBUF_CB_SIZE    48
@@ -13,7 +13,7 @@
 #define OAL_IF_NAME_SIZE          16
 #define ETHER_ADDR_LEN            6 /* length of an Ethernet address */
 
-/* 2.10 IP宏定义 */
+/* 2.10 IP?????? */
 #define IPV6_ADDR_MULTICAST         0x0002U
 #define IPV6_ADDR_UNICAST           0x0001U
 #define IPV6_ADDR_SCOPE_TYPE(scope) ((scope) << 16)
@@ -29,7 +29,7 @@
 #define IPV6_ADDR_MC_SCOPE(a) \
     ((a)->s6_addr[1] & 0x0f) /* nonstandard */
 
-/* 2.13 ETHER宏定义 */
+/* 2.13 ETHER?????? */
 /* ether type */
 #define ETHER_TYPE_PAE      0x888e /* EAPOL PAE/802.1x */
 #define ETHER_TYPE_IP       0x0800 /* IP protocol */
@@ -42,7 +42,7 @@
 #define ETHER_TYPE_WAI      0x88b4 /* WAI/WAPI */
 #define ETHER_LLTD_TYPE     0x88D9 /* LLTD */
 #define ETHER_ONE_X_TYPE    0x888E /* 802.1x Authentication */
-#define ETHER_TUNNEL_TYPE   0x88bd /* 自定义tunnel协议 */
+#define ETHER_TUNNEL_TYPE   0x88bd /* ??????tunnel???? */
 #define ETHER_TYPE_PPP_DISC 0x8863 /* PPPoE discovery messages */
 #define ETHER_TYPE_PPP_SES  0x8864 /* PPPoE session messages */
 
@@ -50,11 +50,11 @@
 #define ETH_TARGET_IP_ADDR_LEN 4 /* length of an Ethernet target ip address */
 
 /*lint -e773*/
-/* 通过结构体成员找结构体指针 第一个参数为结构体指针； 第二个参数为结构体类型名； 第三个参数为数据结构体中成员名字 */
+/* ?????????????????????????? ???????????????????????? ?????????????????????????? ???????????????????????????????? */
 #define OAL_CONTAINER_OF(_member_ptr, _stru_type, _stru_member_name) \
     /*lint -e(413)*/ ((_stru_type *)((oal_int8 *)(_member_ptr) - (oal_uint)(&((_stru_type *)0)->_stru_member_name)))
 
-#define OAL_SMP_MB()                        /* 为空 */
+#define OAL_SMP_MB()                        /* ???? */
 #define OAL_ERR_CODE_NETBUF_PANIC           OAL_PTR_NULL;
 #define OAL_NETBUF_LIST_NUM(_pst_head)      ((_pst_head)->ul_num)
 #define OAL_NET_DEV_PRIV(_pst_dev)          ((_pst_dev)->ml_priv)
@@ -115,10 +115,10 @@
 
 #define OAL_WDEV_MATCH(_netif, _req) ((_netif)->ifindex == (_req)->ifidx)
 
-#define OAL_IFF_RUNNING     0x40 /* linux net_device flag宏定义，表示设备在运行 */
+#define OAL_IFF_RUNNING     0x40 /* linux net_device flag?????????????????????? */
 #define OAL_SIOCIWFIRSTPRIV 0x8BE0
 
-/* iw_priv参数类型OAL封装 */
+/* iw_priv????????OAL???? */
 #define OAL_IW_PRIV_TYPE_BYTE  0x1000 /* Char as number */
 #define OAL_IW_PRIV_TYPE_CHAR  0x2000 /* Char as character */
 #define OAL_IW_PRIV_TYPE_INT   0x4000 /* 32 bits int */
@@ -143,11 +143,11 @@
 #define OAL_IW_TXPOW_MWATT               0x0001 /* Value is in mW */
 #define OAL_IW_TXPOW_RELATIVE            0x0002 /* Value is in arbitrary units */
 #define OAL_IW_TXPOW_RANGE               0x1000 /* Range of value between min/max */
-#define OAL_IEEE80211_MAX_SSID_LEN       32     /* 最大SSID长度 */
-#define OAL_IEEE80211_EXTRA_SSID_LEN     4      /* 因上层逻辑需要增加的额外SSID长度 */
+#define OAL_IEEE80211_MAX_SSID_LEN       32     /* ????SSID???? */
+#define OAL_IEEE80211_EXTRA_SSID_LEN     4      /* ????????????????????????SSID???? */
 #define OAL_NL80211_MAX_NR_CIPHER_SUITES 5
 #define OAL_NL80211_MAX_NR_AKM_SUITES    2
-#define OAL_MAX_SCAN_CHANNELS            40 /* 内核下发的最大扫描信道个数 */
+#define OAL_MAX_SCAN_CHANNELS            40 /* ?????????????????????????? */
 
 #define OAL_ETH_SENDER_IP_ADDR_LEN 4 /* length of an Ethernet send ip address */
 #define OAL_ETH_TARGET_IP_ADDR_LEN 4 /* length of an Ethernet target ip address */
@@ -203,19 +203,19 @@ struct br_fdb_change_info {
 
 #ifdef _PRE_WLAN_FEATURE_PACKET_CAPTURE
 typedef struct {
-    oal_uint32 ul_manufacturerid;  /* 厂商ID                   */
-    oal_uint8 *puc_radiotapheader; /* Radiotap头Buff指针       */
-    oal_uint32 ul_rhlen;           /* Radiotap头Buff长度       */
-    oal_uint8 *puc_macheader;      /* 802.11 MAC Header指针    */
-    oal_uint32 ul_macheaderlen;    /* 802.11 MAC Header长度    */
-    oal_uint8 *puc_databuff;       /* 802.11数据帧数据Buff指针 */
-    oal_uint32 ul_datalen;         /* 802.11数据帧数据Buff长度 */
+    oal_uint32 ul_manufacturerid;  /* ????ID                   */
+    oal_uint8 *puc_radiotapheader; /* Radiotap??Buff????       */
+    oal_uint32 ul_rhlen;           /* Radiotap??Buff????       */
+    oal_uint8 *puc_macheader;      /* 802.11 MAC Header????    */
+    oal_uint32 ul_macheaderlen;    /* 802.11 MAC Header????    */
+    oal_uint8 *puc_databuff;       /* 802.11??????????Buff???? */
+    oal_uint32 ul_datalen;         /* 802.11??????????Buff???? */
 } hw_ker_wifi_sniffer_packet_s;
 #endif
 
 /*
- * 函 数 名  : oal_netif_running_func
- * 功能描述  : win32封装
+ * ?? ?? ??  : oal_netif_running_func
+ * ????????  : win32????
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_netif_running_func()
 {
@@ -224,7 +224,7 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netif_running_func()
 
 #define oal_netif_running(_pst_net_dev) oal_netif_running_func()
 
-/* 主机与网络字节序转换 */
+/* ???????????????????? */
 #define OAL_HOST2NET_SHORT(_x) OAL_SWAP_BYTEORDER_16(_x)
 #define OAL_NET2HOST_SHORT(_x) OAL_SWAP_BYTEORDER_16(_x)
 #define OAL_HOST2NET_LONG(_x)  OAL_SWAP_BYTEORDER_32(_x)
@@ -233,7 +233,7 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netif_running_func()
 #define oal_vlan_tx_tag_present(_skb) ((_skb)->vlan_tci & 0x1000)
 #define oal_vlan_tx_tag_get(_skb)     ((_skb)->vlan_tci & ~0x1000)
 
-/* vlan宏定义 */
+/* vlan?????? */
 #define OAL_VLAN_VID_MASK   0x0fff /* VLAN Identifier */
 #define OAL_VLAN_PRIO_MASK  0xe000 /* Priority Code Point */
 #define OAL_VLAN_PRIO_SHIFT 13
@@ -241,7 +241,7 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netif_running_func()
 #define OAL_THIS_MODULE  OAL_PTR_NULL
 #define OAL_MSG_DONTWAIT 0
 
-/* 枚举定义 */
+/* ???????? */
 typedef enum {
     GFP_KERNEL,
     GFP_ATOMIC,
@@ -311,7 +311,7 @@ typedef struct oal_cpu_usage_stat {
     oal_uint64 ull_guest;
 } oal_cpu_usage_stat_stru;
 
-/* STRUCT定义 */
+/* STRUCT???? */
 #define LL_ALLOCATED_SPACE(dev) \
     ((((dev)->hard_header_len + (dev)->needed_headroom + (dev)->needed_tailroom) & ~(15)) + 16)
 
@@ -367,7 +367,7 @@ typedef struct {
 #define icmp6_override  icmp6_dataun.u_nd_advt.override
 } oal_icmp6hdr_stru;
 
-/* 多了4字节，记得减去4 */
+/* ????4??????????????4 */
 typedef struct {
     oal_icmp6hdr_stru icmph;
     oal_in6_addr target;
@@ -607,7 +607,7 @@ enum nl80211_external_auth_action {
 };
 typedef enum nl80211_external_auth_action oal_nl80211_external_auth_action;
 
-/* 表示wiphy 结构中对应的参数是否被修改 */
+/* ????wiphy ?????????????????????????? */
 enum wiphy_params_flags {
     WIPHY_PARAM_RETRY_SHORT = 1 << 0,
     WIPHY_PARAM_RETRY_LONG = 1 << 1,
@@ -700,7 +700,7 @@ struct beacon_parameters {
 typedef struct beacon_parameters oal_beacon_parameters;
 
 /* lm add new code begin */
-/* 3.10内核中下发的修改beacon帧参数的结构体 */
+/* 3.10????????????????beacon?????????????? */
 struct cfg80211_beacon_data {
     oal_uint8 *head, *tail;
     oal_uint8 *beacon_ies;
@@ -715,7 +715,7 @@ struct cfg80211_beacon_data {
 };
 typedef struct cfg80211_beacon_data oal_beacon_data_stru;
 
-/* 3.10内核中下发的修改bss信息的结构体 */
+/* 3.10????????????????bss???????????? */
 struct bss_parameters {
     oal_int32 use_cts_prot;
     oal_int32 use_short_preamble;
@@ -759,7 +759,7 @@ struct cfg80211_acl_data {
     struct mac_address mac_addrs[1];
 };
 
-/* 3.10新内核下发的配置ap的信息 */
+/* 3.10????????????????ap?????? */
 struct cfg80211_ap_settings {
     oal_cfg80211_chan_def chandef;
     oal_beacon_data_stru beacon;
@@ -833,7 +833,7 @@ typedef struct ieee80211_txrx_stypes {
     oal_uint16 rx;
 } oal_ieee80211_txrx_stypes;
 
-/* 管制域相关结构体定义 */
+/* ???????????????????? */
 #define MHZ_TO_KHZ(freq) ((freq)*1000)
 #define KHZ_TO_MHZ(freq) ((freq) / 1000)
 #define DBI_TO_MBI(gain) ((gain)*100)
@@ -872,7 +872,7 @@ typedef struct {
     struct ieee80211_reg_rule reg_rules[10];
 } oal_ieee80211_regdomain_stru;
 
-/* 此结构体成员命名是为了保持跟linux一致 */
+/* ????????????????????????????linux???? */
 typedef struct oal_wiphy_tag {
     oal_uint8 perm_addr[6];
     oal_uint8 addr_mask[6];
@@ -973,7 +973,7 @@ typedef struct oal_netbuf_tag {
     oal_atomic users;
 } oal_netbuf_stru;
 
-/* net device统计信息结构体 */
+/* net device?????????????? */
 typedef struct {
     oal_uint32 rx_packets; /* total packets received   */
     oal_uint32 tx_packets; /* total packets transmitted    */
@@ -1022,7 +1022,7 @@ typedef struct {
     oal_uint32 ul_handle;
 } oal_qdisc_stru;
 
-/* iw_handler_def结构体win32封装 */
+/* iw_handler_def??????win32???? */
 typedef struct {
     oal_uint16 cmd;   /* Wireless Extension command */
     oal_uint16 flags; /* More to come ;-) */
@@ -1085,12 +1085,12 @@ typedef union {
 typedef oal_int32 (*oal_iw_handler)(struct oal_net_device *dev, oal_iw_request_info_stru *info,
                                     oal_iwreq_data_union *wrqu, char *extra);
 
-/* 私有IOCTL接口信息 */
+/* ????IOCTL???????? */
 typedef struct {
-    oal_uint32 cmd;                  /* ioctl命令号 */
-    oal_uint16 set_args;             /* 类型和参数字符个数 */
-    oal_uint16 get_args;             /* 类型和参数字符个数 */
-    oal_int8 name[OAL_IF_NAME_SIZE]; /* 私有命令名 */
+    oal_uint32 cmd;                  /* ioctl?????? */
+    oal_uint16 set_args;             /* ?????????????????? */
+    oal_uint16 get_args;             /* ?????????????????? */
+    oal_int8 name[OAL_IF_NAME_SIZE]; /* ?????????? */
 } oal_iw_priv_args_stru;
 
 typedef struct {
@@ -1149,7 +1149,7 @@ typedef struct wireless_dev {
     struct oal_net_device *netdev;
     oal_wiphy_stru *wiphy;
     enum nl80211_iftype iftype;
-    /* 1102新内核新增字段 add by lm */
+    /* 1102?????????????? add by lm */
     oal_cfg80211_chan_def preset_chandef;
 } oal_wireless_dev_stru;
 
@@ -1169,7 +1169,7 @@ typedef struct oal_ethtool_ops {
     oal_int32 (*get_regs_len)(struct oal_net_device *);
 } oal_ethtool_ops_stru;
 
-/* VLAN以太网头 win32封装 */
+/* VLAN???????? win32???? */
 typedef struct {
     oal_uint8 h_dest[6];
     oal_uint8 h_source[6];
@@ -1178,7 +1178,7 @@ typedef struct {
     oal_uint16 h_vlan_encapsulated_proto;
 } oal_vlan_ethhdr_stru;
 
-/* scan相关参数 */
+/* scan???????? */
 typedef struct oal_ieee80211_channel_tag {
     oal_ieee80211_band_enum_uint8 band;
     oal_bool_enum_uint8 beacon_found;
@@ -1245,8 +1245,8 @@ typedef struct oal_station_info_tag {
 
     oal_int32 generation;
     oal_int32 snr;
-    oal_int32 noise;  /* 底噪 */
-    oal_int32 chload; /* 信道繁忙程度 */
+    oal_int32 noise;  /* ???? */
+    oal_int32 chload; /* ???????????? */
 } oal_station_info_stru;
 #else
 struct sta_bss_parameters {
@@ -1302,8 +1302,8 @@ typedef struct oal_station_info_tag {
     enum nl80211_mesh_power_mode peer_pm;
     enum nl80211_mesh_power_mode nonpeer_pm;
     oal_int32 snr;
-    oal_int32 noise;  /* 底噪 */
-    oal_int32 chload; /* 信道繁忙程度 */
+    oal_int32 noise;  /* ???? */
+    oal_int32 chload; /* ???????????? */
 } oal_station_info_stru;
 #endif
 
@@ -1331,7 +1331,7 @@ typedef struct oal_cfg80211_ssid_tag {
 
 } oal_cfg80211_ssid_stru;
 
-/* 打桩内核下发扫描请求命令参数 */
+/* ???????????????????????????? */
 typedef struct oal_cfg80211_scan_request_tag {
     oal_cfg80211_ssid_stru *ssids;
     oal_int32 n_ssids;
@@ -1354,7 +1354,7 @@ typedef struct cfg80211_match_set {
     oal_cfg80211_ssid_stru ssid;
 } oal_cfg80211_match_set;
 
-/* 打桩内核下发调度扫描请求命令参数 */
+/* ???????????????????????????????? */
 typedef struct oal_cfg80211_sched_scan_request_tag {
     oal_cfg80211_ssid_stru *ssids;
     oal_int32 n_ssids;
@@ -1402,7 +1402,7 @@ typedef enum {
 } oal_nl80211_mfp_enum;
 typedef oal_uint8 oal_nl80211_mfp_enum_uint8;
 
-/* 打桩内核下发关联请求命令参数 */
+/* ???????????????????????????? */
 typedef struct oal_cfg80211_connect_params_tag {
     oal_ieee80211_channel_stru *channel;
 
@@ -1425,7 +1425,7 @@ typedef struct oal_cfg80211_connect_params_tag {
 
 } oal_cfg80211_conn_stru;
 
-/* 内核下发cfg的接口函数 */
+/* ????????cfg?????????? */
 typedef struct oal_cfg80211_ops_tag {
     oal_int32 (*add_key)(oal_wiphy_stru *wiphy, oal_net_device_stru *netdev,
                          oal_uint8 key_index,
@@ -1480,11 +1480,11 @@ typedef struct oal_cfg80211_ops_tag {
 } oal_cfg80211_ops_stru;
 
 typedef struct {
-    oal_uint32 nlmsg_len;   /* 消息长度，包括首部在内 */
-    oal_uint16 nlmsg_type;  /* 消息内容的类型 */
-    oal_uint16 nlmsg_flags; /* 附加的标志 */
-    oal_uint32 nlmsg_seq;   /* 序列号 */
-    oal_uint32 nlmsg_pid;   /* 发送进程的端口ID */
+    oal_uint32 nlmsg_len;   /* ?????????????????????? */
+    oal_uint16 nlmsg_type;  /* ?????????????? */
+    oal_uint16 nlmsg_flags; /* ?????????? */
+    oal_uint32 nlmsg_seq;   /* ?????? */
+    oal_uint32 nlmsg_pid;   /* ??????????????ID */
 } oal_nlmsghdr_stru;
 
 typedef struct {
@@ -1567,7 +1567,7 @@ typedef struct wiphy_vendor_command {
                       const void *data, int data_len);
 } oal_wiphy_vendor_command_stru;
 
-/* netlink相关 */
+/* netlink???? */
 #define OAL_NLMSG_ALIGNTO             4
 #define OAL_NLMSG_ALIGN(_len)         (((_len) + OAL_NLMSG_ALIGNTO - 1) & ~(OAL_NLMSG_ALIGNTO - 1))
 #define OAL_NLMSG_HDRLEN              ((oal_int32)OAL_NLMSG_ALIGN(OAL_SIZEOF(oal_nlmsghdr_stru)))
@@ -1645,7 +1645,7 @@ typedef struct {
     oal_uint8 auc_ar_tip[ETH_TARGET_IP_ADDR_LEN]; /* target IP address */
 } oal_eth_arphdr_stru;
 
-/* 函数声明 */
+/* ???????? */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_delist(oal_netbuf_head_stru *pst_list_head);
 OAL_INLINE oal_uint32 oal_netbuf_free(oal_netbuf_stru *pst_netbuf);
 OAL_INLINE oal_netbuf_stru *oal_netbuf_peek_tail(oal_netbuf_head_stru *pst_head);
@@ -1665,10 +1665,10 @@ OAL_STATIC OAL_INLINE oal_bool_enum_uint8 oal_is_broadcast_ether_addr(const oal_
 }
 
 /*
- * 函 数 名  : oal_netbuf_put
- * 功能描述  : 在缓冲区尾部增加数据
- * 输入参数  : pst_netbuf: 缓冲区结构体指针
- *             ul_len: 需要增加数据的长度
+ * ?? ?? ??  : oal_netbuf_put
+ * ????????  : ????????????????????
+ * ????????  : pst_netbuf: ????????????????
+ *             ul_len: ??????????????????
  */
 OAL_STATIC OAL_INLINE oal_uint8 *oal_netbuf_put(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_len)
 {
@@ -1687,8 +1687,8 @@ OAL_STATIC OAL_INLINE oal_uint8 *oal_netbuf_put(oal_netbuf_stru *pst_netbuf, oal
 }
 
 /*
- * 函 数 名  : oal_netbuf_push
- * 功能描述  : 在缓冲区开头增加数据
+ * ?? ?? ??  : oal_netbuf_push
+ * ????????  : ????????????????????
  */
 OAL_STATIC OAL_INLINE oal_uint8 *oal_netbuf_push(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_len)
 {
@@ -1703,9 +1703,9 @@ OAL_STATIC OAL_INLINE oal_uint8 *oal_netbuf_push(oal_netbuf_stru *pst_netbuf, oa
 }
 
 /*
- * 函 数 名  : oal_netbuf_pull
- * 功能描述  : 从skb头部取出数据
- * 输入参数  : pst_netbuf: skb结构体指针
+ * ?? ?? ??  : oal_netbuf_pull
+ * ????????  : ??skb????????????
+ * ????????  : pst_netbuf: skb??????????
  */
 OAL_STATIC OAL_INLINE oal_uint8 *oal_netbuf_pull(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_len)
 {
@@ -1718,10 +1718,10 @@ OAL_STATIC OAL_INLINE oal_uint8 *oal_netbuf_pull(oal_netbuf_stru *pst_netbuf, oa
     return (pst_netbuf->data += ul_len);
 }
 /*
- * 函 数 名  : oal_ieee80211_channel_to_frequency
- * 功能描述  : 将信道转换成频率
- * 输入参数  : oal_int32 l_channel      :信道号
- *             enum ieee80211_band band :频段
+ * ?? ?? ??  : oal_ieee80211_channel_to_frequency
+ * ????????  : ????????????????
+ * ????????  : oal_int32 l_channel      :??????
+ *             enum ieee80211_band band :????
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_ieee80211_channel_to_frequency(oal_int32 l_channel, enum ieee80211_band band)
 {
@@ -1779,8 +1779,8 @@ OAL_STATIC OAL_INLINE oal_int32 oal_ieee80211_frequency_to_channel(oal_int32 l_c
 }
 
 /*
- * 函 数 名  : oal_netbuf_get_bitfield
- * 功能描述  : 识别IP报文的大小端
+ * ?? ?? ??  : oal_netbuf_get_bitfield
+ * ????????  : ????IP????????????
  */
 OAL_STATIC OAL_INLINE oal_uint8 oal_netbuf_get_bitfield(oal_void)
 {
@@ -1834,8 +1834,8 @@ OAL_STATIC OAL_INLINE oal_void oal_set_single_netbuf_tail(oal_netbuf_stru *pst_n
 }
 
 /*
- * 函 数 名  : oal_netbuf_addlist
- * 功能描述  : skb链表从头部入队
+ * ?? ?? ??  : oal_netbuf_addlist
+ * ????????  : skb??????????????
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_addlist(oal_netbuf_head_stru *pst_list_head,
                                                   oal_netbuf_stru *netbuf)
@@ -1844,8 +1844,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_addlist(oal_netbuf_head_stru *pst_list
 }
 
 /*
- * 函 数 名  : oal_netbuf_list_tail
- * 功能描述  : add a netbuf to skb list
+ * ?? ?? ??  : oal_netbuf_list_tail
+ * ????????  : add a netbuf to skb list
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_list_tail(oal_netbuf_head_stru *list, oal_netbuf_stru *newsk)
 {
@@ -1854,8 +1854,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_list_tail(oal_netbuf_head_stru *list, 
 }
 
 /*
- * 函 数 名  : oal_netbuf_list_tail_nolock
- * 功能描述  : add a netbuf to skb list
+ * ?? ?? ??  : oal_netbuf_list_tail_nolock
+ * ????????  : add a netbuf to skb list
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_list_tail_nolock(oal_netbuf_head_stru *list, oal_netbuf_stru *newsk)
 {
@@ -1871,11 +1871,11 @@ OAL_STATIC OAL_INLINE oal_int32 oal_netbuf_expand_head(oal_netbuf_stru *skb,
 }
 
 /*
- * 函 数 名  : oal_netbuf_delist_tail
- * 功能描述  : remove skb from list tail
- * 输入参数  : @head: the place to add it in the first list
- * 输出参数  : The list at @list is reinitialised
- * 返 回 值  : the netbuf removed from the list
+ * ?? ?? ??  : oal_netbuf_delist_tail
+ * ????????  : remove skb from list tail
+ * ????????  : @head: the place to add it in the first list
+ * ????????  : The list at @list is reinitialised
+ * ?? ?? ??  : the netbuf removed from the list
  */
 OAL_STATIC OAL_INLINE oal_netbuf_stru *oal_netbuf_delist_tail(oal_netbuf_head_stru *head)
 {
@@ -1887,11 +1887,11 @@ OAL_STATIC OAL_INLINE oal_netbuf_stru *oal_netbuf_delist_tail(oal_netbuf_head_st
 }
 
 /*
- * 函 数 名  : oal_netbuf_splice_sync
- * 功能描述  : move head buffs to list
- * 输入参数  : @list: the new list to add
+ * ?? ?? ??  : oal_netbuf_splice_sync
+ * ????????  : move head buffs to list
+ * ????????  : @list: the new list to add
  *             @head: the place to add it in the first list
- * 输出参数  : The list at @list is reinitialised
+ * ????????  : The list at @list is reinitialised
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_splice_sync(oal_netbuf_head_stru *list, oal_netbuf_head_stru *head)
 {
@@ -1906,8 +1906,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_splice_sync(oal_netbuf_head_stru *list
 }
 
 /*
- * 函 数 名  : oal_netbuf_list_purge
- * 功能描述  : skb链表清空
+ * ?? ?? ??  : oal_netbuf_list_purge
+ * ????????  : skb????????
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_list_purge(oal_netbuf_head_stru *pst_list_head)
 {
@@ -1922,11 +1922,11 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_list_purge(oal_netbuf_head_stru *pst_l
 }
 
 /*
- * 函 数 名  : oal_netbuf_splice_init
- * 功能描述  : join two skb lists and reinitialise the emptied list
- * 输入参数  : @list: the new list to add
+ * ?? ?? ??  : oal_netbuf_splice_init
+ * ????????  : join two skb lists and reinitialise the emptied list
+ * ????????  : @list: the new list to add
  *             @head: the place to add it in the first list
- * 输出参数  : The list at @list is reinitialised
+ * ????????  : The list at @list is reinitialised
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_splice_init(oal_netbuf_head_stru *list, oal_netbuf_head_stru *head)
 {
@@ -1934,11 +1934,11 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_splice_init(oal_netbuf_head_stru *list
     return;
 }
 /*
- * 函 数 名  : oal_netbuf_queue_splice_tail_init
- * 功能描述  : join two skb lists and reinitialise the emptied list
- * 输入参数  : @list: the new list to add
+ * ?? ?? ??  : oal_netbuf_queue_splice_tail_init
+ * ????????  : join two skb lists and reinitialise the emptied list
+ * ????????  : @list: the new list to add
  *             @head: the place to add it in the first list
- * 输出参数  : The list at @list is reinitialised
+ * ????????  : The list at @list is reinitialised
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_queue_splice_tail_init(oal_netbuf_head_stru *list, oal_netbuf_head_stru *head)
 {
@@ -1947,8 +1947,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_queue_splice_tail_init(oal_netbuf_head
 }
 
 /*
- * 函 数 名  : oal_netbuf_head_init
- * 功能描述  : init netbuf list
+ * ?? ?? ??  : oal_netbuf_head_init
+ * ????????  : init netbuf list
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_head_init(oal_netbuf_head_stru *list)
 {
@@ -1957,8 +1957,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_head_init(oal_netbuf_head_stru *list)
 }
 
 /*
- * 函 数 名  : oal_get_cpu_stat
- * 功能描述  : get cpu stat
+ * ?? ?? ??  : oal_get_cpu_stat
+ * ????????  : get cpu stat
  */
 OAL_STATIC OAL_INLINE oal_void oal_get_cpu_stat(oal_cpu_usage_stat_stru *pst_cpu_stat)
 {
@@ -1977,11 +1977,11 @@ OAL_STATIC OAL_INLINE oal_ieee80211_channel_stru *oal_ieee80211_get_channel(oal_
 }
 
 /*
- * 函 数 名  : oal_eth_type_trans
- * 功能描述  : 获取协议模式
- * 输入参数  : pst_netbuf: skb指针
- *             pst_device: net device结构体指针
- * 返 回 值  : 协议模式
+ * ?? ?? ??  : oal_eth_type_trans
+ * ????????  : ????????????
+ * ????????  : pst_netbuf: skb????
+ *             pst_device: net device??????????
+ * ?? ?? ??  : ????????
  */
 OAL_STATIC OAL_INLINE oal_uint16 oal_eth_type_trans(oal_netbuf_stru *pst_netbuf, oal_net_device_stru *pst_device)
 {
@@ -1990,9 +1990,9 @@ OAL_STATIC OAL_INLINE oal_uint16 oal_eth_type_trans(oal_netbuf_stru *pst_netbuf,
     return 0;
 }
 /*
- * 函 数 名  : oal_ether_setup
- * 功能描述  : ether dev建立
- * 输入参数  : net device引用
+ * ?? ?? ??  : oal_ether_setup
+ * ????????  : ether dev????
+ * ????????  : net device????
  */
 OAL_INLINE oal_void oal_ether_setup(oal_net_device_stru *p_net_device)
 {
@@ -2000,8 +2000,8 @@ OAL_INLINE oal_void oal_ether_setup(oal_net_device_stru *p_net_device)
 }
 
 /*
- * 函 数 名  : oal_dev_get_by_name
- * 功能描述  : 根据名字寻找netdevice
+ * ?? ?? ??  : oal_dev_get_by_name
+ * ????????  : ????????????netdevice
  */
 OAL_INLINE oal_net_device_stru *oal_dev_get_by_name(const oal_int8 *pc_name)
 {
@@ -2019,16 +2019,16 @@ OAL_INLINE oal_net_device_stru *oal_dev_get_by_name(const oal_int8 *pc_name)
 }
 
 /*
- * 函 数 名  : oal_dev_put
- * 功能描述  : 调用oal_dev_get_by_name后需要调用dev_put,是net_dev的引用计数减1
- * 输入参数  : _pst_dev: 指向net_dev的指针
+ * ?? ?? ??  : oal_dev_put
+ * ????????  : ????oal_dev_get_by_name??????????dev_put,??net_dev????????????1
+ * ????????  : _pst_dev: ????net_dev??????
  */
 #define oal_dev_put(_pst_dev)
 
 /*
- * 函 数 名  : oal_net_alloc_netdev_mqs
- * 功能描述  : 分配net device
- * 输入参数  : net device引用
+ * ?? ?? ??  : oal_net_alloc_netdev_mqs
+ * ????????  : ????net device
+ * ????????  : net device????
  */
 OAL_INLINE oal_net_device_stru *oal_net_alloc_netdev_mqs(oal_uint32 ul_sizeof_priv, oal_int8 *puc_name,
                                                          oal_void *p_set_up, oal_uint32 ul_txqs, oal_uint32 ul_rxqs)
@@ -2037,7 +2037,7 @@ OAL_INLINE oal_net_device_stru *oal_net_alloc_netdev_mqs(oal_uint32 ul_sizeof_pr
     oal_netdev_priv_stru *pst_netdev_priv;
     oal_uint32 ul_size;
 
-    ul_size = OAL_STRLEN(puc_name) + 1; /* 包括'\0' */
+    ul_size = OAL_STRLEN(puc_name) + 1; /* ????'\0' */
 
     pst_net_dev = (oal_net_device_stru *)oal_memalloc(OAL_SIZEOF(oal_net_device_stru));
 
@@ -2045,7 +2045,7 @@ OAL_INLINE oal_net_device_stru *oal_net_alloc_netdev_mqs(oal_uint32 ul_sizeof_pr
 
     OAL_MEMZERO(pst_net_dev, OAL_SIZEOF(oal_net_device_stru));
 
-    /* 将name保存到netdeivce */
+    /* ??name??????netdeivce */
     oal_memcopy(pst_net_dev->name, puc_name, ul_size);
 
     pst_net_dev->priv = pst_netdev_priv;
@@ -2064,9 +2064,9 @@ OAL_STATIC OAL_INLINE oal_void oal_net_tx_stop_all_queues(oal_net_device_stru *p
 }
 
 /*
- * 函 数 名  : oal_net_wake_subqueue
- * 功能描述  : wake网络设备的某个subqueue
- * 返 回 值  : 错误码
+ * ?? ?? ??  : oal_net_wake_subqueue
+ * ????????  : wake??????????????subqueue
+ * ?? ?? ??  : ??????
  */
 OAL_STATIC OAL_INLINE oal_void oal_net_wake_subqueue(oal_net_device_stru *pst_dev, oal_uint16 us_queue_idx)
 {
@@ -2074,9 +2074,9 @@ OAL_STATIC OAL_INLINE oal_void oal_net_wake_subqueue(oal_net_device_stru *pst_de
 }
 
 /*
- * 函 数 名  : oal_net_stop_subqueue
- * 功能描述  : 暂停网络设备的某个subqueue
- * 返 回 值  : 错误码
+ * ?? ?? ??  : oal_net_stop_subqueue
+ * ????????  : ??????????????????subqueue
+ * ?? ?? ??  : ??????
  */
 OAL_STATIC OAL_INLINE oal_void oal_net_stop_subqueue(oal_net_device_stru *pst_dev, oal_uint16 us_queue_idx)
 {
@@ -2085,9 +2085,9 @@ OAL_STATIC OAL_INLINE oal_void oal_net_stop_subqueue(oal_net_device_stru *pst_de
 
 
 /*
- * 函 数 名  : oal_net_alloc_netdev
- * 功能描述  : 分配net device
- * 输入参数  : net device引用
+ * ?? ?? ??  : oal_net_alloc_netdev
+ * ????????  : ????net device
+ * ????????  : net device????
  */
 OAL_INLINE oal_net_device_stru *oal_net_alloc_netdev(oal_uint32 ul_sizeof_priv, oal_int8 *puc_name,
                                                      oal_void *p_set_up)
@@ -2095,21 +2095,21 @@ OAL_INLINE oal_net_device_stru *oal_net_alloc_netdev(oal_uint32 ul_sizeof_priv, 
     oal_net_device_stru *pst_net_dev;
     oal_uint32 ul_size;
 
-    ul_size = OAL_STRLEN(puc_name) + 1; /* 包括'\0' */
+    ul_size = OAL_STRLEN(puc_name) + 1; /* ????'\0' */
 
     pst_net_dev = (oal_net_device_stru *)oal_memalloc(OAL_SIZEOF(oal_net_device_stru));
 
     OAL_MEMZERO(pst_net_dev, OAL_SIZEOF(oal_net_device_stru));
 
-    /* 将name保存到netdeivce */
+    /* ??name??????netdeivce */
     oal_memcopy(pst_net_dev->name, puc_name, ul_size);
 
     return pst_net_dev;
 }
 
 /*
- * 函 数 名  : oal_net_close_dev
- * 功能描述  : down调 netdev
+ * ?? ?? ??  : oal_net_close_dev
+ * ????????  : down?? netdev
  */
 OAL_INLINE oal_void oal_net_close_dev(oal_net_device_stru *pst_netdev)
 {
@@ -2117,12 +2117,12 @@ OAL_INLINE oal_void oal_net_close_dev(oal_net_device_stru *pst_netdev)
 }
 
 /*
- * 函 数 名  : oal_net_free_netdev
- * 功能描述  : 释放网络设备
- * 输入参数  : ul_sizeof_priv: 私有结构空间长度
- *           : puc_name 设备名称
- *           : p_set_up:启动函数指针
- * 返 回 值  : 错误码
+ * ?? ?? ??  : oal_net_free_netdev
+ * ????????  : ????????????
+ * ????????  : ul_sizeof_priv: ????????????????
+ *           : puc_name ????????
+ *           : p_set_up:????????????
+ * ?? ?? ??  : ??????
  */
 OAL_STATIC OAL_INLINE oal_void oal_net_free_netdev(oal_net_device_stru *pst_netdev)
 {
@@ -2138,10 +2138,10 @@ OAL_STATIC OAL_INLINE oal_void oal_net_free_netdev(oal_net_device_stru *pst_netd
 }
 
 /*
- * 函 数 名  : oal_net_device_priv
- * 功能描述  : 返回netdev的私有成员
- * 输入参数  : pst_net_dev: net device 结构体指针
- * 返 回 值  : priv成员
+ * ?? ?? ??  : oal_net_device_priv
+ * ????????  : ????netdev??????????
+ * ????????  : pst_net_dev: net device ??????????
+ * ?? ?? ??  : priv????
  */
 OAL_INLINE oal_void *oal_net_device_priv(oal_net_device_stru *pst_net_dev)
 {
@@ -2149,10 +2149,10 @@ OAL_INLINE oal_void *oal_net_device_priv(oal_net_device_stru *pst_net_dev)
 }
 
 /*
- * 函 数 名  : oal_net_device_open
- * 功能描述  : net device的open函数
- * 输入参数  : net device指针
- * 返 回 值  : 成功或者失败原因
+ * ?? ?? ??  : oal_net_device_open
+ * ????????  : net device??open????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????????
  */
 OAL_INLINE oal_int32 oal_net_device_open(oal_net_device_stru *pst_dev)
 {
@@ -2162,10 +2162,10 @@ OAL_INLINE oal_int32 oal_net_device_open(oal_net_device_stru *pst_dev)
 }
 
 /*
- * 函 数 名  : oal_net_device_close
- * 功能描述  : net device的close函数
- * 输入参数  : net device指针
- * 返 回 值  : 成功或者失败原因
+ * ?? ?? ??  : oal_net_device_close
+ * ????????  : net device??close????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????????
  */
 OAL_INLINE oal_int32 oal_net_device_close(oal_net_device_stru *pst_dev)
 {
@@ -2175,15 +2175,15 @@ OAL_INLINE oal_int32 oal_net_device_close(oal_net_device_stru *pst_dev)
 }
 
 /*
- * 函 数 名  : oal_net_device_set_macaddr
- * 功能描述  : net device的设置mac地址函数
- * 输入参数  : net device指针
- * 返 回 值  : 成功或者失败原因
+ * ?? ?? ??  : oal_net_device_set_macaddr
+ * ????????  : net device??????mac????????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????????
  */
 OAL_INLINE oal_int32 oal_net_device_set_macaddr(oal_net_device_stru *pst_dev, oal_void *pst_addr)
 {
     oal_sockaddr_stru *pst_mac;
-    /* sa_data成员是总大小为14字节的协议地址buff */
+    /* sa_data??????????????14??????????????buff */
     const oal_uint32 ul_protocol_addr_len = 6;
 
     pst_mac = (oal_sockaddr_stru *)pst_addr;
@@ -2194,10 +2194,10 @@ OAL_INLINE oal_int32 oal_net_device_set_macaddr(oal_net_device_stru *pst_dev, oa
 }
 
 /*
- * 函 数 名  : oal_net_device_init
- * 功能描述  : net device的初始化函数
- * 输入参数  : net device指针
- * 返 回 值  : 成功或者失败原因
+ * ?? ?? ??  : oal_net_device_init
+ * ????????  : net device????????????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????????
  */
 OAL_INLINE oal_int32 oal_net_device_init(oal_net_device_stru *pst_dev)
 {
@@ -2205,10 +2205,10 @@ OAL_INLINE oal_int32 oal_net_device_init(oal_net_device_stru *pst_dev)
 }
 
 /*
- * 函 数 名  : oal_net_device_get_stats
- * 功能描述  : net device的统计函数
- * 输入参数  : net device指针
- * 返 回 值  : 统计结果指针
+ * ?? ?? ??  : oal_net_device_get_stats
+ * ????????  : net device??????????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????
  */
 OAL_INLINE oal_net_device_stats_stru *oal_net_device_get_stats(oal_net_device_stru *pst_dev)
 {
@@ -2227,10 +2227,10 @@ OAL_INLINE oal_net_device_stats_stru *oal_net_device_get_stats(oal_net_device_st
 }
 
 /*
- * 函 数 名  : oal_net_device_ioctl
- * 功能描述  : net device的ioctl函数
- * 输入参数  : net device指针
- * 返 回 值  : 统计结果指针
+ * ?? ?? ??  : oal_net_device_ioctl
+ * ????????  : net device??ioctl????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????
  */
 OAL_INLINE oal_int32 oal_net_device_ioctl(oal_net_device_stru *pst_dev, oal_ifreq_stru *pst_ifr, oal_int32 ul_cmd)
 {
@@ -2238,10 +2238,10 @@ OAL_INLINE oal_int32 oal_net_device_ioctl(oal_net_device_stru *pst_dev, oal_ifre
 }
 
 /*
- * 函 数 名  : oal_net_device_multicast_list
- * 功能描述  : net device的multicast函数
- * 输入参数  : net device指针
- * 返 回 值  : 统计结果指针
+ * ?? ?? ??  : oal_net_device_multicast_list
+ * ????????  : net device??multicast????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????
  */
 OAL_INLINE oal_int32 oal_net_device_multicast_list(oal_net_device_stru *pst_dev)
 {
@@ -2249,10 +2249,10 @@ OAL_INLINE oal_int32 oal_net_device_multicast_list(oal_net_device_stru *pst_dev)
 }
 
 /*
- * 函 数 名  : oal_net_device_change_mtu
- * 功能描述  : net device的change_mtu函数
- * 输入参数  : net device指针
- * 返 回 值  : 统计结果指针
+ * ?? ?? ??  : oal_net_device_change_mtu
+ * ????????  : net device??change_mtu????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????
  */
 OAL_INLINE oal_int32 oal_net_device_change_mtu(oal_net_device_stru *pst_dev, oal_int32 l_mtu)
 {
@@ -2261,10 +2261,10 @@ OAL_INLINE oal_int32 oal_net_device_change_mtu(oal_net_device_stru *pst_dev, oal
 }
 
 /*
- * 函 数 名  : oal_net_device_hardstart
- * 功能描述  : net device的hardstart函数
- * 输入参数  : net device指针
- * 返 回 值  : 统计结果指针
+ * ?? ?? ??  : oal_net_device_hardstart
+ * ????????  : net device??hardstart????
+ * ????????  : net device????
+ * ?? ?? ??  : ????????????
  */
 
 OAL_INLINE oal_int32 oal_net_device_hardstart(oal_netbuf_stru *pst_skb, oal_net_device_stru *pst_dev)
@@ -2273,9 +2273,9 @@ OAL_INLINE oal_int32 oal_net_device_hardstart(oal_netbuf_stru *pst_skb, oal_net_
 }
 
 /*
- * 函 数 名  : oal_net_register_netdev
- * 功能描述  : 注册网络设备
- * 输入参数  : pst_net_dev: net device 结构体指针
+ * ?? ?? ??  : oal_net_register_netdev
+ * ????????  : ????????????
+ * ????????  : pst_net_dev: net device ??????????
  */
 OAL_INLINE oal_int32 oal_net_register_netdev(oal_net_device_stru *pst_net_dev)
 {
@@ -2297,10 +2297,10 @@ OAL_INLINE oal_int32 oal_net_register_netdev(oal_net_device_stru *pst_net_dev)
 }
 
 /*
- * 函 数 名  : oal_net_unregister_netdev
- * 功能描述  : 去注册网络设备
- * 输入参数  : p_net_device: net device 结构体指针
- * 返 回 值  : 错误码
+ * ?? ?? ??  : oal_net_unregister_netdev
+ * ????????  : ??????????????
+ * ????????  : p_net_device: net device ??????????
+ * ?? ?? ??  : ??????
  */
 OAL_STATIC OAL_INLINE oal_void oal_net_unregister_netdev(oal_net_device_stru *p_net_device)
 {
@@ -2313,7 +2313,7 @@ OAL_STATIC OAL_INLINE oal_void oal_net_unregister_netdev(oal_net_device_stru *p_
     for (u_i = 0; u_i < WLAN_VAP_SUPPORT_MAX_NUM_LIMIT; u_i++) {
         if (past_net_device[u_i] == p_net_device) {
             past_net_device[u_i] = OAL_PTR_NULL;
-            /* linux下操作系统会释放netdev，windows下需自己释放 */
+            /* linux????????????????netdev??windows???????????? */
             oal_net_free_netdev(p_net_device);
             return;
         }
@@ -2321,11 +2321,11 @@ OAL_STATIC OAL_INLINE oal_void oal_net_unregister_netdev(oal_net_device_stru *p_
 }
 
 /*
- * 函 数 名  : oal_netbuf_reserve
- * 功能描述  : 将报文结构体的data指针和tail指针同时下移
- * 输入参数  : pst_netbuf报文结构体指针
- *             len: 预留长度
- * 返 回 值  : 成功返回OAL_SUCC；失败返回OAL_ERR_CODE_PTR_NULL
+ * ?? ?? ??  : oal_netbuf_reserve
+ * ????????  : ??????????????data??????tail????????????
+ * ????????  : pst_netbuf??????????????
+ *             len: ????????
+ * ?? ?? ??  : ????????OAL_SUCC??????????OAL_ERR_CODE_PTR_NULL
  */
 OAL_INLINE oal_void oal_netbuf_reserve(oal_netbuf_stru *pst_netbuf, oal_int32 l_len)
 {
@@ -2334,25 +2334,25 @@ OAL_INLINE oal_void oal_netbuf_reserve(oal_netbuf_stru *pst_netbuf, oal_int32 l_
 }
 
 /*
- * 函 数 名  : oal_netbuf_alloc
- * 功能描述  : 为netbuf申请内存
- * 输入参数  : pst_netbuf: 报文结构体指针
- *             ul_size: 分配内存的大小
- *             l_reserve: data跟指针头之间要预留的长度
- *             ul_align: 需要几字节对齐
- * 返 回 值  : 成功返回结构体指针；失败返回OAL_PTR_NULL
+ * ?? ?? ??  : oal_netbuf_alloc
+ * ????????  : ??netbuf????????
+ * ????????  : pst_netbuf: ??????????????
+ *             ul_size: ??????????????
+ *             l_reserve: data????????????????????????
+ *             ul_align: ??????????????
+ * ?? ?? ??  : ????????????????????????????OAL_PTR_NULL
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_alloc(oal_uint32 ul_size, oal_int32 l_reserve, oal_uint32 l_align)
 {
     oal_int32 l_offset;
     oal_netbuf_stru *pst_netbuf;
 
-    /* 防止字节对齐造成分配大小比预期的小 */
+    /* ?????????????????????????????????? */
     if (l_align) {
         ul_size += (oal_uint32)(l_align - 1);
     }
 
-    /* 分配结构体空间 */
+    /* ?????????????? */
     pst_netbuf = (oal_netbuf_stru *)oal_memalloc(OAL_SIZEOF(oal_netbuf_stru));
 
     if (pst_netbuf == OAL_PTR_NULL) {
@@ -2360,7 +2360,7 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_alloc(oal_uint32 ul_size, oal_int32 l_res
     }
     OAL_MEMZERO(pst_netbuf, OAL_SIZEOF(oal_netbuf_stru));
 
-    /* 分配数据空间 */
+    /* ???????????? */
     pst_netbuf->head = (oal_uint8 *)oal_memalloc(ul_size);
 
     if (pst_netbuf->head == OAL_PTR_NULL) {
@@ -2369,7 +2369,7 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_alloc(oal_uint32 ul_size, oal_int32 l_res
         return OAL_PTR_NULL;
     }
 
-    /* 结构体初始化 */
+    /* ???????????? */
     OAL_MEMZERO(pst_netbuf->head, ul_size);
 
     pst_netbuf->data = pst_netbuf->head;
@@ -2396,7 +2396,7 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_alloc(oal_uint32 ul_size, oal_int32 l_res
     /* note: alloc doesn't take responsibility if reserve unaligns the data pointer */
     oal_netbuf_reserve(pst_netbuf, l_reserve);
 
-    /* 字节对齐 */
+    /* ???????? */
     if (l_align) {
         l_offset = (oal_int32)(((oal_uint)pst_netbuf->data) % l_align);
 
@@ -2409,10 +2409,10 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_alloc(oal_uint32 ul_size, oal_int32 l_res
 }
 
 /*
- * 函 数 名  : oal_netbuf_free
- * 功能描述  : 释放报文结构体内存空间
- * 输入参数  : pst_netbuf: 报文结构体指针
- * 返 回 值  : 成功返回OAL_SUCC；失败返回OAL_ERR_CODE_PTR_NULL
+ * ?? ?? ??  : oal_netbuf_free
+ * ????????  : ??????????????????????
+ * ????????  : pst_netbuf: ??????????????
+ * ?? ?? ??  : ????????OAL_SUCC??????????OAL_ERR_CODE_PTR_NULL
  */
 OAL_INLINE oal_uint32 oal_netbuf_free(oal_netbuf_stru *pst_netbuf)
 {
@@ -2440,8 +2440,8 @@ OAL_INLINE oal_uint32 oal_netbuf_free(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_free_any
- * 功能描述  : 释放报文结构体内存空间
+ * ?? ?? ??  : oal_netbuf_free_any
+ * ????????  : ??????????????????????
  */
 OAL_INLINE oal_void oal_netbuf_free_any(oal_netbuf_stru *pst_netbuf)
 {
@@ -2469,10 +2469,10 @@ OAL_INLINE oal_void oal_netbuf_free_any(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_cloned
- * 功能描述  : 判断一个skb是否是克隆的
- * 输入参数  : pst_netbuf: skb结构体指针
- *             en_pri: 内存分配的优先级
+ * ?? ?? ??  : oal_netbuf_cloned
+ * ????????  : ????????skb????????????
+ * ????????  : pst_netbuf: skb??????????
+ *             en_pri: ????????????????
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_cloned(const oal_netbuf_stru *pst_netbuf)
 {
@@ -2480,10 +2480,10 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_cloned(const oal_netbuf_stru *pst_ne
 }
 
 /*
- * 函 数 名  : oal_netbuf_copy_header
- * 功能描述  : 将skb非数据部分拷贝
- * 输入参数  : pst_newbuf: 拷贝目的skb
- *             pst_oldbuf: 拷贝源skb
+ * ?? ?? ??  : oal_netbuf_copy_header
+ * ????????  : ??skb??????????????
+ * ????????  : pst_newbuf: ????????skb
+ *             pst_oldbuf: ??????skb
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_copy_header(oal_netbuf_stru *pst_newbuf, oal_netbuf_stru *pst_oldbuf)
 {
@@ -2510,10 +2510,10 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_copy_header(oal_netbuf_stru *pst_newbu
 }
 
 /*
- * 函 数 名  : oal_netbuf_copy
- * 功能描述  : 拷贝一份新的skb
- * 输入参数  : pst_netbuf: skb结构体指针
- *             en_pri: 内存分配的优先级
+ * ?? ?? ??  : oal_netbuf_copy
+ * ????????  : ????????????skb
+ * ????????  : pst_netbuf: skb??????????
+ *             en_pri: ????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_copy(oal_netbuf_stru *pst_netbuf, oal_gfp_enum_uint8 en_priority)
 {
@@ -2531,20 +2531,20 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_copy(oal_netbuf_stru *pst_netbuf, oal_gfp
 
     oal_netbuf_put(pst_newbuf, pst_netbuf->len);
 
-    /* 数据拷贝 */
+    /* ???????? */
     oal_memcopy((oal_void *)pst_newbuf->head, (oal_void *)pst_netbuf->head, ul_size);
 
-    /* 结构体拷贝 */
+    /* ?????????? */
     oal_netbuf_copy_header(pst_newbuf, pst_netbuf);
 
     return pst_newbuf;
 }
 
 /*
- * 函 数 名  : oal_netbuf_unshare
- * 功能描述  : 判断一个skb是否为克隆的，是则copy一份新的skb，否则直接返回传入的skb
- * 输入参数  : pst_netbuf: skb结构体指针
- *             en_pri: 内存分配的优先级
+ * ?? ?? ??  : oal_netbuf_unshare
+ * ????????  : ????????skb??????????????????copy????????skb????????????????????skb
+ * ????????  : pst_netbuf: skb??????????
+ *             en_pri: ????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_unshare(oal_netbuf_stru *pst_netbuf, oal_gfp_enum_uint8 en_priority)
 {
@@ -2560,9 +2560,9 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_unshare(oal_netbuf_stru *pst_netbuf, oal_
 }
 
 /*
- * 函 数 名  : oal_netbuf_data
- * 功能描述  : 获取skb数据头部
- * 输入参数  : pst_netbuf: skb结构体指针
+ * ?? ?? ??  : oal_netbuf_data
+ * ????????  : ????skb????????
+ * ????????  : pst_netbuf: skb??????????
  */
 OAL_INLINE oal_uint8 *oal_netbuf_data(oal_netbuf_stru *pst_netbuf)
 {
@@ -2570,9 +2570,9 @@ OAL_INLINE oal_uint8 *oal_netbuf_data(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_data
- * 功能描述  : 获取skb数据头部
- * 输入参数  : pst_netbuf: skb结构体指针
+ * ?? ?? ??  : oal_netbuf_data
+ * ????????  : ????skb????????
+ * ????????  : pst_netbuf: skb??????????
  */
 OAL_INLINE oal_uint8 *oal_netbuf_header(oal_netbuf_stru *pst_netbuf)
 {
@@ -2580,9 +2580,9 @@ OAL_INLINE oal_uint8 *oal_netbuf_header(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_data
- * 功能描述  : 获取skb数据头部
- * 输入参数  : pst_netbuf: skb结构体指针
+ * ?? ?? ??  : oal_netbuf_data
+ * ????????  : ????skb????????
+ * ????????  : pst_netbuf: skb??????????
  */
 OAL_INLINE oal_uint8 *oal_netbuf_payload(oal_netbuf_stru *pst_netbuf)
 {
@@ -2595,8 +2595,8 @@ OAL_STATIC OAL_INLINE oal_uint8 *oal_netbuf_end(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_get_len
- * 功能描述  : 获取skb数据长度
+ * ?? ?? ??  : oal_netbuf_get_len
+ * ????????  : ????skb????????
  */
 OAL_INLINE oal_uint32 oal_netbuf_get_len(oal_netbuf_stru *pst_netbuf)
 {
@@ -2604,10 +2604,10 @@ OAL_INLINE oal_uint32 oal_netbuf_get_len(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_headroom
- * 功能描述  : 获取头部空间大小
- * 输入参数  : pst_netbuf: skb结构体指针
- * 返 回 值  : 头部空间大小
+ * ?? ?? ??  : oal_netbuf_headroom
+ * ????????  : ????????????????
+ * ????????  : pst_netbuf: skb??????????
+ * ?? ?? ??  : ????????????
  */
 OAL_INLINE oal_uint32 oal_netbuf_headroom(const oal_netbuf_stru *pst_netbuf)
 {
@@ -2615,10 +2615,10 @@ OAL_INLINE oal_uint32 oal_netbuf_headroom(const oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_tailroom
- * 功能描述  : 获取尾部空间大小
- * 输入参数  : pst_netbuf: skb结构体指针
- * 返 回 值  : 尾部空间大小
+ * ?? ?? ??  : oal_netbuf_tailroom
+ * ????????  : ????????????????
+ * ????????  : pst_netbuf: skb??????????
+ * ?? ?? ??  : ????????????
  */
 OAL_INLINE oal_uint32 oal_netbuf_tailroom(const oal_netbuf_stru *pst_netbuf)
 {
@@ -2626,10 +2626,10 @@ OAL_INLINE oal_uint32 oal_netbuf_tailroom(const oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_realloc_headroom
- * 功能描述  : skb头部内存空间扩充
- * 输入参数  : pst_netbuf: skb结构体指针
- *             ul_headroom: 想要扩展的头部空间大小
+ * ?? ?? ??  : oal_netbuf_realloc_headroom
+ * ????????  : skb????????????????
+ * ????????  : pst_netbuf: skb??????????
+ *             ul_headroom: ??????????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_realloc_headroom(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_headroom)
 {
@@ -2652,10 +2652,10 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_realloc_headroom(oal_netbuf_stru *pst_net
 }
 
 /*
- * 函 数 名  : oal_netbuf_realloc_tailroom
- * 功能描述  : skb尾部空间扩充
- * 输入参数  : pst_netbuf: skb结构体指针
- *             ul_tailroom: 想要扩展的尾部空间大小
+ * ?? ?? ??  : oal_netbuf_realloc_tailroom
+ * ????????  : skb????????????
+ * ????????  : pst_netbuf: skb??????????
+ *             ul_tailroom: ??????????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_realloc_tailroom(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_tailroom)
 {
@@ -2678,10 +2678,10 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_realloc_tailroom(oal_netbuf_stru *pst_net
 }
 
 /*
- * 函 数 名  : oal_netbuf_cb
- * 功能描述  : 返回skb中的cb字段
- * 输入参数  : pst_netbuf: skb结构体指针
- * 返 回 值  : cb
+ * ?? ?? ??  : oal_netbuf_cb
+ * ????????  : ????skb????cb????
+ * ????????  : pst_netbuf: skb??????????
+ * ?? ?? ??  : cb
  */
 OAL_INLINE oal_uint8 *oal_netbuf_cb(oal_netbuf_stru *pst_netbuf)
 {
@@ -2689,11 +2689,11 @@ OAL_INLINE oal_uint8 *oal_netbuf_cb(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_add_to_list
- * 功能描述  : 将skb加入skb链表中
- * 输入参数  : pst_new: 要插入的新skb指针
- *             pst_prev: 尾节点
- *             pst_head: skb链表头指针
+ * ?? ?? ??  : oal_netbuf_add_to_list
+ * ????????  : ??skb????skb??????
+ * ????????  : pst_new: ??????????skb????
+ *             pst_prev: ??????
+ *             pst_head: skb??????????
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_add_to_list(oal_netbuf_stru *pst_buf, oal_netbuf_stru *pst_prev,
                                                       oal_netbuf_stru *pst_next)
@@ -2705,10 +2705,10 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_add_to_list(oal_netbuf_stru *pst_buf, 
 }
 
 /*
- * 函 数 名  : oal_netbuf_add_to_list_tail
- * 功能描述  : 将skb加入skb链表中的尾部
- * 输入参数  : pst_new: 要插入的新skb指针
- *             pst_head: skb链表头指针
+ * ?? ?? ??  : oal_netbuf_add_to_list_tail
+ * ????????  : ??skb????skb????????????
+ * ????????  : pst_new: ??????????skb????
+ *             pst_head: skb??????????
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_add_to_list_tail(oal_netbuf_stru *pst_buf, oal_netbuf_head_stru *pst_head)
 {
@@ -2723,8 +2723,8 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_list_len(oal_netbuf_head_stru *pst_h
 }
 
 /*
- * 函 数 名  : oal_netbuf_list_empty
- * 功能描述  : 判断skb list是否为空
+ * ?? ?? ??  : oal_netbuf_list_empty
+ * ????????  : ????skb list????????
  */
 OAL_INLINE oal_int32 oal_netbuf_list_empty(const oal_netbuf_head_stru *pst_list_head)
 {
@@ -2732,8 +2732,8 @@ OAL_INLINE oal_int32 oal_netbuf_list_empty(const oal_netbuf_head_stru *pst_list_
 }
 
 /*
- * 函 数 名  : oal_netbuf_list_head_init
- * 功能描述  : 初始化skb队列头
+ * ?? ?? ??  : oal_netbuf_list_head_init
+ * ????????  : ??????skb??????
  */
 OAL_INLINE oal_void oal_netbuf_list_head_init(oal_netbuf_head_stru *pst_list_head)
 {
@@ -2744,8 +2744,8 @@ OAL_INLINE oal_void oal_netbuf_list_head_init(oal_netbuf_head_stru *pst_list_hea
 }
 
 /*
- * 函 数 名  : oal_netbuf_list_next
- * 功能描述  : 返回链表中指定节点的下一个节点
+ * ?? ?? ??  : oal_netbuf_list_next
+ * ????????  : ??????????????????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_list_next(const oal_netbuf_stru *pst_buf)
 {
@@ -2753,8 +2753,8 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_list_next(const oal_netbuf_stru *pst_buf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_delete
- * 功能描述  : 删除链表中的skb
+ * ?? ?? ??  : oal_netbuf_delete
+ * ????????  : ????????????skb
  */
 OAL_INLINE oal_void oal_netbuf_delete(oal_netbuf_stru *pst_buf, oal_netbuf_head_stru *pst_list_head)
 {
@@ -2772,8 +2772,8 @@ OAL_INLINE oal_void oal_netbuf_delete(oal_netbuf_stru *pst_buf, oal_netbuf_head_
 }
 
 /*
- * 函 数 名  : oal_netbuf_delist
- * 功能描述  : skb链表出队
+ * ?? ?? ??  : oal_netbuf_delist
+ * ????????  : skb????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_delist(oal_netbuf_head_stru *pst_list_head)
 {
@@ -2791,8 +2791,8 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_delist(oal_netbuf_head_stru *pst_list_hea
 }
 
 /*
- * 函 数 名  : oal_netbuf_delist_nolock
- * 功能描述  : skb链表出队
+ * ?? ?? ??  : oal_netbuf_delist_nolock
+ * ????????  : skb????????
  */
 OAL_STATIC OAL_INLINE oal_netbuf_stru *oal_netbuf_delist_nolock(oal_netbuf_head_stru *pst_list_head)
 {
@@ -2800,10 +2800,10 @@ OAL_STATIC OAL_INLINE oal_netbuf_stru *oal_netbuf_delist_nolock(oal_netbuf_head_
 }
 
 /*
- * 函 数 名  : oal_netbuf_peek
- * 功能描述  : 返回skb链表中的第一个元素
- * 输入参数  : pst_head: skb链表头指针
- * 返 回 值  : 链表中第一个元素
+ * ?? ?? ??  : oal_netbuf_peek
+ * ????????  : ????skb??????????????????
+ * ????????  : pst_head: skb??????????
+ * ?? ?? ??  : ????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_peek(oal_netbuf_head_stru *pst_head)
 {
@@ -2819,10 +2819,10 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_peek(oal_netbuf_head_stru *pst_head)
 }
 
 /*
- * 函 数 名  : oal_netbuf_peek_tail
- * 功能描述  : 返回skb链表中的最后一个元素
- * 输入参数  : pst_head: skb链表头指针
- * 返 回 值  : 链表中第一个元素
+ * ?? ?? ??  : oal_netbuf_peek_tail
+ * ????????  : ????skb????????????????????
+ * ????????  : pst_head: skb??????????
+ * ?? ?? ??  : ????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_peek_tail(oal_netbuf_head_stru *pst_head)
 {
@@ -2835,10 +2835,10 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_peek_tail(oal_netbuf_head_stru *pst_head)
 }
 
 /*
- * 函 数 名  : oal_netbuf_tail
- * 功能描述  : 返回skb链表中的最后一个元素
- * 输入参数  : pst_head: skb链表头指针
- * 返 回 值  : 链表中最后一个元素
+ * ?? ?? ??  : oal_netbuf_tail
+ * ????????  : ????skb????????????????????
+ * ????????  : pst_head: skb??????????
+ * ?? ?? ??  : ??????????????????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_tail(oal_netbuf_head_stru *pst_head)
 {
@@ -2854,8 +2854,8 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_tail(oal_netbuf_head_stru *pst_head)
 }
 
 /*
- * 函 数 名  : oal_netbuf_depad
- * 功能描述  : 去掉尾部的pad
+ * ?? ?? ??  : oal_netbuf_depad
+ * ????????  : ??????????pad
  */
 OAL_INLINE oal_uint8 *oal_netbuf_depad(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_len)
 {
@@ -2866,8 +2866,8 @@ OAL_INLINE oal_uint8 *oal_netbuf_depad(oal_netbuf_stru *pst_netbuf, oal_uint32 u
 }
 
 /*
- * 函 数 名  : oal_netbuf_free_list
- * 功能描述  : 从链表中释放制定个数的skb
+ * ?? ?? ??  : oal_netbuf_free_list
+ * ????????  : ??????????????????????skb
  */
 OAL_INLINE oal_uint32 oal_netbuf_free_list(oal_netbuf_head_stru *pst_head, oal_uint32 ul_num)
 {
@@ -2886,12 +2886,12 @@ OAL_INLINE oal_uint32 oal_netbuf_free_list(oal_netbuf_head_stru *pst_head, oal_u
 }
 
 /*
- * 函 数 名  : oal_netbuf_get_appointed_netbuf
- * 功能描述  : 获取当前netbuf元素后的第n个元素
- * 输入参数  : (1)起始查找节点
- *             (2)向后查找的个数
- * 输出参数  : 指向期望的netbuf的指针
- * 返 回 值  : 期望的betbuf元素的指针或空指针
+ * ?? ?? ??  : oal_netbuf_get_appointed_netbuf
+ * ????????  : ????????netbuf??????????n??????
+ * ????????  : (1)????????????
+ *             (2)??????????????
+ * ????????  : ??????????netbuf??????
+ * ?? ?? ??  : ??????betbuf??????????????????
  */
 OAL_INLINE oal_uint32 oal_netbuf_get_appointed_netbuf(oal_netbuf_stru *pst_netbuf, oal_uint8 uc_num,
                                                       oal_netbuf_stru **pst_expect_netbuf)
@@ -2918,9 +2918,9 @@ OAL_INLINE oal_uint32 oal_netbuf_get_appointed_netbuf(oal_netbuf_stru *pst_netbu
 }
 
 /*
- * 函 数 名  : oal_netbuf_clone
- * 功能描述  : skb克隆，复制头部 ，data指向同一块区域
- * 输入参数  : pst_buf: skb指针
+ * ?? ?? ??  : oal_netbuf_clone
+ * ????????  : skb?????????????? ??data??????????????
+ * ????????  : pst_buf: skb????
  */
 OAL_INLINE oal_netbuf_stru *oal_netbuf_clone(oal_netbuf_stru *pst_buf)
 {
@@ -2957,9 +2957,9 @@ OAL_INLINE oal_netbuf_stru *oal_netbuf_clone(oal_netbuf_stru *pst_buf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_decrease_user
- * 功能描述  : 将skb的引用计数减一
- * 输入参数  : pst_buf: skb指针
+ * ?? ?? ??  : oal_netbuf_decrease_user
+ * ????????  : ??skb??????????????
+ * ????????  : pst_buf: skb????
  */
 OAL_INLINE oal_uint32 oal_netbuf_decrease_user(oal_netbuf_stru *pst_buf)
 {
@@ -2973,9 +2973,9 @@ OAL_INLINE oal_uint32 oal_netbuf_decrease_user(oal_netbuf_stru *pst_buf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_read_user
- * 功能描述  : 读取netbuf引用计数
- * 输入参数  : pst_buf: skb指针
+ * ?? ?? ??  : oal_netbuf_read_user
+ * ????????  : ????netbuf????????
+ * ????????  : pst_buf: skb????
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_read_user(oal_netbuf_stru *pst_buf)
 {
@@ -2987,9 +2987,9 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_read_user(oal_netbuf_stru *pst_buf)
 }
 
 /*
- * 函 数 名  : oal_netbuf_set_user
- * 功能描述  : 设置netbuf引用计数
- * 输入参数  : pst_buf: skb指针
+ * ?? ?? ??  : oal_netbuf_set_user
+ * ????????  : ????netbuf????????
+ * ????????  : pst_buf: skb????
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_set_user(oal_netbuf_stru *pst_buf, oal_uint32 refcount)
 {
@@ -3001,9 +3001,9 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_set_user(oal_netbuf_stru *pst_buf, oal
 }
 
 /*
- * 函 数 名  : oal_netbuf_increase_user
- * 功能描述  : 将skb的引用计数+1
- * 输入参数  : pst_buf: skb指针
+ * ?? ?? ??  : oal_netbuf_increase_user
+ * ????????  : ??skb??????????+1
+ * ????????  : pst_buf: skb????
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_increase_user(oal_netbuf_stru *pst_buf)
 {
@@ -3017,8 +3017,8 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_increase_user(oal_netbuf_stru *pst_b
 }
 
 /*
- * 函 数 名  : oal_netbuf_get_buf_num
- * 功能描述  : 获取netbuf双向链表中buf的个数
+ * ?? ?? ??  : oal_netbuf_get_buf_num
+ * ????????  : ????netbuf??????????buf??????
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_get_buf_num(oal_netbuf_head_stru *pst_netbuf_head)
 {
@@ -3032,8 +3032,8 @@ OAL_STATIC OAL_INLINE oal_netbuf_stru *oal_netbuf_get(oal_netbuf_stru *pst_netbu
 }
 
 /*
- * 函 数 名  : oal_netbuf_queue_purge
- * 功能描述  : 释放skb链中的所有skb
+ * ?? ?? ??  : oal_netbuf_queue_purge
+ * ????????  : ????skb??????????skb
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_queue_purge(oal_netbuf_head_stru *pst_netbuf_head)
 {
@@ -3041,8 +3041,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_queue_purge(oal_netbuf_head_stru *pst_
 }
 
 /*
- * 函 数 名  : oal_netbuf_copy_expand
- * 功能描述  : 复制skb以及数据，并扩充头部和尾部空间
+ * ?? ?? ??  : oal_netbuf_copy_expand
+ * ????????  : ????skb??????????????????????????????
  */
 OAL_STATIC OAL_INLINE oal_netbuf_stru *oal_netbuf_copy_expand(oal_netbuf_stru *pst_netbuf,
                                                               oal_int32 ul_headroom,
@@ -3060,10 +3060,10 @@ OAL_STATIC OAL_INLINE oal_int32 oal_netif_rx_hw(oal_netbuf_stru *pst_netbuf)
 }
 
 /*
- * 函 数 名  : oal_netif_rx
- * 功能描述  : 将skb发给桥
- * 输入参数  : pst_netbuf: skb指针
- * 返 回 值  : 1，drop；0，succ
+ * ?? ?? ??  : oal_netif_rx
+ * ????????  : ??skb??????
+ * ????????  : pst_netbuf: skb????
+ * ?? ?? ??  : 1??drop??0??succ
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_netif_rx(oal_netbuf_stru *pst_netbuf)
 {
@@ -3072,10 +3072,10 @@ OAL_STATIC OAL_INLINE oal_int32 oal_netif_rx(oal_netbuf_stru *pst_netbuf)
     return OAL_SUCC;
 }
 /*
- * 函 数 名  : oal_netif_rx_ni
- * 功能描述  : 将skb发给桥 !in_interrupt()
- * 输入参数  : pst_netbuf: skb指针
- * 返 回 值  : 1，drop；0，succ
+ * ?? ?? ??  : oal_netif_rx_ni
+ * ????????  : ??skb?????? !in_interrupt()
+ * ????????  : pst_netbuf: skb????
+ * ?? ?? ??  : 1??drop??0??succ
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_netif_rx_ni(oal_netbuf_stru *pst_netbuf)
 {
@@ -3114,26 +3114,26 @@ OAL_STATIC OAL_INLINE oal_void oal_local_bh_enable(oal_void)
 }
 
 /*
- * 函 数 名  : oal_cpu_clock
- * 功能描述  : 获取cpu时间戳
- * 输入参数  : pst_netbuf: skb指针
- * 返 回 值  : 1，drop；0，succ
+ * ?? ?? ??  : oal_cpu_clock
+ * ????????  : ????cpu??????
+ * ????????  : pst_netbuf: skb????
+ * ?? ?? ??  : 1??drop??0??succ
  */
 OAL_STATIC OAL_INLINE oal_uint64 oal_cpu_clock(oal_void)
 {
     return OAL_SUCC;
 }
 
-/* BEGIN : Windows 实现 Linux wiphy 结构相关的处理函数 */
+/* BEGIN : Windows ???? Linux wiphy ?????????????????? */
 OAL_STATIC OAL_INLINE oal_wiphy_stru *oal_wiphy_new(oal_cfg80211_ops_stru *ops, oal_uint32 sizeof_priv)
 {
-    // 由于在Windows 中，需要申请空间才能继续执行，故将 oal_wiphy_new 返回值为真。
+    // ??????Windows ?????????????????????????????????? oal_wiphy_new ????????????
     return (oal_wiphy_stru *)oal_memalloc(sizeof_priv + OAL_SIZEOF(oal_wiphy_stru));
 }
 
 OAL_STATIC OAL_INLINE oal_int32 oal_wiphy_register(oal_wiphy_stru *pst_wiphy)
 {
-    return 0;  // 在Linxu 中， 注册设备成功返回 0.
+    return 0;  // ??Linxu ???? ???????????????? 0.
 }
 
 OAL_STATIC OAL_INLINE oal_void oal_wiphy_unregister(oal_wiphy_stru *pst_wiphy)
@@ -3155,13 +3155,13 @@ OAL_STATIC OAL_INLINE void oal_wiphy_apply_custom_regulatory(oal_wiphy_stru *pst
     return;
 }
 
-/* 添加wiphy结构体rts门限赋值 */
+/* ????wiphy??????rts???????? */
 OAL_STATIC OAL_INLINE void oal_wiphy_set_rts(oal_wiphy_stru *pst_wiphy, oal_uint32 ul_rts_threshold)
 {
     pst_wiphy->rts_threshold = ul_rts_threshold;
 }
 
-/* 添加wiphy结构体分片门限赋值 */
+/* ????wiphy?????????????????? */
 OAL_STATIC OAL_INLINE void oal_wiphy_set_frag(oal_wiphy_stru *pst_wiphy, oal_uint32 ul_frag_threshold)
 {
     pst_wiphy->frag_threshold = ul_frag_threshold;
@@ -3284,8 +3284,8 @@ OAL_STATIC OAL_INLINE oal_int32 oal_genlmsg_end(oal_netbuf_stru *pst_skb, oal_vo
 }
 
 /*
- * 函 数 名  : oal_nla_data
- * 功能描述  : 获取 netlink 属性的payload
+ * ?? ?? ??  : oal_nla_data
+ * ????????  : ???? netlink ??????payload
  */
 OAL_STATIC OAL_INLINE oal_void *oal_nla_data(OAL_CONST oal_nlattr_stru *pst_nla)
 {
@@ -3293,8 +3293,8 @@ OAL_STATIC OAL_INLINE oal_void *oal_nla_data(OAL_CONST oal_nlattr_stru *pst_nla)
 }
 
 /*
- * 函 数 名  : oal_nla_get_u32
- * 功能描述  : 获取 netlink 属性的payload，转换为u32 类型
+ * ?? ?? ??  : oal_nla_get_u32
+ * ????????  : ???? netlink ??????payload????????u32 ????
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_nla_get_u32(OAL_CONST oal_nlattr_stru *pst_nla)
 {
@@ -3302,9 +3302,9 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_nla_get_u32(OAL_CONST oal_nlattr_stru *pst_
 }
 
 /*
- * 函 数 名  : oal_nla_total_size
- * 功能描述  : 获取 netlink 属性的总长度
- * 输出参数  :
+ * ?? ?? ??  : oal_nla_total_size
+ * ????????  : ???? netlink ????????????
+ * ????????  :
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_nla_total_size(OAL_CONST oal_nlattr_stru *pst_nla)
 {
@@ -3312,8 +3312,8 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_nla_total_size(OAL_CONST oal_nlattr_stru *p
 }
 
 /*
- * 函 数 名  : oal_nla_len
- * 功能描述  : 获取 netlink 属性的长度
+ * ?? ?? ??  : oal_nla_len
+ * ????????  : ???? netlink ??????????
  */
 OAL_STATIC OAL_INLINE oal_int oal_nla_len(OAL_CONST oal_nlattr_stru *pst_nla)
 {
@@ -3321,8 +3321,8 @@ OAL_STATIC OAL_INLINE oal_int oal_nla_len(OAL_CONST oal_nlattr_stru *pst_nla)
 }
 
 /*
- * 函 数 名  : oal_nla_type
- * 功能描述  : 获取 netlink 属性的类型
+ * ?? ?? ??  : oal_nla_type
+ * ????????  : ???? netlink ??????????
  */
 OAL_STATIC OAL_INLINE oal_int oal_nla_type(OAL_CONST oal_nlattr_stru *pst_nla)
 {
@@ -3343,8 +3343,8 @@ OAL_STATIC OAL_INLINE oal_int32 oal_netlink_unicast(oal_sock_stru *pst_sock, oal
 }
 
 /*
- * 函 数 名  : oal_netbuf_copydata
- * 功能描述  : 将skb中的内容先偏移ul_offset后 按指定长度拷贝到指定内从中
+ * ?? ?? ??  : oal_netbuf_copydata
+ * ????????  : ??skb??????????????ul_offset?? ??????????????????????????
  */
 OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_copydata(oal_netbuf_stru *pst_netbuf_sc, oal_uint32 ul_offset,
                                                      oal_void *p_dst, oal_uint32 ul_len)
@@ -3358,8 +3358,8 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_netbuf_copydata(oal_netbuf_stru *pst_netbuf
 }
 
 /*
- * 函 数 名  : oal_netbuf_trim
- * 功能描述  : 剥去skb中尾部的信息
+ * ?? ?? ??  : oal_netbuf_trim
+ * ????????  : ????skb????????????
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_trim(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_len)
 {
@@ -3377,8 +3377,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_trim(oal_netbuf_stru *pst_netbuf, oal_
 }
 
 /*
- * 函 数 名  : oal_netbuf_concat
- * 功能描述  : 向netbu_head的尾部串接netbuf
+ * ?? ?? ??  : oal_netbuf_concat
+ * ????????  : ??netbu_head??????????netbuf
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_concat(oal_netbuf_stru *pst_netbuf_head, oal_netbuf_stru *pst_netbuf)
 {
@@ -3390,8 +3390,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_concat(oal_netbuf_stru *pst_netbuf_hea
 }
 
 /*
- * 函 数 名  : oal_netbuf_set_len
- * 功能描述  : 将skb的数据内容长度设置为指定长度
+ * ?? ?? ??  : oal_netbuf_set_len
+ * ????????  : ??skb????????????????????????????
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_set_len(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_len)
 {
@@ -3403,8 +3403,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_set_len(oal_netbuf_stru *pst_netbuf, o
 }
 
 /*
- * 函 数 名  : oal_netbuf_init
- * 功能描述  : 初始化netbuf
+ * ?? ?? ??  : oal_netbuf_init
+ * ????????  : ??????netbuf
  */
 OAL_STATIC OAL_INLINE oal_void oal_netbuf_init(oal_netbuf_stru *pst_netbuf, oal_uint32 ul_len)
 {
@@ -3413,8 +3413,8 @@ OAL_STATIC OAL_INLINE oal_void oal_netbuf_init(oal_netbuf_stru *pst_netbuf, oal_
 }
 
 /*
- * 函 数 名  : oal_hi_kernel_wdt_clear
- * 功能描述  : 狗复位
+ * ?? ?? ??  : oal_hi_kernel_wdt_clear
+ * ????????  : ??????
  */
 OAL_STATIC OAL_INLINE oal_void oal_hi_kernel_wdt_clear(oal_void)
 {
@@ -3422,8 +3422,8 @@ OAL_STATIC OAL_INLINE oal_void oal_hi_kernel_wdt_clear(oal_void)
 }
 
 /*
- * 函 数 名  : oal_ipv6_addr_copy
- * 功能描述  : 拷贝ipv6地址
+ * ?? ?? ??  : oal_ipv6_addr_copy
+ * ????????  : ????ipv6????
  */
 OAL_STATIC OAL_INLINE oal_void oal_ipv6_addr_copy(oal_in6_addr *pst_ipv6_dst, oal_in6_addr *pst_ipv6_src)
 {
@@ -3431,9 +3431,9 @@ OAL_STATIC OAL_INLINE oal_void oal_ipv6_addr_copy(oal_in6_addr *pst_ipv6_dst, oa
 }
 
 /*
- * 函 数 名  : eth_header
- * 功能描述  : 保证skb->data包含ul_len指指示的空间，如果没有，则从 skb_shinfo(skb)->frags[]中
- *             拷贝一份数据。
+ * ?? ?? ??  : eth_header
+ * ????????  : ????skb->data????ul_len???????????????????????????? skb_shinfo(skb)->frags[]??
+ *             ??????????????
  */
 OAL_STATIC OAL_INLINE oal_int32 eth_header(oal_netbuf_stru *skb, oal_net_device_stru *dev,
                                            oal_uint16 type,
@@ -3462,8 +3462,8 @@ OAL_STATIC OAL_INLINE oal_int32 eth_header(oal_netbuf_stru *skb, oal_net_device_
 }
 
 /*
- * 函 数 名  : oal_dev_hard_header
- * 功能描述  : 构造以太头
+ * ?? ?? ??  : oal_dev_hard_header
+ * ????????  : ??????????
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_dev_hard_header(oal_netbuf_stru *pst_nb,
                                                     oal_net_device_stru *pst_net_dev,
@@ -3476,8 +3476,8 @@ OAL_STATIC OAL_INLINE oal_int32 oal_dev_hard_header(oal_netbuf_stru *pst_nb,
 }
 
 /*
- * 函 数 名  : oal_csum_ipv6_magic
- * 功能描述  : 生成ipv6的magic
+ * ?? ?? ??  : oal_csum_ipv6_magic
+ * ????????  : ????ipv6??magic
  */
 OAL_STATIC OAL_INLINE oal_uint16 oal_csum_ipv6_magic(oal_in6_addr *pst_ipv6_s,
                                                      oal_in6_addr *pst_ipv6_d,
@@ -3496,8 +3496,8 @@ OAL_STATIC OAL_INLINE oal_uint32 oal_csum_partial(const void *p_buff,
 }
 
 /*
- * 函 数 名  : ipv6_addr_scope2type
- * 功能描述  : 获取ipv6地址的类型
+ * ?? ?? ??  : ipv6_addr_scope2type
+ * ????????  : ????ipv6??????????
  */
 OAL_STATIC OAL_INLINE oal_uint32 ipv6_addr_scope2type(oal_uint32 ul_scope)
 {
@@ -3518,8 +3518,8 @@ OAL_STATIC OAL_INLINE oal_uint32 ipv6_addr_scope2type(oal_uint32 ul_scope)
 }
 
 /*
- * 函 数 名  : __ipv6_addr_type
- * 功能描述  :获取ipv6地址类型
+ * ?? ?? ??  : __ipv6_addr_type
+ * ????????  :????ipv6????????
  */
 /*lint -e778*/ /*lint -e572*/ /*lint -e778*/ /*lint -e713*/
 OAL_STATIC OAL_INLINE oal_int32 __ipv6_addr_type(oal_in6_addr *pst_addr6)
@@ -3580,8 +3580,8 @@ OAL_STATIC OAL_INLINE oal_int32 __ipv6_addr_type(oal_in6_addr *pst_addr6)
 
 /*lint +e778*/ /*lint +e572*/ /*lint +e778*/ /*lint +e713*/
 /*
- * 函 数 名  : ipv6_addr_type
- * 功能描述  :获取地址类型
+ * ?? ?? ??  : ipv6_addr_type
+ * ????????  :????????????
  */
 OAL_STATIC OAL_INLINE oal_int32 ipv6_addr_type(oal_in6_addr *pst_addr6)
 {
@@ -3589,8 +3589,8 @@ OAL_STATIC OAL_INLINE oal_int32 ipv6_addr_type(oal_in6_addr *pst_addr6)
 }
 
 /*
- * 函 数 名  : oal_ipv6_addr_type
- * 功能描述  :获取地址类型
+ * ?? ?? ??  : oal_ipv6_addr_type
+ * ????????  :????????????
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_ipv6_addr_type(oal_in6_addr *pst_ipv6)
 {
@@ -3598,9 +3598,9 @@ OAL_STATIC OAL_INLINE oal_int32 oal_ipv6_addr_type(oal_in6_addr *pst_ipv6)
 }
 
 /*
- * 函 数 名  : oal_pskb_may_pull
- * 功能描述  : 保证skb->data包含ul_len指示的空间，如果没有，则从 skb_shinfo(skb)->frags[]中
- *             拷贝一份数据。
+ * ?? ?? ??  : oal_pskb_may_pull
+ * ????????  : ????skb->data????ul_len?????????????????????????? skb_shinfo(skb)->frags[]??
+ *             ??????????????
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_pskb_may_pull(oal_netbuf_stru *pst_nb, oal_uint32 ul_len)
 {
@@ -3608,8 +3608,8 @@ OAL_STATIC OAL_INLINE oal_int32 oal_pskb_may_pull(oal_netbuf_stru *pst_nb, oal_u
 }
 
 /*
- * 函 数 名  : arp_hdr_len
- * 功能描述  : 获取arp头的长度
+ * ?? ?? ??  : arp_hdr_len
+ * ????????  : ????arp????????
  */
 OAL_STATIC OAL_INLINE oal_int32 arp_hdr_len(oal_net_device_stru *pst_dev)
 {
@@ -3618,8 +3618,8 @@ OAL_STATIC OAL_INLINE oal_int32 arp_hdr_len(oal_net_device_stru *pst_dev)
 }
 
 /*
- * 函 数 名  : arp_hdr_len
- * 功能描述  : skb的data和len指针一起往下移动len
+ * ?? ?? ??  : arp_hdr_len
+ * ????????  : skb??data??len????????????????len
  */
 OAL_STATIC OAL_INLINE oal_void skb_reserve(oal_netbuf_stru *pst_skb, int l_len)
 {
@@ -3628,8 +3628,8 @@ OAL_STATIC OAL_INLINE oal_void skb_reserve(oal_netbuf_stru *pst_skb, int l_len)
 }
 
 /*
- * 函 数 名  : oal_arp_create
- * 功能描述  : 创建一个arp包
+ * ?? ?? ??  : oal_arp_create
+ * ????????  : ????????arp??
  */
 OAL_STATIC OAL_INLINE oal_netbuf_stru *oal_arp_create(oal_int32 l_type, oal_int32 l_ptype, oal_uint32 ul_dest_ip,
                                                       oal_net_device_stru *pst_dev, oal_uint32 ul_src_ip,

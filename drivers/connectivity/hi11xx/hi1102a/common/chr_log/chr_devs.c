@@ -1,7 +1,7 @@
 
 
 #ifdef CONFIG_HI1102_PLAT_HW_CHR
-/* 头文件包含 */
+/* ?????????? */
 #include "chr_devs.h"
 
 #include <linux/init.h>
@@ -35,7 +35,7 @@
 #include "plat_pm_wlan.h"
 #include "securec.h"
 
-/* 函数声明 */
+/* ???????? */
 static int32 chr_misc_open(struct inode *fd, struct file *fp);
 static ssize_t chr_misc_read(struct file *fp, int8 __user *buff, size_t count, loff_t *loff);
 static int64 chr_misc_ioctl(struct file *fp, uint32 cmd, uintptr_t arg);
@@ -45,11 +45,11 @@ int32 chr_wifi_tx_handler(uint32 errno);
 int32 chr_bfg_dev_tx_handler(uint32 ul_errno);
 uint32 chr_rx_proc_test(uint32 errno);
 
-/* 全局变量定义 */
+/* ???????????? */
 static CHR_EVENT chr_event;
 chr_callback_stru gst_chr_get_wifi_info_callback;
 
-/* 本模块debug控制全局变量 */
+/* ??????debug???????????? */
 static int32 log_enable = CHR_LOG_DISABLE;
 
 static const struct file_operations chr_misc_fops = {
@@ -67,8 +67,8 @@ static struct miscdevice chr_misc_dev = {
 };
 
 /*
- * 函 数 名  : chr_misc_open
- * 功能描述  : 打开设备节点接口
+ * ?? ?? ??  : chr_misc_open
+ * ????????  : ????????????????
  */
 static int32 chr_misc_open(struct inode *fd, struct file *fp)
 {
@@ -81,8 +81,8 @@ static int32 chr_misc_open(struct inode *fd, struct file *fp)
 }
 
 /*
- * 函 数 名  : chr_misc_read
- * 功能描述  : 读取设备节点接口
+ * ?? ?? ??  : chr_misc_read
+ * ????????  : ????????????????
  */
 static ssize_t chr_misc_read(struct file *fp, int8 __user *buff, size_t count, loff_t *loff)
 {
@@ -156,8 +156,8 @@ static ssize_t chr_misc_read(struct file *fp, int8 __user *buff, size_t count, l
 }
 
 /*
- * 函 数 名  : chr_write_errno_to_queue
- * 功能描述  : 将异常码写入队列
+ * ?? ?? ??  : chr_write_errno_to_queue
+ * ????????  : ????????????????
  */
 static int32 chr_write_errno_to_queue(uint32 ul_errno, uint8 uc_flag, uint8 *ptr_data, uint16 ul_len)
 {
@@ -184,8 +184,8 @@ static int32 chr_write_errno_to_queue(uint32 ul_errno, uint8 uc_flag, uint8 *ptr
 
     skb_put(skb, sk_len);
     *(uint32 *)skb->data = ul_errno;
-    *((uint16 *)(skb->data + 4)) = ul_len;  /* 偏移存放errno的前4个字节 */
-    *((uint16 *)(skb->data + 6)) = uc_flag; /* 偏移存放errno加长度的前6个字节 */
+    *((uint16 *)(skb->data + 4)) = ul_len;  /* ????????errno????4?????? */
+    *((uint16 *)(skb->data + 6)) = uc_flag; /* ????????errno??????????6?????? */
 
     if ((ul_len > 0) && (ptr_data != NULL)) {
         ret = memcpy_s(((uint8 *)skb->data + OAL_SIZEOF(CHR_DEV_EXCEPTION_STRU_PARA)),
@@ -204,8 +204,8 @@ static int32 chr_write_errno_to_queue(uint32 ul_errno, uint8 uc_flag, uint8 *ptr
 }
 
 /*
- * 函 数 名  : chr_misc_ioctl
- * 功能描述  : 控制设备节点接口
+ * ?? ?? ??  : chr_misc_ioctl
+ * ????????  : ????????????????
  */
 static int64 chr_misc_ioctl(struct file *fp, uint32 cmd, uintptr_t arg)
 {
@@ -277,8 +277,8 @@ static int64 chr_misc_ioctl(struct file *fp, uint32 cmd, uintptr_t arg)
 }
 
 /*
- * 函 数 名  : chr_misc_release
- * 功能描述  : 释放节点设备接口
+ * ?? ?? ??  : chr_misc_release
+ * ????????  : ????????????????
  */
 static int32 chr_misc_release(struct inode *fd, struct file *fp)
 {
@@ -291,8 +291,8 @@ static int32 chr_misc_release(struct inode *fd, struct file *fp)
 }
 
 /*
- * 函 数 名  : __chr_printLog
- * 功能描述  : 内核日志打印接口
+ * ?? ?? ??  : __chr_printLog
+ * ????????  : ????????????????
  */
 int32 __chr_printLog(CHR_LOGPRIORITY prio, CHR_DEV_INDEX dev_index, const int8 *fmt, ...)
 {
@@ -301,8 +301,8 @@ int32 __chr_printLog(CHR_LOGPRIORITY prio, CHR_DEV_INDEX dev_index, const int8 *
 EXPORT_SYMBOL(__chr_printLog);
 
 /*
- * 函 数 名  : __chr_exception
- * 功能描述  : 内核空间抛异常码接口
+ * ?? ?? ??  : __chr_exception
+ * ????????  : ????????????????????
  */
 int32 __chr_exception(uint32 errno)
 {
@@ -361,8 +361,8 @@ EXPORT_SYMBOL(__chr_exception);
 EXPORT_SYMBOL(__chr_exception_para);
 
 /*
- * 函 数 名  : chr_get_exception_info
- * 功能描述  : 获取CHR 信息
+ * ?? ?? ??  : chr_get_exception_info
+ * ????????  : ????CHR ????
  */
 void chr_get_exception_info(CHR_DEV_EXCEPTION_STRU_PARA *pst_dmac_dev_exception_info,
     CHR_DEV_EXCEPTION_STRU_PARA *pst_hmac_dev_exception_info)
@@ -373,13 +373,13 @@ void chr_get_exception_info(CHR_DEV_EXCEPTION_STRU_PARA *pst_dmac_dev_exception_
 }
 
 /*
- * 函 数 名  : chr_get_common_info
- * 功能描述  : 获取芯片平台信息
+ * ?? ?? ??  : chr_get_common_info
+ * ????????  : ????????????????
  */
 void chr_get_common_info(chr_dmac_common_info_stru *pst_dmac_common_info,
     chr_hmac_common_info_stru *pst_hmac_common_info)
 {
-    /* ac_fw_ver device侧数组长度为20，host侧长度为50，所以只需要copy dmac中ac_fw_ver数组的长度 */
+    /* ac_fw_ver device????????????20??host????????50????????????copy dmac??ac_fw_ver?????????? */
     oal_memcopy(pst_hmac_common_info->ac_fw_ver, pst_dmac_common_info->ac_fw_ver,
                 OAL_MIN(OAL_SIZEOF(pst_dmac_common_info->ac_fw_ver), OAL_SIZEOF(pst_hmac_common_info->ac_fw_ver)));
     oal_memcopy(pst_hmac_common_info->ac_ko_ver, pst_dmac_common_info->ac_ko_ver,
@@ -390,8 +390,8 @@ void chr_get_common_info(chr_dmac_common_info_stru *pst_dmac_common_info,
 }
 
 /*
- * 函 数 名  : chr_get_rate_info
- * 功能描述  : 获取报文速率信息
+ * ?? ?? ??  : chr_get_rate_info
+ * ????????  : ????????????????
  */
 void chr_get_rate_info(chr_dmac_rate_info_stru *pst_dmac_rate_info, chr_hmac_rate_info_stru *pst_hmac_rate_info)
 {
@@ -399,8 +399,8 @@ void chr_get_rate_info(chr_dmac_rate_info_stru *pst_dmac_rate_info, chr_hmac_rat
 }
 
 /*
- * 函 数 名  : chr_get_radio_link_quality_and_btcoex_info
- * 功能描述  : 获取空口链路质量和共存相关信息
+ * ?? ?? ??  : chr_get_radio_link_quality_and_btcoex_info
+ * ????????  : ??????????????????????????????
  */
 void chr_get_radio_link_quality_and_btcoex_info(chr_dmac_radio_link_quality_info_stru *pst_dmac_radio_link_quality_info,
                                                 chr_hmac_radio_link_quality_info_stru *pst_hmac_radio_link_quality_info,
@@ -409,7 +409,7 @@ void chr_get_radio_link_quality_and_btcoex_info(chr_dmac_radio_link_quality_info
     int32                           l_ret;
     hmac_get_wifi_info_ext_stru     st_get_wifi_info_ext;
 
-    /* 使用钩子函数获取hmac侧参数,还是通过device通道上报 */
+    /* ????????????????hmac??????,????????device???????? */
     if (gst_chr_get_wifi_info_callback.chr_get_wifi_ext_info_from_host == OAL_PTR_NULL) {
         return;
     }
@@ -418,13 +418,13 @@ void chr_get_radio_link_quality_and_btcoex_info(chr_dmac_radio_link_quality_info
         return;
     }
 
-    /* 获取干扰参数和芯片类型参数 */
+    /* ?????????????????????????? */
     pst_hmac_radio_link_quality_info->en_alg_distance_stat = st_get_wifi_info_ext.uc_device_distance;
     pst_hmac_radio_link_quality_info->en_adj_intf_state = st_get_wifi_info_ext.uc_intf_state_cca;
     pst_hmac_radio_link_quality_info->en_co_intf_state = st_get_wifi_info_ext.uc_intf_state_co;
     pst_hmac_radio_link_quality_info->c_chip_type = st_get_wifi_info_ext.uc_chip_type;
 
-    /* 获取共存参数 */
+    /* ???????????? */
     oal_memcopy(&pst_hmac_btcoex_status->st_bt_status, &st_get_wifi_info_ext.st_bt_status,
                 OAL_SIZEOF(bt_status_stru));
     oal_memcopy(&pst_hmac_btcoex_status->st_ble_status,&st_get_wifi_info_ext.st_ble_status,
@@ -436,8 +436,8 @@ void chr_get_radio_link_quality_and_btcoex_info(chr_dmac_radio_link_quality_info
 
 
 /*
- * 函 数 名  : chr_get_chip_count_info
- * 功能描述  : 获取芯片统计信息
+ * ?? ?? ??  : chr_get_chip_count_info
+ * ????????  : ????????????????
  */
 void chr_get_chip_count_info(chr_dmac_chip_count_info_stru *pst_dmac_chip_count_info,
                              chr_hmac_chip_count_info_stru *pst_hmac_chip_count_info)
@@ -446,8 +446,8 @@ void chr_get_chip_count_info(chr_dmac_chip_count_info_stru *pst_dmac_chip_count_
 }
 
 /*
- * 函 数 名  : chr_get_queue_info
- * 功能描述  : 获取队列状态信息
+ * ?? ?? ??  : chr_get_queue_info
+ * ????????  : ????????????????
  */
 void chr_get_queue_info(chr_dmac_queue_info_stru *pst_dmac_queue_info, chr_hmac_queue_info_stru *pst_hmac_queue_info)
 {
@@ -463,16 +463,16 @@ void chr_get_queue_info(chr_dmac_queue_info_stru *pst_dmac_queue_info, chr_hmac_
 }
 
 /*
- * 函 数 名  : chr_get_send_mode_info
- * 功能描述  : 获取发送模式信息
+ * ?? ?? ??  : chr_get_send_mode_info
+ * ????????  : ????????????????
  */
 void chr_get_send_mode_info(chr_dmac_send_mode_info_stru *pst_dmac_send_mode_info,
     chr_hmac_send_mode_info_stru *pst_hmac_send_mode_info)
 {
-    /* host侧与device侧结构体相差一个数组auc_tx_ant和vht的一个成员变量，所以分段copy */
+    /* host????device????????????????????auc_tx_ant??vht????????????????????????copy */
     oal_memcopy(pst_hmac_send_mode_info, pst_dmac_send_mode_info,
                 OAL_OFFSET_OF(chr_hmac_send_mode_info_stru, auc_tx_ant));
-    /* 连续赋值以下4个数组 */
+    /* ????????????4?????? */
     oal_memcopy(pst_hmac_send_mode_info->auc_tx_chain, pst_dmac_send_mode_info->auc_tx_chain,
                 OAL_SIZEOF(uint8)*CHR_HAL_TX_RATE_MAX_NUM);
     oal_memcopy(pst_hmac_send_mode_info->auc_phy_mode, pst_dmac_send_mode_info->auc_phy_mode,
@@ -491,12 +491,12 @@ void chr_get_send_mode_info(chr_dmac_send_mode_info_stru *pst_dmac_send_mode_inf
 }
 
 /*
- * 函 数 名  : chr_get_txrx_packets
- * 功能描述  : 获取收发包统计信息
+ * ?? ?? ??  : chr_get_txrx_packets
+ * ????????  : ??????????????????
  */
 void chr_get_txrx_packets(chr_dmac_txrx_pkts_stru *pst_dmac_txrx_pkts, chr_hmac_txrx_pkts_stru *pst_hmac_txrx_pkts)
 {
-    /* host侧比device侧少了一个成员变量rssi，需要分段copy */
+    /* host????device??????????????????rssi??????????copy */
     oal_memcopy(pst_hmac_txrx_pkts, pst_dmac_txrx_pkts, OAL_OFFSET_OF(chr_dmac_txrx_pkts_stru, l_rssi));
 
     oal_memcopy(&pst_hmac_txrx_pkts->ul_rx_total_pkts, &pst_dmac_txrx_pkts->ul_rx_total_pkts,
@@ -505,17 +505,17 @@ void chr_get_txrx_packets(chr_dmac_txrx_pkts_stru *pst_dmac_txrx_pkts, chr_hmac_
 }
 
 /*
- * 函 数 名  : chr_get_pm_info
- * 功能描述  : 获取芯片低功耗信息
+ * ?? ?? ??  : chr_get_pm_info
+ * ????????  : ??????????????????
  */
 void chr_get_pm_info(chr_dmac_pm_info_stru *pst_dmac_pm_info, chr_hmac_pm_info_stru *pst_hmac_pm_info)
 {
-    /* 连续赋值前三个变量 */
+    /* ?????????????????? */
     oal_memcopy(pst_hmac_pm_info, pst_dmac_pm_info, OAL_OFFSET_OF(chr_hmac_pm_info_stru, ul_duty_ratio));
 
     pst_hmac_pm_info->ul_cpu_freq_level = pst_dmac_pm_info->ul_cpu_freq_level;
 
-    /* host侧与device侧结构体后8bit相同,但因不能对位域取地址,所以不能直接memcopy */
+    /* host????device??????????8bit????,????????????????????,????????????memcopy */
     pst_hmac_pm_info->bit_pm_more_data_expected = pst_dmac_pm_info->bit_pm_more_data_expected;
     pst_hmac_pm_info->bit_11k_enable            = pst_dmac_pm_info->bit_11k_enable;
     pst_hmac_pm_info->bit_11v_enable            = pst_dmac_pm_info->bit_11v_enable;
@@ -527,9 +527,9 @@ void chr_get_pm_info(chr_dmac_pm_info_stru *pst_dmac_pm_info, chr_hmac_pm_info_s
 }
 
 /*
- * 函 数 名  : chr_dmac_transition_to_hmac
- * 功能描述  : 将DMAC上报的CHR数据转换HMAC对应的数据结构
- * 适配上层正常解析。
+ * ?? ?? ??  : chr_dmac_transition_to_hmac
+ * ????????  : ??DMAC??????CHR????????HMAC??????????????
+ * ??????????????????
  */
 void chr_dmac_transition_to_hmac(chr_dmac_info_stru *buff, uint16 len)
 {
@@ -576,8 +576,8 @@ void chr_dmac_transition_to_hmac(chr_dmac_info_stru *buff, uint16 len)
 }
 
 /*
- * 函 数 名  : chr_dev_exception_callback
- * 功能描述  : device异常回调接口
+ * ?? ?? ??  : chr_dev_exception_callback
+ * ????????  : device????????????
  */
 void chr_dev_exception_callback(void *buff, uint16 len)
 {
@@ -637,8 +637,8 @@ void chr_dev_exception_callback(void *buff, uint16 len)
 EXPORT_SYMBOL(chr_dev_exception_callback);
 
 /*
- * 函 数 名  : chr_host_callback_register
- * 功能描述  : host回调注册函数
+ * ?? ?? ??  : chr_host_callback_register
+ * ????????  : host????????????
  */
 void chr_host_callback_register(chr_get_wifi_info pfunc)
 {
@@ -659,8 +659,8 @@ void chr_host_callback_unregister(void)
 }
 
 /*
- * 函 数 名  : chr_get_wifi_ext_info_callback_register
- * 功能描述  : host回调注册函数:用于获取device上报的额外信息
+ * ?? ?? ??  : chr_get_wifi_ext_info_callback_register
+ * ????????  : host????????????:????????device??????????????
  */
 void chr_get_wifi_ext_info_callback_register(chr_get_wifi_info_ext pfunc)
 {
@@ -686,8 +686,8 @@ EXPORT_SYMBOL(chr_get_wifi_ext_info_callback_register);
 EXPORT_SYMBOL(chr_get_wifi_ext_info_callback_unregister);
 
 /*
- * 函 数 名  : chr_rx_errno_to_dispatch
- * 功能描述  : 将接收到的errno进行解析并分配
+ * ?? ?? ??  : chr_rx_errno_to_dispatch
+ * ????????  : ??????????errno??????????????
  */
 void chr_rx_errno_to_dispatch(uint32 errno)
 {
@@ -715,8 +715,8 @@ void chr_rx_errno_to_dispatch(uint32 errno)
 }
 
 /*
- * 函 数 名  : chr_wifi_dev_tx_handler
- * 功能描述  : 通过hcc通道将errno下发到wifi device
+ * ?? ?? ??  : chr_wifi_dev_tx_handler
+ * ????????  : ????hcc??????errno??????wifi device
  */
 int32 chr_wifi_dev_tx_handler(uint32 errno)
 {
@@ -760,8 +760,8 @@ int32 chr_wifi_dev_tx_handler(uint32 errno)
 }
 
 /*
- * 函 数 名  : chr_host_tx_handler
- * 功能描述  : 调用回调接口将errno传给hmac
+ * ?? ?? ??  : chr_host_tx_handler
+ * ????????  : ??????????????errno????hmac
  */
 int32 chr_host_tx_handler(uint32 errno)
 {
@@ -798,8 +798,8 @@ int32 chr_wifi_tx_handler(uint32 errno)
 }
 
 /*
- * 函 数 名  : chr_bfg_dev_tx_handler
- * 功能描述  : 利用uart通道将errno传给bfg
+ * ?? ?? ??  : chr_bfg_dev_tx_handler
+ * ????????  : ????uart??????errno????bfg
  */
 int32 chr_bfg_dev_tx_handler(uint32 ul_errno)
 {

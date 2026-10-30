@@ -9,7 +9,7 @@ extern "C" {
 
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "hmac_tcp_ack_filter.h"
 #include "hmac_edca_opt.h"
@@ -20,7 +20,7 @@ extern "C" {
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_TCP_ACK_FILTER_C
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 oal_bool_enum_uint8 g_en_tcp_ack_filter_switch = OAL_TRUE;
 oal_uint32 g_ul_2G_tx_large_pps_th = 4000;
@@ -30,7 +30,7 @@ oal_uint32 g_ul_5G_tx_large_pps_th = 20000;
 /* {tx_large_pps, rx_large_pps, tx_small_pps, rx_small_pps}  */
 oal_uint16 g_aus_tcp_tx_performance_test_th[WLAN_BAND_BUTT][4] = {{4000, 500, 200, 500}, {20000, 1500, 500, 1500}};
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 OAL_STATIC oal_void hmac_rx_tcp_ack_update_pkt(mac_tcp_ack_record_stru *pst_tcp_ack_record)
@@ -94,7 +94,7 @@ OAL_STATIC mac_tcp_ack_record_stru *hmac_tcp_ack_record_get(oal_netbuf_stru *pst
 
     us_netbuf_origin_len = us_frame_len - uc_tcp_ack_info_size;
 
-    /* tcp ack info位于netbuf data末尾 */
+    /* tcp ack info????netbuf data???? */
     pst_tcp_ack_info = (mac_tcp_ack_record_stru *) ((oal_uint8 *) oal_netbuf_data(pst_netbuf) + us_netbuf_origin_len);
 
     return pst_tcp_ack_info;
@@ -116,13 +116,13 @@ oal_void hmac_rx_process_tcp_ack_record(hmac_vap_stru *pst_hmac_vap, oal_netbuf_
         return;
     }
 
-    /* 更新BA */
+    /* ????BA */
     hmac_rx_tcp_ack_update_ba(pst_tcp_ack_record);
 
-    /* 更新小包rx pkt数量 */
+    /* ????????rx pkt???? */
     hmac_rx_tcp_ack_update_pkt(pst_tcp_ack_record);
 
-    /* tcp ack过滤信息更新收尾操作 */
+    /* tcp ack???????????????????? */
     hmac_rx_process_tcp_ack_record_post_do(pst_netbuf);
 }
 
@@ -138,7 +138,7 @@ OAL_STATIC oal_uint32 hmac_sync_tcp_ack_filter_switch(hmac_vap_stru *pst_hmac_va
     pst_mac_vap = &pst_hmac_vap->st_vap_base_info;
 
     /***************************************************************************
-                    抛事件到DMAC层, 开启/关闭tcp ack过滤功能
+                    ????????DMAC??, ????/????tcp ack????????
     ***************************************************************************/
     ul_ret = hmac_config_send_event(pst_mac_vap, WLAN_CFGID_TCP_ACK_FILTER_SWITCH, OAL_SIZEOF(oal_bool_enum_uint8), &en_tcp_ack_filter);
     if (OAL_UNLIKELY(OAL_SUCC != ul_ret))
@@ -158,11 +158,11 @@ OAL_STATIC oal_bool_enum_uint8 hmac_in_tcp_tx_performace_test(mac_vap_stru *pst_
     en_band = pst_mac_vap->st_channel.en_band;
     en_bandwidth = pst_mac_vap->st_channel.en_bandwidth;
 
-    /* 目前只考虑2.4G 20M和5G 80M两种场景 */
+    /* ??????????2.4G 20M??5G 80M???????? */
     if ((WLAN_BAND_2G == en_band && WLAN_BAND_WIDTH_20M == en_bandwidth) ||
         (WLAN_BAND_5G == en_band && WLAN_BAND_WIDTH_80PLUSPLUS <= en_bandwidth))
     {
-        /* 不同频段下tcp tx跑流标准不同 */
+        /* ??????????tcp tx???????????? */
         if (ul_tx_large_pps > g_aus_tcp_tx_performance_test_th[en_band][0] &&
             ul_tx_small_pps < g_aus_tcp_tx_performance_test_th[en_band][2] &&
             ul_rx_large_pps + ul_rx_small_pps > g_aus_tcp_tx_performance_test_th[en_band][1] + g_aus_tcp_tx_performance_test_th[en_band][3])
@@ -193,7 +193,7 @@ oal_void hmac_rx_tcp_ack_filter_switch(oal_uint32 ul_tx_large_pps, oal_uint32 ul
         return;
     }
 
-    /* 单非P2P STA跑流场景才开启device tcp ack过滤功能 */
+    /* ????P2P STA??????????????device tcp ack???????? */
     if (mac_device_calc_up_vap_num(pst_mac_device) != 1 || OAL_SUCC != mac_device_find_legacy_sta(pst_mac_device, &pst_mac_vap))
     {
         return;
@@ -207,12 +207,12 @@ oal_void hmac_rx_tcp_ack_filter_switch(oal_uint32 ul_tx_large_pps, oal_uint32 ul
 
     en_tcp_ack_filter = hmac_in_tcp_tx_performace_test(pst_mac_vap, ul_tx_large_pps, ul_rx_large_pps, ul_tx_small_pps, ul_rx_small_pps);
 
-    /* 开易关难, 避免开关反复跳变 */
+    /* ????????, ???????????????? */
     if (pst_hmac_vap->en_tcp_ack_filter != en_tcp_ack_filter)
     {
         if (!en_tcp_ack_filter)
         {
-            /* 连续多次尝试关闭时才关闭 */
+            /* ???????????????????????? */
             pst_hmac_vap->uc_tcp_ack_filter_switch_cnt++;
             if (pst_hmac_vap->uc_tcp_ack_filter_switch_cnt == HMAC_TCP_ACK_FILTER_SWITCH_MAX_CNT)
             {
@@ -221,7 +221,7 @@ oal_void hmac_rx_tcp_ack_filter_switch(oal_uint32 ul_tx_large_pps, oal_uint32 ul
         }
         else
         {
-            /* 尝试开启时马上开启 */
+            /* ?????????????????? */
             hmac_sync_tcp_ack_filter_switch(pst_hmac_vap, en_tcp_ack_filter);
         }
     }

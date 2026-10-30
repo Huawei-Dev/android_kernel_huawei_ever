@@ -2702,7 +2702,7 @@ static void run_state_machine(struct tcpm_port *port)
 		 * USB-PD standard, 6.2.1.4, Port Power Role:
 		 * "During the Power Role Swap Sequence, for the initial Source
 		 * Port, the Port Power Role field shall be set to Sink in the
-		 * PS_RDY Message indicating that the initial Source’s power
+		 * PS_RDY Message indicating that the initial Source???s power
 		 * supply is turned off"
 		 */
 		tcpm_set_pwr_role(port, TYPEC_SINK);

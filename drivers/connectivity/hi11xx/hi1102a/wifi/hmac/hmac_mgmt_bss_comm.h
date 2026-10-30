@@ -9,7 +9,7 @@ extern "C" {
 #endif
 #endif
 
-/* 1 其他头文件包含 */
+/* 1 ?????????????? */
 #include "mac_frame.h"
 #include "dmac_ext_if.h"
 #include "hmac_vap.h"
@@ -20,9 +20,9 @@ extern "C" {
 
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_MGMT_BSS_COMM_H
-/* 2 宏定义 */
-/* HMAC_NCW_INHIBIT_THRED_TIME时间内连续HMAC_RECEIVE_NCW_MAX_CNT次接收到ncw,不上报 */
-#define HMAC_NCW_INHIBIT_THRED_TIME 60000 /* 单位ms */
+/* 2 ?????? */
+/* HMAC_NCW_INHIBIT_THRED_TIME??????????HMAC_RECEIVE_NCW_MAX_CNT????????ncw,?????? */
+#define HMAC_NCW_INHIBIT_THRED_TIME 60000 /* ????ms */
 #define HMAC_RECEIVE_NCW_THRED_CNT  6
 
 #ifdef _PRE_WLAN_FEATURE_LOCATION_RAM
@@ -30,23 +30,23 @@ extern "C" {
 #define HMAC_CSI_SEND_BUF_LEN 3000
 #endif
 
-#define HMAC_BA_SIZE_1   1  // BA聚合个数为1
-#define HMAC_BA_SIZE_2   2  // BA聚合个数为2
-#define HMAC_BA_SIZE_64  64 // BA聚合个数为64
-/* 3 枚举定义 */
-/* 4 全局变量声明 */
+#define HMAC_BA_SIZE_1   1  // BA??????????1
+#define HMAC_BA_SIZE_2   2  // BA??????????2
+#define HMAC_BA_SIZE_64  64 // BA??????????64
+/* 3 ???????? */
+/* 4 ???????????? */
 extern oal_uint8 g_auc_avail_protocol_mode[WLAN_PROTOCOL_BUTT][WLAN_PROTOCOL_BUTT];
 
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
 extern oal_uint32 g_ul_print_wakeup_mgmt;
 #endif
 
-/* 5 消息头定义 */
-/* 6 消息定义 */
-/* 7 STRUCT定义 */
-/* 8 UNION定义 */
-/* 9 OTHERS定义 */
-/* 10 函数声明 */
+/* 5 ?????????? */
+/* 6 ???????? */
+/* 7 STRUCT???? */
+/* 8 UNION???? */
+/* 9 OTHERS???? */
+/* 10 ???????? */
 extern oal_uint16 hmac_mgmt_encap_addba_req(hmac_vap_stru *pst_vap,
                                             oal_uint8 *puc_data,
                                             dmac_ba_tx_stru *pst_tx_ba,

@@ -3,7 +3,7 @@
 #ifndef __ONEIMAGE_H__
 #define __ONEIMAGE_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <linux/platform_device.h>
 
 #include "platform_oneimage_define.h"

@@ -107,16 +107,16 @@
 #undef	THIS_MODU
 #define THIS_MODU mod_dump
 /*****************************************************************************
-* 函 数 名  : system_error
-* 功能描述  : modem 异常函数入口
+* ?? ?? ??  : system_error
+* ????????  : modem ????????????
 *
-* 输入参数  :
-* 输出参数  :
+* ????????  :
+* ????????  :
 
-* 返 回 值  :
+* ?? ?? ??  :
 
 *
-* 修改记录  : 2016年1月4日17:05:33     creat
+* ????????  : 2016??1??4??17:05:33     creat
 *
 *****************************************************************************/
 void system_error(u32 mod_id, u32 arg1, u32 arg2, char *data, u32 length)
@@ -138,7 +138,7 @@ void system_error(u32 mod_id, u32 arg1, u32 arg2, char *data, u32 length)
     dump_ok("mod_id=0x%x arg1=0x%x arg2=0x%x  len=0x%x\n", mod_id, arg1, arg2,  length);
 
 
-    /*AT+TOMODE=3和切卡执行的Modem单独复位*/
+    /*AT+TOMODE=3????????????Modem????????*/
     if(mod_id == DRV_ERROR_USER_RESET
      ||mod_id == DRV_ERRNO_RESET_SIM_SWITCH)
     {

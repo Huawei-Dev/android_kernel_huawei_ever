@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "CsdDownLink.h"
 #include "CsdDebug.h"
@@ -55,13 +55,13 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID                 PS_FILE_ID_CSD_DOWN_LINK_C
 
 #if( FEATURE_ON == FEATURE_CSD )
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 extern VOS_UINT32 AT_SendCsdZcDataToModem(
     VOS_UINT8                           ucIndex,
@@ -70,7 +70,7 @@ extern VOS_UINT32 AT_SendCsdZcDataToModem(
 
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 
@@ -80,7 +80,7 @@ VOS_VOID CSD_DL_ProcIsr(VOS_VOID)
 
     hDLDataSem  = CSD_GetDownLinkDataSem();
 
-    /*释放下行取数据信号量*/
+    /*????????????????????*/
     VOS_SmV(hDLDataSem);
 }
 
@@ -96,7 +96,7 @@ VOS_VOID CSD_DL_SendData(VOS_VOID)
 
     for ( ; ; )
     {
-        /*获取DICC通道发送来数据的个数*/
+        /*????DICC????????????????????*/
         ulDICCNodeCnt = DICC_GetChannelCurrDataCnt(ACPU_PID_CSD,
                                                    DICC_CHAN_ID_DL_CSD_DATA_CHAN,
                                                    DICC_CPU_ID_ACPU);
@@ -111,7 +111,7 @@ VOS_VOID CSD_DL_SendData(VOS_VOID)
 
         if (0 != ulDICCNodeCnt )
         {
-           /*从DICC通道中移出数据*/
+           /*??DICC??????????????*/
             ulRslt      = DICC_RemoveChannelData(ACPU_PID_CSD,
                                                  DICC_CHAN_ID_DL_CSD_DATA_CHAN,
                                                  (VOS_UINT8 *)(&stDLData),
@@ -134,7 +134,7 @@ VOS_VOID CSD_DL_SendData(VOS_VOID)
 
             CSD_DBG_DL_RECV_PKT_NUM(1);
 
-            /*申请sk_buffer内存*/
+            /*????sk_buffer????*/
             pstCsdDLMem = IMM_ZcStaticAlloc(stDLData.usLen);
 
             if (VOS_NULL_PTR == pstCsdDLMem)
@@ -143,23 +143,23 @@ VOS_VOID CSD_DL_SendData(VOS_VOID)
                               "CSD_DL_SendData:: pstCsdDLMem Is Null IMM_ZcStaticAlloc Fail",
                               pstCsdDLMem);
 
-                /*通知cCpu释放TTFmem*/
+                /*????cCpu????TTFmem*/
                 IMM_RemoteFreeTtfMem(stDLData.pGarbage);
 
-                /*此处用continue可能导致死循环*/
+                /*??????continue??????????????*/
                 break;
 
             }
 
-            /*此步骤不能少用来偏移数据尾指针*/
-            /* Modified by l60609 for AP适配项目 ，2012-08-31 Begin */
+            /*??????????????????????????????*/
+            /* Modified by l60609 for AP???????? ??2012-08-31 Begin */
             ImmZcData = (VOS_CHAR *)IMM_ZcPut(pstCsdDLMem, stDLData.usLen);
-            /* Modified by l60609 for AP适配项目 ，2012-08-31 End */
+            /* Modified by l60609 for AP???????? ??2012-08-31 End */
 
             TAF_MEM_CPY_S(ImmZcData, stDLData.usLen, (VOS_UINT8 *)TTF_PHY_TO_VIRT((VOS_VOID *)(stDLData.pucData)), stDLData.usLen);
 
-            /*发送数据到驱动,第一个参数为pppid目前不使用，由于失败AT会释放内存，
-            所以此处不需要另行释放a核内存*/
+            /*??????????????,????????????pppid????????????????????AT????????????
+            ??????????????????????a??????*/
             ulRslt      = AT_SendCsdZcDataToModem(CSD_UL_GetAtClientIndex(), pstCsdDLMem);
 
             if (VOS_OK != ulRslt)
@@ -169,22 +169,22 @@ VOS_VOID CSD_DL_SendData(VOS_VOID)
                 CSD_ERROR_LOG(ACPU_PID_CSD,
                               "CSD_DL_SendData:: AT_SendZcDataToModem  Fail");
 
-                /*通知cCpu释放TTFmem*/
+                /*????cCpu????TTFmem*/
                 IMM_RemoteFreeTtfMem(stDLData.pGarbage);
 
-                /*此处用continue可能导致死循环*/
+                /*??????continue??????????????*/
                 break;
             }
             CSD_DBG_DL_SEND_PKT_NUM(1);
 
-            /*通知cCpu释放TTFmem*/
+            /*????cCpu????TTFmem*/
             IMM_RemoteFreeTtfMem(stDLData.pGarbage);
 
         }
         else
         {
 
-            /*通道内数据发送完*/
+            /*????????????????*/
             CSD_NORMAL_LOG1(ACPU_PID_CSD,
                             "CSD_DL_SendData Queue is Null",
                             ulDICCNodeCnt);
@@ -207,7 +207,7 @@ VOS_VOID CSD_DL_ClearData(VOS_VOID)
     CST_CSD_DATA_IND_STRU               stDLData;
 
 
-    /*获取DICC通道发送来数据的个数*/
+    /*????DICC????????????????????*/
     ulDICCNodeCnt   = DICC_GetChannelCurrDataCnt(ACPU_PID_CSD,
                                                  DICC_CHAN_ID_DL_CSD_DATA_CHAN,
                                                  DICC_CPU_ID_ACPU);
@@ -222,7 +222,7 @@ VOS_VOID CSD_DL_ClearData(VOS_VOID)
     while ((0 != ulDICCNodeCnt))
     {
 
-        /*从DICC通道中移出数据*/
+        /*??DICC??????????????*/
         ulRslt      = DICC_RemoveChannelData(ACPU_PID_CSD,
                                              DICC_CHAN_ID_DL_CSD_DATA_CHAN,
                                              (VOS_UINT8 *)(&stDLData),
@@ -238,7 +238,7 @@ VOS_VOID CSD_DL_ClearData(VOS_VOID)
 
         ulDICCNodeCnt-- ;
 
-        /*通知cCpu释放TTFmem*/
+        /*????cCpu????TTFmem*/
         IMM_RemoteFreeTtfMem(stDLData.pGarbage);
     }
 
@@ -254,7 +254,7 @@ VOS_VOID CSD_DL_ProcDataTask(VOS_VOID)
     for ( ; ; )
     {
 
-        /* 获取下行取数据信号量 */
+        /* ???????????????????? */
         if (VOS_OK != VOS_SmP(hDownLinkSem, 0 ))
         {
             CSD_NORMAL_LOG(ACPU_PID_CSD,
@@ -264,10 +264,10 @@ VOS_VOID CSD_DL_ProcDataTask(VOS_VOID)
             continue;
         }
 
-        /*获取当前是否挂断电话*/
+        /*????????????????????*/
         if (AT_CSD_CALL_STATE_ON != CSD_GetCallState())
         {
-            /*释放数据*/
+            /*????????*/
             CSD_DL_ClearData();
 
             CSD_ERROR_LOG(ACPU_PID_CSD,

@@ -25,23 +25,23 @@
 #endif
 #define CONFIG_CREDIT_MSG_FLOW_WATER_LINE 60
 
-#define HCC_FLOW_HIGH_PRI_BUFF_CNT 5 /* device侧预留的高优先级专用buffer个数，要与OAL_NETBUF_HIGH_PRIORITY_COUNT相同 */
+#define HCC_FLOW_HIGH_PRI_BUFF_CNT 5 /* device????????????????????buffer??????????OAL_NETBUF_HIGH_PRIORITY_COUNT???? */
 
 #define HCC_FLUSH_ALL (~0UL)
 
 /* hcc tx transfer flow control */
-#define HCC_FC_NONE          0x0 /* 对调用者不进行流控，netbuf一直缓冲在hcc队列中,这种类型的数据包不宜过多 */
-#define HCC_FC_WAIT          0x1 /* 阻塞等待，如果是在中断上下文调用，该标记被自动清除,非中断上下文生效 */
-#define HCC_FC_NET           0x2 /* 对于网络层的流控 */
-#define HCC_FC_DROP          0x4 /* 流控采用丢包方式,流控时返回成功 */
+#define HCC_FC_NONE          0x0 /* ????????????????????netbuf??????????hcc??????,???????????????????????? */
+#define HCC_FC_WAIT          0x1 /* ??????????????????????????????????????????????????,???????????????? */
+#define HCC_FC_NET           0x2 /* ???????????????? */
+#define HCC_FC_DROP          0x4 /* ????????????????,?????????????? */
 #define HCC_FC_ALL           (HCC_FC_WAIT | HCC_FC_NET | HCC_FC_DROP)
-#define HCC_BUS_MEMALLOC_MAX 128 /* 提前申请的netbuf数目 */
+#define HCC_BUS_MEMALLOC_MAX 128 /* ??????????netbuf???? */
 struct hcc_transfer_param {
     oal_uint32 main_type;
     oal_uint32 sub_type;
     oal_uint32 extend_len;
-    oal_uint32 fc_flag;  /* 流控标记 */
-    oal_uint32 queue_id; /* 期望进入的队列号, */
+    oal_uint32 fc_flag;  /* ???????? */
+    oal_uint32 queue_id; /* ????????????????, */
 };
 #define OAL_SAVE_MODE_BUFF_SIZE          128
 
@@ -138,7 +138,7 @@ OAL_STATIC OAL_INLINE oal_void hcc_hdr_param_init(struct hcc_transfer_param *par
     param->queue_id = queue_id;
 }
 
-/* 全局变量，供pm 统计收发包总数 */
+/* ????????????pm ?????????????? */
 extern oal_uint32 pm_wifi_rxtx_count;
 extern oal_uint32 hcc_assemble_count;
 
@@ -251,7 +251,7 @@ typedef struct _hcc_tx_flow_ctrl_info_ {
     oal_uint32 flowctrl_hipri_update_count;
     oal_uint8 uc_hipriority_cnt;
     oal_uint8 auc_resv[3];
-    oal_spin_lock_stru st_hipri_lock; /* 读写uc_hipriority_cnt时要加锁 */
+    oal_spin_lock_stru st_hipri_lock; /* ????uc_hipriority_cnt???????? */
     oal_wait_queue_head_stru wait_queue;
     flowctrl_cb net_stopall;
     flowctrl_cb net_startall;
@@ -270,7 +270,7 @@ typedef struct _hcc_thread_stat_ {
     oal_uint64 wait_event_block_count;
     oal_uint64 wait_event_run_count;
     oal_uint64 loop_have_data_count;
-    oal_uint64 loop_no_data_count; /* 空转 */
+    oal_uint64 loop_no_data_count; /* ???? */
 } hcc_thread_stat;
 
 struct hcc_transfer_handler {
@@ -360,7 +360,7 @@ oal_void hcc_clear_all_queues(struct hcc_handler *hcc, oal_int32 is_need_lock);
 oal_void hcc_enable(struct hcc_handler *hcc, oal_int32 is_need_lock);
 oal_void hcc_disable(struct hcc_handler *hcc, oal_int32 is_need_lock);
 
-/* 获取默认的HCC通道句柄 */
+/* ??????????HCC???????? */
 extern struct hcc_handler *hcc_get_110x_handler(oal_void);
 extern oal_void hcc_dev_flowctrl_on(struct hcc_handler *hcc, oal_uint8 need_notify_dev);
 extern oal_void hcc_dev_flowctrl_off(struct hcc_handler *hcc);
@@ -513,8 +513,8 @@ extern struct custom_process_func_handler custom_process_func;
 #define HCC_NETBUF_RESERVED_ROOM_SIZE (HCC_HDR_TOTAL_LEN + HISDIO_H2D_SCATT_BUFFLEN_ALIGN)
 
 /*
- * 函 数 名  : hcc_netbuf_alloc
- * 功能描述  : reserved the fixed headroom and tailroom for hcc transfer!
+ * ?? ?? ??  : hcc_netbuf_alloc
+ * ????????  : reserved the fixed headroom and tailroom for hcc transfer!
  */
 OAL_STATIC OAL_INLINE oal_netbuf_stru *hcc_netbuf_alloc(oal_uint32 ul_size)
 {
@@ -553,7 +553,7 @@ OAL_STATIC OAL_INLINE oal_void hcc_tx_netbuf_free(oal_netbuf_stru *pst_netbuf)
         printk(KERN_EMERG "BUG: tx netbuf:%p on CPU#%d,magic:%08x should be %08x\n", pst_cb_stru,
                raw_smp_processor_id(), pst_cb_stru->magic, HCC_TX_WAKELOCK_MAGIC);
         print_hex_dump(KERN_ERR, "tx_netbuf_magic", DUMP_PREFIX_ADDRESS, 16, 1,
-                       (oal_uint8 *)pst_netbuf, sizeof(oal_netbuf_stru), true); /* 内核函数固定的传参 */
+                       (oal_uint8 *)pst_netbuf, sizeof(oal_netbuf_stru), true); /* ?????????????????? */
         printk(KERN_ERR "\n");
 #endif
         OAL_WARN_ON(1);

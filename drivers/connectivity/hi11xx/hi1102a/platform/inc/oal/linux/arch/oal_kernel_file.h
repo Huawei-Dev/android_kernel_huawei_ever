@@ -3,7 +3,7 @@
 #ifndef __OAL_LINUX_KERNEL_FILE_H__
 #define __OAL_LINUX_KERNEL_FILE_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/module.h>
@@ -14,10 +14,10 @@
 #include <asm/unistd.h>
 #include <asm/uaccess.h>
 
-/* 宏定义 */
+/* ?????? */
 #define OAL_KERNEL_DS KERNEL_DS
 
-/* 文件属性 */
+/* ???????? */
 #define OAL_O_ACCMODE O_ACCMODE
 #define OAL_O_RDONLY  O_RDONLY
 #define OAL_O_WRONLY  O_WRONLY
@@ -26,12 +26,12 @@
 #define OAL_O_TRUNC   O_TRUNC
 #define OAL_O_APPEND  O_APPEND
 
-#define OAL_PRINT_FORMAT_LENGTH 200 /* 打印格式字符串的最大长度 */
+#define OAL_PRINT_FORMAT_LENGTH 200 /* ???????????????????????? */
 
 typedef struct file oal_file;
 typedef mm_segment_t oal_mm_segment_t;
 
-/* 函数声明 */
+/* ???????? */
 OAL_STATIC OAL_INLINE oal_mm_segment_t oal_get_fs(oal_void)
 {
     return get_fs();

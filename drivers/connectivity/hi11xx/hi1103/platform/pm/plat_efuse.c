@@ -1,16 +1,16 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include "plat_efuse.h"
 #include "board.h"
 #include "securec.h"
 
-/* 全局变量定义 */
+/* ???????????? */
 uint8 hi110x_ec_version_etc = V100;
 
 /*
- * 函 数 名  : read_efuse_ec_version_etc
- * 功能描述  : 从device EFUSE中读取EC版本号
+ * ?? ?? ??  : read_efuse_ec_version_etc
+ * ????????  : ??device EFUSE??????EC??????
  */
 void read_efuse_ec_version_etc(void)
 {
@@ -40,8 +40,8 @@ void read_efuse_ec_version_etc(void)
         PS_PRINT_DBG("ec version[%d]=0x%x\n", i, buff[i]);
     }
 
-    uc_ec_version = buff[1];         // Byte24(0x50000771)对应bit[191:184]
-    uc_ec_version &= ((uint8)0x03);  // bit[185:184]标示EC version
+    uc_ec_version = buff[1];         // Byte24(0x50000771)????bit[191:184]
+    uc_ec_version &= ((uint8)0x03);  // bit[185:184]????EC version
 
     if (uc_ec_version == V100) {
         PS_PRINT_INFO("hi110x read efuse V100[0x%x]\n", uc_ec_version);
@@ -55,9 +55,9 @@ void read_efuse_ec_version_etc(void)
 }
 
 /*
- * 函 数 名  : get_ec_version_etc
- * 功能描述  : 获取hi110x芯片EC版本号
- * 返 回 值  : EC版本号
+ * ?? ?? ??  : get_ec_version_etc
+ * ????????  : ????hi110x????EC??????
+ * ?? ?? ??  : EC??????
  */
 uint8 get_ec_version_etc(void)
 {
@@ -65,8 +65,8 @@ uint8 get_ec_version_etc(void)
 }
 
 /*
- * 函 数 名  : mask_bits
- * 功能描述  : 将位段置为零
+ * ?? ?? ??  : mask_bits
+ * ????????  : ????????????
  */
 static void mask_bits(uint32 value[], uint32 start_bits, uint32 end_bits)
 {
@@ -86,8 +86,8 @@ static void mask_bits(uint32 value[], uint32 start_bits, uint32 end_bits)
 }
 
 /*
- * 函 数 名  : check_efuse_file_exist
- * 功能描述  : 检查文件是否存在
+ * ?? ?? ??  : check_efuse_file_exist
+ * ????????  : ????????????????
  */
 static int32 check_efuse_file_exist(void)
 {
@@ -109,8 +109,8 @@ static int32 check_efuse_file_exist(void)
 }
 
 /*
- * 函 数 名  : get_efuse_from_device
- * 功能描述  : 从device获取efuse信息
+ * ?? ?? ??  : get_efuse_from_device
+ * ????????  : ??device????efuse????
  */
 static int32 get_efuse_from_device(uint32 *buff, int32 len)
 {
@@ -136,8 +136,8 @@ static int32 get_efuse_from_device(uint32 *buff, int32 len)
     return SUCC;
 }
 /*
- * 函 数 名  : store_efuse_into_file
- * 功能描述  : 将efuse信息保存在下
+ * ?? ?? ??  : store_efuse_into_file
+ * ????????  : ??efuse????????????
  */
 static int32 store_efuse_into_file(uint32 *buff, uint32 buff_len)
 {

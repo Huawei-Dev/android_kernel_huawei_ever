@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 /*lint -e322*/ /*lint -e7*/
 #include <linux/tty.h>
 #include <linux/delay.h>
@@ -21,7 +21,7 @@
 #include "wireless_patch.h"
 #endif
 
-/* 全局变量定义 */
+/* ???????????? */
 STATIC struct ps_uart_state_s uart_state = {0};
 STATIC struct ps_uart_state_s uart_state_pre = {0};
 uint32 default_baud_rate = DEFAULT_BAUD_RATE;
@@ -320,7 +320,7 @@ STATIC void ps_tty_receive(struct tty_struct *tty, const uint8 *data,
             rtc_time_to_tm(tv.tv_sec, &tm);
             ret = snprintf_s(filename, sizeof(filename), sizeof(filename) - 1,
                              "/data/hwlogdir/uart_rx/uart_rx-%04d-%02d-%02d:%02d-%02d-%02d",
-                             tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, /* 换算成当前时间 */
+                             tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, /* ?????????????? */
                              tm.tm_hour, tm.tm_min, tm.tm_sec);
             if (ret < 0) {
                 ps_uart_tty_rx_add(count);

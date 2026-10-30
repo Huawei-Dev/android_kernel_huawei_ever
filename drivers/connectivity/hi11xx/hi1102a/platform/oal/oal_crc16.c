@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include "oal_types.h"
 #include "plat_debug.h"
 
@@ -39,7 +39,7 @@ oal_uint16 cal_crc_16(const oal_uint8 *data, const oal_uint16 data_bit_num)
     oal_uint8 byte;
     oal_uint16 remainder = 0xFFFF;
 
-    /* 入参无效，返回一个无效值*/
+    /* ????????????????????????*/
     if ((data == NULL) || (data_bit_num == 0)) {
         PS_PRINT_ERR("input parameter error\n");
         return 0;

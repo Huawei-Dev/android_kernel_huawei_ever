@@ -77,7 +77,7 @@
 
 // Manufacturer ID.
 // These IDs are assigned by Microsoft,
-// they are PNP IDs "00001=A¡±; ¡°00010=B¡±; ... ¡°11010=Z¡±.
+// they are PNP IDs "00001=A??; ??00010=B??; ... ??11010=Z??.
 // Bit 7 (at address 08h) is 0
 // the first character (letter) is located at bits 6 -> 2 (at address 08h),
 // the second character (letter) is located at bits 1 & 0 (at address 08h)

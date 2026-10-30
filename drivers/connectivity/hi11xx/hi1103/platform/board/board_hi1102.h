@@ -3,11 +3,11 @@
 #ifndef __BOARD_HI1102_H__
 #define __BOARD_HI1102_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "plat_type.h"
 #include "hw_bfg_ps.h"
 
-/* 宏定义 */
+/* ?????? */
 #define BOARD_VERSION_NAME_HI1102 "hi1102"
 
 #define DTS_NODE_HI110X                 "hisilicon,hi1102"
@@ -31,7 +31,7 @@
 /* hisi_cust_cfg */
 #define CUST_COMP_NODE "hi1102,customize"
 
-/* 函数声明 */
+/* ???????? */
 extern int32 hi1102_get_board_power_gpio(void);
 extern void hi1102_free_board_power_gpio_etc(void);
 extern int32 hi1102_board_wakeup_gpio_init_etc(void);

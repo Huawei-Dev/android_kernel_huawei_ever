@@ -49,7 +49,7 @@
 #define _AT_INPUT_PROC_H_
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 
 #include "ImmInterface.h"
@@ -69,17 +69,17 @@ extern "C" {
 #pragma pack(4)
 
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *****************************************************************************/
 
 /*Begin - yaochaoqun - 2009-4-2 - for new PNP*/
 #define  SCSI_CMD_LEN                       (31)
 /*End - yaochaoqun - 2009-4-2 - for new PNP*/
 
-/* 向底软最大重传次数 */
+/* ?????????????????? */
 #define AT_NDIS_MAX_RESEND_TIMES            (60)
 
-/*AT数据初始长度*/
+/*AT????????????*/
 #define AT_INIT_DATA_LEN                    (0)
 
 #define AT_MODEM_UL_DATA_BUFF_SIZE      (1536)
@@ -88,97 +88,97 @@ extern "C" {
 #define AT_UART_UL_DATA_BUFF_SIZE       (1536)
 #define AT_UART_UL_DATA_BUFF_NUM        (16)
 
-/* HSIC AT通道，底软向协议栈发送数据的上行缓存规格 */
+/* HSIC AT???????????????????????????????????????? */
 #define AT_HSIC_UL_DATA_BUFF_SIZE       (5*1024)
 #define AT_HSIC_UL_DATA_BUFF_NUM        (2)
 
-/* 来电RI管脚电平控制定时器名称 */
+/* ????RI?????????????????????? */
 #define AT_SET_VOICE_RI_TMR_NAME(ulTmrName)\
             (ulTmrName)  = AT_VOICE_RI_TIMER;\
             (ulTmrName) |= AT_INTERNAL_PROCESS_TYPE
 
-/* 来电RI管脚电平控制定时器参数 */
+/* ????RI?????????????????????? */
 #define AT_SET_VOICE_RI_TMR_PARAM(ulTmrParam, ucIndex, ucCallId)\
             ((ulTmrParam) = ((ucCallId) << 8) | (ucIndex))
 
-/* 从来电RI管脚电平控制定时器超时消息中获取CALLID */
+/* ??????RI????????????????????????????????CALLID */
 #define AT_GET_VOICE_RI_CALLID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)(((ulTmrParam) & 0x0000FF00) >> 8))
 
-/* 从来电RI管脚电平控制定时器超时消息中获取端口ID */
+/* ??????RI????????????????????????????????????ID */
 #define AT_GET_VOICE_RI_CLIENTID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)((ulTmrParam) & 0x000000FF))
 
-/* 新短信RI管脚电平控制定时器名称 */
+/* ??????RI?????????????????????? */
 #define AT_SET_SMS_RI_TMR_NAME(ulTmrName)\
             (ulTmrName)  = AT_SMS_RI_TIMER;\
             (ulTmrName) |= AT_INTERNAL_PROCESS_TYPE
 
-/* 新短信RI管脚电平控制定时器参数 */
+/* ??????RI?????????????????????? */
 #define AT_SET_SMS_RI_TMR_PARAM(ulTmrParam, ucIndex)\
             ((ulTmrParam) = (ucIndex))
 
-/* 从新短信RI管脚电平控制定时器超时消息中获取端口ID */
+/* ????????RI????????????????????????????????????ID */
 #define AT_GET_SMS_RI_CLIENTID_FROM_TMR_PARAM(ulTmrParam)\
             ((VOS_UINT8)((ulTmrParam) & 0x000000FF))
 
-/* UART端口数据帧格式映射表指针和大小 */
+/* UART?????????????????????????????? */
 #define AT_UART_GET_FORMAT_TBL_PTR()    (g_astAtUartFormatTab)
 #define AT_UART_GET_FORMAT_TBL_SIZE()   (AT_ARRAY_SIZE(g_astAtUartFormatTab))
 
 
 /*****************************************************************************
-  3 枚举定义
+  3 ????????
 *****************************************************************************/
 
 enum AT_MEM_SOURCE_TYPE_ENUM
 {
-    AT_MEM_SOURCE_UDI_UL_BUF,                                                   /*MODEM设备buffer内存*/
-    AT_MEM_SOURCE_UDI_DL_BUF,                                                   /*使用的DDR内存*/
+    AT_MEM_SOURCE_UDI_UL_BUF,                                                   /*MODEM????buffer????*/
+    AT_MEM_SOURCE_UDI_DL_BUF,                                                   /*??????DDR????*/
 
     AT_MEM_SOURCE_TYPE_BUTT
 };
 typedef VOS_UINT32 AT_MEM_SOURCE_TYPE_ENUM_UINT32;
 
 /*****************************************************************************
-  4 全局变量声明
+  4 ????????????
 *****************************************************************************/
 extern  VOS_UINT32  g_ATNdisSendSem;
 
-/*USB NCM的UDI句柄*/
+/*USB NCM??UDI????*/
 extern UDI_HANDLE                              g_ulAtUdiNdisHdl;
 
-/* UDI句柄 */
+/* UDI???? */
 extern UDI_HANDLE                              g_alAtUdiHandle[AT_CLIENT_BUTT];
 
 
 /*****************************************************************************
-  5 消息头定义
+  5 ??????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  6 消息定义
+  6 ????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  7 STRUCT定义
+  7 STRUCT????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  8 UNION定义
+  8 UNION????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  9 OTHERS定义
+  9 OTHERS????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  10 函数声明
+  10 ????????
 *****************************************************************************/
 
 extern VOS_INT OM_RcvDiagCmdFromPC(VOS_UINT8 ucPortNo, VOS_UINT8 *pData, VOS_UINT16 uslength);
@@ -550,19 +550,19 @@ VOS_VOID AT_ProcFormatResultMsc(VOS_UINT8 ucIndex, VOS_UINT32 ulReturnCode);
 typedef struct
 {
     VOS_MSG_HEADER                                                              /* _H2ASN_Skip */
-    AT_INTER_MSG_ID_ENUM_UINT32         enMsgId;            /* 消息类型     */  /* _H2ASN_Skip */
-    VOS_UINT32                          ulPortId;           /* 端口ID */
-    AT_DCE_MSC_STRU                     stDceMscInfo;       /* 管脚信号信息 */
+    AT_INTER_MSG_ID_ENUM_UINT32         enMsgId;            /* ????????     */  /* _H2ASN_Skip */
+    VOS_UINT32                          ulPortId;           /* ????ID */
+    AT_DCE_MSC_STRU                     stDceMscInfo;       /* ???????????? */
 
 } AT_MNTN_MSC_STRU;
 
 /*****************************************************************************
- 函 数 名  : AT_MNTN_TraceInputMsc
- 功能描述  : 管脚信号输入可维可测
- 输入参数  : ucIndex   - 端口索引
-             pstDceMsc - 管脚信号信息(调用者保证非空)
- 输出参数  : 无
- 返 回 值  : VOS_VOID
+ ?? ?? ??  : AT_MNTN_TraceInputMsc
+ ????????  : ????????????????????
+ ????????  : ucIndex   - ????????
+             pstDceMsc - ????????????(??????????????)
+ ????????  : ??
+ ?? ?? ??  : VOS_VOID
 *****************************************************************************/
 VOS_VOID AT_MNTN_TraceInputMsc(
     VOS_UINT8                           ucIndex,
@@ -570,12 +570,12 @@ VOS_VOID AT_MNTN_TraceInputMsc(
 );
 
 /*****************************************************************************
- 函 数 名  : AT_MNTN_TraceOutputMsc
- 功能描述  : 管脚信号输出可维可测
- 输入参数  : ucIndex   - 端口索引
-             pstDceMsc - 管脚信号信息(调用者保证非空)
- 输出参数  : 无
- 返 回 值  : VOS_VOID
+ ?? ?? ??  : AT_MNTN_TraceOutputMsc
+ ????????  : ????????????????????
+ ????????  : ucIndex   - ????????
+             pstDceMsc - ????????????(??????????????)
+ ????????  : ??
+ ?? ?? ??  : VOS_VOID
 *****************************************************************************/
 VOS_VOID AT_MNTN_TraceOutputMsc(
     VOS_UINT8                           ucIndex,

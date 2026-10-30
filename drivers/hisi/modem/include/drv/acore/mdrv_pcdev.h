@@ -7,7 +7,7 @@ extern "C"
 #endif
 
 
-/* IOCTL CMD ∂®“Â */
+/* IOCTL CMD ???? */
 #define PCDEV_IOCTL_SET_WRITE_CB      0x7F001000
 #define PCDEV_IOCTL_SET_READ_CB       0x7F001001
 #define PCDEV_IOCTL_SET_EVT_CB        0x7F001002

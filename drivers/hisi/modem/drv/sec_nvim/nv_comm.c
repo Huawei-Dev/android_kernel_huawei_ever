@@ -76,11 +76,11 @@ struct nv_global_ctrl_info_stru  g_nv_ctrl = {};
 struct nv_global_ctrl_stru * g_flash_emmc_info_ptr = NULL;
 
 /*****************************************************************************
- 函 数 名  : nv_create_flag_file
- 功能描述  : 创建文件标志
- 输入参数  : 无
- 输出参数  : 无
- 返 回 值  :
+ ?? ?? ??  : nv_create_flag_file
+ ????????  : ????????????
+ ????????  : ??
+ ????????  : ??
+ ?? ?? ??  :
 *****************************************************************************/
 void nv_create_flag_file(const s8* path)
 {
@@ -99,11 +99,11 @@ void nv_create_flag_file(const s8* path)
 }
 
 /*****************************************************************************
- 函 数 名  : nv_delete_flag_file
- 功能描述  : 删除文件标志
- 输入参数  : 无
- 输出参数  : 无
- 返 回 值  :
+ ?? ?? ??  : nv_delete_flag_file
+ ????????  : ????????????
+ ????????  : ??
+ ????????  : ??
+ ?? ?? ??  :
 *****************************************************************************/
 void nv_delete_flag_file(const s8* path)
 {
@@ -114,11 +114,11 @@ void nv_delete_flag_file(const s8* path)
 }
 
 /*****************************************************************************
- 函 数 名  : nv_flag_file_isExist
- 功能描述  : 检查文件标志是否存在
- 输入参数  : 无
- 输出参数  : 无
- 返 回 值  :
+ ?? ?? ??  : nv_flag_file_isExist
+ ????????  : ????????????????????
+ ????????  : ??
+ ????????  : ??
+ ?? ?? ??  :
 *****************************************************************************/
 bool nv_flag_file_isExist(const s8* path)
 {
@@ -126,11 +126,11 @@ bool nv_flag_file_isExist(const s8* path)
 }
 
 /*****************************************************************************
- 函 数 名  : nv_data_writeback
- 功能描述  : 回写NV镜像到各分区，包括工作分区和备份区
- 输入参数  : 无
- 输出参数  : 无
- 返 回 值  :
+ ?? ?? ??  : nv_data_writeback
+ ????????  : ????NV??????????????????????????????????
+ ????????  : ??
+ ????????  : ??
+ ?? ?? ??  :
 *****************************************************************************/
 u32 nv_data_writeback(void)
 {
@@ -211,7 +211,7 @@ u32 nv_read_from_mem(nv_rdwr_req *rreq, nv_item_info_s *item_info, nv_ctrl_info_
 s32 nv_icc_msg_proc(u32 chanid ,u32 len,void* pdata)
 {
     return (s32)nv_handle_icc_rmsg(chanid , len);
-/*lint -save -e715*//*715表示pdata未使用*/
+/*lint -save -e715*//*715????pdata??????*/
 }
 /*lint -restore*/
 
@@ -237,7 +237,7 @@ u32 nv_icc_send(u32 chanid,u8* pdata,u32 len)
     for(i = 0;i<NV_ICC_SEND_COUNT;i++)
     {
         ret = bsp_icc_send(core_type,chanid,pdata,len);
-        if(ICC_INVALID_NO_FIFO_SPACE == ret)/*消息队列满,则50ms之后重新发送*/
+        if(ICC_INVALID_NO_FIFO_SPACE == ret)/*??????????,??50ms????????????*/
         {
             nv_taskdelay(50);
             continue;
@@ -265,7 +265,7 @@ u32 nv_icc_chan_init(u32 fun_id)
     u32 chanid;
     if(fun_id == NV_RECV_FUNC_AC)
     {
-        /*lint -save -e845*//*The right argument to operator '|' is certain to be 0，但是此处最好不要修改*/
+        /*lint -save -e845*//*The right argument to operator '|' is certain to be 0??????????????????????*/
         chanid = ICC_CHN_NV << 16 | fun_id;
         /*lint -restore*/
     }

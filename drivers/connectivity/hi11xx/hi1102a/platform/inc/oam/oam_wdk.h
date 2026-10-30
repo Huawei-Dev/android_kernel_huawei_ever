@@ -3,10 +3,10 @@
 #ifndef __OAM_WDK_H__
 #define __OAM_WDK_H__
 
-/* 宏定义 */
+/* ?????? */
 #define OAM_SOFTWARE_VERSION "Hi1151 V100R001C01B200_0515"
 
-/* 枚举定义 */
+/* ???????? */
 typedef enum {
     /* ALG */
     OAM_FILE_ID_ALG_EXT_IF_H = 1100,
@@ -684,7 +684,7 @@ typedef enum {
     OAM_FILE_ID_HISI_CUSTOMIZE_WIFI_HI115X_C = 2504,
     OAM_FILE_ID_PLAT_FIRMWARE_C = 2505,
 
-    /* HAL rom化文件 */
+    /* HAL rom?????? */
     OAM_FILE_ID_HAL_HI1103_MAC_ROM_C = 2600,
     OAM_FILE_ID_HAL_CHIP_ROM_C = 2601,
     OAM_FILE_ID_HAL_DEVICE_ROM_C = 2602,
@@ -697,7 +697,7 @@ typedef enum {
     OAM_FILE_ID_HAL_HI1103_RF_ROM_C = 2609,
     OAM_FILE_ID_HAL_HI1103_COEX_REG_ROM_C = 2610,
 
-    /* DMAC rom化文件 */
+    /* DMAC rom?????? */
 #if defined(_PRE_WLAN_FEATURE_DFS_OPTIMIZE) || defined(_PRE_WLAN_FEATURE_DFS_ENABLE)
     OAM_FILE_ID_DMAC_RADAR_ROM_C = 2702,
 #endif
@@ -786,7 +786,7 @@ typedef enum {
     OAM_FILE_ID_DMAC_CRYPTO_TKIP_ROM_C = 2776,
     OAM_FILE_ID_DMAC_CRYPTO_AES_CCM_ROM_C = 2777,
     OAM_FILE_ID_DMAC_CSA_STA_ROM_C = 2778,
-    /* 1102a文件 */
+    /* 1102a???? */
     OAM_FILE_ID_MAC_BOARD_RAM_C = 2779,
     OAM_FILE_ID_MAC_DATA_RAM_C = 2780,
     OAM_FILE_ID_MAC_FCS_RAM_C = 2781,
@@ -915,7 +915,7 @@ typedef enum {
     OAM_FILE_ID_MAC_IE_EC_C = 2911,
     OAM_FILE_ID_MAC_FRAME_EC_C = 2912,
 
-    /* dmac是从3000开始的，这里id不能到3000 */
+    /* dmac????3000????????????id??????3000 */
     OAM_FILE_ID_BUTT
 } oam_file_id_enum;
 typedef oal_uint32 oam_file_id_enum_uint32;

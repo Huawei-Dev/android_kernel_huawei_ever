@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-   1 头文件包含
+   1 ??????????
 *****************************************************************************/
 #include "vos.h"
 #include "PsCommonDef.h"
@@ -64,7 +64,7 @@
 #define    THIS_FILE_ID        PS_FILE_ID_MNCALL_API_C
 
 /*****************************************************************************
-   2 函数实现
+   2 ????????
 *****************************************************************************/
 
 
@@ -90,13 +90,13 @@ VOS_UINT32  MN_CALL_SendAppRequest(
                 0x00,
                (VOS_SIZE_T)(sizeof(MN_CALL_APP_REQ_MSG_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = WUEPS_PID_AT;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
     pstMsg->ulReceiverPid               = AT_GetDestPid(clientId, I0_WUEPS_PID_TAF);
 
-    /* 填写原语首部 */
+    /* ???????????? */
     pstMsg->enReq = enReq;
     pstMsg->clientId = clientId;
     pstMsg->opId = opId;
@@ -107,7 +107,7 @@ VOS_UINT32  MN_CALL_SendAppRequest(
         TAF_MEM_CPY_S(&pstMsg->unParm, sizeof(pstMsg->unParm), punParam, sizeof(pstMsg->unParm));
     }
 
-    /* 发送VOS消息 */
+    /* ????VOS???? */
     if (VOS_OK != PS_SEND_MSG(WUEPS_PID_AT, pstMsg))
     {
         AT_ERR_LOG1("MN_CALL_SendAppRequest: Send Message Fail. reqtype:", (VOS_INT32)enReq);
@@ -130,14 +130,14 @@ VOS_UINT32  MN_CALL_Orig(
     MN_CALL_ID_T                        callId;
     MN_CALL_APP_REQ_PARM_UNION          stAppReq;
 
-    /* 在该处不在分配CallId，直接将callId赋值为0
-       CallId的分配放到MN CALL模块处理该情况的函数中 */
+    /* ??????????????CallId????????callId??????0
+       CallId??????????MN CALL?????????????????????? */
     callId = 0;
 
     TAF_MEM_SET_S(&stAppReq, (VOS_UINT32)sizeof(stAppReq), 0x00, (VOS_UINT32)sizeof(stAppReq));
     TAF_MEM_CPY_S(&(stAppReq.stOrig), (VOS_UINT32)sizeof(stAppReq.stOrig), pstOrigParam, (VOS_UINT32)sizeof(MN_CALL_ORIG_PARAM_STRU));
 
-    /* 发送异步应用请求 */
+    /* ???????????????? */
     ulResult = MN_CALL_SendAppRequest(MN_CALL_APP_ORIG_REQ, clientId,
                                       opId, callId,
                                       &stAppReq);
@@ -164,7 +164,7 @@ VOS_UINT32  MN_CALL_End(
 
     if ( TAF_NULL_PTR == pstEndParam)
     {
-        /* 本地构造一个MN_CALL_END_REQ_PARAM_STRU结构, 填写原因值为255 */
+        /* ????????????MN_CALL_END_REQ_PARAM_STRU????, ????????????255 */
         stAppReq.stEnd.enEndCause = MN_CALL_INTERWORKING_UNSPECIFIED;
     }
     else
@@ -172,7 +172,7 @@ VOS_UINT32  MN_CALL_End(
         stAppReq.stEnd.enEndCause = pstEndParam->enEndCause;
     }
 
-    /* 发送异步应用请求 */
+    /* ???????????????? */
     ulResult = MN_CALL_SendAppRequest(MN_CALL_APP_END_REQ, clientId,
                                       opId, callId,
                                       &stAppReq);
@@ -189,7 +189,7 @@ VOS_UINT32  MN_CALL_QryCdur(
 {
     VOS_UINT32                          ulResult;
 
-    /* 发送异步应用请求 */
+    /* ???????????????? */
     ulResult = MN_CALL_SendAppRequest(MN_CALL_APP_GET_CDUR_REQ, clientId,
                                       opId, callId,
                                       VOS_NULL_PTR);
@@ -208,11 +208,11 @@ VOS_UINT32  TAF_CALL_SendDtmf(
     VOS_UINT32                          ulResult;
     MN_CALL_APP_REQ_PARM_UNION          stAppPara;
 
-    /* 初始化局部变量 */
+    /* ?????????????? */
     TAF_MEM_SET_S(&stAppPara, sizeof(stAppPara), 0x00, sizeof(stAppPara));
     TAF_MEM_CPY_S(&stAppPara.stDtmf, sizeof(stAppPara.stDtmf), pstDtmfParam, sizeof(TAF_CALL_DTMF_PARAM_STRU));
 
-    /* 发送异步应用请求 */
+    /* ???????????????? */
     ulResult = MN_CALL_SendAppRequest(enMsgType, clientId, opId,
                                       pstDtmfParam->CallId,
                                       &stAppPara);
@@ -233,8 +233,8 @@ VOS_UINT32  MN_CALL_Sups(
     TAF_MEM_SET_S(&stAppPara, (VOS_UINT32)sizeof(stAppPara), 0x00, (VOS_UINT32)sizeof(stAppPara));
     TAF_MEM_CPY_S(&stAppPara.stCallMgmtCmd, (VOS_UINT32)sizeof(stAppPara.stCallMgmtCmd), pstCallSupsParam, (VOS_UINT32)sizeof(MN_CALL_SUPS_PARAM_STRU));
 
-    /* 发送异步应用请求 */
-    /* 里层和外层的CallId填成一致 */
+    /* ???????????????? */
+    /* ????????????CallId???????? */
     ulResult = MN_CALL_SendAppRequest(MN_CALL_APP_SUPS_CMD_REQ, clientId,
                                       opId, pstCallSupsParam->callId,
                                       &stAppPara);
@@ -252,7 +252,7 @@ VOS_UINT32  MN_CALL_GetCallInfos(
 {
     VOS_UINT32                          ulResult;
 
-    /* 发送异步应用请求 */
+    /* ???????????????? */
     ulResult = MN_CALL_SendAppRequest(MN_CALL_APP_GET_INFO_REQ, clientId,
                                       opId, callId,
                                       VOS_NULL_PTR);
@@ -271,8 +271,8 @@ VOS_UINT32 MN_CALL_SetAlsLineNo(
 
     stAppReq.stSetAls.enAlsLine = enAlsLine;
 
-    /*1.通过TAF_MSG_ALS_LINE_NO_SET消息带参数结构MN_CALL_ALS_PARAM_STRU
-        通知TAF对ALS进行设置。*/
+    /*1.????TAF_MSG_ALS_LINE_NO_SET??????????????MN_CALL_ALS_PARAM_STRU
+        ????TAF??ALS??????????*/
     ulRst = MN_CALL_SendAppRequest(MN_CALL_APP_SET_ALS_REQ,
                                    gastAtClientTab[ucIndex].usClientId,
                                    At_GetOpId(),
@@ -292,7 +292,7 @@ VOS_UINT32 MN_CALL_CheckUus1ParmValid(
         return MN_ERR_INVALIDPARM;
     }
 
-    /*  校验参数的合法性,非法直接返回 */
+    /*  ????????????????,???????????? */
     if ( ( enSetType >= MN_CALL_SET_UUS1_BUTT )
       || ( pstUus1Info->enMsgType > MN_CALL_UUS1_MSG_RELEASE_COMPLETE ))
     {
@@ -300,8 +300,8 @@ VOS_UINT32 MN_CALL_CheckUus1ParmValid(
     }
 
 
-    /* 对于UUIE的检查仅检查第一项是否是UUIE,其他的长度和PD不进行检查,
-       由应用保证,该项仅在激活UUS1时需要检查,去激活不关心该项  */
+    /* ????UUIE????????????????????????UUIE,????????????PD??????????,
+       ??????????,????????????UUS1??????????,????????????????  */
     if ( ( MN_CALL_SET_UUS1_ACT == enSetType)
       && ( MN_CALL_UUS_IEI != pstUus1Info->aucUuie[MN_CALL_IEI_POS]))
     {
@@ -333,19 +333,19 @@ VOS_UINT32  TAF_XCALL_SendFlashReq(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_SEND_FLASH_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = WUEPS_PID_AT;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
     pstMsg->ulReceiverPid               = AT_GetDestPid(clientId, I0_WUEPS_PID_TAF);
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstMsg->usMsgId    = TAF_CALL_APP_SEND_FLASH_REQ;
     pstMsg->usClientId = clientId;
     pstMsg->ucOpId     = opId;
     TAF_MEM_CPY_S(&(pstMsg->stFlashPara), sizeof(pstMsg->stFlashPara), pstFlashPara, sizeof(TAF_CALL_FLASH_PARA_STRU));
 
-    /* 发送VOS消息 */
+    /* ????VOS???? */
     if (VOS_OK != PS_SEND_MSG(WUEPS_PID_AT, pstMsg))
     {
         AT_ERR_LOG("TAF_XCALL_SendFlashReq: Send TAF_CALL_APP_SEND_FLASH_REQ Message Fail");
@@ -376,19 +376,19 @@ VOS_UINT32  TAF_XCALL_SendBurstDtmf(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_BURST_DTMF_REQ_MSG_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = WUEPS_PID_AT;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
     pstMsg->ulReceiverPid               = AT_GetDestPid(clientId, I0_WUEPS_PID_TAF);
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstMsg->usMsgId    = TAF_CALL_APP_SEND_BURST_DTMF_REQ;
     pstMsg->usClientId = clientId;
     pstMsg->ucOpId     = opId;
     TAF_MEM_CPY_S(&(pstMsg->stBurstDTMFPara), sizeof(pstMsg->stBurstDTMFPara), pstSndBurstDTMFPara, sizeof(TAF_CALL_BURST_DTMF_PARA_STRU));
 
-    /* 发送VOS消息 */
+    /* ????VOS???? */
     if (VOS_OK != PS_SEND_MSG(WUEPS_PID_AT, pstMsg))
     {
         AT_ERR_LOG("TAF_XCALL_SendBurstDtmf: Send TAF_CALL_APP_SEND_BURST_DTMF_REQ Message Fail");
@@ -419,19 +419,19 @@ VOS_UINT32  TAF_XCALL_SendCustomDialReq(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_SEND_CUSTOM_DIAL_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = WUEPS_PID_AT;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
     pstMsg->ulReceiverPid               = AT_GetDestPid(clientId, I0_WUEPS_PID_TAF);
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstMsg->usMsgId    = TAF_CALL_APP_SEND_CUSTOM_DIAL_REQ;
     pstMsg->usClientId = clientId;
     pstMsg->ucOpId     = opId;
     TAF_MEM_CPY_S(&(pstMsg->stCustomDialPara), sizeof(pstMsg->stCustomDialPara), pstCustomDialPara, sizeof(pstMsg->stCustomDialPara));
 
-    /* 发送VOS消息 */
+    /* ????VOS???? */
     (VOS_VOID)PS_SEND_MSG(WUEPS_PID_AT, pstMsg);
 
     return VOS_TRUE;
@@ -502,19 +502,19 @@ VOS_UINT32  TAF_XCALL_SendCclpr(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_SND_CCLPR_REQ_MSG_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = WUEPS_PID_AT;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
     pstMsg->ulReceiverPid               = AT_GetDestPid(clientId, I0_WUEPS_PID_TAF);
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstMsg->usMsgId    = TAF_CALL_APP_SEND_CCLPR_REQ;
     pstMsg->usClientId = clientId;
     pstMsg->ucOpId     = opId;
     pstMsg->ucCallId   = ucCallId;
 
-    /* 发送VOS消息TAF_CALL_APP_SEND_CCLPR_REQ */
+    /* ????VOS????TAF_CALL_APP_SEND_CCLPR_REQ */
     (VOS_VOID)PS_SEND_MSG(WUEPS_PID_AT, pstMsg);
 
     return VOS_OK;
@@ -552,14 +552,14 @@ VOS_UINT32 TAF_XCALL_SendEncryptCall(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_ENCRYPT_VOICE_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstEncryptVoiceReq->ulSenderCpuId                       = VOS_LOCAL_CPUID;
     pstEncryptVoiceReq->ulSenderPid                         = ulSenderPid;
     pstEncryptVoiceReq->ulReceiverCpuId                     = VOS_LOCAL_CPUID;
     pstEncryptVoiceReq->ulReceiverPid                       = ulReceiverPid;
     pstEncryptVoiceReq->ulLength                            = sizeof(TAF_CALL_APP_ENCRYPT_VOICE_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstEncryptVoiceReq->enMsgName                           = ID_TAF_CALL_APP_ENCRYPT_VOICE_REQ;
     pstEncryptVoiceReq->stCtrl.usClientId                   = usClientId;
     pstEncryptVoiceReq->stCtrl.ucOpId                       = opId;
@@ -567,7 +567,7 @@ VOS_UINT32 TAF_XCALL_SendEncryptCall(
     pstEncryptVoiceReq->enEccVoiceType                      = ulEccVoiceType;
     TAF_MEM_CPY_S(&pstEncryptVoiceReq->stDialNumber, (VOS_UINT32)sizeof(pstEncryptVoiceReq->stDialNumber), pstDialNumber, (VOS_UINT32)sizeof(TAF_ECC_CALL_BCD_NUM_STRU));
 
-    /* 发送VOS消息ID_TAF_CALL_APP_ENCRYPT_VOICE_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_ENCRYPT_VOICE_REQ */
 	/*lint -e516 */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstEncryptVoiceReq);
 
@@ -604,14 +604,14 @@ VOS_UINT32 TAF_XCALL_SendEccCtrl(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_REMOTE_CTRL_ANSWER_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstEccRemoteCtrlAnsReq->ulSenderCpuId                   = VOS_LOCAL_CPUID;
     pstEccRemoteCtrlAnsReq->ulSenderPid                     = ulSenderPid;
     pstEccRemoteCtrlAnsReq->ulReceiverCpuId                 = VOS_LOCAL_CPUID;
     pstEccRemoteCtrlAnsReq->ulReceiverPid                   = ulReceiverPid;
     pstEccRemoteCtrlAnsReq->ulLength                        = sizeof(TAF_CALL_APP_REMOTE_CTRL_ANSWER_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstEccRemoteCtrlAnsReq->enMsgName                       = ID_TAF_CALL_APP_REMOTE_CTRL_ANSWER_REQ;
     pstEccRemoteCtrlAnsReq->stCtrl.usClientId               = usClientId;
     pstEccRemoteCtrlAnsReq->stCtrl.ucOpId                   = opId;
@@ -619,7 +619,7 @@ VOS_UINT32 TAF_XCALL_SendEccCtrl(
     pstEccRemoteCtrlAnsReq->enRemoteCtrlEvtType             = ulRemoteCtrlEvtType;
     pstEccRemoteCtrlAnsReq->enResult                        = ulResult;
 
-    /* 发送VOS消息ID_TAF_CALL_APP_REMOTE_CTRL_ANSWER_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_REMOTE_CTRL_ANSWER_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstEccRemoteCtrlAnsReq);
 
     return VOS_OK;
@@ -654,14 +654,14 @@ VOS_UINT32 TAF_XCALL_SetEccCap(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_ECC_SRV_CAP_CFG_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstEccSrvCapReq->ulSenderCpuId                          = VOS_LOCAL_CPUID;
     pstEccSrvCapReq->ulSenderPid                            = ulSenderPid;
     pstEccSrvCapReq->ulReceiverCpuId                        = VOS_LOCAL_CPUID;
     pstEccSrvCapReq->ulReceiverPid                          = ulReceiverPid;
     pstEccSrvCapReq->ulLength                               = sizeof(TAF_CALL_APP_ECC_SRV_CAP_CFG_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstEccSrvCapReq->enMsgName                              = ID_TAF_CALL_APP_ECC_SRV_CAP_CFG_REQ;
     pstEccSrvCapReq->stCtrl.usClientId                      = usClientId;
     pstEccSrvCapReq->stCtrl.ucOpId                          = opId;
@@ -669,7 +669,7 @@ VOS_UINT32 TAF_XCALL_SetEccCap(
     pstEccSrvCapReq->enEccSrvCap                            = ulEccSrvCap;
     pstEccSrvCapReq->enEccSrvStatus                         = ulEccSrvStatus;
 
-    /* 发送VOS消息ID_TAF_CALL_APP_ECC_SRV_CAP_CFG_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_ECC_SRV_CAP_CFG_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstEccSrvCapReq);
 
     return VOS_OK;
@@ -701,7 +701,7 @@ VOS_UINT32 TAF_XCALL_QryEncryptCallCap(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_ECC_SRV_CAP_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstQryEccCapReq->ulSenderCpuId                        = VOS_LOCAL_CPUID;
     pstQryEccCapReq->ulSenderPid                          = ulSenderPid;
     pstQryEccCapReq->ulReceiverCpuId                      = VOS_LOCAL_CPUID;
@@ -709,13 +709,13 @@ VOS_UINT32 TAF_XCALL_QryEncryptCallCap(
     pstQryEccCapReq->ulLength                             = sizeof(TAF_CALL_APP_ECC_SRV_CAP_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstQryEccCapReq->enMsgName                            = ID_TAF_CALL_APP_ECC_SRV_CAP_QRY_REQ;
     pstQryEccCapReq->stCtrl.usClientId                    = usClientId;
     pstQryEccCapReq->stCtrl.ucOpId                        = opId;
     pstQryEccCapReq->stCtrl.ulModuleId                    = ulModuleId;
 
-    /* 发送VOS消息ID_TAF_CALL_APP_ECC_SRV_CAP_QRY_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_ECC_SRV_CAP_QRY_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstQryEccCapReq);
 
     return VOS_OK;
@@ -753,14 +753,14 @@ VOS_UINT32 TAF_XCALL_SetEncryptCallKmc(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_SET_EC_KMC_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstEccKmcSetReq->ulSenderCpuId                          = VOS_LOCAL_CPUID;
     pstEccKmcSetReq->ulSenderPid                            = ulSenderPid;
     pstEccKmcSetReq->ulReceiverCpuId                        = VOS_LOCAL_CPUID;
     pstEccKmcSetReq->ulReceiverPid                          = ulReceiverPid;
     pstEccKmcSetReq->ulLength                               = sizeof(TAF_CALL_APP_SET_EC_KMC_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstEccKmcSetReq->enMsgName                              = ID_TAF_CALL_APP_SET_EC_KMC_REQ;
     pstEccKmcSetReq->stCtrl.usClientId                      = usClientId;
     pstEccKmcSetReq->stCtrl.ucOpId                          = opId;
@@ -768,7 +768,7 @@ VOS_UINT32 TAF_XCALL_SetEncryptCallKmc(
     TAF_MEM_CPY_S(&pstEccKmcSetReq->stKmcData, (VOS_UINT32)sizeof(pstEccKmcSetReq->stKmcData), pstEccKmcData, (VOS_UINT32)sizeof(MN_CALL_APP_EC_KMC_DATA_STRU));
 
 
-    /* 发送VOS消息ID_TAF_CALL_APP_SET_EC_KMC_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_SET_EC_KMC_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstEccKmcSetReq);
 
     return VOS_OK;
@@ -802,7 +802,7 @@ VOS_UINT32 TAF_XCALL_SetEccTestMode(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_SET_EC_TEST_MODE_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstEccTestModeReq->ulSenderCpuId                        = VOS_LOCAL_CPUID;
     pstEccTestModeReq->ulSenderPid                          = ulSenderPid;
     pstEccTestModeReq->ulReceiverCpuId                      = VOS_LOCAL_CPUID;
@@ -810,7 +810,7 @@ VOS_UINT32 TAF_XCALL_SetEccTestMode(
     pstEccTestModeReq->ulLength                             = sizeof(TAF_CALL_APP_SET_EC_TEST_MODE_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstEccTestModeReq->enMsgName                            = ID_TAF_CALL_APP_SET_EC_TEST_MODE_REQ;
     pstEccTestModeReq->stCtrl.usClientId                    = usClientId;
     pstEccTestModeReq->stCtrl.ucOpId                        = opId;
@@ -818,7 +818,7 @@ VOS_UINT32 TAF_XCALL_SetEccTestMode(
     pstEccTestModeReq->enEccTestModeStatus                  = ulTestMode;
 
 
-    /* 发送VOS消息ID_TAF_CALL_APP_SET_EC_TEST_MODE_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_SET_EC_TEST_MODE_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstEccTestModeReq);
 
     return VOS_OK;
@@ -852,20 +852,20 @@ VOS_UINT32 TAF_XCALL_QryEncryptCallRandom(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_GET_EC_RANDOM_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstGetEccRandomReq->ulSenderCpuId                        = VOS_LOCAL_CPUID;
     pstGetEccRandomReq->ulSenderPid                          = ulSenderPid;
     pstGetEccRandomReq->ulReceiverCpuId                      = VOS_LOCAL_CPUID;
     pstGetEccRandomReq->ulReceiverPid                        = ulReceiverPid;
     pstGetEccRandomReq->ulLength                             = sizeof(TAF_CALL_APP_GET_EC_RANDOM_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstGetEccRandomReq->enMsgName                            = ID_TAF_CALL_APP_GET_EC_RANDOM_REQ;
     pstGetEccRandomReq->stCtrl.usClientId                    = usClientId;
     pstGetEccRandomReq->stCtrl.ucOpId                        = opId;
     pstGetEccRandomReq->stCtrl.ulModuleId                    = ulModuleId;
 
-    /* 发送VOS消息ID_TAF_CALL_APP_ECC_SRV_CAP_QRY_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_ECC_SRV_CAP_QRY_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstGetEccRandomReq);
 
     return VOS_OK;
@@ -897,20 +897,20 @@ VOS_UINT32 TAF_XCALL_QryEncryptCallKmc(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_GET_EC_KMC_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstGetEccKmcReq->ulSenderCpuId                        = VOS_LOCAL_CPUID;
     pstGetEccKmcReq->ulSenderPid                          = ulSenderPid;
     pstGetEccKmcReq->ulReceiverCpuId                      = VOS_LOCAL_CPUID;
     pstGetEccKmcReq->ulReceiverPid                        = ulReceiverPid;
     pstGetEccKmcReq->ulLength                             = sizeof(TAF_CALL_APP_GET_EC_KMC_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstGetEccKmcReq->enMsgName                            = ID_TAF_CALL_APP_GET_EC_KMC_REQ;
     pstGetEccKmcReq->stCtrl.usClientId                    = usClientId;
     pstGetEccKmcReq->stCtrl.ucOpId                        = opId;
     pstGetEccKmcReq->stCtrl.ulModuleId                    = ulModuleId;
 
-    /* 发送VOS消息ID_TAF_CALL_APP_GET_EC_KMC_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_GET_EC_KMC_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstGetEccKmcReq);
 
     return VOS_OK;
@@ -942,20 +942,20 @@ VOS_UINT32 TAF_XCALL_QryEncryptCallTestMode(
                 0x00,
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_GET_EC_TEST_MODE_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstGetEccTestModeReq->ulSenderCpuId                        = VOS_LOCAL_CPUID;
     pstGetEccTestModeReq->ulSenderPid                          = ulSenderPid;
     pstGetEccTestModeReq->ulReceiverCpuId                      = VOS_LOCAL_CPUID;
     pstGetEccTestModeReq->ulReceiverPid                        = ulReceiverPid;
     pstGetEccTestModeReq->ulLength                             = sizeof(TAF_CALL_APP_GET_EC_TEST_MODE_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstGetEccTestModeReq->enMsgName                            = ID_TAF_CALL_APP_GET_EC_TEST_MODE_REQ;
     pstGetEccTestModeReq->stCtrl.usClientId                    = usClientId;
     pstGetEccTestModeReq->stCtrl.ucOpId                        = opId;
     pstGetEccTestModeReq->stCtrl.ulModuleId                    = ulModuleId;
 
-    /* 发送VOS消息ID_TAF_CALL_APP_GET_EC_TEST_MODE_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_GET_EC_TEST_MODE_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstGetEccTestModeReq);
     /*lint +e516 */
 
@@ -995,14 +995,14 @@ VOS_UINT32 TAF_XCALL_SetPrivacyModePreferred(
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_PRIVACY_MODE_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstPrivacyModeReq->ulSenderCpuId                        = VOS_LOCAL_CPUID;
     pstPrivacyModeReq->ulSenderPid                          = ulSenderPid;
     pstPrivacyModeReq->ulReceiverCpuId                      = VOS_LOCAL_CPUID;
     pstPrivacyModeReq->ulReceiverPid                        = ulReceiverPid;
     pstPrivacyModeReq->ulLength                             = sizeof(TAF_CALL_APP_PRIVACY_MODE_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstPrivacyModeReq->enMsgName                            = ID_TAF_CALL_APP_PRIVACY_MODE_SET_REQ;
     pstPrivacyModeReq->stCtrl.usClientId                    = usClientId;
     pstPrivacyModeReq->stCtrl.ucOpId                        = opId;
@@ -1044,14 +1044,14 @@ VOS_UINT32 TAF_XCALL_QryPrivacyModePreferred(
                (VOS_SIZE_T)(sizeof(TAF_CALL_APP_PRIVACY_MODE_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstPrivacyModeReq->ulSenderCpuId                        = VOS_LOCAL_CPUID;
     pstPrivacyModeReq->ulSenderPid                          = ulSenderPid;
     pstPrivacyModeReq->ulReceiverCpuId                      = VOS_LOCAL_CPUID;
     pstPrivacyModeReq->ulReceiverPid                        = ulReceiverPid;
     pstPrivacyModeReq->ulLength                             = sizeof(TAF_CALL_APP_PRIVACY_MODE_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstPrivacyModeReq->enMsgName                            = ID_TAF_CALL_APP_PRIVACY_MODE_QRY_REQ;
     pstPrivacyModeReq->stCtrl.usClientId                    = usClientId;
     pstPrivacyModeReq->stCtrl.ucOpId                        = opId;
@@ -1091,20 +1091,20 @@ VOS_UINT32 TAF_CALL_QryCnap(
                   0x00,
                   (VOS_SIZE_T)(sizeof(TAF_CALL_APP_CNAP_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写VOS消息头 */
+    /* ????VOS?????? */
     pstCnapQryReq->ulSenderCpuId    = VOS_LOCAL_CPUID;
     pstCnapQryReq->ulSenderPid      = ulSenderPid;
     pstCnapQryReq->ulReceiverCpuId  = VOS_LOCAL_CPUID;
     pstCnapQryReq->ulReceiverPid    = ulReceiverPid;
     pstCnapQryReq->ulLength         = sizeof(TAF_CALL_APP_CNAP_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstCnapQryReq->enMsgName            = ID_TAF_CALL_APP_CNAP_QRY_REQ;
     pstCnapQryReq->stCtrl.usClientId    = usClientId;
     pstCnapQryReq->stCtrl.ucOpId        = opId;
     pstCnapQryReq->stCtrl.ulModuleId    = ulModuleId;
 
-    /* 发送VOS消息ID_TAF_CALL_APP_CNAP_QRY_REQ */
+    /* ????VOS????ID_TAF_CALL_APP_CNAP_QRY_REQ */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstCnapQryReq);
 
     return VOS_OK;

@@ -9,7 +9,7 @@ extern "C" {
 
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "oam_ext_if.h"
 #include "wlan_spec.h"
@@ -22,7 +22,7 @@ extern "C" {
 #undef  THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_MAC_USER_C
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 
 mac_user_rom_stru  g_mac_user_rom[MAC_RES_MAX_USER_LIMIT];
@@ -38,7 +38,7 @@ oal_uint32 mac_user_update_ap_bandwidth_cap(mac_user_stru *pst_mac_user)
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 获取HT和VHT结构体指针 */
+    /* ????HT??VHT?????????? */
     pst_mac_ht_hdl = &(pst_mac_user->st_ht_hdl);
     pst_mac_vht_hdl = &(pst_mac_user->st_vht_hdl);
 
@@ -51,8 +51,8 @@ oal_uint32 mac_user_update_ap_bandwidth_cap(mac_user_stru *pst_mac_user)
     }
 
     if (pst_mac_vht_hdl->en_vht_capable == OAL_TRUE) {
-        /* en_channel_width的取值:VHT opern ie，0 -- 20/40M, 1 -- 80/160M, 同时兼容已废弃的2和3 */
-        /* bit_supported_channel_width: VHT capabilities,0--非160,1--160M, 2--160 and 80+80 */
+        /* en_channel_width??????:VHT opern ie??0 -- 20/40M, 1 -- 80/160M, ????????????????2??3 */
+        /* bit_supported_channel_width: VHT capabilities,0--??160,1--160M, 2--160 and 80+80 */
         if (pst_mac_vht_hdl->en_channel_width == WLAN_MIB_VHT_OP_WIDTH_80) {
             if ((0 == pst_mac_vht_hdl->bit_supported_channel_width) && (0 != pst_mac_vht_hdl->bit_extend_nss_bw_supp)) {
                 pst_mac_user->en_bandwidth_cap =
@@ -85,7 +85,7 @@ oal_uint8 mac_user_get_sta_cap_bandwidth_11ac(wlan_channel_band_enum_uint8 en_ba
 {
     wlan_bw_cap_enum_uint8        en_bandwidth_cap = WLAN_BW_CAP_20M;
 
-    /* 2.4g band不应根据vht cap获取带宽信息 */
+    /* 2.4g band????????vht cap???????????? */
     if((en_band == WLAN_BAND_2G) && (pst_mac_ht_hdl->en_ht_capable == OAL_TRUE)) {
         en_bandwidth_cap = (pst_mac_ht_hdl->bit_supported_channel_width == WLAN_BW_CAP_40M) ?     \
                             WLAN_BW_CAP_40M : WLAN_BW_CAP_20M;

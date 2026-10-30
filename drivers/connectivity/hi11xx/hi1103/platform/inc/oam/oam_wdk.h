@@ -3,13 +3,13 @@
 #ifndef __OAM_WDK_H__
 #define __OAM_WDK_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_ext_if.h"
 
-/* 宏定义 */
+/* ?????? */
 #define OAM_SOFTWARE_VERSION "Hi1151 V100R001C01B200_0515"
 
-/* 枚举定义 */
+/* ???????? */
 typedef enum {
     /* ALG */
     OAM_FILE_ID_ALG_EXT_IF_H = 1100,
@@ -679,7 +679,7 @@ typedef enum {
     OAM_FILE_ID_HISI_CUSTOMIZE_WIFI_HI115X_C = 2504,
     OAM_FILE_ID_PLAT_PM_C = 2505,
 
-    /* HAL rom化文件 */
+    /* HAL rom?????? */
     OAM_FILE_ID_HAL_HI1103_MAC_ROM_C = 2600,
     OAM_FILE_ID_HAL_CHIP_ROM_C = 2601,
     OAM_FILE_ID_HAL_DEVICE_ROM_C = 2602,
@@ -692,7 +692,7 @@ typedef enum {
     OAM_FILE_ID_HAL_HI1103_RF_ROM_C = 2609,
     OAM_FILE_ID_HAL_HI1103_COEX_REG_ROM_C = 2610,
 
-    /* DMAC rom化文件 */
+    /* DMAC rom?????? */
 #if defined(_PRE_WLAN_FEATURE_DFS_OPTIMIZE) || defined(_PRE_WLAN_FEATURE_DFS_ENABLE)
     OAM_FILE_ID_DMAC_RADAR_ROM_C = 2702,
 #endif

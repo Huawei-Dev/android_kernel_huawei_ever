@@ -104,7 +104,7 @@ VOS_UINT32 diag_GetImei(VOS_CHAR szimei [16])
 
         for (subscript = 0; subscript < uslen; subscript++)
         {
-            *(szimei + subscript) = *(auctemp + subscript) + 0x30; /*字符转换*/
+            *(szimei + subscript) = *(auctemp + subscript) + 0x30; /*????????*/
         }
 
         szimei[DIAG_NV_IMEI_LEN - 1] = checkdata + 0x30;
@@ -121,13 +121,13 @@ VOS_VOID diag_GetModemInfo(DIAG_CONNECT_FRAME_INFO_STRU *pstDiagHead)
     const MODEM_VER_INFO_S* pstVerInfo;
     MSP_DIAG_CNF_INFO_STRU stDiagInfo;
 
-    /*处理结果*/
+    /*????????*/
     stCnf.ulAuid = ((MSP_DIAG_DATA_REQ_STRU*)(pstDiagHead->aucData))->ulAuid;
     stCnf.ulSn   = ((MSP_DIAG_DATA_REQ_STRU*)(pstDiagHead->aucData))->ulSn;
 
     (VOS_VOID)VOS_MemSet_s(&(stCnf.stBuildVersion), (VOS_UINT32)sizeof(DIAG_CMD_UE_BUILD_VER_STRU), 0, (VOS_UINT32)sizeof(DIAG_CMD_UE_BUILD_VER_STRU));
 
-    /*获取版本信息*/
+    /*????????????*/
     pstVerInfo = mdrv_ver_get_info();
 	if(pstVerInfo!=NULL)
 	{
@@ -139,24 +139,24 @@ VOS_VOID diag_GetModemInfo(DIAG_CONNECT_FRAME_INFO_STRU *pstDiagHead)
         stCnf.stBuildVersion.usHardwareVerNo = pstVerInfo->stswverinfo.ulCustomNOv;
         stCnf.stBuildVersion.ulProductNo     = pstVerInfo->stswverinfo.ulProductNo;
 
-        /*获取数采基地址*/
+        /*??????????????*/
         stCnf.ulChipBaseAddr = (VOS_UINT32)pstVerInfo->stproductinfo.echiptype;
 	}
 
-    /*获取IMEI号*/
+    /*????IMEI??*/
 
-    /*获取软件版本号*/
+    /*??????????????*/
     (VOS_VOID)VOS_MemSet_s(&stCnf.stUeSoftVersion, (VOS_UINT32)sizeof(DIAG_CMD_UE_SOFT_VERSION_STRU), 0, (VOS_UINT32)sizeof(DIAG_CMD_UE_SOFT_VERSION_STRU));
 
-    /*路测信息获取*/
+    /*????????????*/
     (VOS_VOID) mdrv_nv_read(EN_NV_ID_AGENT_FLAG, &(stCnf.stAgentFlag), (VOS_UINT32)sizeof(NV_ITEM_AGENT_FLAG_STRU));
 
     stCnf.diag_cfg.UintValue = 0;
 
-    /* 010: OM通道融合的版本 */
-    /* 110: OM融合GU未融合的版本 */
-    /* 100: OM完全融合的版本 */
-    stCnf.diag_cfg.CtrlFlag.ulDrxControlFlag    = 0; /*和HIDS确认此处不再使用,打桩处理即可*/
+    /* 010: OM?????????????? */
+    /* 110: OM????GU???????????? */
+    /* 100: OM?????????????? */
+    stCnf.diag_cfg.CtrlFlag.ulDrxControlFlag    = 0; /*??HIDS????????????????,????????????*/
     stCnf.diag_cfg.CtrlFlag.ulPortFlag          = 0;
     stCnf.diag_cfg.CtrlFlag.ulOmUnifyFlag       = 1;
 
@@ -206,7 +206,7 @@ VOS_UINT32 diag_ConnProc(VOS_UINT8* pstReq)
 
     mdrv_diag_PTR(EN_DIAG_PTR_MSGMSP_CONN_IN, 1, pstDiagHead->ulCmdId, 0);
 
-    /* 新增获取modem信息的命令用于工具查询单板信息 */
+    /* ????????modem?????????????????????????????? */
     if(pstDiagHead->ulMsgLen >= sizeof(DIAG_CMD_GET_MDM_INFO_REQ_STRU))
     {
         pstInfo = (DIAG_CMD_GET_MDM_INFO_REQ_STRU *)pstDiagHead->aucData;
@@ -242,7 +242,7 @@ VOS_UINT32 diag_ConnProc(VOS_UINT8* pstReq)
         goto DIAG_ERROR;
     }
 
-    /*设置连接状态开关值*/
+    /*??????????????????*/
     ulCnfRst = diag_CfgSetGlobalBitValue(&g_ulDiagCfgInfo, DIAG_CFG_CONN_BIT,DIAG_CFG_SWT_OPEN);
     if(ulCnfRst)
     {
@@ -250,12 +250,12 @@ VOS_UINT32 diag_ConnProc(VOS_UINT8* pstReq)
         goto DIAG_ERROR;
     }
 
-    /* 关闭SOCP模块的自动降频 */
+    /* ????SOCP?????????????? */
     mdrv_socp_disalbe_dfs();
 
     (VOS_VOID)VOS_MemSet_s(&(pstConn->stConnInfo.stBuildVersion), (VOS_UINT32)sizeof(DIAG_CMD_UE_BUILD_VER_STRU), 0, (VOS_UINT32)sizeof(DIAG_CMD_UE_BUILD_VER_STRU));
 
-    /*获取版本信息*/
+    /*????????????*/
     pstVerInfo = mdrv_ver_get_info();
     if(pstVerInfo!=NULL)
     {
@@ -267,24 +267,24 @@ VOS_UINT32 diag_ConnProc(VOS_UINT8* pstReq)
         pstConn->stConnInfo.stBuildVersion.usHardwareVerNo = pstVerInfo->stswverinfo.ulCustomNOv;
         pstConn->stConnInfo.stBuildVersion.ulProductNo     = pstVerInfo->stswverinfo.ulProductNo;
 
-        /*获取数采基地址*/
+        /*??????????????*/
         pstConn->stConnInfo.ulChipBaseAddr = (VOS_UINT32)pstVerInfo->stproductinfo.echiptype;
     }
 
-    /*获取IMEI号*/
+    /*????IMEI??*/
 
-    /*获取软件版本号*/
+    /*??????????????*/
     (VOS_VOID)VOS_MemSet_s(&pstConn->stConnInfo.stUeSoftVersion, (VOS_UINT32)sizeof(DIAG_CMD_UE_SOFT_VERSION_STRU), 0, (VOS_UINT32)sizeof(DIAG_CMD_UE_SOFT_VERSION_STRU));
 
-    /*路测信息获取*/
+    /*????????????*/
     (VOS_VOID)mdrv_nv_read(EN_NV_ID_AGENT_FLAG, &(pstConn->stConnInfo.stAgentFlag), (VOS_UINT32)sizeof(NV_ITEM_AGENT_FLAG_STRU));
 
     pstConn->stConnInfo.diag_cfg.UintValue = 0;
 
-    /* 010: OM通道融合的版本 */
-    /* 110: OM融合GU未融合的版本 */
-    /* 100: OM完全融合的版本 */
-    pstConn->stConnInfo.diag_cfg.CtrlFlag.ulDrxControlFlag = 0; /*和HIDS确认此处不再使用,打桩处理即可*/
+    /* 010: OM?????????????? */
+    /* 110: OM????GU???????????? */
+    /* 100: OM?????????????? */
+    pstConn->stConnInfo.diag_cfg.CtrlFlag.ulDrxControlFlag = 0; /*??HIDS????????????????,????????????*/
     pstConn->stConnInfo.diag_cfg.CtrlFlag.ulPortFlag = 0;
     pstConn->stConnInfo.diag_cfg.CtrlFlag.ulOmUnifyFlag = 1;
 #ifdef DIAG_SEC_TOOLS
@@ -308,7 +308,7 @@ VOS_UINT32 diag_ConnProc(VOS_UINT8* pstReq)
         goto DIAG_ERROR;
     }
 
-    /*处理结果*/
+    /*????????*/
     pstConn->stConnInfo.ulAuid = ((MSP_DIAG_DATA_REQ_STRU*)(pstDiagHead->aucData))->ulAuid;
     pstConn->stConnInfo.ulSn   = ((MSP_DIAG_DATA_REQ_STRU*)(pstDiagHead->aucData))->ulSn;
     pstConn->stConnInfo.ulRc   = ERR_MSP_SUCCESS;
@@ -321,7 +321,7 @@ VOS_UINT32 diag_ConnProc(VOS_UINT8* pstReq)
     ulCnfRst = VOS_SendMsg(MSP_PID_DIAG_APP_AGENT, pstConn);
     if(ERR_MSP_SUCCESS == ulCnfRst)
     {
-        /*复位维测信息记录*/
+        /*????????????????*/
         mdrv_diag_reset_mntn_info(DIAGLOG_SRC_MNTN);
         mdrv_diag_reset_mntn_info(DIAGLOG_DST_MNTN);
 
@@ -385,14 +385,14 @@ VOS_UINT32 diag_SetChanDisconn(MsgBlock* pMsgBlock)
         diag_ConnReset();
         diag_CfgResetAllSwt();
 
-        /* 删除定时器 */
+        /* ?????????? */
         diag_StopMntnTimer();
 
         mdrv_hds_printlog_disconn();
 
         mdrv_hds_translog_disconn();
 
-        /*将状态发送给C核*/
+        /*????????????C??*/
         (VOS_VOID)diag_SendMsg(MSP_PID_DIAG_APP_AGENT,MSP_PID_DIAG_AGENT,ID_MSG_DIAG_HSO_DISCONN_IND, VOS_NULL, 0);
 
         mdrv_socp_send_data_manager(SOCP_CODER_DST_OM_IND, SOCP_DEST_DSM_DISABLE);
@@ -415,7 +415,7 @@ VOS_UINT32 diag_DisConnProc(VOS_UINT8* pstReq)
     diag_crit("Receive tool disconnect cmd!\n");
 
 #ifdef DIAG_SEC_TOOLS
-        /* 清空鉴权状态 */
+        /* ???????????? */
         g_ulAuthState = DIAG_AUTH_TYPE_DEFAULT;
 #endif
 
@@ -429,11 +429,11 @@ VOS_UINT32 diag_DisConnProc(VOS_UINT8* pstReq)
 
     mdrv_diag_PTR(EN_DIAG_PTR_MSGMSP_DISCONN_IN, 1, pstDiagHead->ulCmdId, 0);
 
-    /*重置所有开关状态为未打开*/
+    /*????????????????????????*/
     diag_ConnReset();
     diag_CfgResetAllSwt();
 
-    /* 删除定时器 */
+    /* ?????????? */
     diag_StopMntnTimer();
 
     DIAG_MSG_ACORE_CFG_PROC(ulLen, pstDiagHead, pstInfo, ret);
@@ -468,7 +468,7 @@ VOS_VOID diag_ConnAuth(DIAG_CONNECT_FRAME_INFO_STRU *pstDiagHead)
 
     g_ulAuthState = DIAG_AUTH_TYPE_AUTHING;
 
-    /* 鉴权消息DIAG 三级头+ 鉴权key */
+    /* ????????DIAG ??????+ ????key */
     if((pstDiagHead->ulMsgLen < sizeof(MSP_DIAG_DATA_REQ_STRU))||(pstDiagHead->ulMsgLen > DIAG_FRAME_SUM_LEN))
     {
         diag_error("rev msglen is too small, len:0x%x\n", pstDiagHead->ulMsgLen);
@@ -493,7 +493,7 @@ VOS_VOID diag_ConnAuthRst(MsgBlock* pMsgBlock)
     DIAG_DATA_MSG_STRU *pstMsg = (DIAG_DATA_MSG_STRU*)pMsgBlock;
     DIAG_AUTH_CNF_STRU *pstAuthRst = NULL;
 
-    /* 不是在鉴权中 */
+    /* ???????????? */
     if(g_ulAuthState != DIAG_AUTH_TYPE_AUTHING)
     {
         diag_error("no auth req, g_ulAuthState:0x%x\n", g_ulAuthState);

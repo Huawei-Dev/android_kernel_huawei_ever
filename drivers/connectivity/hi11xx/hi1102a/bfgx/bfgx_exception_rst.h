@@ -2,7 +2,7 @@
 
 #ifndef __BFGX_EXCEPTION_RST_H__
 #define __BFGX_EXCEPTION_RST_H__
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "plat_exception_rst.h"
 #include "oal_workqueue.h"
 
@@ -99,7 +99,7 @@ extern memdump_info_t bcpu_memdump_cfg;
 extern memdump_info_t wcpu_memdump_cfg;
 #endif
 
-/* 全局变量定义 */
+/* ???????????? */
 enum PLAT_CFG {
     PLAT_DFR_CFG = 0,
     PLAT_BEATTIMER_TIMEOUT_RESET_CFG = 1,

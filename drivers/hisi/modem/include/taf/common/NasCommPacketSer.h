@@ -54,7 +54,7 @@
 
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 #include "vos.h"
 
@@ -68,7 +68,7 @@ extern "C" {
 #endif
 
 /*****************************************************************************
-#pragma pack(*)    设置字节对齐方式
+#pragma pack(*)    ????????????????
 *****************************************************************************/
 #if (VOS_OS_VER != VOS_WIN32)
 #pragma pack(4)
@@ -90,7 +90,7 @@ extern "C" {
 #define PS_MAC_ADDR_LEN                                     (6)
 
 #define PS_MAX_LADN_LIST_NUM                                (8)
-#define PS_MAX_NR_TA_NUM                                    (16)     /* TA 列表最大个数 */
+#define PS_MAX_NR_TA_NUM                                    (16)     /* TA ???????????? */
 
 #define PS_URSP_OS_ID_MAX_LEN                               (4)
 #define PS_URSP_APP_ID_MAX_LEN                              (8)
@@ -117,13 +117,13 @@ extern "C" {
 #define PS_PDU_SESSION_ID_MIN                               (5)
 #define PS_PDU_SESSION_ID_MAX                               (15)
 
-/* 目前有效的PDU SESSION ID范围是1-15, 总共16个, 但APS目前支持的最小PDU SESSION ID依旧为5个, 后续统一此处可以改成 (PS_PDU_SESSION_ID_MAX - PS_PDU_SESSION_ID_MIN + 1) */
+/* ??????????PDU SESSION ID??????1-15, ????16??, ??APS??????????????PDU SESSION ID??????5??, ???????????????????? (PS_PDU_SESSION_ID_MAX - PS_PDU_SESSION_ID_MIN + 1) */
 #define PS_PDU_SESSION_ID_MAX_NUM                           (16)
 
 #define PS_MAX_QOS_FLOW_NUM                                 (8)
-#define PS_MAX_QOS_RULE_NUM                                 (8)             /* TODO:暂定每个PDU Session中最多有8个QoS rule */
-#define PS_MAX_QOS_RULE_NUM_IN_QOS_FLOW                     (4)             /* TODO:暂定每个QoS flow 中最多有4个QoS rule */
-#define PS_MAX_PF_NUM_IN_QOS_RULE                           (4)             /* TODO:暂定每个QoS rule 中最多有4个PF,下个迭代再调大到8个  */
+#define PS_MAX_QOS_RULE_NUM                                 (8)             /* TODO:????????PDU Session????????8??QoS rule */
+#define PS_MAX_QOS_RULE_NUM_IN_QOS_FLOW                     (4)             /* TODO:????????QoS flow ????????4??QoS rule */
+#define PS_MAX_PF_NUM_IN_QOS_RULE                           (4)             /* TODO:????????QoS rule ????????4??PF,????????????????8??  */
 #define PS_MAX_PF_NUM_IN_TFT                                (16)
 #define PS_MAX_MAP_QOS_FLOW_NUM                             (2)
 #define PS_MAX_MAP_QOS_RULE_NUM                             (4)
@@ -133,8 +133,8 @@ extern "C" {
 #define PS_ONE_MBPS_UNIT_WITH_KBPS                          (1000UL)
 #define PS_ONE_GBPS_UNIT_WITH_KBPS                          (1000000UL)
 #define PS_ONE_TBPS_UNIT_WITH_KBPS                          (1000000000UL)
-#define PS_UE_SUPPORT_MAX_RATE                              (4000000000UL)      /* 暂定UE最大支持速率4Tbps */
-#define PS_SIM_FORMAT_PLMN_LEN                              (3)               /* Sim卡格式的Plmn长度 */
+#define PS_UE_SUPPORT_MAX_RATE                              (4000000000UL)      /* ????UE????????????4Tbps */
+#define PS_SIM_FORMAT_PLMN_LEN                              (3)               /* Sim????????Plmn???? */
 
 #define PS_QFI_UNASSIGNED_VALUE                             (0)
 /*******************************************************************************
@@ -167,8 +167,8 @@ enum PS_PDU_SESSION_TYPE_ENUM
     PS_PDU_SESSION_TYPE_IPV4            = 0x01,
     PS_PDU_SESSION_TYPE_IPV6            = 0x02,
     PS_PDU_SESSION_TYPE_IPV4V6          = 0x03,
-    PS_PDU_SESSION_TYPE_UNSTRUCT        = 0x04,             /* 此枚举值仅用在5G下 */
-    PS_PDU_SESSION_TYPE_ETHERNET        = 0x05,             /* 此枚举值仅用在5G下 */
+    PS_PDU_SESSION_TYPE_UNSTRUCT        = 0x04,             /* ??????????????5G?? */
+    PS_PDU_SESSION_TYPE_ETHERNET        = 0x05,             /* ??????????????5G?? */
     PS_PDU_SESSION_TYPE_BUTT
 };
 typedef VOS_UINT8 PS_PDU_SESSION_TYPE_ENUM_UINT8;
@@ -401,7 +401,7 @@ typedef PS_SESSION_AMBR_UNIT_TYPE_ENUM_UINT8                PS_NR_BIT_RATE_UNIT_
 
 typedef struct
 {
-    VOS_UINT8                           ucLength;                               /* 长度为0标示APN/DNN无效 */
+    VOS_UINT8                           ucLength;                               /* ??????0????APN/DNN???? */
     VOS_UINT8                           aucReserved[3];
     VOS_UINT8                           aucValue[PS_MAX_APN_LEN];
 } PS_APN_STRU;
@@ -409,8 +409,8 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulDLSessionAmbr;/* 转换后的单位是:kbps */
-    VOS_UINT32                          ulULSessionAmbr;/* 转换后的单位是:kbps */
+    VOS_UINT32                          ulDLSessionAmbr;/* ??????????????:kbps */
+    VOS_UINT32                          ulULSessionAmbr;/* ??????????????:kbps */
 } PS_PDU_SESSION_AMBR_STRU;
 
 
@@ -465,10 +465,10 @@ typedef struct
 }PS_REJECTED_NSSAI_INFO_STRU;
 
 /*****************************************************************************
- 结构名称   : PS_PF_STRU
- 协议表格   :
- ASN.1 描述 :
- 结构说明   : 详见TS 24.501 section 9.10.4.9 Traffic Flow Template，已译码
+ ????????   : PS_PF_STRU
+ ????????   :
+ ASN.1 ???? :
+ ????????   : ????TS 24.501 section 9.10.4.9 Traffic Flow Template????????
 *****************************************************************************/
 typedef struct
 {
@@ -498,24 +498,24 @@ typedef struct
     VOS_UINT16                          usSingleRmtPort;
     VOS_UINT16                          usRmtPortHighLimit;
     VOS_UINT16                          usRmtPortLowLimit;
-    VOS_UINT8                           ucProtocolId;             /*协议号*/
+    VOS_UINT8                           ucProtocolId;             /*??????*/
     VOS_UINT8                           ucTypeOfService;          /*TOS*/
 
     VOS_UINT8                           ucTypeOfServiceMask;      /*TOS Mask*/
     PS_PF_MATCH_ALL_ENUM_UINT8          enMatchAll;
 
     VOS_UINT8                           aucRmtIpv4Address[PS_IPV4_ADDR_LEN];
-                                                                  /*ucSourceIpAddress[0]为IP地址高字节位
-                                                                    ucSourceIpAddress[3]为低字节位*/
+                                                                  /*ucSourceIpAddress[0]??IP????????????
+                                                                    ucSourceIpAddress[3]??????????*/
     VOS_UINT8                           aucRmtIpv4Mask[PS_IPV4_ADDR_LEN];
-                                                                  /*ucSourceIpMask[0]为IP地址高字节位 ,
-                                                                    ucSourceIpMask[3]为低字节位 */
+                                                                  /*ucSourceIpMask[0]??IP???????????? ,
+                                                                    ucSourceIpMask[3]?????????? */
     VOS_UINT8                           aucRmtIpv6Address[PS_IPV6_ADDR_LEN];
-                                                                  /*ucRmtIpv6Address[0]为IPv6接口标识高字节位
-                                                                    ucRmtIpv6Address[15]为IPv6接口标识低字节位*/
+                                                                  /*ucRmtIpv6Address[0]??IPv6????????????????
+                                                                    ucRmtIpv6Address[15]??IPv6????????????????*/
     VOS_UINT8                           aucRmtIpv6Mask[PS_IPV6_ADDR_LEN];
-                                                                  /*ucRmtIpv6Mask[0]为高字节位
-                                                                    ucRmtIpv6Mask[15]为低字节位*/
+                                                                  /*ucRmtIpv6Mask[0]??????????
+                                                                    ucRmtIpv6Mask[15]??????????*/
 
     VOS_UINT32                          ulFlowLabelType;          /*FlowLabelType*/
     VOS_UINT8                           aucLocalIpv4Addr[PS_IPV4_ADDR_LEN];
@@ -529,15 +529,15 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulPfNum;                                /* pf个数 */
-    PS_PF_STRU                          astPf[PS_MAX_PF_NUM_IN_TFT];                   /* pf表 */
+    VOS_UINT32                          ulPfNum;                                /* pf???? */
+    PS_PF_STRU                          astPf[PS_MAX_PF_NUM_IN_TFT];                   /* pf?? */
 }PS_TFT_STRU;
 
 
 typedef struct
 {
-    VOS_UINT32                          ulPfNum;                                /* pf个数 */
-    PS_PF_STRU                          astPf[PS_MAX_PF_NUM_IN_QOS_RULE];       /* pf表 */
+    VOS_UINT32                          ulPfNum;                                /* pf???? */
+    PS_PF_STRU                          astPf[PS_MAX_PF_NUM_IN_QOS_RULE];       /* pf?? */
 }PS_QFT_STRU;
 
 
@@ -566,24 +566,24 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulULMBR;    /* 上行最大速率值,单位KBPS */
-    VOS_UINT32                          ulDLMBR;    /* 下行最大速率值,单位KBPS */
-    VOS_UINT32                          ulULGBR;    /* 上行保证速率值,单位KBPS */
-    VOS_UINT32                          ulDLGBR;    /* 上行保证速率值,单位KBPS */
+    VOS_UINT32                          ulULMBR;    /* ??????????????,????KBPS */
+    VOS_UINT32                          ulDLMBR;    /* ??????????????,????KBPS */
+    VOS_UINT32                          ulULGBR;    /* ??????????????,????KBPS */
+    VOS_UINT32                          ulDLGBR;    /* ??????????????,????KBPS */
 }PS_EPS_EXTENDED_QOS_STRU;
 
 
 typedef struct
 {
-    VOS_UINT32                          ulDLApnAmbr;/* 上行速率值,单位KBPS */
-    VOS_UINT32                          ulULApnAmbr;/* 下行速率值,单位KBPS */
+    VOS_UINT32                          ulDLApnAmbr;/* ??????????,????KBPS */
+    VOS_UINT32                          ulULApnAmbr;/* ??????????,????KBPS */
 } PS_EPS_APN_AMBR_STRU;
 
 
 typedef struct
 {
-    VOS_UINT32                          ulExtDLApnAmbr;/* 扩展上行速率值,单位KBPS */
-    VOS_UINT32                          ulExtULApnAmbr;/* 扩展下行速率值,单位KBPS */
+    VOS_UINT32                          ulExtDLApnAmbr;/* ??????????????,????KBPS */
+    VOS_UINT32                          ulExtULApnAmbr;/* ??????????????,????KBPS */
 } PS_EPS_EXTENDED_APN_AMBR_STRU;
 
 
@@ -605,8 +605,8 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT8                           ucIpv4PcscfAddrNum;                     /* IPV4的P-CSCF地址个数，有效范围[0,3] */
-    VOS_UINT8                           aucRsv[3];                              /* 保留 */
+    VOS_UINT8                           ucIpv4PcscfAddrNum;                     /* IPV4??P-CSCF??????????????????[0,3] */
+    VOS_UINT8                           aucRsv[3];                              /* ???? */
 
     PS_IPV4_PCSCF_STRU                  astIpv4PcscfAddrList[PS_MAX_PCSCF_ADDR_NUM];
 } PS_IPV4_PCSCF_LIST_STRU;
@@ -620,8 +620,8 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT8                           ucIpv6PcscfAddrNum;                     /* IPV6的P-CSCF地址个数，有效范围[0,3] */
-    VOS_UINT8                           aucRsv[3];                              /* 保留 */
+    VOS_UINT8                           ucIpv6PcscfAddrNum;                     /* IPV6??P-CSCF??????????????????[0,3] */
+    VOS_UINT8                           aucRsv[3];                              /* ???? */
 
     PS_IPV6_PCSCF_STRU                  astIpv6PcscfAddrList[PS_MAX_PCSCF_ADDR_NUM];
 } PS_IPV6_PCSCF_LIST_STRU;
@@ -629,9 +629,9 @@ typedef struct
 
 typedef struct
 {
-    PS_NR_BIT_RATE_UNIT_TYPE_ENUM_UINT8 ucUnit;             /* 单位 */
+    PS_NR_BIT_RATE_UNIT_TYPE_ENUM_UINT8 ucUnit;             /* ???? */
     VOS_UINT8                           ucRsv;
-    VOS_UINT16                          usValue;            /* 数值 */
+    VOS_UINT16                          usValue;            /* ???? */
 }PS_NR_BIT_RATE_STRU;
 
 
@@ -643,10 +643,10 @@ typedef struct
     VOS_UINT8                           uc5QI;
     VOS_UINT8                           ucRsv;
     VOS_UINT16                          usAveragWindow;     /* Averaging Window */
-    VOS_UINT32                          ulULMaxRate;        /* MFBR uplink,无效值:0 */
-    VOS_UINT32                          ulDLMaxRate;        /* MFBR downlink,无效值:0  */
-    VOS_UINT32                          ulULGMaxRate;       /* GFBR uplink,无效值:0  */
-    VOS_UINT32                          ulDLGMaxRate;       /* GFBR downlink,无效值:0  */
+    VOS_UINT32                          ulULMaxRate;        /* MFBR uplink,??????:0 */
+    VOS_UINT32                          ulDLMaxRate;        /* MFBR downlink,??????:0  */
+    VOS_UINT32                          ulULGMaxRate;       /* GFBR uplink,??????:0  */
+    VOS_UINT32                          ulDLGMaxRate;       /* GFBR downlink,??????:0  */
 }PS_NR_QOS_STRU;
 
 
@@ -674,13 +674,13 @@ typedef struct
     VOS_UINT32                          bitOpSpare          : 31;
 
     VOS_UINT8                           ucQfi;
-    VOS_UINT8                           ucEpsbId;                       /* 如果没有Epsbid,表示此 QoS Flow没有映射的EPS BEARER*/
-    VOS_UINT8                           ucPsCallId;                     /* 0xFF为无效值 */
+    VOS_UINT8                           ucEpsbId;                       /* ????????Epsbid,?????? QoS Flow??????????EPS BEARER*/
+    VOS_UINT8                           ucPsCallId;                     /* 0xFF???????? */
     VOS_UINT8                           ucCid;
     VOS_UINT8                           ucQosRuleNum;
     VOS_UINT8                           aucResv[3];
 
-    VOS_UINT8                           aucQri[PS_MAX_QOS_RULE_NUM_IN_QOS_FLOW];    /* 指向PS_QOS_RULE_LIST_STRU中的QoS Rule Identifier，即ucQri值*/
+    VOS_UINT8                           aucQri[PS_MAX_QOS_RULE_NUM_IN_QOS_FLOW];    /* ????PS_QOS_RULE_LIST_STRU????QoS Rule Identifier????ucQri??*/
 
     PS_NR_QOS_STRU                      stNrQos;
 
@@ -770,7 +770,7 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulTaNum;            /* TA的个数    */
+    VOS_UINT32                          ulTaNum;            /* TA??????    */
     PS_NR_TAI_STRU                      astTai[PS_MAX_NR_TA_NUM];
 }PS_NR_TAI_LIST_STRU;
 
@@ -816,11 +816,11 @@ typedef struct
 typedef struct
 {
     VOS_UINT8                           aucRmtIpv6Address[PS_IPV6_ADDR_LEN];
-                                                                  /*ucRmtIpv6Address[0]为IPv6接口标识高字节位
-                                                                    ucRmtIpv6Address[7]为IPv6接口标识低字节位*/
+                                                                  /*ucRmtIpv6Address[0]??IPv6????????????????
+                                                                    ucRmtIpv6Address[7]??IPv6????????????????*/
    /* VOS_UINT8                           aucRmtIpv6Mask[PS_IPV6_ADDR_LEN]; */
-                                                                  /*ucRmtIpv6Mask[0]为高字节位
-                                                                    ucRmtIpv6Mask[7]为低字节位*/
+                                                                  /*ucRmtIpv6Mask[0]??????????
+                                                                    ucRmtIpv6Mask[7]??????????*/
     VOS_UINT8                           ucPrefixLen;
     VOS_UINT8                           aucReserved[3];
 }PS_URSP_RMT_IPV6_ADDR_MASK_STRU;
@@ -829,11 +829,11 @@ typedef struct
 typedef struct
 {
     VOS_UINT8                           aucRmtIpv4Address[PS_IPV4_ADDR_LEN];
-                                                                  /*ucSourceIpAddress[0]为IP地址高字节位
-                                                                  ucSourceIpAddress[3]为低字节位*/
+                                                                  /*ucSourceIpAddress[0]??IP????????????
+                                                                  ucSourceIpAddress[3]??????????*/
     VOS_UINT8                           aucRmtIpv4Mask[PS_IPV4_ADDR_LEN];
-                                                                  /*ucSourceIpMask[0]为IP地址高字节位 ,
-                                                                  ucSourceIpMask[3]为低字节位*/
+                                                                  /*ucSourceIpMask[0]??IP???????????? ,
+                                                                  ucSourceIpMask[3]??????????*/
 }PS_URSP_RMT_IPV4_ADDR_MASK_STRU;
 
 
@@ -859,13 +859,13 @@ typedef struct
 }PS_URSP_TOS_STRU;
 
 /*****************************************************************************
- 结构名称  : PS_URSP_TRAFFIC_RULE_STRU
- 结构说明  : 24.526协议 5.2章节Traffic descriptor component
+ ????????  : PS_URSP_TRAFFIC_RULE_STRU
+ ????????  : 24.526???? 5.2????Traffic descriptor component
 *****************************************************************************/
 typedef struct
 {
 
-    PS_URSP_MATCH_ALL_ENUM_UINT8        enMatchAll;                                                     /* 为1时，其它所有的子项为空*/
+    PS_URSP_MATCH_ALL_ENUM_UINT8        enMatchAll;                                                     /* ??1??????????????????????*/
     VOS_UINT8                           ucSpiNum;
     VOS_UINT8                           ucDnnNum;
     VOS_UINT8                           ucTosNum;
@@ -878,7 +878,7 @@ typedef struct
     VOS_UINT8                           ucPortRangeNum;
     VOS_UINT8                           ucResvered;
 
-    VOS_UINT8                           aucProtocolId[PS_URSP_TRAFFIC_MAX_PROTOCL_ID_NUM];              /*协议号*/
+    VOS_UINT8                           aucProtocolId[PS_URSP_TRAFFIC_MAX_PROTOCL_ID_NUM];              /*??????*/
     VOS_UINT32                          aulSecuParaIndex[PS_URSP_TRAFFIC_MAX_SPI_NUM];                  /*SPI*/
     VOS_UINT32                          aulFlowLabelType[PS_URSP_TRAFFIC_MAX_FLOW_LABEL_NUM];           /*FlowLabelType*/
     VOS_UINT16                          ausSingleRmtPort[PS_URSP_TRAFFIC_MAX_SINGLE_PORT_NUM];
@@ -893,8 +893,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : PS_URSP_ROUTE_RULE_STRU
- 结构说明  : 24.526协议 5.2章节Route selection descriptor contents
+ ????????  : PS_URSP_ROUTE_RULE_STRU
+ ????????  : 24.526???? 5.2????Route selection descriptor contents
 *****************************************************************************/
 typedef struct
 {
@@ -911,24 +911,24 @@ typedef struct
     PS_ALLOW_NSSAI_STRU                                     stNssai;
     PS_NON_SEAMLESS_NON_3GPP_OFFLOAD_IND_ENUM_UINT8         enOffloadFlag;                              /* non-seamless non-3GPP offload indication type */
     VOS_UINT8                                               aucRsv[2];
-    VOS_UINT8                                               ucDnnNum;                                   /* num为0时表示没有DNN */
+    VOS_UINT8                                               ucDnnNum;                                   /* num??0??????????DNN */
     PS_APN_STRU                                             astDnn[PS_URSP_ROUTE_MAX_APN_NUM];          /* PS_APN_IN_ROUTE_RULE_MAX_NUM= 4 */
 } PS_URSP_ROUTE_RULE_STRU;
 
 /*****************************************************************************
- 结构名称  : PS_URSP_ROUTE_RULE_LIST_STRU
- 结构说明  : 24.526协议 5.2章节Route selection descriptor contents
+ ????????  : PS_URSP_ROUTE_RULE_LIST_STRU
+ ????????  : 24.526???? 5.2????Route selection descriptor contents
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT8                           ucRouteRuleNum;                             /* num为0时表示没有RouteRule */
+    VOS_UINT8                           ucRouteRuleNum;                             /* num??0??????????RouteRule */
     VOS_UINT8                           aucRsv[3];
     PS_URSP_ROUTE_RULE_STRU             astRouteRule[PS_URSP_ROUTE_RULE_MAX_NUM];   /* PS_URSP_ROUTE_RULE_MAX_NUM= 4 */
 } PS_URSP_ROUTE_RULE_LIST_STRU;
 
 /*****************************************************************************
- 结构名称  : TAF_PS_ROUTE_RULE_LIST_STRU
- 结构说明  : 24.526协议 5.2章节URSP rule
+ ????????  : TAF_PS_ROUTE_RULE_LIST_STRU
+ ????????  : 24.526???? 5.2????URSP rule
 *****************************************************************************/
 typedef struct
 {
@@ -940,19 +940,19 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : PS_URSP_RULE_LIST_STRU
- 结构说明  : 24.526协议 5.2章节URSP rules
+ ????????  : PS_URSP_RULE_LIST_STRU
+ ????????  : 24.526???? 5.2????URSP rules
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT8                           ucUrspNum;                                      /* num为0时表示没有RouteRule */
+    VOS_UINT8                           ucUrspNum;                                      /* num??0??????????RouteRule */
     VOS_UINT8                           aucRsv[3];
     PS_URSP_RULE_STRU                   astUrspRule[PS_URSP_RULE_IN_PLMN_MAX_NUM];      /* PS_URSP_RULE_MAX_NUM= 16 */
 } PS_URSP_RULE_LIST_STRU;
 
 /*****************************************************************************
- 结构名称  : PS_5GSM_CAPABILITY_STRU
- 结构说明  : 24.501协议 9.10.4.2
+ ????????  : PS_5GSM_CAPABILITY_STRU
+ ????????  : 24.501???? 9.10.4.2
 *****************************************************************************/
 typedef struct
 {
@@ -962,14 +962,14 @@ typedef struct
 } PS_5GSM_CAPABILITY_STRU;
 
 /*****************************************************************************
- 结构名    : PS_ALLOC_SSC_MODE_STRU
- 结构说明  : ALLOWED SSC MODE数据结构
+ ??????    : PS_ALLOC_SSC_MODE_STRU
+ ????????  : ALLOWED SSC MODE????????
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT8                           ucSscMode1Allowed;    /* VOS_TRUE :allowed，VOS_FALSE :not allowed */
-    VOS_UINT8                           ucSscMode2Allowed;    /* VOS_TRUE :allowed，VOS_FALSE :not allowed */
-    VOS_UINT8                           ucSscMode3Allowed;    /* VOS_TRUE :allowed，VOS_FALSE :not allowed */
+    VOS_UINT8                           ucSscMode1Allowed;    /* VOS_TRUE :allowed??VOS_FALSE :not allowed */
+    VOS_UINT8                           ucSscMode2Allowed;    /* VOS_TRUE :allowed??VOS_FALSE :not allowed */
+    VOS_UINT8                           ucSscMode3Allowed;    /* VOS_TRUE :allowed??VOS_FALSE :not allowed */
     VOS_UINT8                           aucReserved[1];
 }PS_ALLOWED_SSC_MODE_STRU;
 

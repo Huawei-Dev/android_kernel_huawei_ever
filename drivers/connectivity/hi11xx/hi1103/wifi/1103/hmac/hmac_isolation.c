@@ -9,7 +9,7 @@ extern "C" {
 #endif
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "hmac_main.h"
 #include "hmac_isolation.h"
@@ -25,7 +25,7 @@ extern "C" {
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_ISOLATION_C
 
 /*****************************************************************************
-  2 STRUCT定义
+  2 STRUCT????
 *****************************************************************************/
     /*
     CS_ISOLATION_MODE_BROADCAST =0x01
@@ -37,11 +37,11 @@ extern "C" {
 
 
 /*****************************************************************************
-  3 全局变量定义
+  3 ????????????
 *****************************************************************************/
 
 /*****************************************************************************
-  4 函数实现
+  4 ????????
 *****************************************************************************/
 
 
@@ -50,7 +50,7 @@ oal_uint32 hmac_isolation_set_mode(mac_vap_stru *pst_mac_vap, oal_uint8 uc_mode)
     mac_isolation_info_stru       *pst_isolation_info = OAL_PTR_NULL;
     hmac_vap_stru                 *pst_hmac_vap = OAL_PTR_NULL;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if (OAL_PTR_NULL == pst_mac_vap)
     {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "{hmac_isolation_set_mode::null mac_vap}");
@@ -64,7 +64,7 @@ oal_uint32 hmac_isolation_set_mode(mac_vap_stru *pst_mac_vap, oal_uint8 uc_mode)
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 2.1 获取参数 */
+    /* 2.1 ???????? */
     uc_mode = uc_mode & 0x7;
     if (0 == uc_mode)
     {
@@ -76,7 +76,7 @@ oal_uint32 hmac_isolation_set_mode(mac_vap_stru *pst_mac_vap, oal_uint8 uc_mode)
     pst_isolation_info = &pst_hmac_vap->st_isolation_info;
 
 
-    /* 3.1 重新初始化 */
+    /* 3.1 ?????????? */
     pst_isolation_info->uc_mode = uc_mode;
 
     OAM_INFO_LOG1(pst_mac_vap->uc_vap_id, OAM_SF_ANY, "{hmac_isolation_set_mode::isolation mode is set to %d}", uc_mode);
@@ -89,14 +89,14 @@ oal_uint32 hmac_isolation_set_type(mac_vap_stru *pst_mac_vap, oal_uint8 uc_bss_t
     mac_isolation_info_stru       *pst_isolation_info = OAL_PTR_NULL;
     hmac_vap_stru                 *pst_hmac_vap = OAL_PTR_NULL;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if (OAL_PTR_NULL == pst_mac_vap)
     {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "{hmac_isolation_set_type::null mac_vap}");
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 2.1 获取参数 */
+    /* 2.1 ???????? */
     if ((uc_bss_type != CS_ISOLATION_TYPE_MULTI_BSS) && (uc_bss_type != CS_ISOLATION_TYPE_SINGLE_BSS))
     {
         OAM_ERROR_LOG1(0, OAM_SF_ANY, "{hmac_isolation_set_type::bss_type=%d is wrong.}", uc_bss_type);
@@ -117,7 +117,7 @@ oal_uint32 hmac_isolation_set_type(mac_vap_stru *pst_mac_vap, oal_uint8 uc_bss_t
 
     pst_isolation_info = &pst_hmac_vap->st_isolation_info;
 
-    /* 3.1 设置模式 */
+    /* 3.1 ???????? */
     if (CS_ISOLATION_TYPE_MULTI_BSS == uc_bss_type)
     {
         pst_isolation_info->uc_multi_type = uc_isolation_type;
@@ -137,7 +137,7 @@ oal_uint32 hmac_isolation_set_forward(mac_vap_stru *pst_mac_vap, oal_uint8 uc_fo
     mac_isolation_info_stru       *pst_isolation_info = OAL_PTR_NULL;
     hmac_vap_stru                 *pst_hmac_vap = OAL_PTR_NULL;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if (OAL_PTR_NULL == pst_mac_vap)
     {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "{hmac_isolation_set_forward::null mac_vap}");
@@ -151,7 +151,7 @@ oal_uint32 hmac_isolation_set_forward(mac_vap_stru *pst_mac_vap, oal_uint8 uc_fo
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 2.1 获取参数 */
+    /* 2.1 ???????? */
     if (uc_forward >= CS_ISOLATION_FORWORD_BUTT)
     {
         uc_forward = CS_ISOLATION_FORWORD_TOLAN;
@@ -171,7 +171,7 @@ oal_uint32 hmac_isolation_clear_counter(mac_vap_stru *pst_mac_vap)
     mac_isolation_info_stru       *pst_isolation_info = OAL_PTR_NULL;
     hmac_vap_stru                 *pst_hmac_vap = OAL_PTR_NULL;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if (OAL_PTR_NULL == pst_mac_vap)
     {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "{hmac_isolation_clear_counter::null mac_vap}");
@@ -187,7 +187,7 @@ oal_uint32 hmac_isolation_clear_counter(mac_vap_stru *pst_mac_vap)
 
     pst_isolation_info = &pst_hmac_vap->st_isolation_info;
 
-    /* 2.1 刷新计数器 */
+    /* 2.1 ?????????? */
     pst_isolation_info->ul_counter_bcast = 0;
     pst_isolation_info->ul_counter_mcast = 0;
     pst_isolation_info->ul_counter_ucast = 0;
@@ -202,7 +202,7 @@ oal_void hmac_show_isolation_info(mac_vap_stru *pst_mac_vap)
     oal_int8                        *pc_print_buff = OAL_PTR_NULL;
     hmac_vap_stru                   *pst_hmac_vap = OAL_PTR_NULL;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if (OAL_PTR_NULL == pst_mac_vap)
     {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "{hmac_show_isolation_info::null mac_vap}");
@@ -225,7 +225,7 @@ oal_void hmac_show_isolation_info(mac_vap_stru *pst_mac_vap)
 
     pst_isolation_info = &pst_hmac_vap->st_isolation_info;
 
-    /* 1.2 打印隔离信息 */
+    /* 1.2 ???????????? */
     OAM_INFO_LOG0(pst_mac_vap->uc_vap_id, OAM_SF_ANY, "{hmac_show_isolation_info::isolation info is :}");
     OAM_INFO_LOG4(pst_mac_vap->uc_vap_id, OAM_SF_ANY, "{ mode:%d. single_bss_type:%d. multi_bss_type=%d.forward:%d.}",
         pst_isolation_info->uc_mode, pst_isolation_info->uc_single_type, pst_isolation_info->uc_multi_type, pst_isolation_info->uc_forward);
@@ -262,7 +262,7 @@ cs_isolation_forward_enum hmac_isolation_filter(mac_vap_stru *pst_mac_vap, oal_u
     hmac_vap_stru                *pst_hmac_vap = OAL_PTR_NULL;
     oal_uint16                    us_user_idx;
 
-    /* 1.1 入参检查 */
+    /* 1.1 ???????? */
     if (OAL_ANY_NULL_PTR2(pst_mac_vap,puc_mac_addr))
     {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "{hmac_isolation_filter::null mac_vap or null mac addr}");
@@ -277,10 +277,10 @@ cs_isolation_forward_enum hmac_isolation_filter(mac_vap_stru *pst_mac_vap, oal_u
 
     pst_isolation_info = &pst_hmac_vap->st_isolation_info;
 
-    /* 1.1 多BSS隔离 */
+    /* 1.1 ??BSS???? */
     if (OAL_TRUE == pst_isolation_info->uc_multi_type)
     {
-        /* 1.2 广播隔离 */
+        /* 1.2 ???????? */
         if (ETHER_IS_BROADCAST(puc_mac_addr))
         {
             if (BROADCAST_ISOLATION(pst_isolation_info->uc_mode))
@@ -295,7 +295,7 @@ cs_isolation_forward_enum hmac_isolation_filter(mac_vap_stru *pst_mac_vap, oal_u
                 return CS_ISOLATION_FORWORD_NONE;
             }
         }
-        /* 1.3 组播隔离 */
+        /* 1.3 ???????? */
         if (ETHER_IS_MULTICAST(puc_mac_addr))
         {
             if (MULTICAST_ISOLATION(pst_isolation_info->uc_mode))
@@ -310,7 +310,7 @@ cs_isolation_forward_enum hmac_isolation_filter(mac_vap_stru *pst_mac_vap, oal_u
                 return CS_ISOLATION_FORWORD_NONE;
             }
         }
-       /* 2.4 单播隔离,如果在本bss中找到用户，不隔离处理，否则需要在其他bss中找，找到就隔离 */
+       /* 2.4 ????????,????????bss??????????????????????????????????????bss???????????????? */
 
         if (UNICAST_ISOLATION(pst_isolation_info->uc_mode))
         {
@@ -335,10 +335,10 @@ cs_isolation_forward_enum hmac_isolation_filter(mac_vap_stru *pst_mac_vap, oal_u
         }
     }
 
-    /* 2.1 单BSS隔离 */
+    /* 2.1 ??BSS???? */
     if (OAL_TRUE == pst_isolation_info->uc_single_type)
     {
-        /* 2.2 广播隔离 */
+        /* 2.2 ???????? */
         if (ETHER_IS_BROADCAST(puc_mac_addr))
         {
             if (BROADCAST_ISOLATION(pst_isolation_info->uc_mode))
@@ -353,7 +353,7 @@ cs_isolation_forward_enum hmac_isolation_filter(mac_vap_stru *pst_mac_vap, oal_u
                 return CS_ISOLATION_FORWORD_NONE;
             }
         }
-        /* 2.3 组播隔离 */
+        /* 2.3 ???????? */
         if (ETHER_IS_MULTICAST(puc_mac_addr))
         {
             if (MULTICAST_ISOLATION(pst_isolation_info->uc_mode))
@@ -368,7 +368,7 @@ cs_isolation_forward_enum hmac_isolation_filter(mac_vap_stru *pst_mac_vap, oal_u
                 return CS_ISOLATION_FORWORD_NONE;
             }
         }
-        /* 2.4 单播隔离，如果在本bss中找到用户就隔离，否则不处理 */
+        /* 2.4 ??????????????????bss???????????????????????????? */
         if (UNICAST_ISOLATION(pst_isolation_info->uc_mode))
         {
             if (OAL_SUCC == mac_vap_find_user_by_macaddr_etc(pst_mac_vap, puc_mac_addr, &us_user_idx))

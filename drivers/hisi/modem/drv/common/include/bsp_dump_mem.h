@@ -169,7 +169,7 @@ typedef enum
 #define DUMP_FIELD_MAGIC_NUM    (0x6C7D9F8E)
 
 
-/*头部接口要与rdr_area.h中定义格式相同*/
+/*????????????rdr_area.h??????????????*/
 #define DUMP_GLOBALE_TOP_HEAD_MAGIC          (0x4e524d53)
 struct dump_global_top_head_s {
     u32 magic;

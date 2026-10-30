@@ -40,7 +40,7 @@ OAL_STATIC oal_void oal_softwdt_timeout(oal_ulong data)
     hisi_softwdt.wdt_timeout_count++;
 
     if (hisi_softwdt.wdt_timeout_count == 1) {
-        /* 第一次超时 */
+        /* ?????????? */
 #ifdef CONFIG_PRINTK
         printk(KERN_WARNING "hisi softwdt timeout first time,keep try...\n");
 #else
@@ -50,7 +50,7 @@ OAL_STATIC oal_void oal_softwdt_timeout(oal_ulong data)
     }
 
     if (hisi_softwdt.wdt_timeout_count >= 2) {
-        /* 第二次及以上次超时 */
+        /* ?????????????????? */
 #ifdef CONFIG_PRINTK
         printk(KERN_EMERG "[E]hisi softwdt timeout second time, dump system stack\n");
 #else

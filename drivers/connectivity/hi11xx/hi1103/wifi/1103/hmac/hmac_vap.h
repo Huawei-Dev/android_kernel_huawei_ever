@@ -11,7 +11,7 @@ extern "C" {
 
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 #include "oal_ext_if.h"
 #include "mac_vap.h"
@@ -34,7 +34,7 @@ extern "C" {
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_VAP_H
 
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *****************************************************************************/
 #ifdef _PRE_WLAN_DFT_STAT
 #define   HMAC_VAP_DFT_STATS_PKT_INCR(_member, _cnt)        ((_member) += (_cnt))
@@ -52,16 +52,16 @@ extern "C" {
 #define HMAC_DSCP_VALUE_INVALID      0xA5
 
 /*****************************************************************************
-  3 枚举定义
+  3 ????????
 *****************************************************************************/
 /*****************************************************************************
-    初始化vap特性枚举
+    ??????vap????????
 *****************************************************************************/
 
 
 
 /*****************************************************************************
-  4 全局变量声明
+  4 ????????????
 *****************************************************************************/
 #ifdef _PRE_WLAN_REPORT_PRODUCT_LOG
 extern oal_uint8   vapid_to_chipid[2 * WLAN_VAP_MAX_NUM_PER_DEVICE_LIMIT];
@@ -69,17 +69,17 @@ extern oal_uint8   vapid_to_chipid[2 * WLAN_VAP_MAX_NUM_PER_DEVICE_LIMIT];
 
 extern oal_uint8   g_uc_host_rx_ampdu_amsdu;
 /*****************************************************************************
-  5 消息头定义
+  5 ??????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  6 消息定义
+  6 ????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  7 STRUCT定义
+  7 STRUCT????
 *****************************************************************************/
 typedef struct
 {
@@ -107,38 +107,38 @@ typedef struct
 }hmac_cfg_qos_map_param_stru;
 #endif
 
-/*修改此结构体需要同步通知SDT，否则上报无法解析*/
+/*????????????????????????SDT??????????????????*/
 typedef struct
 {
 
     /***************************************************************************
-                                收送包统计
+                                ??????????
     ***************************************************************************/
-    /* 发往lan的数据包统计 */
-    oal_uint32  ul_rx_pkt_to_lan;                               /* 接收流程发往以太网的数据包数目，MSDU */
-    oal_uint32  ul_rx_bytes_to_lan;                             /* 接收流程发往以太网的字节数 */
+    /* ????lan???????????? */
+    oal_uint32  ul_rx_pkt_to_lan;                               /* ????????????????????????????????MSDU */
+    oal_uint32  ul_rx_bytes_to_lan;                             /* ?????????????????????????? */
 
    /***************************************************************************
-                                发送包统计
+                                ??????????
     ***************************************************************************/
-   /* 从lan接收到的数据包统计 */
-   oal_uint32  ul_tx_pkt_num_from_lan;                         /* 从lan过来的包数目,MSDU */
-   oal_uint32  ul_tx_bytes_from_lan;                           /* 从lan过来的字节数 */
+   /* ??lan?????????????????? */
+   oal_uint32  ul_tx_pkt_num_from_lan;                         /* ??lan????????????,MSDU */
+   oal_uint32  ul_tx_bytes_from_lan;                           /* ??lan???????????? */
 
 }hmac_vap_query_stats_stru;
-/*装备测试*/
+/*????????*/
 typedef struct
 {
-    oal_uint32                       ul_rx_pkct_succ_num;                       /*接收数据包数*/
-    oal_uint32                       ul_dbb_num;                                /*DBB版本号*/
-    oal_uint32                       ul_check_fem_pa_status;                    /*fem和pa是否烧毁标志*/
+    oal_uint32                       ul_rx_pkct_succ_num;                       /*????????????*/
+    oal_uint32                       ul_dbb_num;                                /*DBB??????*/
+    oal_uint32                       ul_check_fem_pa_status;                    /*fem??pa????????????*/
     oal_int16                        s_rx_rssi;
-    oal_bool_enum_uint8              uc_get_dbb_completed_flag;                 /*获取DBB版本号成功上报标志*/
-    oal_bool_enum_uint8              uc_check_fem_pa_flag;                      /*fem和pa是否烧毁上报标志*/
-    oal_bool_enum_uint8              uc_get_rx_pkct_flag;                       /*接收数据包上报标志位*/
-    oal_bool_enum_uint8              uc_lte_gpio_check_flag;                    /*接收数据包上报标志位*/
-    oal_bool_enum_uint8              uc_report_efuse_reg_flag;              /*efuse 寄存器读取*/
-    oal_bool_enum_uint8              uc_report_reg_flag;                    /*单个寄存器读取*/
+    oal_bool_enum_uint8              uc_get_dbb_completed_flag;                 /*????DBB??????????????????*/
+    oal_bool_enum_uint8              uc_check_fem_pa_flag;                      /*fem??pa????????????????*/
+    oal_bool_enum_uint8              uc_get_rx_pkct_flag;                       /*????????????????????*/
+    oal_bool_enum_uint8              uc_lte_gpio_check_flag;                    /*????????????????????*/
+    oal_bool_enum_uint8              uc_report_efuse_reg_flag;              /*efuse ??????????*/
+    oal_bool_enum_uint8              uc_report_reg_flag;                    /*??????????????*/
     oal_uint32                       ul_reg_value;
     oal_uint8                        uc_ant_status : 4,
                                      uc_get_ant_flag : 4;
@@ -160,15 +160,15 @@ typedef enum _hmac_tcp_opt_queue_
 
 #ifdef _PRE_WLAN_TCP_OPT
 typedef oal_uint16 (* hmac_trans_cb_func)(void *pst_hmac_device, hmac_tcp_opt_queue type,hcc_chan_type dir, void* data);
-/*tcp_ack优化*/
+/*tcp_ack????*/
 typedef struct
 {
     struct wlan_perform_tcp      hmac_tcp_ack;
     struct wlan_perform_tcp_list hmac_tcp_ack_list;
     wlan_perform_tcp_impls       filter_info;
-    hmac_trans_cb_func           filter[HMAC_TCP_OPT_QUEUE_BUTT];	//过滤处理钩子函数
-    oal_uint64                   all_ack_count[HMAC_TCP_OPT_QUEUE_BUTT];	//丢弃的TCP ACK统计
-    oal_uint64                   drop_count[HMAC_TCP_OPT_QUEUE_BUTT];	//丢弃的TCP ACK统计
+    hmac_trans_cb_func           filter[HMAC_TCP_OPT_QUEUE_BUTT];	//????????????????
+    oal_uint64                   all_ack_count[HMAC_TCP_OPT_QUEUE_BUTT];	//??????TCP ACK????
+    oal_uint64                   drop_count[HMAC_TCP_OPT_QUEUE_BUTT];	//??????TCP ACK????
     oal_netbuf_head_stru         data_queue[HMAC_TCP_OPT_QUEUE_BUTT];
     oal_spin_lock_stru           data_queue_lock[HMAC_TCP_OPT_QUEUE_BUTT];
 }hmac_tcp_ack_stru;
@@ -203,7 +203,7 @@ typedef struct
 }hmac_vap_wds_stru;
 #endif
 
-/* 查询事件ID枚举 */
+/* ????????ID???? */
 typedef enum
 {
     QUERY_ID_KO_VERSION = 0,
@@ -262,12 +262,12 @@ typedef struct mac_vap_rrm_info_tag
     oal_uint16                           us_quiet_offset;
     oal_uint8                            auc_rsv2[2];
 
-    oal_dlist_head_stru                  st_meas_rpt_list;  /*Report链表*/
-    frw_timeout_stru                     st_quiet_timer;    /* quiet定时器，每次进入quiet时启动，quiet duration后超时处理退出quiet */
-    frw_timeout_stru                     st_offset_timer;   /* 最后一个tbtt中断开始时启动offset定时器，offset时间后超时处理进入quiet，并启动quiet定时器 */
+    oal_dlist_head_stru                  st_meas_rpt_list;  /*Report????*/
+    frw_timeout_stru                     st_quiet_timer;    /* quiet????????????????quiet????????quiet duration??????????????quiet */
+    frw_timeout_stru                     st_offset_timer;   /* ????????tbtt??????????????offset????????offset??????????????????quiet????????quiet?????? */
 #endif
-    mac_bcn_req_info_stru                st_bcn_req_info;   /*保存发送的bcn请求*/
-    mac_neighbor_req_info_stru           st_neighbor_req_info;   /*保存发送的neighbor请求*/
+    mac_bcn_req_info_stru                st_bcn_req_info;   /*??????????bcn????*/
+    mac_neighbor_req_info_stru           st_neighbor_req_info;   /*??????????neighbor????*/
     oal_uint32                           aul_act_meas_start_time[2];
 
     frw_timeout_stru                     st_meas_status_timer;
@@ -284,30 +284,30 @@ typedef struct
 #ifdef _PRE_WLAN_FEATURE_M2S
 typedef struct
 {
-    frw_timeout_stru      st_arp_probe_timer;          /* 发送ARP REQ后启动定时器 */
-    oal_atomic            ul_rx_unicast_pkt_to_lan;    /* 接收到的单播帧个数 */
-    oal_uint8             uc_rx_no_pkt_count;          /* 超时时间内没有收到帧的次数 */
-    oal_bool_enum_uint8   en_arp_probe_on;             /* 是否打开arp统计，做重关联保护 */
+    frw_timeout_stru      st_arp_probe_timer;          /* ????ARP REQ???????????? */
+    oal_atomic            ul_rx_unicast_pkt_to_lan;    /* ?????????????????? */
+    oal_uint8             uc_rx_no_pkt_count;          /* ?????????????????????????? */
+    oal_bool_enum_uint8   en_arp_probe_on;             /* ????????arp?????????????????? */
     wlan_m2s_action_type_enum_uint8  en_action_type;
 } hmac_vap_m2s_stru;
 #endif
 
-/* hmac vap结构体 */
-/* 在向此结构体中增加成员的时候，请保持整个结构体8字节对齐*/
+/* hmac vap?????? */
+/* ??????????????????????????????????????????????8????????*/
 typedef struct hmac_vap_tag
 {
-    /* ap sta公共字段 */
-    oal_net_device_stru            *pst_net_device;                             /* VAP对应的net_devices */
-    oal_uint8                       auc_name[OAL_IF_NAME_SIZE];                 /* VAP名字*/
-    hmac_vap_cfg_priv_stru          st_cfg_priv;                                /* wal hmac配置通信接口 */
+    /* ap sta???????? */
+    oal_net_device_stru            *pst_net_device;                             /* VAP??????net_devices */
+    oal_uint8                       auc_name[OAL_IF_NAME_SIZE];                 /* VAP????*/
+    hmac_vap_cfg_priv_stru          st_cfg_priv;                                /* wal hmac???????????? */
 
-    oal_spin_lock_stru              st_lock_state;                              /* 数据面和控制面对VAP状态进行互斥 */
+    oal_spin_lock_stru              st_lock_state;                              /* ????????????????VAP???????????? */
 
     oal_mgmt_tx_stru                st_mgmt_tx;
     frw_timeout_stru                st_mgmt_timer;
     hmac_mgmt_timeout_param_stru    st_mgmt_timetout_param;
 
-    frw_timeout_stru                st_scan_timeout;                            /* vap发起扫描时，会启动定时器，做超时保护处理 */
+    frw_timeout_stru                st_scan_timeout;                            /* vap???????????????????????????????????????? */
 
 #ifdef _PRE_WLAN_FEATURE_AMPDU_TX_HW
     oal_delayed_work                st_ampdu_work;
@@ -316,19 +316,19 @@ typedef struct hmac_vap_tag
     mac_cfg_ampdu_tx_on_param_stru  st_mode_set;
 #endif
 
-    hmac_remove_ie_stru             st_remove_ie;                           /* 配置需要屏蔽的IE信息 */
+    hmac_remove_ie_stru             st_remove_ie;                           /* ??????????????IE???? */
 
 #if (_PRE_WLAN_FEATURE_BLACKLIST_LEVEL != _PRE_WLAN_FEATURE_BLACKLIST_NONE)
-    mac_blacklist_info_stru        *pst_blacklist_info;                          /* 黑名单信息 */
+    mac_blacklist_info_stru        *pst_blacklist_info;                          /* ?????????? */
 #endif
 #ifdef _PRE_WLAN_FEATURE_ISOLATION
-    mac_isolation_info_stru         st_isolation_info;                          /* 用户隔离信息 */
+    mac_isolation_info_stru         st_isolation_info;                          /* ???????????? */
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_P2P
-    oal_net_device_stru            *pst_p2p0_net_device;                        /* 指向p2p0 net device */
-    oal_net_device_stru            *pst_del_net_device;                         /* 指向需要通过cfg80211 接口删除的 net device */
-    oal_work_stru                   st_del_virtual_inf_worker;                  /* 删除net_device 工作队列 */
+    oal_net_device_stru            *pst_p2p0_net_device;                        /* ????p2p0 net device */
+    oal_net_device_stru            *pst_del_net_device;                         /* ????????????cfg80211 ?????????? net device */
+    oal_work_stru                   st_del_virtual_inf_worker;                  /* ????net_device ???????? */
     oal_bool_enum_uint8             en_wait_roc_end;
     oal_uint8                       auc_resv6[3];
     oal_completion                  st_roc_end_ready;                           /* roc end completion */
@@ -340,7 +340,7 @@ typedef struct hmac_vap_tag
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_ALWAYS_TX
-    oal_uint8                       bit_init_flag:1;                            /* 常发关闭再次打开标志 */
+    oal_uint8                       bit_init_flag:1;                            /* ???????????????????? */
     oal_uint8                       bit_ack_policy:1;                           /* ack policy: 0:normal ack 1:normal ack */
     oal_uint8                       bit_reserved:6;
     oal_uint8                       auc_resv1[3];
@@ -348,10 +348,10 @@ typedef struct hmac_vap_tag
 
 #ifdef _PRE_WLAN_FEATURE_ROAM
     oal_uint32                     *pul_roam_info;
-    oal_bool_enum_uint8             en_roam_prohibit_on;                        /* 是否禁止漫游 */
+    oal_bool_enum_uint8             en_roam_prohibit_on;                        /* ???????????? */
 #endif
 
-    /* 组播转单播字段 */
+    /* ?????????????? */
 #if defined(_PRE_WLAN_FEATURE_MCAST) || defined(_PRE_WLAN_FEATURE_HERA_MCAST)
     oal_void                        *pst_m2u;
 #endif
@@ -363,12 +363,12 @@ typedef struct hmac_vap_tag
     oal_uint8                       auc_resv2[1];
 #endif
 
-    oal_uint16                      us_rx_timeout[WLAN_WME_AC_BUTT];            /* 不同业务重排序超时时间 */
-    oal_uint16                      us_rx_timeout_min[WLAN_WME_AC_BUTT];        /* 不同业务重排序超时时间 */
+    oal_uint16                      us_rx_timeout[WLAN_WME_AC_BUTT];            /* ?????????????????????? */
+    oal_uint16                      us_rx_timeout_min[WLAN_WME_AC_BUTT];        /* ?????????????????????? */
 
-    oal_uint16                      us_del_timeout;                             /* 多长时间超时删除ba会话 如果是0则不删除 */
-    mac_cfg_mode_param_stru         st_preset_para;                             /* STA协议变更时变更前的协议模式 */
-    oal_uint8                       auc_supp_rates[WLAN_MAX_SUPP_RATES];        /* 支持的速率集 */
+    oal_uint16                      us_del_timeout;                             /* ????????????????ba???? ??????0???????? */
+    mac_cfg_mode_param_stru         st_preset_para;                             /* STA?????????????????????????? */
+    oal_uint8                       auc_supp_rates[WLAN_MAX_SUPP_RATES];        /* ???????????? */
 
 #if defined(_PRE_WLAN_FEATURE_DBAC) && defined(_PRE_WLAN_FEATRUE_DBAC_DOUBLE_AP_MODE)
     oal_bool_enum_uint8             en_omit_acs_chan;
@@ -383,7 +383,7 @@ typedef struct hmac_vap_tag
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_WMMAC
-    oal_uint8                       uc_ts_dialog_token;                         /* TS会话创建伪随机值 */
+    oal_uint8                       uc_ts_dialog_token;                         /* TS???????????????? */
     oal_bool_enum_uint8             en_wmmac_auth_flag;
     oal_uint8                       uc_resv5[2];
 #endif //_PRE_WLAN_FEATURE_WMMAC
@@ -391,63 +391,63 @@ typedef struct hmac_vap_tag
     oal_bool_enum_uint8             auc_query_flag[QUERY_ID_MODE_BUTT];
     mac_cfg_param_char_stru         st_param_char;
 
-    /* sta独有字段 */
+    /* sta???????? */
     oal_bool_enum_uint8               en_no_beacon;
-    oal_uint8                         uc_no_smps_user_cnt_ap;                     /* AP关联的不支持SMPS的用户数  */
-    oal_uint8                         uc_ba_dialog_token;                         /* BA会话创建伪随机值 */
-    oal_bool_enum_uint8               en_updata_rd_by_ie_switch;                  /*是否根据关联的ap跟新自己的国家码*/
+    oal_uint8                         uc_no_smps_user_cnt_ap;                     /* AP????????????SMPS????????  */
+    oal_uint8                         uc_ba_dialog_token;                         /* BA???????????????? */
+    oal_bool_enum_uint8               en_updata_rd_by_ie_switch;                  /*??????????????ap????????????????*/
 
     oal_uint8                       bit_sta_protocol_cfg    :   1;
-    oal_uint8                       bit_protocol_fall       :   1;              /* 降协议标志位 */
-    oal_uint8                       bit_reassoc_flag        :   1;              /* 关联过程中判断是否为重关联动作 */
+    oal_uint8                       bit_protocol_fall       :   1;              /* ???????????? */
+    oal_uint8                       bit_reassoc_flag        :   1;              /* ?????????????????????????????? */
     oal_uint8                       bit_rx_ampduplusamsdu_active:1;
-    oal_uint8                       bit_sae_connect_with_pmkid :1;              /* 0:不包含PMKID的SAE连接；1:包含PMKID的SAE连接 */
+    oal_uint8                       bit_sae_connect_with_pmkid :1;              /* 0:??????PMKID??SAE??????1:????PMKID??SAE???? */
 #if defined(_PRE_WLAN_FEATURE_11K) || defined(_PRE_WLAN_FEATURE_11R) || defined(_PRE_WLAN_FEATURE_11K_EXTERN) || defined(_PRE_WLAN_FEATURE_11V_ENABLE)
-    oal_uint8                       bit_11k_auth_flag       :   1;              /* 11k 认证标志位*/
+    oal_uint8                       bit_11k_auth_flag       :   1;              /* 11k ??????????*/
     oal_uint8                       bit_voe_11r_auth        :   1;
     oal_uint8                       bit_11k_auth_oper_class :   2;
-    oal_uint8                       bit_11r_over_ds         :   1;              /*是否使用11r over ds；0表示over ds走over air流程*/
+    oal_uint8                       bit_11r_over_ds         :   1;              /*????????11r over ds??0????over ds??over air????*/
     oal_uint8                       bit_11k_enable          :   1;
     oal_uint8                       bit_11v_enable          :   1;
     oal_uint8                       bit_11r_enable          :   1;
     oal_uint8                       bit_bcn_table_switch    :   1;
-    oal_uint8                       bit_adaptive11r         :   1;              /* 是否使用adaptive 11r流程 */
+    oal_uint8                       bit_adaptive11r         :   1;              /* ????????adaptive 11r???? */
     oal_uint8                       bit_nb_rpt_11k          :   1;
 
     oal_uint8                       auc_resv[2];
 #else
     oal_uint8                       bit_resv                :   3;
 #endif // _PRE_WLAN_FEATURE_11K
-    oal_int8                        ac_desired_country[3];                      /* 要加入的AP的国家字符串，前两个字节为国家字母，第三个为\0 */
+    oal_int8                        ac_desired_country[3];                      /* ????????AP????????????????????????????????????????????\0 */
 
     oal_dlist_head_stru             st_pmksa_list_head;
 
-    /* 信息上报 */
-    oal_wait_queue_head_stru         query_wait_q;                              /*查询等待队列*/
+    /* ???????? */
+    oal_wait_queue_head_stru         query_wait_q;                              /*????????????*/
     oal_station_info_stru            station_info;
-    station_info_extend_stru         st_station_info_extend;                    /*CHR2.0使用的STA统计信息*/
+    station_info_extend_stru         st_station_info_extend;                    /*CHR2.0??????STA????????*/
 
-    oal_bool_enum_uint8              station_info_query_completed_flag;         /*查询结束标志，OAL_TRUE，查询结束，OAL_FALSE，查询未结束*/
-    oal_int16                        s_free_power;                              /* 底噪 */
+    oal_bool_enum_uint8              station_info_query_completed_flag;         /*??????????????OAL_TRUE????????????OAL_FALSE????????????*/
+    oal_int16                        s_free_power;                              /* ???? */
     oal_bool_enum_uint8              en_monitor_mode;
 
-    oal_int32                        center_freq;                               /* 中心频点 */
+    oal_int32                        center_freq;                               /* ???????? */
     mac_cfg_show_dieid_stru          st_dieid;
     hmac_atcmdsrv_get_stats_stru     st_atcmdsrv_get_status;
-    oal_proc_dir_entry_stru         *pst_proc_dir;                              /* vap对应的proc目录 */
+    oal_proc_dir_entry_stru         *pst_proc_dir;                              /* vap??????proc???? */
 
 #ifdef _PRE_WLAN_DFT_STAT
-    /*统计信息+信息上报新增字段，修改这个字段，必须修改SDT才能解析正确*/
+    /*????????+????????????????????????????????????????SDT????????????*/
     hmac_vap_query_stats_stru        st_query_stats;
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_EDCA_OPT_AP
-    frw_timeout_stru                 st_edca_opt_timer;                         /* edca参数调整定时器 */
-    oal_uint32                       ul_edca_opt_time_ms;                       /* edca参数调整计时器周期 */
-    oal_uint8                        uc_edca_opt_flag_ap;                       /* ap模式下是否使能edca优化特性 */
-    oal_uint8                        uc_edca_opt_flag_sta;                      /* sta模式下是否使能edca优化特性 */
-    oal_uint8                        uc_edca_opt_weight_sta;                    /* 调整beacon中edca参数的权重，最大值为 3*/
-    oal_uint8                        uc_idle_cycle_num;                         /* vap连续处于idle状态的周期个数 */
+    frw_timeout_stru                 st_edca_opt_timer;                         /* edca?????????????? */
+    oal_uint32                       ul_edca_opt_time_ms;                       /* edca?????????????????? */
+    oal_uint8                        uc_edca_opt_flag_ap;                       /* ap??????????????edca???????? */
+    oal_uint8                        uc_edca_opt_flag_sta;                      /* sta??????????????edca???????? */
+    oal_uint8                        uc_edca_opt_weight_sta;                    /* ????beacon??edca???????????????????? 3*/
+    oal_uint8                        uc_idle_cycle_num;                         /* vap????????idle?????????????? */
 #endif
 
 #ifdef _PRE_WLAN_TCP_OPT
@@ -459,15 +459,15 @@ typedef struct hmac_vap_tag
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_STA_PM
-    frw_timeout_stru                 st_ps_sw_timer;                             /* 低功耗开关 */
-    oal_uint8                        uc_cfg_sta_pm_manual;                       /* 手动设置sta pm mode的标志 */
+    frw_timeout_stru                 st_ps_sw_timer;                             /* ?????????? */
+    oal_uint8                        uc_cfg_sta_pm_manual;                       /* ????????sta pm mode?????? */
     oal_uint8                        uc_ps_mode;
-    oal_uint16                       us_check_timer_pause_cnt;                   /* 低功耗pause计数 */
+    oal_uint16                       us_check_timer_pause_cnt;                   /* ??????pause???? */
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_SMARTANT
-    oal_bool_enum_uint8             en_ant_info_query_completed_flag;           /*查询结束标志，OAL_TRUE，查询结束，OAL_FALSE，查询未结束*/
-    oal_bool_enum_uint8             en_double_ant_switch_query_completed_flag;  /*查询结束标志，OAL_TRUE，查询结束，OAL_FALSE，查询未结束*/
+    oal_bool_enum_uint8             en_ant_info_query_completed_flag;           /*??????????????OAL_TRUE????????????OAL_FALSE????????????*/
+    oal_bool_enum_uint8             en_double_ant_switch_query_completed_flag;  /*??????????????OAL_TRUE????????????OAL_FALSE????????????*/
     oal_uint8                       auc_resv10[2];
     oal_uint32                      ul_double_ant_switch_ret;
 #endif
@@ -481,7 +481,7 @@ typedef struct hmac_vap_tag
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_CAR
-       hmac_car_limit_stru                    st_car_vap_cfg[HMAC_CAR_BUTT];    /* vap限速结构体,0-up 1-down */
+       hmac_car_limit_stru                    st_car_vap_cfg[HMAC_CAR_BUTT];    /* vap??????????,0-up 1-down */
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_11K_EXTERN
@@ -495,12 +495,12 @@ typedef struct hmac_vap_tag
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_SAE
-    oal_work_stru                       st_sae_report_ext_auth_worker;          /* SAE report external auth req工作队列 */
+    oal_work_stru                       st_sae_report_ext_auth_worker;          /* SAE report external auth req???????? */
 #endif
     oal_uint8                           owe_group[MAC_OWE_GROUP_SUPPORTED_NUM];
     oal_uint8                           owe_group_cap;
 
-#ifdef _PRE_WLAN_FEATURE_11AX /* TWT节能配置参数 */
+#ifdef _PRE_WLAN_FEATURE_11AX /* TWT???????????? */
     oal_uint64      ull_twt_start_time;
     oal_uint64      ull_twt_interval;
     oal_uint8        uc_twt_duration;
@@ -513,7 +513,7 @@ typedef struct hmac_vap_tag
     oal_uint32      ul_htc_info;
 #endif
 
-    mac_vap_stru                        st_vap_base_info;                           /* MAC vap，只能放在最后! */
+    mac_vap_stru                        st_vap_base_info;                           /* MAC vap??????????????! */
 }hmac_vap_stru;
 
 typedef enum _hmac_cac_event_
@@ -535,18 +535,18 @@ typedef struct
 }hmac_cac_event_stru;
 
 /*****************************************************************************
-  8 UNION定义
+  8 UNION????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  9 OTHERS定义
+  9 OTHERS????
 *****************************************************************************/
 
 
 
 /*****************************************************************************
-  10 函数声明
+  10 ????????
 *****************************************************************************/
 extern oal_uint32  hmac_vap_destroy_etc(hmac_vap_stru *pst_vap);
 extern oal_uint32  hmac_vap_init_etc(

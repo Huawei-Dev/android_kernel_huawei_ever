@@ -3,12 +3,12 @@
 #ifndef __CHR_DEVS_H__
 #define __CHR_DEVS_H__
 
-/* 头文件包含 */
+/* ?????????? */
 #include <linux/debugfs.h>
 #include "plat_type.h"
 
-/* CHR性能配置 */
-/* 宏定义 */
+/* CHR???????? */
+/* ?????? */
 #define CHR_DEV_KMSG_PLAT "chrKmsgPlat"
 
 #define CHR_LOG_ENABLE          1
@@ -72,13 +72,13 @@ enum CHR_ID_ENUM {
     CHR_ENUM
 };
 
-/* 枚举类型定义 */
+/* ???????????? */
 enum return_type {
     CHR_SUCC = 0,
     CHR_EFAIL,
 };
 
-/* 结构体定义 */
+/* ?????????? */
 typedef struct {
     wait_queue_head_t errno_wait;
     struct sk_buff_head errno_queue;

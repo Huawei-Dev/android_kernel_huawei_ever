@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 
 #include "mdrv.h"
@@ -68,16 +68,16 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID        PS_FILE_ID_RNIC_MAIN_C
 
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 
-/* RNIC CTX,用于保存RNIC的全局变量 */
+/* RNIC CTX,????????RNIC?????????? */
 RNIC_CTX_STRU                           g_stRnicCtx;
 
 
@@ -88,12 +88,12 @@ VOS_INT RNIC_CCpuResetCallback(
 {
     RNIC_CCPU_RESET_IND_STRU           *pstMsg = VOS_NULL_PTR;
 
-    /* 复位前 */
+    /* ?????? */
     if (MDRV_RESET_CB_BEFORE == enParam)
     {
         RNIC_PR_LOGI("before reset enter, %u", VOS_GetSlice());
 
-        /* 构造消息 */
+        /* ???????? */
         pstMsg = (RNIC_CCPU_RESET_IND_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(ACPU_PID_RNIC,
                                                                     sizeof(RNIC_CCPU_RESET_IND_STRU));
         if (VOS_NULL_PTR == pstMsg)
@@ -102,18 +102,18 @@ VOS_INT RNIC_CCpuResetCallback(
             return VOS_ERROR;
         }
 
-        /* 填写消息头 */
+        /* ?????????? */
         pstMsg->ulReceiverPid               = ACPU_PID_RNIC;
         pstMsg->enMsgId                     = ID_RNIC_CCPU_RESET_START_IND;
 
-        /* 发消息 */
+        /* ?????? */
         if (VOS_OK != PS_SEND_MSG(ACPU_PID_RNIC, pstMsg))
         {
             RNIC_PR_LOGI("before reset send msg fail, %u", VOS_GetSlice());
             return VOS_ERROR;
         }
 
-        /* 等待回复信号量初始为锁状态，等待消息处理完后信号量解锁。 */
+        /* ???????????????????????????????????????????????????????? */
         if (VOS_OK != VOS_SmP(RNIC_GET_RESET_SEM(), RNIC_RESET_TIMEOUT_LEN))
         {
             RNIC_PR_LOGI("before reset Vos_SmP fail, %u", VOS_GetSlice());
@@ -123,7 +123,7 @@ VOS_INT RNIC_CCpuResetCallback(
 
         return VOS_OK;
     }
-    /* 复位后 */
+    /* ?????? */
     else if (MDRV_RESET_CB_AFTER == enParam)
     {
         RNIC_PR_LOGI("After reset , %u", VOS_GetSlice());
@@ -150,33 +150,33 @@ VOS_VOID RNIC_InitCtx(VOS_VOID)
 
     pstRnicCtx = RNIC_GET_RNIC_CTX_ADR();
 
-    /* 读取NV中的NAPI配置 */
+    /* ????NV????NAPI???? */
     RNIC_ReadNapiCfg(&stNapiCfg, &stNapiLbCfg);
 
     for (ulIndex = 0 ; ulIndex < RNIC_NET_ID_MAX_NUM ; ulIndex++)
     {
         pstRnicCtx->astIfaceCtx[ulIndex].enRmNetId = (VOS_UINT8)ulIndex;
 
-        /* 初始化RNIC PDN信息 */
+        /* ??????RNIC PDN???? */
         RNIC_InitPdnInfo(&(pstRnicCtx->astIfaceCtx[ulIndex].stPsIfaceInfo));
 
-        /* 初始化设备NAPI配置 */
+        /* ??????????NAPI???? */
         RNIC_InitNapiCfg((VOS_UINT8)ulIndex, &stNapiCfg, &stNapiLbCfg);
 
     }
 
-    /* 初始化RNIC定时器上下文 */
+    /* ??????RNIC???????????? */
     RNIC_InitAllTimers();
 
 #if (FEATURE_OFF == FEATURE_DELAY_MODEM_INIT)
-    /* 初始化拨号模式信息 */
+    /* ?????????????????? */
     RNIC_InitOnDemandDialInfo();
 #endif
 
-    /* 初始化复位信号量 */
+    /* ???????????????? */
     RNIC_InitResetSem();
 
-    /* 初始化Tethering信息 */
+    /* ??????Tethering???? */
     RNIC_InitTetherInfo();
 
     return;
@@ -204,7 +204,7 @@ VOS_VOID RNIC_InitNapiCfg(
 )
 {
 #if (FEATURE_ON == FEATURE_RNIC_NAPI_GRO)
-    /* 3GPP域7张网卡按照NV配置，其他网卡关闭NAPI */
+    /* 3GPP??7??????????NV??????????????????NAPI */
     if (enRmNetId <= RNIC_3GPP_NET_ID_MAX_NUM)
     {
         RNIC_SET_NAPI_FEATURE(enRmNetId, pstNapiCfg->ucNapiEnable);
@@ -223,7 +223,7 @@ VOS_VOID RNIC_InitNapiCfg(
         RNIC_SET_NAPI_WEIGHT_LEVEL3(enRmNetId, pstNapiCfg->stNapiWeightDynamicAdjCfg.stNapiWeightLevel.ucNapiWeightLevel3);
         RNIC_SET_NAPI_WEIGHT_LEVEL4(enRmNetId, pstNapiCfg->stNapiWeightDynamicAdjCfg.stNapiWeightLevel.ucNapiWeightLevel4);
 
-        /* NAPI负载均衡配置, 如果NAPI特性关闭，则直接关闭NAPI负载均衡 */
+        /* NAPI????????????, ????NAPI????????????????????NAPI???????? */
         if (RNIC_FEATURE_OFF == RNIC_GET_NAPI_FEATURE(enRmNetId))
         {
             RNIC_SET_NAPI_LB_FEATURE(enRmNetId, RNIC_FEATURE_OFF);
@@ -232,7 +232,7 @@ VOS_VOID RNIC_InitNapiCfg(
         {
             RNIC_SET_NAPI_LB_FEATURE(enRmNetId, pstNapiLbCfg->ucNapiLbEnable);
             RNIC_SET_NAPI_LB_CPUMASK(enRmNetId, pstNapiLbCfg->usNapiLbCpumask);
-            /* 默认为档位0 */
+            /* ??????????0 */
             RNIC_SET_NAPI_LB_CUR_LEVEL(enRmNetId, 0);
 
             TAF_MEM_CPY_S(g_stRnicCtx.astIfaceCtx[enRmNetId].stFeatureCfg.stNapiLbCfg.astNapiLbLevelCfg,
@@ -299,7 +299,7 @@ VOS_VOID RNIC_InitResetSem(VOS_VOID)
 {
     g_stRnicCtx.hResetSem  = VOS_NULL_PTR;
 
-    /* 分配二进制信号量 */
+    /* ???????????????? */
     if (VOS_OK != VOS_SmBCreate( "RNIC", 0, VOS_SEMA4_FIFO, &g_stRnicCtx.hResetSem))
     {
         PS_PRINTF_WARNING("Create rnic acpu cnf sem failed!\n");
@@ -393,7 +393,7 @@ VOS_VOID RNIC_ReadNapiCfg(
                                    &stIpfMode,
                                    (VOS_UINT32)sizeof(TAF_NV_ADS_IPF_MODE_CFG_STRU)))
     {
-        /* 如果是进程上下文, 关闭NAPI和GRO */
+        /* ????????????????, ????NAPI??GRO */
         if (1 == stIpfMode.ucIpfMode)
         {
             pstNapiCfg->ucNapiEnable = RNIC_FEATURE_OFF;
@@ -427,23 +427,23 @@ VOS_UINT32 RNIC_PidInit (enum VOS_INIT_PHASE_DEFINE enPhase)
         case VOS_IP_LOAD_CONFIG:
 
 #if (FEATURE_OFF == FEATURE_DELAY_MODEM_INIT)
-            /* 创建网卡 */
+            /* ???????? */
             rnic_create_netdev();
 
-            /* 创建按需拨号相关proc节点 */
+            /* ????????????????proc???? */
             rnic_create_ondemand_procfs();
 #endif
-            /* 初始化RNIC上下文信息 */
+            /* ??????RNIC?????????? */
             RNIC_InitCtx();
 
 #if (FEATURE_OFF == FEATURE_DELAY_MODEM_INIT)
-            /* 注册按需拨号节点操作回调 */
+            /* ???????????????????????? */
             RNIC_IFACE_RegOnDemandOpsCB();
 #endif
-            /* 注册设备Ready notify回调 */
+            /* ????????Ready notify???? */
             RNIC_IFACE_RegDevNotifyCB();
 
-           /* 注册回调函数，用于C核单独复位的处理 */
+           /* ??????????????????C???????????????? */
             mdrv_sysboot_register_reset_notify(NAS_RNIC_FUNC_PROC_NAME,
                                      RNIC_CCpuResetCallback,
                                      0,

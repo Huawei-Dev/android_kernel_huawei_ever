@@ -9,7 +9,7 @@ extern "C" {
 
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "oam_ext_if.h"
 #include "frw_ext_if.h"
@@ -73,14 +73,14 @@ extern "C" {
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_DEVICE_C
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 /*lint -e578*//*lint -e19*/
 oal_module_license("GPL");
 /*lint +e578*//*lint +e19*/
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 
@@ -103,7 +103,7 @@ oal_uint32  hmac_device_exit_etc(mac_board_stru *pst_board, mac_chip_stru *pst_c
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 扫描模块去初始化 */
+    /* ???????????????? */
     hmac_scan_exit_etc(pst_hmac_device);
 
 #ifdef _PRE_WLAN_FEATURE_CAR
@@ -121,14 +121,14 @@ oal_uint32  hmac_device_exit_etc(mac_board_stru *pst_board, mac_chip_stru *pst_c
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 亮暗屏去注册 */
+    /* ???????????? */
 #if ((_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION) && (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE))
 #ifdef CONFIG_HAS_EARLYSUSPEND
     unregister_early_suspend(&pst_hmac_device->early_suspend);
 #endif
 #endif
 
-    /* 由于配置vap初始化在HMAC做，所以配置VAP卸载也在HMAC做 */
+    /* ????????vap????????HMAC????????????VAP????????HMAC?? */
     uc_vap_idx = pst_device->uc_cfg_vap_id;
     pst_vap = (hmac_vap_stru *)mac_res_get_hmac_vap(uc_vap_idx);
 
@@ -150,7 +150,7 @@ oal_uint32  hmac_device_exit_etc(mac_board_stru *pst_board, mac_chip_stru *pst_c
 
     for (uc_vap_idx = 0; uc_vap_idx < pst_device->uc_vap_num; uc_vap_idx++)
     {
-        /* 获取最右边一位为1的位数，此值即为vap的数组下标 */
+        /* ????????????????1????????????????vap?????????? */
         pst_vap = (hmac_vap_stru *)mac_res_get_hmac_vap(pst_device->auc_vap_id[uc_vap_idx]);
         if (OAL_PTR_NULL == pst_vap)
         {
@@ -167,7 +167,7 @@ oal_uint32  hmac_device_exit_etc(mac_board_stru *pst_board, mac_chip_stru *pst_c
         pst_device->auc_vap_id[uc_vap_idx] = 0;
     }
 
-    /*释放公共结构体 以及 对应衍生特性*/
+    /*?????????????? ???? ????????????*/
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
     ul_ret = mac_device_exit_etc(pst_device);
     if (OAL_SUCC != ul_ret)
@@ -178,7 +178,7 @@ oal_uint32  hmac_device_exit_etc(mac_board_stru *pst_board, mac_chip_stru *pst_c
     }
 #endif
 
-    /* 指向基础mac device的指针为空 */
+    /* ????????mac device?????????? */
     pst_hmac_device->pst_device_base_info = OAL_PTR_NULL;
 
     return OAL_SUCC;
@@ -201,7 +201,7 @@ OAL_STATIC oal_uint32  hmac_chip_exit(mac_board_stru *pst_board, mac_chip_stru *
     {
          pst_hmac_device = hmac_res_get_mac_dev_etc(pst_chip->auc_device_id[uc_device]);
 
-         /* 待挪动位置 释放资源 */
+         /* ?????????? ???????? */
          hmac_res_free_mac_dev_etc(pst_chip->auc_device_id[uc_device]);
 
          ul_ret = hmac_device_exit_etc(pst_board, pst_chip, pst_hmac_device);
@@ -240,7 +240,7 @@ oal_uint32  hmac_board_exit_etc(mac_board_stru *pst_board)
     uc_chip_id_bitmap = pst_board->uc_chip_id_bitmap;
     while (0 != uc_chip_id_bitmap)
     {
-        /* 获取最右边一位为1的位数，此值即为chip的数组下标 */
+        /* ????????????????1????????????????chip?????????? */
         uc_chip_idx = oal_bit_find_first_bit_one_byte(uc_chip_id_bitmap);
         if (OAL_UNLIKELY(uc_chip_idx >= WLAN_CHIP_MAX_NUM_PER_BOARD))
         {
@@ -256,16 +256,16 @@ oal_uint32  hmac_board_exit_etc(mac_board_stru *pst_board)
             return ul_ret;
         }
 
-        /* 清除对应的bitmap位 */
+        /* ??????????bitmap?? */
         oal_bit_clear_bit_one_byte(&uc_chip_id_bitmap, uc_chip_idx);
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
-        /* 清除对应的bitmap位 */
+        /* ??????????bitmap?? */
         oal_bit_clear_bit_one_byte(&pst_board->uc_chip_id_bitmap, uc_chip_idx);
 #endif
     }
 
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
-    /*公共部分的初始化*/
+    /*????????????????*/
     mac_board_exit_etc(pst_board);
 #endif
 
@@ -279,7 +279,7 @@ OAL_STATIC oal_uint32 hmac_cfg_vap_init(mac_device_stru *pst_device)
     oal_uint32           ul_ret;
     hmac_vap_stru       *pst_vap = OAL_PTR_NULL;
 
-    /* 初始化流程中，只初始化配置vap，其他vap需要通过配置添加 */
+    /* ??????????????????????????vap??????vap???????????????? */
     /*lint -e413*/
     ul_ret = mac_res_alloc_hmac_vap(&pst_device->uc_cfg_vap_id,
                                        OAL_OFFSET_OF(hmac_vap_stru, st_vap_base_info));
@@ -297,11 +297,11 @@ OAL_STATIC oal_uint32 hmac_cfg_vap_init(mac_device_stru *pst_device)
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 把hmac_vap_stru结构体初始化赋值为0 */
+    /* ??hmac_vap_stru??????????????????0 */
     memset_s(pst_vap, OAL_SIZEOF(hmac_vap_stru), 0, OAL_SIZEOF(hmac_vap_stru));
 
     {
-    mac_cfg_add_vap_param_stru  st_param = {0};       /* 构造配置VAP参数结构体 */
+    mac_cfg_add_vap_param_stru  st_param = {0};       /* ????????VAP?????????? */
     st_param.en_vap_mode = WLAN_VAP_MODE_CONFIG;
 #ifdef _PRE_PLAT_FEATURE_CUSTOMIZE
     st_param.bit_11ac2g_enable = OAL_TRUE;
@@ -367,7 +367,7 @@ oal_void  hmac_do_suspend_action_etc(mac_device_stru    *pst_mac_device, oal_uin
     ul_is_wlan_poweron = wlan_pm_is_poweron_etc();
 #endif
 
-    /* 开了host低功耗并且device已上电才需要将亮暗屏状态同步到device */
+    /* ????host??????????device??????????????????????????????device */
     if (wlan_pm_switch_etc && ul_is_wlan_poweron)
     {
         st_suspend.uc_in_suspend        = uc_in_suspend;
@@ -388,7 +388,7 @@ oal_void  hmac_do_suspend_action_etc(mac_device_stru    *pst_mac_device, oal_uin
         }
         hmac_wake_lock();
         /***************************************************************************
-            抛事件到DMAC层, 同步屏幕最新状态到DMAC
+            ????????DMAC??, ??????????????????DMAC
         ***************************************************************************/
         ul_ret = hmac_config_send_event_etc(pst_cfg_mac_vap, WLAN_CFGID_SUSPEND_ACTION_SYN, OAL_SIZEOF(mac_cfg_suspend_stru), (oal_uint8 *)&st_suspend);
         if (OAL_UNLIKELY(OAL_SUCC != ul_ret))
@@ -434,7 +434,7 @@ oal_uint32 hmac_send_evt2wal_etc(mac_vap_stru *pst_mac_vap, oal_uint8 uc_evtid, 
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 填写事件 */
+    /* ???????? */
     pst_event = frw_get_event_stru(pst_event_mem);
 
     FRW_EVENT_HDR_INIT(&(pst_event->st_event_hdr),
@@ -452,7 +452,7 @@ oal_uint32 hmac_send_evt2wal_etc(mac_vap_stru *pst_mac_vap, oal_uint8 uc_evtid, 
         return OAL_FAIL;
     }
 
-    /* 分发事件 */
+    /* ???????? */
     ul_ret = frw_event_dispatch_event_etc(pst_event_mem);
     FRW_EVENT_FREE(pst_event_mem);
     return ul_ret;
@@ -503,7 +503,7 @@ oal_uint32 hmac_config_host_dev_init_etc(mac_vap_stru *pst_mac_vap, oal_uint16 u
     hmac_pkt_mem_opt_init_etc(pst_hmac_device);
 #endif
 
-    /* TBD 补充上下电时候需要初始化的hmac_device_stru下的信息 */
+    /* TBD ??????????????????????????hmac_device_stru???????? */
 
     return OAL_SUCC;
 }
@@ -551,7 +551,7 @@ oal_uint32  hmac_device_init_etc(oal_uint8 *puc_device_id, mac_chip_stru *pst_ch
     oal_uint32           ul_ret;
     oal_uint32           ul_loop = 0;
 
-    /*申请公共mac device结构体*/
+    /*????????mac device??????*/
     ul_ret = mac_res_alloc_hmac_dev_etc(&uc_dev_id);
     if(OAL_UNLIKELY(ul_ret != OAL_SUCC))
     {
@@ -560,7 +560,7 @@ oal_uint32  hmac_device_init_etc(oal_uint8 *puc_device_id, mac_chip_stru *pst_ch
         return OAL_FAIL;
     }
 
-    /* 获取mac device结构体指针 */
+    /* ????mac device?????????? */
     pst_mac_device = mac_res_get_dev_etc(uc_dev_id);
 
     if (OAL_PTR_NULL == pst_mac_device)
@@ -579,14 +579,14 @@ oal_uint32  hmac_device_init_etc(oal_uint8 *puc_device_id, mac_chip_stru *pst_ch
         return ul_ret;
     }
 
-    /* 申请hmac device资源 */
+    /* ????hmac device???? */
     if(OAL_UNLIKELY(hmac_res_alloc_mac_dev_etc(uc_dev_id) != OAL_SUCC))
     {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "{hmac_device_init_etc::hmac_res_alloc_mac_dev_etc failed.}");
         return OAL_FAIL;
     }
 
-    /* 获取hmac device，并进行相关参数赋值 */
+    /* ????hmac device???????????????????? */
     pst_hmac_device = hmac_res_get_mac_dev_etc(uc_dev_id);
     if (OAL_UNLIKELY(OAL_PTR_NULL == pst_hmac_device))
     {
@@ -594,7 +594,7 @@ oal_uint32  hmac_device_init_etc(oal_uint8 *puc_device_id, mac_chip_stru *pst_ch
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 结构体初始化 */
+    /* ???????????? */
     memset_s(pst_hmac_device, OAL_SIZEOF(hmac_device_stru), 0, OAL_SIZEOF(hmac_device_stru));
 
     pst_hmac_device->pst_device_base_info = pst_mac_device;
@@ -612,17 +612,17 @@ oal_uint32  hmac_device_init_etc(oal_uint8 *puc_device_id, mac_chip_stru *pst_ch
     oal_spin_unlock(&pst_hmac_device->st_suspend_lock);
 #endif
 
-    /* 扫描模块初始化 */
+    /* ?????????????? */
     hmac_scan_init_etc(pst_hmac_device);
 
 #ifdef _PRE_WLAN_FEATURE_PKT_MEM_OPT
     hmac_pkt_mem_opt_init_etc(pst_hmac_device);
 #endif
 
-    /* 初始化P2P 等待队列 */
+    /* ??????P2P ???????? */
     OAL_WAIT_QUEUE_INIT_HEAD(&(pst_hmac_device->st_netif_change_event));
 #ifdef _PRE_WLAN_FEATURE_PSM_FLT_STAT
-    /* 初始化低功耗帧过滤统计数据查询等待队列 */
+    /* ?????????????????????????????????????? */
     OAL_WAIT_QUEUE_INIT_HEAD(&(pst_hmac_device->st_psm_flt_stat_query.st_wait_queue));
 #endif
 #ifdef _PRE_WLAN_TCP_OPT
@@ -644,15 +644,15 @@ oal_uint32  hmac_device_init_etc(oal_uint8 *puc_device_id, mac_chip_stru *pst_ch
     }
 #endif
 
-    /* 初始化device下的rx tx BA会话数目 */
+    /* ??????device????rx tx BA???????? */
 #ifndef _PRE_WLAN_FEATURE_AMPDU_VAP
     pst_mac_device->uc_rx_ba_session_num = 0;
     pst_mac_device->uc_tx_ba_session_num = 0;
 #endif
-    /* 出参赋值，CHIP中需要保存该device id */
+    /* ??????????CHIP????????????device id */
     *puc_device_id = uc_dev_id;
 
-    /* 配置vap初始化*/
+    /* ????vap??????*/
     ul_ret = hmac_cfg_vap_init(pst_mac_device);
     if(OAL_UNLIKELY(ul_ret != OAL_SUCC))
     {
@@ -682,10 +682,10 @@ OAL_STATIC oal_uint32  hmac_chip_init(mac_chip_stru *pst_chip, oal_uint8 uc_chip
 
     pst_chip->uc_chip_id = uc_chip_id;
 
-    /* CHIP调用接口 oal_get_chip_version*/
+    /* CHIP???????? oal_get_chip_version*/
     pst_chip->ul_chip_ver = oal_chip_get_version_etc();
 
-    /* OAL接口获取支持device个数 */
+    /* OAL????????????device???? */
     uc_device_max = oal_chip_get_device_num_etc(pst_chip->ul_chip_ver);
     if (0 == uc_device_max)
     {
@@ -708,7 +708,7 @@ OAL_STATIC oal_uint32  hmac_chip_init(mac_chip_stru *pst_chip, oal_uint8 uc_chip
             continue;
         }
 #endif //#ifdef _PRE_PLAT_FEATURE_CUSTOMIZE
-        /* hmac device结构初始化 */
+        /* hmac device?????????? */
         ul_ret = hmac_device_init_etc(&pst_chip->auc_device_id[uc_device], pst_chip);
 
         if(OAL_UNLIKELY(ul_ret != OAL_SUCC))
@@ -734,7 +734,7 @@ oal_uint32  hmac_board_init_etc(mac_board_stru *pst_board)
 
     mac_board_init_etc();
 
-    /* chip支持的最大数由PCIe总线处理提供; */
+    /* chip??????????????PCIe????????????; */
     ul_chip_max_num = oal_bus_get_chip_num_etc();
 
     for (uc_chip = 0; uc_chip < ul_chip_max_num; uc_chip++)
@@ -776,7 +776,7 @@ oal_void hmac_device_pmf_add_black_list(hmac_device_stru *pst_hmac_dev, oal_uint
         return;
     }
 
-    /* 黑名单列表未满，插入到列表末尾，更新黑名单总数，否则覆盖最早的一个 */
+    /* ?????????????????????????????????????????????????????????????????? */
     if (pst_hmac_dev->st_pmf_black_list.uc_cnt < PMF_BLACK_LIST_MAX_CNT)
     {
         uc_black_add_pos = pst_hmac_dev->st_pmf_black_list.uc_cnt++;
@@ -826,7 +826,7 @@ oal_void hmac_device_create_random_mac_addr_etc(mac_device_stru *pst_mac_dev, ma
     }
 
     oal_random_ether_addr(pst_hmac_dev->st_scan_mgmt.auc_random_mac);
-    pst_hmac_dev->st_scan_mgmt.auc_random_mac[0] = pst_mac_dev->auc_mac_oui[0] & 0xfe;  /* 保证是单播mac */
+    pst_hmac_dev->st_scan_mgmt.auc_random_mac[0] = pst_mac_dev->auc_mac_oui[0] & 0xfe;  /* ??????????mac */
     pst_hmac_dev->st_scan_mgmt.auc_random_mac[1] = pst_mac_dev->auc_mac_oui[1];
     pst_hmac_dev->st_scan_mgmt.auc_random_mac[2] = pst_mac_dev->auc_mac_oui[2];
 

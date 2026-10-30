@@ -3,14 +3,14 @@
 #ifndef __PLAT_EFUSE_H__
 #define __PLAT_EFUSE_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <linux/moduleparam.h>
 #include <linux/delay.h>
 #include <linux/rtc.h>
 #include "plat_debug.h"
 #include "plat_firmware.h"
 
-/* 宏定义 */
+/* ?????? */
 #define GET_EFUSE_CMD        "0x50000744,64"
 #define GET_EFUSE_EC_VERSION "0x50000770,4"
 #ifndef HISI_WIFI_MISC_TOP_DIR
@@ -37,7 +37,7 @@
 
 #define STR_REG_NFC_EN_KEEP "0x60001044"
 
-/* 函数声明 */
+/* ???????? */
 extern int32 number_type_cmd_send(uint8 *Key, uint8 *Value);
 extern int32 read_msg(uint8 *data, int32 len);
 extern void store_efuse_info(void);

@@ -2,7 +2,7 @@
 
 #if (_PRE_PRODUCT_ID == _PRE_PRODUCT_ID_HI1151)
 
-/* 头文件包含 */
+/* ?????????? */
 #include "oal_hardware.h"
 #include "oal_bus_if.h"
 #include "oal_pci_if.h"
@@ -11,8 +11,8 @@
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_OAL_PCI_C
 
-/* 全局变量定义 */
-/* PCI驱动支持的设备列表 */
+/* ???????????? */
+/* PCI?????????????????? */
 #define OAL_PCI_WITP_DEVICE_ID 0x1151
 
 OAL_CONST oal_pci_device_id_stru pci_id_table[] = {
@@ -50,7 +50,7 @@ OAL_CONST oal_pci_device_id_stru pci_id_table[] = {
 };
 
 oal_pci_bar_idx_enum_uint8 en_bar_table[1] = {
-    OAL_PCI_BAR_0, /* 256KB地址空间，用于SoC MAC PHY地址映射 */
+    OAL_PCI_BAR_0, /* 256KB??????????????SoC MAC PHY???????? */
 };
 
 #ifdef _PRE_WLAN_FEATURE_AP_PM
@@ -60,7 +60,7 @@ oal_module_symbol(is_cpu_sleep);
 /*lint +e19*/
 #endif
 
-/* 静态函数声明 */
+/* ???????????? */
 OAL_STATIC oal_int32 oal_pci_probe(oal_pci_dev_stru *pst_pci_dev, OAL_CONST oal_pci_device_id_stru *pst_id);
 OAL_STATIC oal_void oal_pci_remove(oal_pci_dev_stru *pst_pci_dev);
 #if (_PRE_CONFIG_TARGET_PRODUCT == _PRE_TARGET_PRODUCT_TYPE_E5)
@@ -76,13 +76,13 @@ OAL_STATIC oal_int32 oal_pci_prepare(oal_device_stru *pst_dev);
 #if ((_PRE_TARGET_PRODUCT_TYPE_5610EVB == _PRE_CONFIG_TARGET_PRODUCT) ||  \
      (_PRE_TARGET_PRODUCT_TYPE_VSPM310DMB == _PRE_CONFIG_TARGET_PRODUCT))
 #elif (_PRE_TARGET_PRODUCT_TYPE_WS835DMB == _PRE_CONFIG_TARGET_PRODUCT)
-/* WS835低功耗需要的pcie复位函数看是否后续需要，再添加 */
+/* WS835????????????pcie?????????????????????????????? */
 #elif (_PRE_TARGET_PRODUCT_TYPE_E5 == _PRE_CONFIG_TARGET_PRODUCT)
-/* E5平台暂不使用  */
+/* E5????????????  */
 #elif (_PRE_TARGET_PRODUCT_TYPE_CPE == _PRE_CONFIG_TARGET_PRODUCT)
-/* CPE平台暂不使用  */
+/* CPE????????????  */
 #elif (_PRE_TARGET_PRODUCT_TYPE_ONT == _PRE_CONFIG_TARGET_PRODUCT)
-/* ONT平台暂不使用  */
+/* ONT????????????  */
 #elif (_PRE_TARGET_PRODUCT_TYPE_5630HERA == _PRE_CONFIG_TARGET_PRODUCT)
 #else
 #endif
@@ -106,7 +106,7 @@ OAL_STATIC oal_pci_driver_stru pci_drv = {
 };
 
 #if (_PRE_CONFIG_TARGET_PRODUCT == _PRE_TARGET_PRODUCT_TYPE_E5)
-/* syscore对应结构体 */
+/* syscore?????????? */
 OAL_STATIC oal_pm_syscore_ops drv_pcie_pm_syscore_ops = {
     .resume = oal_drv_pcie_pm_sys_resume,
 };
@@ -121,7 +121,7 @@ OAL_STATIC oal_pci_driver_stru pci_drv = {
 };
 
 #if (_PRE_CONFIG_TARGET_PRODUCT == _PRE_TARGET_PRODUCT_TYPE_E5)
-/* syscore对应结构体 */
+/* syscore?????????? */
 OAL_STATIC oal_pm_syscore_ops drv_pcie_pm_syscore_ops = {
     oal_drv_pcie_pm_sys_resume,
 };
@@ -134,11 +134,11 @@ oal_void *reg5115_sys_ctl = OAL_PTR_NULL;
 oal_void *5610_mode = OAL_PTR_NULL;
 oal_void *5610_gpio = OAL_PTR_NULL;
 #if (_PRE_TARGET_PRODUCT_TYPE_5610DMB == _PRE_CONFIG_TARGET_PRODUCT)
-oal_void *5610_gpio1 = OAL_PTR_NULL; /* 0x10106000地址 */
-oal_void *5610_gpio2 = OAL_PTR_NULL; /* 0x10108000地址 */
+oal_void *5610_gpio1 = OAL_PTR_NULL; /* 0x10106000???? */
+oal_void *5610_gpio2 = OAL_PTR_NULL; /* 0x10108000???? */
 #endif
 #ifdef _PRE_WLAN_FEATURE_PCIE_ADAPT_5116
-oal_void *5115_sys_ctl1 = OAL_PTR_NULL; /* v200 5116 pcie1的sys ctrl */
+oal_void *5115_sys_ctl1 = OAL_PTR_NULL; /* v200 5116 pcie1??sys ctrl */
 #endif
 
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION)
@@ -164,7 +164,7 @@ OAL_STATIC oal_int32 oal_pci_resume(oal_pci_dev_stru *pst_pci_dev)
     return OAL_SUCC;
 }
 
-/* cpu休眠时调用stop_ap早于suspend */
+/* cpu??????????stop_ap????suspend */
 OAL_STATIC oal_int32 oal_pci_prepare(oal_device_stru *pst_dev)
 {
     OAL_IO_PRINT("enter oal_pci_prepare\n");
@@ -180,11 +180,11 @@ OAL_STATIC oal_int32 oal_pci_prepare(oal_device_stru *pst_dev)
 
 #ifdef _PRE_WLAN_PRODUCT_1151V200
 /*
- * 函 数 名  : oal_pcie_set_inbound_iatu
- * 功能描述  : 设置EP端iATU表,设置2个映射表。
- *             256KB的BAR0空间:
- *             iATU0: 240K,为soc+phy+mac的寄存器地址
- *             iATU1: pcie internal寄存器地址
+ * ?? ?? ??  : oal_pcie_set_inbound_iatu
+ * ????????  : ????EP??iATU??,????2??????????
+ *             256KB??BAR0????:
+ *             iATU0: 240K,??soc+phy+mac????????????
+ *             iATU1: pcie internal??????????
  */
 oal_void oal_pcie_set_inbound_iatu(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -203,7 +203,7 @@ oal_void oal_pcie_set_inbound_iatu(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x20000000);                       /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* iATU1:BAR0:PCIE Internal: 16KB,从0x3C000开始，映射为0地址 */
+    /* iATU1:BAR0:PCIE Internal: 16KB,??0x3C000????????????0???? */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x200, 0x80000001);                       /* view index */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x204, 0x0);                              /* ctrl 1 */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x208, 0x80000000);                       /* ctrl 2 */
@@ -215,7 +215,7 @@ oal_void oal_pcie_set_inbound_iatu(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x40000000);                       /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* iATU2:BAR0:PCIE Internal: 16KB,从0x3C000开始，映射为0地址 */
+    /* iATU2:BAR0:PCIE Internal: 16KB,??0x3C000????????????0???? */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x200, 0x80000002);                       /* view index */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x204, 0x0);                              /* ctrl 1 */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x208, 0x80000000);                       /* ctrl 2 */
@@ -227,14 +227,14 @@ oal_void oal_pcie_set_inbound_iatu(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x20017000);                       /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* 配置命令寄存器                                                                         */
+    /* ??????????????                                                                         */
     /* BIT0 = 1(I/O Space Enable), BIT1 = 1(Memory Space Enable), BIT2 = 1(Bus Master Enable) */
     oal_pci_write_config_word(pst_pci_dev, 0x04, 0x7);
 }
 
 /*
- * 函 数 名  : oal_pcie_set_inbound_iatu_slip_window
- * 功能描述  : 设置滑窗后的EP端iATU表:FPGA有0x30000000的地址空间，需要进行划窗访问
+ * ?? ?? ??  : oal_pcie_set_inbound_iatu_slip_window
+ * ????????  : ????????????EP??iATU??:FPGA??0x30000000????????????????????????????
  */
 oal_void oal_pcie_set_inbound_iatu_slip_window_fpga(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -253,7 +253,7 @@ oal_void oal_pcie_set_inbound_iatu_slip_window_fpga(oal_pci_dev_stru *pst_pci_de
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x20000000);                       /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* iATU1:BAR0:PCIE Internal: 16KB,从0x3C000开始，映射为0地址 */
+    /* iATU1:BAR0:PCIE Internal: 16KB,??0x3C000????????????0???? */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x200, 0x80000001);                       /* view index */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x204, 0x0);                              /* ctrl 1 */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x208, 0x80000000);                       /* ctrl 2 */
@@ -265,7 +265,7 @@ oal_void oal_pcie_set_inbound_iatu_slip_window_fpga(oal_pci_dev_stru *pst_pci_de
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x40000000);                       /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* iATU2:BAR0:PCIE Internal: 16KB,从0x3C000开始，映射为0地址 */
+    /* iATU2:BAR0:PCIE Internal: 16KB,??0x3C000????????????0???? */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x200, 0x80000002);                       /* view index */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x204, 0x0);                              /* ctrl 1 */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x208, 0x80000000);                       /* ctrl 2 */
@@ -277,7 +277,7 @@ oal_void oal_pcie_set_inbound_iatu_slip_window_fpga(oal_pci_dev_stru *pst_pci_de
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x20017000);                       /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* 配置命令寄存器                                                                         */
+    /* ??????????????                                                                         */
     /* BIT0 = 1(I/O Space Enable), BIT1 = 1(Memory Space Enable), BIT2 = 1(Bus Master Enable) */
     oal_pci_write_config_word(pst_pci_dev, 0x04, 0x7);
 }
@@ -294,17 +294,17 @@ oal_void oal_pcie_set_outbound_iatu(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, OAL_PCIE_TARGET_ADDR); /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);                    /* target upper */
 
-    /* 配置命令寄存器                                                                         */
+    /* ??????????????                                                                         */
     /* BIT0 = 1(I/O Space Enable), BIT1 = 1(Memory Space Enable), BIT2 = 1(Bus Master Enable) */
     oal_pci_write_config_word(pst_pci_dev, 0x04, 0x7);
 }
 #else
 /*
- * 函 数 名  : oal_pcie_set_inbound_iatu
- * 功能描述  : 设置EP端iATU表,设置2个映射表。
- *             256KB的BAR0空间:
- *             iATU0: 240K,为soc+phy+mac的寄存器地址
- *             iATU1: pcie internal寄存器地址
+ * ?? ?? ??  : oal_pcie_set_inbound_iatu
+ * ????????  : ????EP??iATU??,????2??????????
+ *             256KB??BAR0????:
+ *             iATU0: 240K,??soc+phy+mac????????????
+ *             iATU1: pcie internal??????????
  */
 oal_void oal_pcie_set_inbound_iatu(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -323,7 +323,7 @@ oal_void oal_pcie_set_inbound_iatu(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x20000000);                      /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* iATU1:BAR0:PCIE Internal: 16KB,从0x3C000开始，映射为0地址 */
+    /* iATU1:BAR0:PCIE Internal: 16KB,??0x3C000????????????0???? */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x200, 0x80000001);                      /* view index */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x204, 0x0);                             /* ctrl 1 */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x208, 0x80000000);                      /* ctrl 2 */
@@ -335,7 +335,7 @@ oal_void oal_pcie_set_inbound_iatu(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x0);                             /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* 配置命令寄存器                                                                         */
+    /* ??????????????                                                                         */
     /* BIT0 = 1(I/O Space Enable), BIT1 = 1(Memory Space Enable), BIT2 = 1(Bus Master Enable) */
     oal_pci_write_config_word(pst_pci_dev, 0x04, 0x7);
 }
@@ -352,15 +352,15 @@ oal_void oal_pcie_set_outbound_iatu(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, OAL_PCIE_TARGET_ADDR); /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);                    /* target upper */
 
-    /* 配置命令寄存器                                                                         */
+    /* ??????????????                                                                         */
     /* BIT0 = 1(I/O Space Enable), BIT1 = 1(Memory Space Enable), BIT2 = 1(Bus Master Enable) */
     oal_pci_write_config_word(pst_pci_dev, 0x04, 0x7);
 }
 #endif
 
 /*
- * 函 数 名  : oal_pcie_set_inbound_iatu_slip_window
- * 功能描述  : 设置滑窗后的EP端iATU表
+ * ?? ?? ??  : oal_pcie_set_inbound_iatu_slip_window
+ * ????????  : ????????????EP??iATU??
  */
 oal_void oal_pcie_set_inbound_iatu_slip_window(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -376,15 +376,15 @@ oal_void oal_pcie_set_inbound_iatu_slip_window(oal_pci_dev_stru *pst_pci_dev)
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x218, 0x20040000);             /* target lower */
     oal_pci_write_config_dword(pst_pci_dev, 0x700 + 0x21c, 0);
 
-    /* 配置命令寄存器                                                                         */
+    /* ??????????????                                                                         */
     /* BIT0 = 1(I/O Space Enable), BIT1 = 1(Memory Space Enable), BIT2 = 1(Bus Master Enable) */
     oal_pci_write_config_word(pst_pci_dev, 0x04, 0x7);
 }
 
 #ifdef _PRE_DEBUG_MODE
 /*
- * 函 数 名  : oal_pci_debug_info
- * 功能描述  : 打印PCIe调试信息
+ * ?? ?? ??  : oal_pci_debug_info
+ * ????????  : ????PCIe????????
  */
 OAL_STATIC oal_void oal_pci_debug_info(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -402,11 +402,11 @@ OAL_STATIC oal_void oal_pci_debug_info(oal_pci_dev_stru *pst_pci_dev)
 #endif
 
 /*
- * 函 数 名  : oal_pci_witp_init
- * 功能描述  : WITP 1151 PCI探测初始化函数
- * 输入参数  : pst_pci_dev: 指向PCI设备
- *             ul_dev_id     : PCI设备号
- * 返 回 值  : Linux错误码
+ * ?? ?? ??  : oal_pci_witp_init
+ * ????????  : WITP 1151 PCI??????????????
+ * ????????  : pst_pci_dev: ????PCI????
+ *             ul_dev_id     : PCI??????
+ * ?? ?? ??  : Linux??????
  */
 OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32 ul_dev_id)
 {
@@ -416,12 +416,12 @@ OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32
     oal_uint32 aul_bar[OAL_WITP_MAX_BARS];
     oal_uint32 aul_len[OAL_WITP_MAX_BARS];
     oal_uint32 aul_mem[OAL_WITP_MAX_BARS];
-    oal_uint8 uc_chip_idx; /* 当前已探测到的芯片编号 */
+    oal_uint8 uc_chip_idx; /* ?????????????????????? */
     oal_bus_chip_stru *pst_bus_chip = OAL_PTR_NULL;
     oal_bus_dev_stru *pst_bus_dev = OAL_PTR_NULL;
     oal_uint32 ul_ret;
 
-    /* 获取当前总线上chip的索引 */
+    /* ??????????????chip?????? */
     uc_chip_idx = oal_bus_get_chip_num_etc();
 
     oal_bus_get_chip_instance(&pst_bus_chip, uc_chip_idx);
@@ -444,10 +444,10 @@ OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32
     pst_bus_chip->uc_chip_id = uc_chip_idx;
     pst_bus_chip->pst_pci_device = pst_pci_dev;
 
-    /* 1151芯片是DBSC，所以device数量一定为1 */
+    /* 1151??????DBSC??????device??????????1 */
     pst_bus_chip->uc_device_num = 1;
 
-    /* 获取BUS DEV结构体 */
+    /* ????BUS DEV?????? */
     pst_bus_dev = &pst_bus_chip->st_bus_dev[0];
 
     for (uc_index = 0; uc_index < OAL_WITP_MAX_BARS; uc_index++) {
@@ -458,7 +458,7 @@ OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32
         OAL_IO_PRINT("BAR %d: set to [mem 0x%x, len = 0x%x]\n",
                      en_bar_idx, aul_bar[uc_index], aul_len[uc_index]);
 
-        /* 申请IO内存资源，此处witp字符串是IO内存资源的名字 */
+        /* ????IO??????????????witp????????IO?????????????? */
         if (!oal_request_mem_region(aul_bar[uc_index], aul_len[uc_index], "witp")) {
             OAL_IO_PRINT("BAR %d, pci: cannot reserve PCI memory region\n", en_bar_idx);
 
@@ -475,7 +475,7 @@ OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32
 
         OAL_IO_PRINT("BAR %d: ioremap addr = 0x%x\n", en_bar_idx, aul_mem[uc_index]);
 
-        /*lint -e774*/ /* WIN32封装下ul_mem是常量，if判断总是false */
+        /*lint -e774*/ /* WIN32??????ul_mem????????if????????false */
         if (!aul_mem[uc_index]) {
             OAL_IO_PRINT("BAR %d, pci: cannot remap PCI memory region\n", en_bar_idx);
 
@@ -494,7 +494,7 @@ OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32
         /* lint +e774 */
     }
 
-    /* 保存基地址，1151芯片的基地址等于device的基地址 */
+    /* ????????????1151????????????????device???????? */
     if (memcpy_s(pst_bus_dev->aul_mem_start, sizeof(pst_bus_dev->aul_mem_start),
                  aul_mem, OAL_WITP_MAX_BARS * OAL_SIZEOF(oal_uint32)) != EOK) {
         OAL_IO_PRINT("memcpy_s error, destlen=%u, srclen=%u\n ",
@@ -511,24 +511,24 @@ OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32
         return -OAL_EFAIL;
     }
 
-    /* 总线上的chip数量增加1 */
+    /* ????????chip????????1 */
     ul_ret = oal_bus_inc_chip_num_etc();
     if (ul_ret != OAL_SUCC) {
         OAL_IO_PRINT("oal_pci_probe: oal_bus_inc_chip_num_etc failed!\n");
         return -OAL_EIO;
     }
 
-    /* 更新其他信息 */
+    /* ???????????? */
     pst_bus_dev->uc_chip_id = pst_bus_chip->uc_chip_id;
     pst_bus_dev->p_dev = pst_pci_dev;
     pst_bus_dev->ul_irq_num = pst_pci_dev->irq;
     pst_bus_dev->ul_device_id = ul_dev_id;
     pst_bus_dev->uc_bar_num = OAL_WITP_MAX_BARS;
 
-    /* 设置inbound iATU表 */
+    /* ????inbound iATU?? */
     oal_pcie_set_inbound_iatu(pst_pci_dev);
 
-    /* 设置outbound iATU表 */
+    /* ????outbound iATU?? */
     oal_pcie_set_outbound_iatu(pst_pci_dev);
 
     OAL_IO_PRINT("WITP: pci_dev->irq      : %d.\n", pst_bus_dev->ul_irq_num);
@@ -537,11 +537,11 @@ OAL_STATIC oal_int32 oal_pci_witp_init(oal_pci_dev_stru *pst_pci_dev, oal_uint32
 }
 
 /*
- * 函 数 名  : oal_pci_probe
- * 功能描述  : PCI探测函数
- * 输入参数  : pst_pci_dev: 指向PCI设备
- *             pst_id     : PCI设备表
- * 返 回 值  : Linux错误码
+ * ?? ?? ??  : oal_pci_probe
+ * ????????  : PCI????????
+ * ????????  : pst_pci_dev: ????PCI????
+ *             pst_id     : PCI??????
+ * ?? ?? ??  : Linux??????
  */
 OAL_STATIC oal_int32 oal_pci_probe(oal_pci_dev_stru *pst_pci_dev, OAL_CONST oal_pci_device_id_stru *pst_id)
 {
@@ -565,10 +565,10 @@ OAL_STATIC oal_int32 oal_pci_probe(oal_pci_dev_stru *pst_pci_dev, OAL_CONST oal_
     oal_pci_debug_info(pst_pci_dev);
 #endif
 
-    /* 获取chip中的device id */
+    /* ????chip????device id */
     ul_dev_id = OAL_PCI_GET_DEV_ID(pst_id);
 
-    /* 1151 chip的初始化 */
+    /* 1151 chip???????? */
     if (ul_dev_id == OAL_PCI_WITP_DEVICE_ID) {
         l_ret = oal_pci_witp_init(pst_pci_dev, ul_dev_id);
         if (l_ret != OAL_SUCC) {
@@ -581,7 +581,7 @@ OAL_STATIC oal_int32 oal_pci_probe(oal_pci_dev_stru *pst_pci_dev, OAL_CONST oal_
 #endif
 
     } else {
-        /* 暂不支持其他芯片 */
+        /* ???????????????? */
         OAL_IO_PRINT("oal_pci_probe: unknown device id (%d)!\n", ul_dev_id);
         return -OAL_EIO;
     }
@@ -592,11 +592,11 @@ OAL_STATIC oal_int32 oal_pci_probe(oal_pci_dev_stru *pst_pci_dev, OAL_CONST oal_
 }
 
 /*
- * 函 数 名  : oal_pci_witp_remove
- * 功能描述  : WITP PCI探测函数
- * 输入参数  : pst_pci_dev: 指向PCI设备
- *             pst_id     : PCI设备表
- * 返 回 值  : Linux错误码
+ * ?? ?? ??  : oal_pci_witp_remove
+ * ????????  : WITP PCI????????
+ * ????????  : pst_pci_dev: ????PCI????
+ *             pst_id     : PCI??????
+ * ?? ?? ??  : Linux??????
  */
 OAL_STATIC oal_void oal_pci_witp_remove(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -629,9 +629,9 @@ OAL_STATIC oal_void oal_pci_witp_remove(oal_pci_dev_stru *pst_pci_dev)
 }
 
 /*
- * 函 数 名  : oal_pci_remove
- * 功能描述  : pci设备移除函数
- * 输入参数  : pst_pci_dev: pci设备
+ * ?? ?? ??  : oal_pci_remove
+ * ????????  : pci????????????
+ * ????????  : pst_pci_dev: pci????
  */
 OAL_STATIC oal_void oal_pci_remove(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -651,8 +651,8 @@ OAL_STATIC oal_void oal_pci_remove(oal_pci_dev_stru *pst_pci_dev)
 }
 
 /*
- * 函 数 名  : oal_pci_init
- * 功能描述  : pci初始化
+ * ?? ?? ??  : oal_pci_init
+ * ????????  : pci??????
  */
 oal_uint32 oal_pci_init(oal_void)
 {
@@ -668,7 +668,7 @@ oal_uint32 oal_pci_init(oal_void)
         return OAL_FAIL;
     }
 
-    /* WINDOWS下UT代码 */
+    /* WINDOWS??UT???? */
 #if (_PRE_OS_VERSION_WIN32 == _PRE_OS_VERSION) && (_PRE_TEST_MODE == _PRE_TEST_MODE_UT)
     for (uc_chip_id = 0; uc_chip_id < WLAN_CHIP_MAX_NUM_PER_BOARD; uc_chip_id++) {
         oal_bus_inc_chip_num_etc();
@@ -679,8 +679,8 @@ oal_uint32 oal_pci_init(oal_void)
 }
 
 /*
- * 函 数 名  : oal_pci_exit
- * 功能描述  : pci驱动退出
+ * ?? ?? ??  : oal_pci_exit
+ * ????????  : pci????????
  */
 oal_void oal_pci_exit(oal_void)
 {
@@ -690,9 +690,9 @@ oal_void oal_pci_exit(oal_void)
 }
 
 /*
- * 函 数 名  : oal_5115_pci_init
- * 功能描述  : 5115 system control & PCIE0 基地址映射
- * 返 回 值  : OAL_SUCC或其它错误码
+ * ?? ?? ??  : oal_5115_pci_init
+ * ????????  : 5115 system control & PCIE0 ??????????
+ * ?? ?? ??  : OAL_SUCC????????????
  */
 oal_uint32 oal_5115_pci_init(oal_void)
 {
@@ -787,8 +787,8 @@ oal_void oal_5115_pci_exit(oal_void)
 }
 
 /*
- * 函 数 名  : oal_pcie_dbi_enable
- * 功能描述  : 使能RC侧的DBI读写功能
+ * ?? ?? ??  : oal_pcie_dbi_enable
+ * ????????  : ????RC????DBI????????
  */
 oal_void oal_pcie_dbi_enable(oal_uint32 id)
 {
@@ -828,13 +828,13 @@ oal_void oal_pcie_dbi_enable(oal_uint32 id)
 #endif
 }
 /*
- * 函 数 名  : oal_pcie_dbi_disable
- * 功能描述  : 去使能RC侧的DBI读写功能，恢复EP侧的DBI读写
+ * ?? ?? ??  : oal_pcie_dbi_disable
+ * ????????  : ??????RC????DBI??????????????EP????DBI????
  */
 oal_void oal_pcie_dbi_disable(oal_uint32 id)
 {
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION)
-    /* 配置工作模式，恢复读写wifi侧 */
+    /* ??????????????????????wifi?? */
     oal_uint32 ul_val;
 
 #ifdef _PRE_WLAN_FEATURE_PCIE_ADAPT_5116
@@ -870,8 +870,8 @@ oal_void oal_pcie_dbi_disable(oal_uint32 id)
 #endif
 }
 /*
- * 函 数 名  : oal_pcie_internal_get
- * 功能描述  : 1151 PCIE内部寄存器MEM读接口，调用接口前，需确保已调用hi1151_pcie_dbi_enable接口使能1151的DBI接口。
+ * ?? ?? ??  : oal_pcie_internal_get
+ * ????????  : 1151 PCIE??????????MEM????????????????????????????????hi1151_pcie_dbi_enable????????1151??DBI??????
  */
 oal_uint32 oal_pcie_internal_get(oal_uint32 ul_inter_addr, oal_uint32 bit_offset, oal_uint32 bit_width)
 {
@@ -897,8 +897,8 @@ oal_uint32 oal_pcie_internal_get(oal_uint32 ul_inter_addr, oal_uint32 bit_offset
     return ul_value;
 }
 /*
- * 函 数 名  : oal_pcie_internal_set
- * 功能描述  : 1151 PCIE内部寄存器MEM写接口，调用接口前，需确保已调用hi1151_pcie_dbi_enable接口使能1151的DBI接口。
+ * ?? ?? ??  : oal_pcie_internal_set
+ * ????????  : 1151 PCIE??????????MEM????????????????????????????????hi1151_pcie_dbi_enable????????1151??DBI??????
  */
 oal_void oal_pcie_internal_set(oal_uint32 ul_inter_addr, oal_uint32 bit_offset,
                                oal_uint32 bit_width, oal_uint32 bit_value)
@@ -923,8 +923,8 @@ oal_void oal_pcie_internal_set(oal_uint32 ul_inter_addr, oal_uint32 bit_offset,
 #endif
 }
 /*
- * 函 数 名  : oal_pci_linkup_check
- * 功能描述  : 检测PCIE的link状态
+ * ?? ?? ??  : oal_pci_linkup_check
+ * ????????  : ????PCIE??link????
  */
 oal_uint32 oal_pci_linkup_check(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -945,8 +945,8 @@ oal_uint32 oal_pci_linkup_check(oal_pci_dev_stru *pst_pci_dev)
 }
 
 /*
- * 函 数 名  : oal_pcie_show_link_status
- * 功能描述  : 输出当前PCIE的模式，速率，带宽
+ * ?? ?? ??  : oal_pcie_show_link_status
+ * ????????  : ????????PCIE??????????????????
  */
 oal_void oal_pcie_show_link_status(oal_uint32 id)
 {
@@ -959,7 +959,7 @@ oal_void oal_pcie_show_link_status(oal_uint32 id)
     oal_bus_chip_stru *pst_bus_chip = OAL_PTR_NULL;
     oal_uint ul_flag = 0;
 
-    /* 获取当前总线上chip的索引 */
+    /* ??????????????chip?????? */
     if (id == 0) {
         oal_bus_get_chip_instance(&pst_bus_chip, 0);
         if (OAL_UNLIKELY(pst_bus_chip == OAL_PTR_NULL)) {
@@ -985,9 +985,9 @@ oal_void oal_pcie_show_link_status(oal_uint32 id)
 }
 
 /*
- * 函 数 名  : oal_pcie_set_gen
- * 功能描述  : PCIE设置gen模式:1.0/2.0/3.0
- * 输入参数  : pst_pci_dev: pci设备
+ * ?? ?? ??  : oal_pcie_set_gen
+ * ????????  : PCIE????gen????:1.0/2.0/3.0
+ * ????????  : pst_pci_dev: pci????
  */
 oal_void oal_pcie_set_gen(oal_uint32 id, oal_pci_gen_enum_uint8 uc_gen)
 {
@@ -997,7 +997,7 @@ oal_void oal_pcie_set_gen(oal_uint32 id, oal_pci_gen_enum_uint8 uc_gen)
     oal_uint ul_flag;
 
     if (id == 0) {
-        /* 获取当前总线上chip的索引 */
+        /* ??????????????chip?????? */
         oal_bus_get_chip_instance(&pst_bus_chip, 0);
         if (OAL_UNLIKELY(pst_bus_chip == OAL_PTR_NULL)) {
             OAL_IO_PRINT("oal_pcie_show_link_status: OAL_PTR_NULL == pst_bus_chip!\n");
@@ -1033,9 +1033,9 @@ oal_void oal_pcie_set_gen(oal_uint32 id, oal_pci_gen_enum_uint8 uc_gen)
 }
 
 /*
- * 函 数 名  : oal_pci_ep_reconfig
- * 功能描述  : pci设备重新建联后EP端(1151)恢复配置寄存器和IATU表
- * 输入参数  : pst_pci_dev: pci设备
+ * ?? ?? ??  : oal_pci_ep_reconfig
+ * ????????  : pci??????????????EP??(1151)????????????????IATU??
+ * ????????  : pst_pci_dev: pci????
  */
 oal_uint32 oal_pci_ep_reconfig(oal_pci_dev_stru *pst_pci_dev)
 {
@@ -1063,31 +1063,31 @@ oal_uint32 oal_pci_ep_reconfig(oal_pci_dev_stru *pst_pci_dev)
 }
 
 /*
- * 函 数 名  : oal_pci_rc_reconfig
- * 功能描述  : pci设备重新建联后恢复RC端(5115)配置寄存器和IATU表
- * 输入参数  : pst_pci_dev: pci设备
+ * ?? ?? ??  : oal_pci_rc_reconfig
+ * ????????  : pci??????????????????RC??(5115)????????????IATU??
+ * ????????  : pst_pci_dev: pci????
  */
 oal_uint32 oal_pci_rc_reconfig(oal_uint8 uc_chip_id)
 {
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION)
 
 #if (_PRE_TARGET_PRODUCT_TYPE_E5 == _PRE_CONFIG_TARGET_PRODUCT)
-    /* to be done: 722 平台适配 */
+    /* to be done: 722 ???????? */
     balong_pcie_pm_sys_resume();
 #elif (_PRE_TARGET_PRODUCT_TYPE_CPE == _PRE_CONFIG_TARGET_PRODUCT)
-    /* CPE暂不需要 */
+    /* CPE???????? */
 #elif ((_PRE_TARGET_PRODUCT_TYPE_5610EVB == _PRE_CONFIG_TARGET_PRODUCT) ||  \
        (_PRE_TARGET_PRODUCT_TYPE_VSPM310DMB == _PRE_CONFIG_TARGET_PRODUCT))
-    oal_uint8 uc_pcie_slot = uc_chip_id + 1; /* pcie槽位号从1开始,chip id从0开始 */
+    oal_uint8 uc_pcie_slot = uc_chip_id + 1; /* pcie????????1????,chip id??0???? */
     pcie_sys_reinit(uc_pcie_slot);
 #elif (_PRE_TARGET_PRODUCT_TYPE_WS835DMB == _PRE_CONFIG_TARGET_PRODUCT)
-    /* WS835低功耗需要的pcie复位函数看是否后续需要，再添加 */
+    /* WS835????????????pcie?????????????????????????????? */
 #elif (_PRE_TARGET_PRODUCT_TYPE_ONT == _PRE_CONFIG_TARGET_PRODUCT)
-    /* ONT低功耗需要的pcie复位函数看是否后续需要，再添加 */
+    /* ONT????????????pcie?????????????????????????????? */
 #elif (_PRE_TARGET_PRODUCT_TYPE_5630HERA == _PRE_CONFIG_TARGET_PRODUCT)
-    /* HERA低功耗需要的pcie复位函数看是否后续需要，再添加 */
+    /* HERA????????????pcie?????????????????????????????? */
 #else
-    hi_pcie_reinit(uc_chip_id); /* 5610sdk最新代码的pcie是按照chip开始，分为0,1,2；2表示无效 */
+    hi_pcie_reinit(uc_chip_id); /* 5610sdk??????????pcie??????chip??????????0,1,2??2???????? */
 #endif
 
 #endif
@@ -1099,8 +1099,8 @@ oal_uint32 oal_pci_rc_reconfig(oal_uint8 uc_chip_id)
 #define PCIE_NONFATAL_ERR_STATUS (0x0104)
 
 /*
- * 函 数 名  : oal_pci_check_clear_error_nonfatal
- * 功能描述  : 检测当前pcie是否有检测到pcie error_nonfatal出现,如果检测到则清除该寄存器，并返回1；否则返回0;
+ * ?? ?? ??  : oal_pci_check_clear_error_nonfatal
+ * ????????  : ????????pcie????????????pcie error_nonfatal????,????????????????????????????????1??????????0;
  */
 oal_uint32 oal_pci_check_clear_error_nonfatal(oal_uint8 uc_chip_id)
 {
@@ -1118,38 +1118,38 @@ oal_uint32 oal_pci_check_clear_error_nonfatal(oal_uint8 uc_chip_id)
     oal_irq_save(&ul_flag, OAL_5115IRQ_OPCCEN);
 
     if (uc_chip_id == 0) {
-        /* 配置工作模式，读CPU侧 */
+        /* ????????????????CPU?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_R_PCIE0);
         ul_val |= BIT21;
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_R_PCIE0);
 
-        /* 配置工作模式，写CPU侧 */
+        /* ????????????????CPU?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_W_PCIE0);
         ul_val |= BIT21;
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_W_PCIE0);
     } else {
-        /* 配置工作模式，读CPU侧 */
+        /* ????????????????CPU?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_R_PCIE1);
         ul_val |= BIT21;
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_R_PCIE1);
 
-        /* 配置工作模式，写CPU侧 */
+        /* ????????????????CPU?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_W_PCIE1);
         ul_val |= BIT21;
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_W_PCIE1);
     }
 
-    /* ul_val 非零表示出现PCIE nonfatal错误 */
+    /* ul_val ????????????PCIE nonfatal???? */
     ul_val = oal_readl(pst_bus_chip->p_pci_dbi_base + PCIE_NONFATAL_ERR_STATUS);
     if (ul_val) {
-        /* 读取寄存器值，可查看错误类型 */
+        /* ???????????????????????????? */
         OAL_IO_PRINT("before clear: chip_id = %d, dbi_base = %p, reg 0x0104 value = 0x%x",
                      uc_chip_id, pst_bus_chip->p_pci_dbi_base, ul_val);
 
-        /* 写全F清零 */
+        /* ????F???? */
         oal_writel(0xFFFFFFFF, pst_bus_chip->p_pci_dbi_base + PCIE_NONFATAL_ERR_STATUS);
 
-        /* 回读确认是否清零 */
+        /* ???????????????? */
         ul_val = oal_readl(pst_bus_chip->p_pci_dbi_base + PCIE_NONFATAL_ERR_STATUS);
         OAL_IO_PRINT("after clear: chip_id = %d, dbi_base = %p, reg 0x0104 value = 0x%x",
                      uc_chip_id, pst_bus_chip->p_pci_dbi_base, ul_val);
@@ -1158,22 +1158,22 @@ oal_uint32 oal_pci_check_clear_error_nonfatal(oal_uint8 uc_chip_id)
     }
 
     if (uc_chip_id == 0) {
-        /* 配置工作模式，恢复读wifi侧 */
+        /* ????????????????????wifi?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_R_PCIE0);
         ul_val &= (~BIT21);
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_R_PCIE0);
 
-        /* 配置工作模式，恢复写wifi侧 */
+        /* ????????????????????wifi?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_W_PCIE0);
         ul_val &= (~BIT21);
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_W_PCIE0);
     } else {
-        /* 配置工作模式，恢复读wifi侧 */
+        /* ????????????????????wifi?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_R_PCIE1);
         ul_val &= (~BIT21);
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_R_PCIE1);
 
-        /* 配置工作模式，恢复写wifi侧 */
+        /* ????????????????????wifi?? */
         ul_val = oal_readl(reg5115_sys_ctl + OAL_PERI_W_PCIE1);
         ul_val &= (~BIT21);
         oal_writel(ul_val, reg5115_sys_ctl + OAL_PERI_W_PCIE1);
@@ -1193,8 +1193,8 @@ oal_uint32 oal_pci_check_clear_error_nonfatal(oal_uint8 uc_chip_id)
 #define PCIE_RESET_CLTR_BIT_NOT(_chip_id) (_chip_id == 0 ? 0x800000 : 0x1000000)
 
 /*
- * 函 数 名  : oal_pci_hand_reset
- * 功能描述  : 手动触发复位pci
+ * ?? ?? ??  : oal_pci_hand_reset
+ * ????????  : ????????????pci
  */
 oal_uint32 oal_pci_hand_reset(oal_uint8 uc_chip_id)
 {
@@ -1206,22 +1206,22 @@ oal_uint32 oal_pci_hand_reset(oal_uint8 uc_chip_id)
         return OAL_FAIL;
     }
 
-    /* 外设时钟使能寄存器，bit6代表pcie0时钟 */
+    /* ????????????????????bit6????pcie0???? */
     ul_val = oal_readl(5115_cfg_base + 0x20);
     ul_val = ul_val | PCIE_DEV_CLK_ENABLE_BIT(uc_chip_id);
     oal_writel(ul_val, 5115_cfg_base + 0x20);
 
-    /* pcie0控制寄器12，初始值为420c0802 */
+    /* pcie0????????12??????????420c0802 */
     ul_val = 0x420539F3;
     oal_writel(ul_val, 5115_cfg_base + PCIE_CTRL_REG12(uc_chip_id));
 
-    /* 0x30外复位控制器，bit23代表 PCIE0 复位(1代表复位，0代表不复位) */
+    /* 0x30??????????????bit23???? PCIE0 ????(1??????????0??????????) */
     ul_val = oal_readl(5115_cfg_base + 0x30);
     ul_val = ul_val & PCIE_RESET_CTRL_BIT(uc_chip_id);
     oal_writel(ul_val, 5115_cfg_base + 0x30);
     oal_udelay(1000);
 
-    /* 0x30外复位控制器，bit23代表 PCIE0 复位(1代表复位，0代表不复位) */
+    /* 0x30??????????????bit23???? PCIE0 ????(1??????????0??????????) */
     ul_val = oal_readl(5115_cfg_base + 0x30);
     ul_val = ul_val | PCIE_RESET_CLTR_BIT_NOT(uc_chip_id);
     oal_writel(ul_val, 5115_cfg_base + 0x30);
@@ -1231,8 +1231,8 @@ oal_uint32 oal_pci_hand_reset(oal_uint8 uc_chip_id)
 }
 
 /*
- * 函 数 名  : oal_machine_restart
- * 功能描述  : 触发系统复位
+ * ?? ?? ??  : oal_machine_restart
+ * ????????  : ????????????
  */
 oal_void oal_machine_restart(oal_void)
 {
@@ -1245,8 +1245,8 @@ oal_void oal_machine_restart(oal_void)
 
 #if (_PRE_CONFIG_TARGET_PRODUCT == _PRE_TARGET_PRODUCT_TYPE_E5)
 /*
- * 函 数 名  : oal_drv_pcie_pm_sys_resume
- * 功能描述  : syscore resume的回调函数,恢复ep侧寄存器
+ * ?? ?? ??  : oal_drv_pcie_pm_sys_resume
+ * ????????  : syscore resume??????????,????ep????????
  */
 OAL_STATIC oal_void oal_drv_pcie_pm_sys_resume(oal_void)
 {
@@ -1256,7 +1256,7 @@ OAL_STATIC oal_void oal_drv_pcie_pm_sys_resume(oal_void)
 
     OAL_IO_PRINT("{oal_drv_pcie_pm_sys_resume:: enter!}\n");
 
-    /* 遍历chip,获取对应的pci device */
+    /* ????chip,??????????pci device */
     for (uc_chip_idx = 0; uc_chip_idx < oal_bus_get_chip_num_etc(); uc_chip_idx++) {
         oal_bus_get_chip_instance(&pst_bus_chip, uc_chip_idx);
         if (OAL_UNLIKELY(pst_bus_chip == OAL_PTR_NULL)) {
@@ -1278,8 +1278,8 @@ OAL_STATIC oal_void oal_drv_pcie_pm_sys_resume(oal_void)
 }
 
 /*
- * 函 数 名  : oal_register_syscore_ops
- * 功能描述  : 注册syscore回调函数
+ * ?? ?? ??  : oal_register_syscore_ops
+ * ????????  : ????syscore????????
  */
 oal_void oal_register_syscore_ops(oal_void)
 {
@@ -1289,8 +1289,8 @@ oal_void oal_register_syscore_ops(oal_void)
 }
 
 /*
- * 函 数 名  : oal_register_syscore_ops
- * 功能描述  : 去注册syscore回调函数
+ * ?? ?? ??  : oal_register_syscore_ops
+ * ????????  : ??????syscore????????
  */
 oal_void oal_unregister_syscore_ops(oal_void)
 {
@@ -1300,7 +1300,7 @@ oal_void oal_unregister_syscore_ops(oal_void)
 }
 #endif
 
-/* 将pci_id_table导出到用户空间，使热插拔和模块装载系统知道什么模块针对什么硬件设备 */
+/* ??pci_id_table?????????????????????????????????????????????????????????????????? */
 /*lint -e19*/
 /*lint -e578*/ /*lint -e19*/
 OAL_MODULE_DEVICE_TABLE(pci, pci_id_table);

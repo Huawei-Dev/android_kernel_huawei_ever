@@ -328,7 +328,7 @@ STATIC void ps_tty_receive(struct tty_struct *tty, const uint8 *data,
             ret = snprintf_s(filename, sizeof(filename), sizeof(filename) - 1,
                              "/data/hwlogdir/uart_rx/uart_rx-%04d-%02d-%02d:%02d-%02d-%02d",
                              tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-                             tm.tm_hour, tm.tm_min, tm.tm_sec); /* 转换成当前时间 */
+                             tm.tm_hour, tm.tm_min, tm.tm_sec); /* ?????????????? */
             if (ret < 0) {
                 ps_uart_tty_rx_add(count);
                 tty_recv(tty->disc_data, data, count);
@@ -409,7 +409,7 @@ STATIC void ps_tty_flush_buffer(struct tty_struct *tty)
  * Prototype    : ps_change_uart_baud_rate
  * Description  : change arm platform uart baud rate to secend
  *                baud rate for high baud rate when download patch
- * input        : baud_rate，enable_flowctl
+ * input        : baud_rate??enable_flowctl
  */
 int32 ps_change_uart_baud_rate(int64 baud_rate, uint8 enable_flowctl)
 {

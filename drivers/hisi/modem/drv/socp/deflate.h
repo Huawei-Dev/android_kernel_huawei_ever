@@ -103,8 +103,8 @@ struct deflate_ctrl_info
     u32                     initFlag;
     u32                     u32ChanID;
     void*                     baseAddr;
-    u32                     u32SetStat;    /* 通道已经或没有配置的标识*/
-    u32                     u32Thrh;       /* 阈值*/
+    u32                     u32SetStat;    /* ????????????????????????*/
+    u32                     u32Thrh;       /* ????*/
     socp_event_cb           event_cb;
     socp_read_cb            read_cb;
     osl_sem_id              task_sem;
@@ -130,49 +130,49 @@ typedef socp_event_cb   deflate_event_cb;
 /* DEFLATE_REG Base address of Module's Register */
  enum DEFLATE_STATE_ENUM
     {
-    DEFLATE_IDLE               = 0,    /* DEFLATE处于空闲态 */
-    DEFLATE_BUSY,                      /* DEFLATE处忙 */
-    DEFLATE_UNKNOWN_BUTT              /*  未知状态 */
+    DEFLATE_IDLE               = 0,    /* DEFLATE?????????? */
+    DEFLATE_BUSY,                      /* DEFLATE???? */
+    DEFLATE_UNKNOWN_BUTT              /*  ???????? */
 };
 enum DEFLATE_READ_STATE
     {
-    DEFLATE_READ_DONE               = 0,    /* DEFLATE 读完成 */
-    DEFLATE_READ_GO,                      /* DEFLATE 读进行中 */
-    DEFLATE_READ_UNKNOWN_BUTT              /*  未知状态 */
+    DEFLATE_READ_DONE               = 0,    /* DEFLATE ?????? */
+    DEFLATE_READ_GO,                      /* DEFLATE ???????? */
+    DEFLATE_READ_UNKNOWN_BUTT              /*  ???????? */
 };
 
 
-#define  SOCP_REG_DEFLATE_INFORMATION                  HI_SOCP_REG_DEFLATE_INFORMATION            /* deflate压缩模块版本信息 */
-#define  SOCP_REG_DEFLATE_GLOBALCTRL                   HI_SOCP_REG_DEFLATE_GLOBALCTRL             /* SOCP deflate全局控制寄存器 */
-#define  SOCP_REG_DEFLATE_IBUFTIMEOUTCFG               HI_SOCP_REG_DEFLATE_IBUFTIMEOUTCFG         /* 压缩模块ibuf超时计数器配置 */
-#define  SOCP_REG_DEFLATE_RAWINT                       HI_SOCP_REG_DEFLATE_RAWINT                 /* 原始中断寄存器 */
-#define  SOCP_REG_DEFLATE_INT                          HI_SOCP_REG_DEFLATE_INT                    /* 中断状态寄存器 */
-#define  SOCP_REG_DEFLATE_INTMASK                      HI_SOCP_REG_DEFLATE_INTMASK                /* 中断屏蔽寄存器 */
-#define  SOCP_REG_DEFLATE_TFRTIMEOUTCFG                HI_SOCP_REG_DEFLATE_TFRTIMEOUTCFG          /* 压缩数据块传输超时计数器配置阈值 */
-#define  SOCP_REG_DEFLATE_STATE                        HI_SOCP_REG_DEFLATE_STATE                  /* 压缩模块操作控制 */
-#define  SOCP_REG_DEFLATE_ABORTSTATERECORD             HI_SOCP_REG_DEFLATE_ABORTSTATERECORD       /* 压缩异常状态记录 */
-#define  SOCP_REG_DEFLATEDEBUG_CH                      HI_SOCP_REG_DEFLATEDEBUG_CH                /* 压缩模块bug通道 */
-#define  SOCP_REG_DEFLATEDEST_BUFREMAINTHCFG           HI_SOCP_REG_DEFLATEDEST_BUFREMAINTHCFG     /* 压缩通路目的buffer溢出中断阈值寄存器 */
+#define  SOCP_REG_DEFLATE_INFORMATION                  HI_SOCP_REG_DEFLATE_INFORMATION            /* deflate???????????????? */
+#define  SOCP_REG_DEFLATE_GLOBALCTRL                   HI_SOCP_REG_DEFLATE_GLOBALCTRL             /* SOCP deflate?????????????? */
+#define  SOCP_REG_DEFLATE_IBUFTIMEOUTCFG               HI_SOCP_REG_DEFLATE_IBUFTIMEOUTCFG         /* ????????ibuf?????????????? */
+#define  SOCP_REG_DEFLATE_RAWINT                       HI_SOCP_REG_DEFLATE_RAWINT                 /* ?????????????? */
+#define  SOCP_REG_DEFLATE_INT                          HI_SOCP_REG_DEFLATE_INT                    /* ?????????????? */
+#define  SOCP_REG_DEFLATE_INTMASK                      HI_SOCP_REG_DEFLATE_INTMASK                /* ?????????????? */
+#define  SOCP_REG_DEFLATE_TFRTIMEOUTCFG                HI_SOCP_REG_DEFLATE_TFRTIMEOUTCFG          /* ???????????????????????????????? */
+#define  SOCP_REG_DEFLATE_STATE                        HI_SOCP_REG_DEFLATE_STATE                  /* ???????????????? */
+#define  SOCP_REG_DEFLATE_ABORTSTATERECORD             HI_SOCP_REG_DEFLATE_ABORTSTATERECORD       /* ???????????????? */
+#define  SOCP_REG_DEFLATEDEBUG_CH                      HI_SOCP_REG_DEFLATEDEBUG_CH                /* ????????bug???? */
+#define  SOCP_REG_DEFLATEDEST_BUFREMAINTHCFG           HI_SOCP_REG_DEFLATEDEST_BUFREMAINTHCFG     /* ????????????buffer?????????????????? */
 
 #ifdef FEATURE_SOCP_ADDR_64BITS
-#define  SOCP_REG_DEFLATEDEST_BUFRPTR            	   HI_SOCP_REG_DEFLATE_DST_BUFRPTR_OFSSET     /* 压缩通路目的buffer读指针寄存器 */
-#define  SOCP_REG_DEFLATEDEST_BUFWPTR                  HI_SOCP_REG_DEFLATE_DST_BUFWPTR_OFSSET     /* 压缩通路目的buffer写指针寄存器 */
-#define  SOCP_REG_DEFLATEDST_BUFADDR_L                 HI_SOCP_REG_DEFLATE_DST_BUFADDR_LOW        /*压缩目的buffer起始地址低32位*/
-#define  SOCP_REG_DEFLATEDST_BUFADDR_H                 HI_SOCP_REG_DEFLATE_DST_BUFADDR_HIGH       /*压缩目的buffer起始地址高32位*/
+#define  SOCP_REG_DEFLATEDEST_BUFRPTR            	   HI_SOCP_REG_DEFLATE_DST_BUFRPTR_OFSSET     /* ????????????buffer???????????? */
+#define  SOCP_REG_DEFLATEDEST_BUFWPTR                  HI_SOCP_REG_DEFLATE_DST_BUFWPTR_OFSSET     /* ????????????buffer???????????? */
+#define  SOCP_REG_DEFLATEDST_BUFADDR_L                 HI_SOCP_REG_DEFLATE_DST_BUFADDR_LOW        /*????????buffer??????????32??*/
+#define  SOCP_REG_DEFLATEDST_BUFADDR_H                 HI_SOCP_REG_DEFLATE_DST_BUFADDR_HIGH       /*????????buffer??????????32??*/
 #else
-#define  SOCP_REG_DEFLATEDEST_BUFRPTR            	   HI_SOCP_REG_DEFLATEDEST_BUFRPTR            /* 压缩通路目的buffer读指针寄存器 */
-#define  SOCP_REG_DEFLATEDEST_BUFWPTR                  HI_SOCP_REG_DEFLATEDEST_BUFWPTR            /* 压缩通路目的buffer写指针寄存器 */
-#define  SOCP_REG_DEFLATEDEST_BUFADDR                  HI_SOCP_REG_DEFLATEDEST_BUFADDR            /* 压缩通路目的buffer起始地址寄存器 */
+#define  SOCP_REG_DEFLATEDEST_BUFRPTR            	   HI_SOCP_REG_DEFLATEDEST_BUFRPTR            /* ????????????buffer???????????? */
+#define  SOCP_REG_DEFLATEDEST_BUFWPTR                  HI_SOCP_REG_DEFLATEDEST_BUFWPTR            /* ????????????buffer???????????? */
+#define  SOCP_REG_DEFLATEDEST_BUFADDR                  HI_SOCP_REG_DEFLATEDEST_BUFADDR            /* ????????????buffer?????????????? */
 #endif
-#define  SOCP_REG_DEFLATEDEST_BUFDEPTH                 HI_SOCP_REG_DEFLATEDEST_BUFDEPTH           /* 压缩通路目的buffer深度寄存器 */
-#define  SOCP_REG_DEFLATEDEST_BUFTHRH                  HI_SOCP_REG_DEFLATEDEST_BUFTHRH            /* 传输阈值中断配置寄存器 */
-#define  SOCP_REG_DEFLATEDEST_BUFOVFTIMEOUT            HI_SOCP_REG_DEFLATEDEST_BUFOVFTIMEOUT      /* 压缩目的BUFFER溢出超时配置寄存器 */
-#define  SOCP_REG_SOCP_MAX_PKG_BYTE_CFG                HI_SOCP_REG_SOCP_MAX_PKG_BYTE_CFG          /* socp最大包长字节阈值配置 */
-#define  SOCP_REG_DEFLATE_OBUF_DEBUG                   HI_SOCP_REG_DEFLATE_OBUF_DEBUG             /* 压缩目的buffer DEBUG */
+#define  SOCP_REG_DEFLATEDEST_BUFDEPTH                 HI_SOCP_REG_DEFLATEDEST_BUFDEPTH           /* ????????????buffer?????????? */
+#define  SOCP_REG_DEFLATEDEST_BUFTHRH                  HI_SOCP_REG_DEFLATEDEST_BUFTHRH            /* ?????????????????????? */
+#define  SOCP_REG_DEFLATEDEST_BUFOVFTIMEOUT            HI_SOCP_REG_DEFLATEDEST_BUFOVFTIMEOUT      /* ????????BUFFER?????????????????? */
+#define  SOCP_REG_SOCP_MAX_PKG_BYTE_CFG                HI_SOCP_REG_SOCP_MAX_PKG_BYTE_CFG          /* socp???????????????????? */
+#define  SOCP_REG_DEFLATE_OBUF_DEBUG                   HI_SOCP_REG_DEFLATE_OBUF_DEBUG             /* ????????buffer DEBUG */
 
-#define  SOCP_REG_DEFLATE_COM_PKG_NUM                  HI_SOCP_REG_DEFLATE_COM_PKG_NUM            /*压缩完成的包个数*/
+#define  SOCP_REG_DEFLATE_COM_PKG_NUM                  HI_SOCP_REG_DEFLATE_COM_PKG_NUM            /*????????????????*/
 #ifdef DIAG_SYSTEM_5G
-#define SOCP_REG_DEFLATE_COMPELTE_TIMEOUT              HI_SOCP_REG_DEFLATE_DST_COMPLETE_TIMEOUT   /*传输完成超时寄存器*/
+#define SOCP_REG_DEFLATE_COMPELTE_TIMEOUT              HI_SOCP_REG_DEFLATE_DST_COMPLETE_TIMEOUT   /*??????????????????*/
 #endif
 
 #define  DEFLATE_DRX_BACKUP_DDR_ADDR        (SHM_BASE_ADDR + SHM_OFFSET_DEFLATE)
@@ -181,25 +181,25 @@ enum DEFLATE_READ_STATE
 
 struct deflate_debug_info
 {
-    u32 u32DeflateDstSetCnt;                  /*deflate目的buffer配置次数*/
-    u32 u32DeflateDstSetSucCnt;               /*deflate目的buffer配置成功次数*/
-    u32 u32DeflateRegReadCBCnt;               /*注册deflate目的通道读数据回调函数次数*/
-    u32 u32DeflateRegEventCBCnt;              /*注册deflate目的通道异常事件回调函数次数*/
-    u32 u32DeflateGetReadBufEtrCnt;           /*尝试获取deflate目的buffer次数*/
-    u32 u32DeflateGetReadBufSucCnt;           /*获取deflate目的buffer成功次数*/
-    u32 u32DeflateReaddoneEtrCnt;             /*尝试读取deflate目的数据次数*/
-    u32 u32DeflateReaddoneZeroCnt;            /*尝试读取deflate目的数据长度等于0次数*/
-    u32 u32DeflateReaddoneValidCnt;           /*读取deflate目的数据长度不等于0次数*/
-    u32 u32DeflateReaddoneFailCnt;            /*读取deflate目的数据失败的次数*/
-    u32 u32DeflateReaddoneSucCnt;             /*读取deflate目的数据成功的次数*/
-    u32 u32DeflateTskTrfCbOriCnt;             /*处理传输中断任务的次数*/
-    u32 u32DeflateTskTrfCbCnt;                /*处理完传输中断任务的次数*/
-    u32 u32DeflateTskOvfCbOriCnt;             /*处理上溢中断的次数*/
-    u32 u32DeflateTskOvfCbCnt;                /*处理完上溢中断的次数*/
-    u32 u32DeflateTskThresholdOvfCbOriCnt;    /*处理阈值溢出的次数*/
-    u32 u32DeflateTskThresholdOvfCbCnt;       /*处理完阈值溢出的次数*/
-    u32 u32DeflateTskIntWorkAortCbOriCnt;     /*处理异常的次数*/
-    u32 u32DeflateTskIntWorkAortCbCnt;        /*处理完异常的次数*/
+    u32 u32DeflateDstSetCnt;                  /*deflate????buffer????????*/
+    u32 u32DeflateDstSetSucCnt;               /*deflate????buffer????????????*/
+    u32 u32DeflateRegReadCBCnt;               /*????deflate??????????????????????????*/
+    u32 u32DeflateRegEventCBCnt;              /*????deflate????????????????????????????*/
+    u32 u32DeflateGetReadBufEtrCnt;           /*????????deflate????buffer????*/
+    u32 u32DeflateGetReadBufSucCnt;           /*????deflate????buffer????????*/
+    u32 u32DeflateReaddoneEtrCnt;             /*????????deflate????????????*/
+    u32 u32DeflateReaddoneZeroCnt;            /*????????deflate????????????????0????*/
+    u32 u32DeflateReaddoneValidCnt;           /*????deflate??????????????????0????*/
+    u32 u32DeflateReaddoneFailCnt;            /*????deflate??????????????????*/
+    u32 u32DeflateReaddoneSucCnt;             /*????deflate??????????????????*/
+    u32 u32DeflateTskTrfCbOriCnt;             /*??????????????????????*/
+    u32 u32DeflateTskTrfCbCnt;                /*????????????????????????*/
+    u32 u32DeflateTskOvfCbOriCnt;             /*??????????????????*/
+    u32 u32DeflateTskOvfCbCnt;                /*????????????????????*/
+    u32 u32DeflateTskThresholdOvfCbOriCnt;    /*??????????????????*/
+    u32 u32DeflateTskThresholdOvfCbCnt;       /*????????????????????*/
+    u32 u32DeflateTskIntWorkAortCbOriCnt;     /*??????????????*/
+    u32 u32DeflateTskIntWorkAortCbCnt;        /*????????????????*/
 };
 struct deflate_abort_info
 {
@@ -227,17 +227,17 @@ struct deflate_abort_info
 
 enum tagDEFLATE_EVENT_E
 {
-	DEFLATE_EVENT_WORK_ABORT          = 0x5,    /* 异常 */
-	DEFLATE_EVENT_OVERFLOW            = 0x6,    /* 目的buffer上溢 */
-	DEFLATE_EVENT_THRESHOLD_OVERFLOW  = 0x7,    /* 目的buffer阈值溢出中断 */
+	DEFLATE_EVENT_WORK_ABORT          = 0x5,    /* ???? */
+	DEFLATE_EVENT_OVERFLOW            = 0x6,    /* ????buffer???? */
+	DEFLATE_EVENT_THRESHOLD_OVERFLOW  = 0x7,    /* ????buffer???????????? */
 
-	DEFLATE_EVENT_CYCLE               = 0x1000,    /* 目的循环模式中断*/
-	DEFLATE_EVENT_NOCYCLE             = 0x1001,    /* 目的阻塞模式中断*/
+	DEFLATE_EVENT_CYCLE               = 0x1000,    /* ????????????????*/
+	DEFLATE_EVENT_NOCYCLE             = 0x1001,    /* ????????????????*/
 	DEFLATE_EVENT_BUTT
 };
 typedef unsigned int DEFLATE_EVENT_ENUM_UIN32;
 
-#define  DEFLATE_CHN_SET ((s32) 1)     /*通道已经配置*/
+#define  DEFLATE_CHN_SET ((s32) 1)     /*????????????*/
 #define DEFLATE_WORK_ABORT_MASK ((s32)(1)<<2 )
 #define DEFLATE_THROVF_MASK ((s32)(1)<<6 )
 #define DEFLATE_OVF_MASK ((s32)(1)<<7 )

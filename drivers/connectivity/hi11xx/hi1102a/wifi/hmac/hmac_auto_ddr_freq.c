@@ -6,7 +6,7 @@ extern "C" {
 #endif
 #endif
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION) && (_PRE_PRODUCT_ID == _PRE_PRODUCT_ID_HI1102A_HOST)
 #include "hmac_auto_ddr_freq.h"
 #include <linux/pm_qos.h>
@@ -15,10 +15,10 @@ extern "C" {
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_AUTO_DDR_FREQ_C
 
-/* 2 全局变量定义 */
+/* 2 ???????????? */
 hmac_auto_ddr_freq_mgmt_stru g_st_auto_ddr_freq_mgmt = { 0 };
 
-/* 3 函数实现 */
+/* 3 ???????? */
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION) && (_PRE_PRODUCT_ID == _PRE_PRODUCT_ID_HI1102A_HOST)
 
 OAL_STATIC oal_void hmac_remove_ddr_freq_req(oal_void)

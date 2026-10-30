@@ -6,7 +6,7 @@ extern "C" {
 #endif
 #endif
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "frw_ext_if.h"
 #include "hmac_arp_offload.h"
 #include "hmac_vap.h"
@@ -15,8 +15,8 @@ extern "C" {
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_ARP_OFFLOAD_C
 
 #ifdef _PRE_WLAN_FEATURE_ARP_OFFLOAD
-/* 2 全局变量定义 */
-/* 3 函数实现 */
+/* 2 ???????????? */
+/* 3 ???????? */
 
 oal_uint32 hmac_arp_offload_set_ip_addr(mac_vap_stru *pst_mac_vap,
                                         dmac_ip_type_enum_uint8 en_type,

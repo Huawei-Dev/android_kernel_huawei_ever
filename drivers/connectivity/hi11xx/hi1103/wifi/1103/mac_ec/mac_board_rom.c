@@ -1,22 +1,22 @@
 
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "wlan_spec.h"
 #include "mac_board.h"
 
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_MAC_BOARD_ROM_C
 
-/* 2 全局变量定义 */
-/* DFX公用全局变量定义 */
+/* 2 ???????????? */
+/* DFX???????????????? */
 #ifdef _PRE_WLAN_DFT_STAT
 dfx_performance_log_switch_enum_uint8 g_auc_dfx_performance_log_switch_etc[DFX_PERFORMANCE_LOG_BUTT] = {0};
 #endif
 hisi_device_board_enum_uint8 g_en_chip_type = BOARD_VERSION;
 
-/* 3 函数实现 */
+/* 3 ???????? */
 /* lint +e19 */
-/* DFX公用函数实现 */
+/* DFX???????????? */
 #ifdef _PRE_WLAN_DFT_STAT
 
 oal_uint32 dfx_get_performance_log_switch_enable_etc(

@@ -91,20 +91,20 @@ SOCP_DEBUG_INFO_S g_stSocpDebugInfo;
 EXPORT_SYMBOL(g_stSocpDebugInfo);
 
  struct socp_enc_dst_log_cfg *SocpLogConfig =NULL ;
-/* 任务优先级定义 */
+/* ?????????????? */
 #define SOCP_ENCSRC_TASK_PRO    79
 #define SOCP_ENCDST_TASK_PRO    81
 #define SOCP_DECSRC_TASK_PRO    79
 #define SOCP_DECDST_TASK_PRO    81
-/* SOCP基地址 */
+/* SOCP?????? */
 u32 g_SocpRegBaseAddr = 0;
-/* 中断处理函数 */
+/* ???????????? */
 irqreturn_t socp_app_int_handler(int irq, void* dev_info);
 
 spinlock_t lock;
 
 u32 g_ulThrowout = 0;
-u32 g_SocpEnableState[SOCP_MAX_ENCDST_CHN] = {0};  /* socp目的端数据上报控制状态 */
+u32 g_SocpEnableState[SOCP_MAX_ENCDST_CHN] = {0};  /* socp?????????????????????? */
 u32 socp_version = 0;
 u32 g_ulSocpDebugTraceCfg = 0;
 u32 g_strSocpDeflateStatus=0;
@@ -126,7 +126,7 @@ struct socp_enc_dst_stat_s g_stEncDstStat[SOCP_MAX_ENC_DST_COUNT];
 
 extern struct socp_enc_dst_log_cfg g_stEncDstBufLogConfig;
 
-/* 检测是否初始化 */
+/* ?????????????? */
 s32 socp_check_init(void)
 {
     if (!g_strSocpStat.bInitFlag)
@@ -140,7 +140,7 @@ s32 socp_check_init(void)
     }
 }
 
-/* 检测地址起始结束有效性 */
+/* ?????????????????????? */
 s32 socp_check_buf_addr(unsigned long start, unsigned long end)
 {
     if (start >= end)
@@ -154,7 +154,7 @@ s32 socp_check_buf_addr(unsigned long start, unsigned long end)
     }
 }
 
-/* 检测通道类型 */
+/* ???????????? */
 s32 socp_check_chan_type(u32 para, u32 type)
 {
     if (type != para)
@@ -168,7 +168,7 @@ s32 socp_check_chan_type(u32 para, u32 type)
     }
 }
 
-/* 检测通道ID是否有效 */
+/* ????????ID???????? */
 s32 socp_check_chan_id(u32 para, u32 id)
 {
     if (para >= id)
@@ -182,7 +182,7 @@ s32 socp_check_chan_id(u32 para, u32 id)
     }
 }
 
-/* 检查编码源通道ID有效性 */
+/* ??????????????ID?????? */
 s32 socp_check_encsrc_chan_id(u32 id)
 {
     if ((id >= SOCP_CCORE_ENCSRC_CHN_BASE) && (id < (SOCP_CCORE_ENCSRC_CHN_BASE + SOCP_CCORE_ENCSRC_CHN_NUM)))
@@ -196,7 +196,7 @@ s32 socp_check_encsrc_chan_id(u32 id)
     }
 }
 
-/* 检测是否8字节对齐 */
+/* ????????8???????? */
 s32 socp_check_8bytes_align(unsigned long para)
 {
     if (0 != (para%8))
@@ -210,7 +210,7 @@ s32 socp_check_8bytes_align(unsigned long para)
     }
 }
 
-/* 检测通道优先级有效性 */
+/* ???????????????????? */
 s32 socp_check_chan_priority(u32 para)
 {
     if (para >= SOCP_CHAN_PRIORITY_BUTT)
@@ -224,7 +224,7 @@ s32 socp_check_chan_priority(u32 para)
     }
 }
 
-/* 检测socp数据类型 */
+/* ????socp???????? */
 s32 socp_check_data_type(u32 para)
 {
     if (para >= SOCP_DATA_TYPE_BUTT)
@@ -331,13 +331,13 @@ void socp_global_ctrl_init(void)
 {
     unsigned int i;
 
-    /* 初始化全局状态结构体 */
-    /* 任务ID初始化 */
+    /* ???????????????????? */
+    /* ????ID?????? */
     g_strSocpStat.u32EncSrcTskID     = 0;
     g_strSocpStat.u32DecDstTskID     = 0;
     g_strSocpStat.u32EncDstTskID     = 0;
     g_strSocpStat.u32DecSrcTskID     = 0;
-    /* 包头错误标志初始化 */
+    /* ?????????????????? */
     g_strSocpStat.u32IntEncSrcHeader = 0;
     g_strSocpStat.u32IntEncSrcRD     = 0;
     g_strSocpStat.u32IntDecDstTfr    = 0;
@@ -404,7 +404,7 @@ s32 socp_clk_enable(void)
     #ifndef BSP_CONFIG_PHONE_TYPE
         struct clk *cSocp;
 
-        /* 打开SOCP时钟 */
+        /* ????SOCP???? */
         cSocp = clk_get(NULL, "socp_clk");
         clk_prepare(cSocp);
         if(BSP_OK !=clk_enable(cSocp))
@@ -419,23 +419,23 @@ s32 socp_clk_enable(void)
 
 
 /*****************************************************************************
-* 函 数 名  : socp_get_idle_buffer
+* ?? ?? ??  : socp_get_idle_buffer
 *
-* 功能描述  : 查询空闲缓冲区
+* ????????  : ??????????????
 *
-* 输入参数  :  pRingBuffer       待查询的环形buffer
-                    pRWBuffer         输出的环形buffer
+* ????????  :  pRingBuffer       ????????????buffer
+                    pRWBuffer         ??????????buffer
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :  无
+* ?? ?? ??  :  ??
 *****************************************************************************/
 void socp_get_idle_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRWBuffer)
 {
 #ifdef FEATURE_SOCP_ADDR_64BITS
     	if(pRingBuffer->u32Write < pRingBuffer->u32Read)
     	{
-        	/* 读指针大于写指针，直接计算 */
+        	/* ?????????????????????????? */
         	pRWBuffer->pBuffer = (char *)(pRingBuffer->Start + (u32)pRingBuffer->u32Write);
         	pRWBuffer->u32Size = (u32)(pRingBuffer->u32Read - pRingBuffer->u32Write - 1);
         	pRWBuffer->pRbBuffer = (char *)BSP_NULL;
@@ -443,7 +443,7 @@ void socp_get_idle_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
     	}
     	else
     	{
-        	/* 写指针大于读指针，需要考虑回卷 */
+        	/* ?????????????????????????????? */
         	if(pRingBuffer->u32Read != 0)
         	{
             		pRWBuffer->pBuffer = (char *)((unsigned long)pRingBuffer->Start + (u32)pRingBuffer->u32Write);
@@ -462,7 +462,7 @@ void socp_get_idle_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
 #else
     	if(pRingBuffer->u32Write < pRingBuffer->u32Read)
     	{
-        	/* 读指针大于写指针，直接计算 */
+        	/* ?????????????????????????? */
         	pRWBuffer->pBuffer = (char *)((unsigned long)pRingBuffer->u32Write);
         	pRWBuffer->u32Size = (u32)(pRingBuffer->u32Read - pRingBuffer->u32Write - 1);
         	pRWBuffer->pRbBuffer = (char *)BSP_NULL;
@@ -470,7 +470,7 @@ void socp_get_idle_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
     	}
     	else
     	{
-        	/* 写指针大于读指针，需要考虑回卷 */
+        	/* ?????????????????????????????? */
         	if(pRingBuffer->u32Read != (u32)pRingBuffer->Start)
         	{
             		pRWBuffer->pBuffer = (char *)((unsigned long)pRingBuffer->u32Write);
@@ -492,23 +492,23 @@ void socp_get_idle_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_get_data_buffer
+* ?? ?? ??  : socp_get_data_buffer
 *
-* 功能描述  : 获取空闲缓冲区的数据
+* ????????  : ????????????????????
 *
-* 输入参数  :  pRingBuffer       待查询的环形buffer
-                    pRWBuffer         输出的环形buffer
+* ????????  :  pRingBuffer       ????????????buffer
+                    pRWBuffer         ??????????buffer
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :  无
+* ?? ?? ??  :  ??
 *****************************************************************************/
 void socp_get_data_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRWBuffer)
 {
 #ifdef FEATURE_SOCP_ADDR_64BITS
     if(pRingBuffer->u32Read <= pRingBuffer->u32Write)
     {
-        /* 写指针大于读指针，直接计算 */
+        /* ?????????????????????????? */
         pRWBuffer->pBuffer = (char *)((unsigned long)pRingBuffer->Start + (u32)pRingBuffer->u32Read);
         pRWBuffer->u32Size = (u32)(pRingBuffer->u32Write - pRingBuffer->u32Read);
         pRWBuffer->pRbBuffer = (char *)BSP_NULL;
@@ -516,7 +516,7 @@ void socp_get_data_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
     }
     else
     {
-        /* 读指针大于写指针，需要考虑回卷 */
+        /* ?????????????????????????????? */
         pRWBuffer->pBuffer = (char *)((unsigned long)pRingBuffer->Start + (u32)pRingBuffer->u32Read);
         pRWBuffer->u32Size = (u32)((unsigned long)pRingBuffer->End - ((unsigned long)pRingBuffer->Start + pRingBuffer->u32Read) + 1);
         pRWBuffer->pRbBuffer = (char *)pRingBuffer->Start;
@@ -525,7 +525,7 @@ void socp_get_data_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
 #else
     if(pRingBuffer->u32Read <= pRingBuffer->u32Write)
     {
-        /* 写指针大于读指针，直接计算 */
+        /* ?????????????????????????? */
         pRWBuffer->pBuffer = (char *)((unsigned long)pRingBuffer->u32Read);
         pRWBuffer->u32Size = (u32)(pRingBuffer->u32Write - pRingBuffer->u32Read);
         pRWBuffer->pRbBuffer = (char *)BSP_NULL;
@@ -533,7 +533,7 @@ void socp_get_data_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
     }
     else
     {
-        /* 读指针大于写指针，需要考虑回卷 */
+        /* ?????????????????????????????? */
         pRWBuffer->pBuffer = (char *)((unsigned long)pRingBuffer->u32Read);
         pRWBuffer->u32Size = (u32)(pRingBuffer->End - pRingBuffer->u32Read + 1);
         pRWBuffer->pRbBuffer = (char *)pRingBuffer->Start;
@@ -544,16 +544,16 @@ void socp_get_data_buffer(SOCP_RING_BUF_S *pRingBuffer, SOCP_BUFFER_RW_STRU *pRW
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_write_done
+* ?? ?? ??  : socp_write_done
 *
-* 功能描述  : 更新缓冲区的写指针
+* ????????  : ??????????????????
 *
-* 输入参数  :  pRingBuffer       待更新的环形buffer
-                    u32Size          更新的数据长度
+* ????????  :  pRingBuffer       ????????????buffer
+                    u32Size          ??????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :  无
+* ?? ?? ??  :  ??
 *****************************************************************************/
 void socp_write_done(SOCP_RING_BUF_S *pRingBuffer, u32 u32Size)
 {
@@ -588,16 +588,16 @@ void socp_write_done(SOCP_RING_BUF_S *pRingBuffer, u32 u32Size)
     return;
 }
 /*****************************************************************************
-* 函 数 名  : socp_read_done
+* ?? ?? ??  : socp_read_done
 *
-* 功能描述  : 更新缓冲区的读指针
+* ????????  : ??????????????????
 *
-* 输入参数  :  pRingBuffer       待更新的环形buffer
-                    u32Size          更新的数据长度
+* ????????  :  pRingBuffer       ????????????buffer
+                    u32Size          ??????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :  无
+* ?? ?? ??  :  ??
 *****************************************************************************/
 void socp_read_done(SOCP_RING_BUF_S *pRingBuffer, u32 u32Size)
 {
@@ -617,15 +617,15 @@ void socp_read_done(SOCP_RING_BUF_S *pRingBuffer, u32 u32Size)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_clean_encsrc_chan
+* ?? ?? ??  : bsp_socp_clean_encsrc_chan
 *
-* 功能描述  : 清空编码源通道，同步V9 SOCP接口
+* ????????  : ????????????????????V9 SOCP????
 *
-* 输入参数  : enSrcChanID       编码通道号
+* ????????  : enSrcChanID       ??????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : BSP_OK
+* ?? ?? ??  : BSP_OK
 *****************************************************************************/
 u32 bsp_socp_clean_encsrc_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID)
 {
@@ -648,10 +648,10 @@ u32 bsp_socp_clean_encsrc_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID)
         return ret;
     }
 
-    /* 复位通道 */
+    /* ???????? */
     SOCP_REG_SETBITS(SOCP_REG_ENCRST, ulChanID, 1, 1);
 
-    /* 等待通道自清 */
+    /* ???????????? */
     for(i=0; i< SOCP_RESET_TIME; i++)
     {
         ulResetFlag = SOCP_REG_GETBITS(SOCP_REG_ENCRST, ulChanID, 1);
@@ -672,33 +672,33 @@ u32 bsp_socp_clean_encsrc_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID)
 
 
 /***************************************************************************************
-* 函 数 名  : socp_reset_chan_reg_wr_addr
+* ?? ?? ??  : socp_reset_chan_reg_wr_addr
 *
-* 功能描述  : socp复位通道地址和读写指针寄存器，内部区分socp32位和64位寻址
+* ????????  : socp??????????????????????????????????????socp32????64??????
 *
-* 输入参数  : ChanId: 通道号，包括通道类型和通道ID
-              type: 通道类型，区分编码通道和解码通道
-              Enc_pChan: 编码通道参数结构体
-              Dec_pChan: 解码通道参数结构体
+* ????????  : ChanId: ??????????????????????????ID
+              type: ????????????????????????????????
+              Enc_pChan: ??????????????????
+              Dec_pChan: ??????????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 ****************************************************************************************/
 void socp_reset_chan_reg_wr_addr(u32 ChanId, u32 Type, SOCP_ENCSRC_CHAN_S *Enc_pChan, SOCP_DECSRC_CHAN_S *Dec_pChan)
 {
-#ifdef FEATURE_SOCP_ADDR_64BITS   // SOCP 64位寻址
-    if(Type == SOCP_CODER_SRC_CHAN)   // 编码通道
+#ifdef FEATURE_SOCP_ADDR_64BITS   // SOCP 64??????
+    if(Type == SOCP_CODER_SRC_CHAN)   // ????????
     {
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFADDR_L(ChanId),(u32)Enc_pChan->sEncSrcBuf.Start);
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFADDR_H(ChanId),(u32)(((u64)Enc_pChan->sEncSrcBuf.Start)>>32));
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFWPTR(ChanId),0);
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFRPTR(ChanId), 0);
-         /* 更新读写指针*/
+         /* ????????????*/
         g_strSocpStat.sEncSrcChan[ChanId].sEncSrcBuf.u32Read  = 0;
         g_strSocpStat.sEncSrcChan[ChanId].sEncSrcBuf.u32Write = 0;
 
-        /* 如果是用链表缓冲区，则配置RDbuffer的起始地址和长度 */
+        /* ??????????????????????????RDbuffer???????????????? */
         if(SOCP_ENCSRC_CHNMODE_LIST == Enc_pChan->eChnMode)
         {
             SOCP_REG_WRITE(SOCP_REG_ENCSRC_RDQADDR_L(ChanId),(u32)Enc_pChan->sRdBuf.Start);
@@ -709,36 +709,36 @@ void socp_reset_chan_reg_wr_addr(u32 ChanId, u32 Type, SOCP_ENCSRC_CHAN_S *Enc_p
             SOCP_REG_SETBITS(SOCP_REG_ENCSRC_RDQCFG(ChanId), 0, 16, Enc_pChan->sRdBuf.u32Length);
             SOCP_REG_SETBITS(SOCP_REG_ENCSRC_RDQCFG(ChanId), 16, 16, 0);
             /*lint -restore +e647*/
-            /* 更新读写指针*/
+            /* ????????????*/
             g_strSocpStat.sEncSrcChan[ChanId].sRdBuf.u32Read  = 0;
             g_strSocpStat.sEncSrcChan[ChanId].sRdBuf.u32Write = 0;
         }
     }
 
-    else if(Type == SOCP_DECODER_SRC_CHAN)   // 解码通道
+    else if(Type == SOCP_DECODER_SRC_CHAN)   // ????????
     {
-    	/* 使用配置参数进行配置 */
+    	/* ???????????????????? */
     	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR_L(ChanId), (u32)Dec_pChan->sDecSrcBuf.Start);
     	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR_H(ChanId), (u32)(((u64)Dec_pChan->sDecSrcBuf.Start)>>32));
     	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFWPTR(ChanId), 0);
     	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFRPTR(ChanId), 0);
-    	/* 更新对应通道的读写指针*/
+    	/* ??????????????????????*/
     	g_strSocpStat.sDecSrcChan[ChanId].sDecSrcBuf.u32Read  = 0;
     	g_strSocpStat.sDecSrcChan[ChanId].sDecSrcBuf.u32Write = 0;
     }
 
-#else   // SOCP 32位寻址
+#else   // SOCP 32??????
 
-    if(Type == SOCP_CODER_SRC_CHAN)   // 编码通道
+    if(Type == SOCP_CODER_SRC_CHAN)   // ????????
     {
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFADDR(ChanId), (u32)Enc_pChan->sEncSrcBuf.Start);
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFWPTR(ChanId), (u32)Enc_pChan->sEncSrcBuf.Start);
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFRPTR(ChanId),  (u32)Enc_pChan->sEncSrcBuf.Start);
-        /* 更新读写指针*/
+        /* ????????????*/
         g_strSocpStat.sEncSrcChan[ChanId].sEncSrcBuf.u32Read  = (u32)(Enc_pChan->sEncSrcBuf.Start);
         g_strSocpStat.sEncSrcChan[ChanId].sEncSrcBuf.u32Write = (u32)(Enc_pChan->sEncSrcBuf.Start);
 
-        /* 如果是用链表缓冲区，则配置RDbuffer的起始地址和长度 */
+        /* ??????????????????????????RDbuffer???????????????? */
         if(SOCP_ENCSRC_CHNMODE_LIST == Enc_pChan->eChnMode)
         {
             SOCP_REG_WRITE(SOCP_REG_ENCSRC_RDQADDR(ChanId), (u32)Enc_pChan->sRdBuf.Start);
@@ -753,13 +753,13 @@ void socp_reset_chan_reg_wr_addr(u32 ChanId, u32 Type, SOCP_ENCSRC_CHAN_S *Enc_p
         }
     }
 
-    else if(Type == SOCP_DECODER_SRC_CHAN)   // 解码通道
+    else if(Type == SOCP_DECODER_SRC_CHAN)   // ????????
     {
-    	/* 使用配置参数进行配置 */
+    	/* ???????????????????? */
     	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR(ChanId), (u32)Dec_pChan->sDecSrcBuf.Start);
     	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFWPTR(ChanId), (u32)Dec_pChan->sDecSrcBuf.Start);
     	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFRPTR(ChanId), (u32)Dec_pChan->sDecSrcBuf.Start);
-    	/* 更新对应通道的读写指针*/
+    	/* ??????????????????????*/
     	g_strSocpStat.sDecSrcChan[ChanId].sDecSrcBuf.u32Read  = (u32)(Dec_pChan->sDecSrcBuf.Start);
     	g_strSocpStat.sDecSrcChan[ChanId].sDecSrcBuf.u32Write = (u32)(Dec_pChan->sDecSrcBuf.Start);
     }
@@ -768,15 +768,15 @@ void socp_reset_chan_reg_wr_addr(u32 ChanId, u32 Type, SOCP_ENCSRC_CHAN_S *Enc_p
 
 
 /*****************************************************************************
-* 函 数 名  : socp_reset_enc_chan
+* ?? ?? ??  : socp_reset_enc_chan
 *
-* 功能描述  : 复位编码通道
+* ????????  : ????????????
 *
-* 输入参数  : u32ChanID       编码通道号
+* ????????  : u32ChanID       ??????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 释放成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 socp_reset_enc_chan(u32 u32ChanID)
 {
@@ -786,10 +786,10 @@ s32 socp_reset_enc_chan(u32 u32ChanID)
 
     pChan = &g_strSocpStat.sEncSrcChan[u32ChanID];
 
-    /* 复位通道 */
+    /* ???????? */
     SOCP_REG_SETBITS(SOCP_REG_ENCRST, u32ChanID, 1, 1);
 
-    /* 等待通道自清 */
+    /* ???????????? */
     for(i=0; i<SOCP_RESET_TIME; i++)
     {
         ResetFlag = SOCP_REG_GETBITS(SOCP_REG_ENCRST, u32ChanID, 1);
@@ -806,7 +806,7 @@ s32 socp_reset_enc_chan(u32 u32ChanID)
 
     socp_reset_chan_reg_wr_addr(u32ChanID, SOCP_CODER_SRC_CHAN, pChan, NULL);
 
-    /*配置其它参数*/
+    /*????????????*/
 	/*lint -save -e647*/
     SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(u32ChanID), 1, 2, pChan->eChnMode);
     SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(u32ChanID), 4, 4, pChan->u32DestChanID);
@@ -816,7 +816,7 @@ s32 socp_reset_enc_chan(u32 u32ChanID)
     SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(u32ChanID), 11, 1, pChan->eDataTypeEn);
     SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(u32ChanID), 31, 1, pChan->eDebugEn);
 
-    /*如果通道是启动状态，使能通道*/
+    /*????????????????????????????*/
     if(pChan->u32ChanEn)
     {
         SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(u32ChanID), 0, 1, 1);
@@ -826,15 +826,15 @@ s32 socp_reset_enc_chan(u32 u32ChanID)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_reset_dec_chan
+* ?? ?? ??  : socp_reset_dec_chan
 *
-* 功能描述  : 复位解码通道
+* ????????  : ????????????
 *
-* 输入参数  : u32ChanID       解码通道号
+* ????????  : u32ChanID       ??????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 释放成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 socp_reset_dec_chan(u32 u32ChanID)
 {
@@ -849,10 +849,10 @@ s32 socp_reset_dec_chan(u32 u32ChanID)
 
     pChan = &g_strSocpStat.sDecSrcChan[u32ChanID];
 
-    /* 复位通道 */
+    /* ???????? */
     SOCP_REG_SETBITS(SOCP_REG_DECRST, u32ChanID, 1, 1);
 
-    /* 等待通道自清 */
+    /* ???????????? */
     for(i=0; i<SOCP_RESET_TIME; i++)
     {
         u32ResetFlag = SOCP_REG_GETBITS(SOCP_REG_DECRST, u32ChanID, 1);
@@ -875,15 +875,15 @@ s32 socp_reset_dec_chan(u32 u32ChanID)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_soft_free_encdst_chan
+* ?? ?? ??  : socp_soft_free_encdst_chan
 *
-* 功能描述  : 软释放编码目的通道
+* ????????  : ??????????????????
 *
-* 输入参数  : u32EncDstChanId       编码通道号
+* ????????  : u32EncDstChanId       ??????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 释放成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 socp_soft_free_encdst_chan(u32 u32EncDstChanId)
 {
@@ -907,17 +907,17 @@ s32 socp_soft_free_encdst_chan(u32 u32EncDstChanId)
     pChan = &g_strSocpStat.sEncDstChan[u32ChanID];
 
 #ifdef FEATURE_SOCP_ADDR_64BITS
-    /* 写入起始地址到目的buffer起始地址寄存器*/
+    /* ??????????????????buffer??????????????*/
     SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFADDR_L(u32ChanID), (u32)pChan->sEncDstBuf.Start);
 	SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFADDR_H(u32ChanID), (u32)(((u64)pChan->sEncDstBuf.Start)>>32));
     SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFRPTR(u32ChanID), 0);
     SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFWPTR(u32ChanID), 0);
 
-    g_strSocpStat.sEncDstChan[u32ChanID].sEncDstBuf.u32Write = 0; /* [false alarm]:u32ChanID已经在函数入口处经过判断 */
-    g_strSocpStat.sEncDstChan[u32ChanID].sEncDstBuf.u32Read = 0;/* [false alarm]:u32ChanID已经在函数入口处经过判断 */
+    g_strSocpStat.sEncDstChan[u32ChanID].sEncDstBuf.u32Write = 0; /* [false alarm]:u32ChanID???????????????????????? */
+    g_strSocpStat.sEncDstChan[u32ChanID].sEncDstBuf.u32Read = 0;/* [false alarm]:u32ChanID???????????????????????? */
 
 #else
-    /* 写入起始地址到目的buffer起始地址寄存器*/
+    /* ??????????????????buffer??????????????*/
     SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFADDR(u32ChanID), (u32)pChan->sEncDstBuf.Start);
     SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFRPTR(u32ChanID), (u32)pChan->sEncDstBuf.Start);
     SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFWPTR(u32ChanID), (u32)pChan->sEncDstBuf.Start);
@@ -926,22 +926,22 @@ s32 socp_soft_free_encdst_chan(u32 u32EncDstChanId)
     g_strSocpStat.sEncDstChan[u32ChanID].sEncDstBuf.u32Read = (u32)pChan->sEncDstBuf.Start;
 #endif
 
-    g_strSocpStat.sEncDstChan[u32ChanID].u32SetStat = SOCP_CHN_UNSET;/* [false alarm]:u32ChanID已经在函数入口处经过判断 */
+    g_strSocpStat.sEncDstChan[u32ChanID].u32SetStat = SOCP_CHN_UNSET;/* [false alarm]:u32ChanID???????????????????????? */
 
 
     return BSP_OK;
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_soft_free_decsrc_chan
+* ?? ?? ??  : socp_soft_free_decsrc_chan
 *
-* 功能描述  : 软释放解码源通道
+* ????????  : ????????????????
 *
-* 输入参数  : u32DecSrcChanId       解码通道号
+* ????????  : u32DecSrcChanId       ??????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 释放成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 socp_soft_free_decsrc_chan(u32 u32DecSrcChanId)
 {
@@ -965,16 +965,16 @@ s32 socp_soft_free_decsrc_chan(u32 u32DecSrcChanId)
     pDecSrcChan = &g_strSocpStat.sDecSrcChan[u32ChanID];
 
 #ifdef FEATURE_SOCP_ADDR_64BITS
-    	/* 写入起始地址到目的buffer起始地址寄存器*/
+    	/* ??????????????????buffer??????????????*/
    	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFWPTR(u32ChanID), 0);
     SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR_L(u32ChanID), (u32)pDecSrcChan->sDecSrcBuf.Start);
     SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR_H(u32ChanID), (u32)(((u64)pDecSrcChan->sDecSrcBuf.Start)>>32));
     SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFRPTR(u32ChanID), 0);
 
-    g_strSocpStat.sDecSrcChan[u32ChanID].sDecSrcBuf.u32Write = 0;/* [false alarm]:u32ChanID已经在函数入口处经过判断 */
-    g_strSocpStat.sDecSrcChan[u32ChanID].sDecSrcBuf.u32Read = 0;/* [false alarm]:u32ChanID已经在函数入口处经过判断 */
+    g_strSocpStat.sDecSrcChan[u32ChanID].sDecSrcBuf.u32Write = 0;/* [false alarm]:u32ChanID???????????????????????? */
+    g_strSocpStat.sDecSrcChan[u32ChanID].sDecSrcBuf.u32Read = 0;/* [false alarm]:u32ChanID???????????????????????? */
 #else
-    	/* 写入起始地址到目的buffer起始地址寄存器*/
+    	/* ??????????????????buffer??????????????*/
    	SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFWPTR(u32ChanID), (u32)pDecSrcChan->sDecSrcBuf.Start);
     SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR(u32ChanID), (u32)pDecSrcChan->sDecSrcBuf.Start);
     SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFRPTR(u32ChanID), (u32)pDecSrcChan->sDecSrcBuf.Start);
@@ -983,22 +983,22 @@ s32 socp_soft_free_decsrc_chan(u32 u32DecSrcChanId)
     g_strSocpStat.sDecSrcChan[u32ChanID].sDecSrcBuf.u32Read = (u32)pDecSrcChan->sDecSrcBuf.Start;/*[false alarm] alarm*/
 #endif
 
-    g_strSocpStat.sDecSrcChan[u32ChanID].u32SetStat = SOCP_CHN_UNSET;/* [false alarm]:u32ChanID已经在函数入口处经过判断 */
+    g_strSocpStat.sDecSrcChan[u32ChanID].u32SetStat = SOCP_CHN_UNSET;/* [false alarm]:u32ChanID???????????????????????? */
 
     return BSP_OK;
 }
 
 /* cov_verified_start */
 /*****************************************************************************
-* 函 数 名  : socp_get_enc_rd_size
+* ?? ?? ??  : socp_get_enc_rd_size
 *
-* 功能描述  :  获取编码源通道RDbuffer
+* ????????  :  ??????????????RDbuffer
 *
-* 输入参数  : 无
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 释放成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 u32 socp_get_enc_rd_size(u32 u32ChanID)
 {
@@ -1015,15 +1015,15 @@ u32 socp_get_enc_rd_size(u32 u32ChanID)
 }
 
 /*****************************************************************************
-* 函 数 名   : socp_encsrc_rd_handler
+* ?? ?? ??   : socp_encsrc_rd_handler
 *
-* 功能描述  :  编码源通道RDbuffer中断处理函数
+* ????????  :  ??????????RDbuffer????????????
 *
-* 输入参数  : 无
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 void socp_encsrc_rd_handler(u32 RdSize, u32 i)
 {
@@ -1051,14 +1051,14 @@ void socp_encsrc_rd_handler(u32 RdSize, u32 i)
 /* cov_verified_stop */
 
 /*****************************************************************************
-* 函 数 名  : socp_encsrc_task
+* ?? ?? ??  : socp_encsrc_task
 *
-* 功能描述  : 模块任务函数:编码源中断，双核
-* 输入参数  : 无
+* ????????  : ????????????:????????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 int socp_encsrc_task(void * data)
 {
@@ -1068,7 +1068,7 @@ int socp_encsrc_task(void * data)
     unsigned long lock_flag;
     /* coverity[no_escape] */
     do{
-        /* 超时或者被中断，非正常返回 */
+        /* ?????????????????????????? */
         if(0 != down_interruptible(&g_strSocpStat.u32EncSrcSemID))
         {
             continue;
@@ -1080,12 +1080,12 @@ int socp_encsrc_task(void * data)
         g_strSocpStat.u32IntEncSrcRD = 0;
         spin_unlock_irqrestore(&lock, lock_flag);
 
-        /* 处理编码包头'HISI'检验错误*/
+        /* ????????????'HISI'????????*/
         if (IntHeadState)
         {
             for (i = 0; i < SOCP_MAX_ENCSRC_CHN; i++)
             {
-                /* 检测通道是否申请*/
+                /* ????????????????*/
                 if (SOCP_CHN_ALLOCATED == g_strSocpStat.sEncSrcChan[i].u32AllocStat)
                 {
                     if (IntHeadState & ((u32)1 << i))
@@ -1108,14 +1108,14 @@ int socp_encsrc_task(void * data)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_encdst_task
+* ?? ?? ??  : socp_encdst_task
 *
-* 功能描述  : 模块任务函数:编码目的，App核
-* 输入参数  : 无
+* ????????  : ????????????:??????????App??
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 int socp_encdst_task(void * data)
 {
@@ -1130,7 +1130,7 @@ int socp_encdst_task(void * data)
 
     /* coverity[no_escape] */
     do{
-        /* 超时或者被中断，非正常返回 */
+        /* ?????????????????????????? */
         if(0 != down_interruptible(&g_strSocpStat.u32EncDstSemID))
         {
             continue;
@@ -1145,12 +1145,12 @@ int socp_encdst_task(void * data)
         g_strSocpStat.u32IntEncDstThresholdOvf = 0;
         spin_unlock_irqrestore(&lock, lock_flag);
 
-        /* 处理编码传输完成中断*/
+        /* ????????????????????*/
         if (IntTfrState)
         {
             for (i = 0; i < SOCP_MAX_ENCDST_CHN; i++)
             {
-                /* 检测通道是否配置*/
+                /* ????????????????*/
                 if (SOCP_CHN_SET == g_strSocpStat.sEncDstChan[i].u32SetStat)
                 {
                     if (IntTfrState & ((u32)1 << i))
@@ -1179,12 +1179,12 @@ int socp_encdst_task(void * data)
             }
         }
 
-        /* 处理编码目的 buffer 溢出中断*/
+        /* ???????????? buffer ????????*/
         if (IntOvfState)
         {
             for (i = 0; i < SOCP_MAX_ENCDST_CHN; i++)
             {
-                /* 检测通道是否配置*/
+                /* ????????????????*/
                 if (SOCP_CHN_SET == g_strSocpStat.sEncDstChan[i].u32SetStat)
                 {
                     if (IntOvfState & ((u32)1 << i))
@@ -1215,12 +1215,12 @@ int socp_encdst_task(void * data)
             }
         }
 
-        /* 处理编码目的 buffer 阈值溢出中断*/
+        /* ???????????? buffer ????????????*/
         if (IntThresholdOvfState)
         {
             for (i = 0; i < SOCP_MAX_ENCDST_CHN; i++)
             {
-                /* 检测通道是否配置*/
+                /* ????????????????*/
                 if (SOCP_CHN_SET == g_strSocpStat.sEncDstChan[i].u32SetStat)
                 {
                     if (IntThresholdOvfState & ((u32)1 << (i + SOCP_ENC_DST_BUFF_THRESHOLD_OVF_BEGIN)))
@@ -1258,14 +1258,14 @@ int socp_encdst_task(void * data)
 
 /* cov_verified_start */
 /*****************************************************************************
-* 函 数 名  : socp_decsrc_event_handler
+* ?? ?? ??  : socp_decsrc_event_handler
 *
-* 功能描述  : 解码源通道事件处理函数
-* 输入参数  : 无
+* ????????  : ??????????????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 void  socp_decsrc_event_handler(u32 id, u32 secIntState)
 {
@@ -1321,14 +1321,14 @@ void  socp_decsrc_event_handler(u32 id, u32 secIntState)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_decsrc_handler
+* ?? ?? ??  : socp_decsrc_handler
 *
-* 功能描述  : 解码源通道中断处理函数
-* 输入参数  : 无
+* ????????  : ??????????????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 void  socp_decsrc_handler(void)
 {
@@ -1343,7 +1343,7 @@ void  socp_decsrc_handler(void)
 
         for(i=0;i<SOCP_MAX_DECSRC_CHN;i++)
         {
-            /* 检测通道是否配置*/
+            /* ????????????????*/
 
             if(SOCP_CHN_SET == g_strSocpStat.sDecSrcChan[i].u32SetStat)
             {
@@ -1366,27 +1366,27 @@ void  socp_decsrc_handler(void)
 /* cov_verified_stop */
 
 /*****************************************************************************
-* 函 数 名  : socp_decsrc_task
+* ?? ?? ??  : socp_decsrc_task
 *
-* 功能描述  : 模块任务函数:解码源，A核
-* 输入参数  : 无
+* ????????  : ????????????:????????A??
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 int socp_decsrc_task(void * data)
 {
     unsigned long lock_flag;
     /* coverity[no_escape] */
     do{
-        /* 超时或者被中断，非正常返回 */
+        /* ?????????????????????????? */
         if(0 != down_interruptible(&g_strSocpStat.u32DecSrcSemID))
         {
             continue;
         }
         spin_lock_irqsave(&lock, lock_flag);
-        /* 处理解码源中断*/
+        /* ??????????????*/
         socp_decsrc_handler();
         spin_unlock_irqrestore(&lock, lock_flag);
     }while(1);
@@ -1395,14 +1395,14 @@ int socp_decsrc_task(void * data)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_decdst_task
+* ?? ?? ??  : socp_decdst_task
 *
-* 功能描述  : 模块任务函数:解码目的，双核
-* 输入参数  : 无
+* ????????  : ????????????:??????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 int socp_decdst_task(void * data)
 {
@@ -1413,7 +1413,7 @@ int socp_decdst_task(void * data)
     unsigned long lock_flag;
     /* coverity[no_escape] */
     do{
-        /* 超时或者被中断，非正常返回 */
+        /* ?????????????????????????? */
         if(0 != down_interruptible(&g_strSocpStat.u32DecDstSemID))
         {
             continue;
@@ -1426,12 +1426,12 @@ int socp_decdst_task(void * data)
         g_strSocpStat.u32IntDecDstOvf = 0;
         spin_unlock_irqrestore(&lock, lock_flag);
 
-        /* 处理解码传输完成中断*/
+        /* ????????????????????*/
         if (IntTfrState)
         {
             for (i = 0; i < SOCP_MAX_DECDST_CHN; i++)
             {
-                /* 检测通道是否申请*/
+                /* ????????????????*/
                 if (SOCP_CHN_ALLOCATED == g_strSocpStat.sDecDstChan[i].u32AllocStat)
                 {
                     if (IntTfrState & ((u32)1 << i))
@@ -1450,12 +1450,12 @@ int socp_decdst_task(void * data)
             }
         }
 
-        /* 处理解码目的 buffer 溢出中断*/
+        /* ???????????? buffer ????????*/
         if (IntOvfState)
         {
             for (i = 0; i < SOCP_MAX_DECDST_CHN; i++)
             {
-                /* 检测通道是否申请*/
+                /* ????????????????*/
                 if (SOCP_CHN_ALLOCATED == g_strSocpStat.sDecDstChan[i].u32AllocStat)
                 {
                     if (IntOvfState & ((u32)1 << i))
@@ -1479,14 +1479,14 @@ int socp_decdst_task(void * data)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_create_task
+* ?? ?? ??  : socp_create_task
 *
-* 功能描述  : socp任务创建函数
-* 输入参数  : 无
+* ????????  : socp????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 创建成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 socp_create_task( s8 * puchName,
                         unsigned long * pu32TaskID,
@@ -1518,20 +1518,20 @@ s32 socp_create_task( s8 * puchName,
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_init_task
+* ?? ?? ??  : socp_init_task
 *
-* 功能描述  : 创建编解码任务
-* 输入参数  : 无
+* ????????  : ??????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 创建成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 socp_init_task(void)
 {
     u32 aulArguments[4] = {0,0,0,0};
 
-    /* 编码源通道任务*/
+    /* ??????????????*/
     sema_init(&g_strSocpStat.u32EncSrcSemID, 0);
     if(!g_strSocpStat.u32EncSrcTskID)
     {
@@ -1543,7 +1543,7 @@ s32 socp_init_task(void)
         }
     }
 
-    /* 编码输出通道任务*/
+    /* ????????????????*/
     sema_init(&g_strSocpStat.u32EncDstSemID, 0);
     if(!g_strSocpStat.u32EncDstTskID)
     {
@@ -1555,7 +1555,7 @@ s32 socp_init_task(void)
         }
     }
 
-    /* 解码源通道任务*/
+    /* ??????????????*/
     sema_init(&g_strSocpStat.u32DecSrcSemID, 0);
     if(!g_strSocpStat.u32DecSrcTskID)
     {
@@ -1567,7 +1567,7 @@ s32 socp_init_task(void)
         }
     }
 
-    /* 解码目的通道任务*/
+    /* ????????????????*/
     sema_init(&g_strSocpStat.u32DecDstSemID, 0);
     if(!g_strSocpStat.u32DecDstTskID)
     {
@@ -1583,14 +1583,14 @@ s32 socp_init_task(void)
 }
 
 /*****************************************************************************
-* 函 数 名   : socp_handler_encsrc
+* ?? ?? ??   : socp_handler_encsrc
 *
-* 功能描述  : 编码源通道处理函数，RD处理由上层完成，驱动RD中断可以不做处理
-* 输入参数  : 无
+* ????????  : ????????????????????RD????????????????????RD????????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 void  socp_handler_encsrc(void)
 {
@@ -1601,7 +1601,7 @@ void  socp_handler_encsrc(void)
 
     /*read and clear the interrupt flags*/
     SOCP_REG_READ(SOCP_REG_GBL_INTSTAT, IntFlag);
-    /* 处理包头错误 */
+    /* ???????????? */
     if (IntFlag & SOCP_APP_ENC_FLAGINT_MASK)
     {
         SOCP_REG_READ(SOCP_REG_APP_INTSTAT1, IntState);
@@ -1614,7 +1614,7 @@ void  socp_handler_encsrc(void)
         {
             if (IntState & ((u32)1 << i))
             {
-                /* debug模式屏蔽包头错误中断 */
+                /* debug???????????????????? */
                 if(SOCP_REG_GETBITS(SOCP_REG_ENCSRC_BUFCFG1(i), 31, 1))/*lint !e647*/
                 {
                     SOCP_REG_SETBITS(SOCP_REG_APP_MASK1, i, 1,1);
@@ -1624,7 +1624,7 @@ void  socp_handler_encsrc(void)
         }
     }
 
-    /*不再处理RD完成中断，初始化时保持屏蔽 */
+    /*????????RD?????????????????????????? */
 
     if(bHandle)
     {
@@ -1636,14 +1636,14 @@ void  socp_handler_encsrc(void)
 
 
 /*****************************************************************************
-* 函 数 名   : socp_handler_encdst
+* ?? ?? ??   : socp_handler_encdst
 *
-* 功能描述  : 编码目的中断处理函数
-* 输入参数  : 无
+* ????????  : ????????????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 /*lint -save -e550*/
 void socp_handler_encdst(void)
@@ -1660,7 +1660,7 @@ void socp_handler_encdst(void)
     int countFlag = BSP_FALSE;
     u32  ModeState = 0;
 
-    /*编码目的传输中断*/
+    /*????????????????*/
     SOCP_REG_READ(SOCP_REG_GBL_INTSTAT, IntFlag);
     if (IntFlag & SOCP_APP_ENC_TFRINT_MASK)
     {
@@ -1668,7 +1668,7 @@ void socp_handler_encdst(void)
         SOCP_REG_READ(SOCP_REG_ENC_INTSTAT0, IntState);
         SOCP_REG_READ(SOCP_REG_ENC_MASK0, mask);
         SOCP_REG_WRITE(SOCP_REG_ENC_MASK0, (IntState | mask));   // mask int 2011.7.27 by yangzhi
-        /* 屏蔽溢出中断 */
+        /* ???????????? */
         SOCP_REG_READ(SOCP_REG_ENC_MASK2, mask2);
         SOCP_REG_WRITE(SOCP_REG_ENC_MASK2, ((IntState << 16) | mask2));
         SOCP_REG_WRITE(SOCP_REG_ENC_RAWINT0, IntState);
@@ -1681,7 +1681,7 @@ void socp_handler_encdst(void)
         {
             if (IntState & ((u32)1 << i))
             {
-                if(g_ulThrowout == 0x5a5a5a5a) /*仅在压测中使用*/
+                if(g_ulThrowout == 0x5a5a5a5a) /*??????????????*/
                 {
                     spin_lock_irqsave(&lock, lock_flag);
                     SOCP_REG_READ(SOCP_REG_ENCDEST_BUFWPTR(i), write);
@@ -1705,11 +1705,11 @@ void socp_handler_encdst(void)
             }
         }
     }
-    // 上溢中断与阈值中断共用一个寄存器
+    // ????????????????????????????????
     else if (IntFlag & SOCP_APP_ENC_OUTOVFINT_MASK)
     {
         SOCP_REG_READ(SOCP_REG_ENC_INTSTAT2, IntState);
-        // 编码目的buffer阈值中断处理
+        // ????????buffer????????????
         if(0 != (IntState & SOCP_ENC_DST_BUFF_THRESHOLD_OVF_MASK))
         {
             spin_lock_irqsave(&lock, lock_flag);
@@ -1730,7 +1730,7 @@ void socp_handler_encdst(void)
             }
 
         }
-        // 编码目的buffer上溢中断
+        // ????????buffer????????
         if (0 != (IntState & SOCP_ENC_DST_BUFF_OVF_MASK))
         {
             spin_lock_irqsave(&lock, lock_flag);
@@ -1757,7 +1757,7 @@ void socp_handler_encdst(void)
         return ;
     }
 
-    /* 编码目的buffer模式切换完成 */
+    /* ????????buffer???????????? */
     else if (IntFlag & SOCP_CORE0_ENC_MODESWT_MASK)
     {
         spin_lock_irqsave(&lock, lock_flag);
@@ -1766,7 +1766,7 @@ void socp_handler_encdst(void)
         SOCP_REG_READ(SOCP_REG_ENC_MASK0, mask);
         SOCP_REG_SETBITS(SOCP_REG_ENC_MASK0, 16, 7, (((IntState | mask)>>16)&0x7f));
 
-        /* 清原始中断状态 */
+        /* ?????????????? */
         SOCP_REG_SETBITS(SOCP_REG_ENC_RAWINT0, 16, 7, ((IntState>>16)&0x7f));
 
         mask = 0;
@@ -1779,7 +1779,7 @@ void socp_handler_encdst(void)
             	}
         }
 
-        /* 屏蔽处于循环模式通道的传输中断和阈值溢出中断 */
+        /* ???????????????????????????????????????????? */
         SOCP_REG_SETBITS(SOCP_REG_ENC_MASK0, 0, 7, mask);
         SOCP_REG_SETBITS(SOCP_REG_ENC_MASK2, 0, 7, mask);
         SOCP_REG_SETBITS(SOCP_REG_ENC_MASK2, 16, 7, mask);
@@ -1804,14 +1804,14 @@ void socp_handler_encdst(void)
 /*lint -restore +e550*/
 
 /*****************************************************************************
-* 函 数 名   : socp_handler_decsrc
+* ?? ?? ??   : socp_handler_decsrc
 *
-* 功能描述  : 解码源通道中断处理函数
-* 输入参数  : 无
+* ????????  : ??????????????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 void socp_handler_decsrc(void)
 {
@@ -1820,7 +1820,7 @@ void socp_handler_decsrc(void)
     int bHandle = BSP_FALSE;
     u32 i = 0;
 
-    /*编码输入错误*/
+    /*????????????*/
     SOCP_REG_READ(SOCP_REG_GBL_INTSTAT, IntFlag);
     if (IntFlag & SOCP_DEC_INERRINT_MASK)
     {
@@ -1849,14 +1849,14 @@ void socp_handler_decsrc(void)
 
 
 /*****************************************************************************
-* 函 数 名   : socp_handler_decdst
+* ?? ?? ??   : socp_handler_decdst
 *
-* 功能描述  : 解码目的通道中断处理函数
-* 输入参数  : 无
+* ????????  : ????????????????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 
 void socp_handler_decdst(void)
@@ -1877,7 +1877,7 @@ void socp_handler_decdst(void)
     OvMask  = SOCP_CORE0_DEC_OUTOVFINT_MASK;
     OvState = SOCP_REG_DEC_CORE0ISTAT2;
 
-    /*解码传输中断*/
+    /*????????????*/
     SOCP_REG_READ(SOCP_REG_GBL_INTSTAT, IntFlag);
     if (IntFlag & TfMask)
     {
@@ -1900,7 +1900,7 @@ void socp_handler_decdst(void)
         }
     }
 
-    /*解码目的buffer 上溢*/
+    /*????????buffer ????*/
     SOCP_REG_READ(SOCP_REG_GBL_INTSTAT, IntFlag);
     if (IntFlag & OvMask)
     {
@@ -1930,14 +1930,14 @@ void socp_handler_decdst(void)
 
 
 /*****************************************************************************
-* 函 数 名   : socp_app_int_handler
+* ?? ?? ??   : socp_app_int_handler
 *
-* 功能描述  : APP 核中断处理函数
-* 输入参数  : 无
+* ????????  : APP ??????????????
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 irqreturn_t socp_app_int_handler(int irq, void* dev_info)
 {
@@ -1983,15 +1983,15 @@ static struct platform_driver socp_driver = {
 };
 
 /*****************************************************************************
-* 函 数 名  : socp_init
+* ?? ?? ??  : socp_init
 *
-* 功能描述  : 模块初始化函数
+* ????????  : ??????????????
 *
-* 输入参数  : 无
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 初始化成功的标识码
+* ?? ?? ??  : ??????????????????
 *****************************************************************************/
 s32 socp_init(void)
 {
@@ -2029,10 +2029,10 @@ s32 socp_init(void)
     if(0 == g_strSocpStat.baseAddr)
     {
         socp_error("[init] base addr is NULL!\n");
-        return BSP_ERROR; /* [false alarm]:屏蔽Fortify错误 */
+        return BSP_ERROR; /* [false alarm]:????Fortify???? */
     }
 
-    /* bsp_memmap.h里面还没有对BBP寄存器空间做映射 */
+    /* bsp_memmap.h????????????BBP???????????????? */
     g_strSocpStat.armBaseAddr = (unsigned long)BBP_REG_ARM_BASEADDR;
     memset_s(&g_stSocpDebugInfo, sizeof(g_stSocpDebugInfo), 0x0 ,sizeof(g_stSocpDebugInfo));
 
@@ -2050,7 +2050,7 @@ s32 socp_init(void)
 
     bsp_socp_ind_delay_init();
 
-    /* 创建编解码任务 */
+    /* ?????????????? */
     ret = socp_init_task();
     if (BSP_OK != ret)
     {
@@ -2058,7 +2058,7 @@ s32 socp_init(void)
         return (s32)ret;
     }
 
-    /* 挂中断 */
+    /* ?????? */
     irq = irq_of_parse_and_map(dev,0);
     ret = request_irq(irq, (irq_handler_t)socp_app_int_handler, 0, "SOCP_APP_IRQ",  BSP_NULL);
     if (BSP_OK != ret)
@@ -2068,7 +2068,7 @@ s32 socp_init(void)
     }
 
 
-    /* 设置初始化状态 */
+    /* ?????????????? */
     g_strSocpStat.bInitFlag = BSP_TRUE;
 
     socp_encsrc_headerr_irq_enable();
@@ -2079,15 +2079,15 @@ s32 socp_init(void)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_encdst_dsm_init
+* ?? ?? ??  : bsp_socp_encdst_dsm_init
 *
-* 功能描述  : socp编码目的端中断状态初始化
-* 输入参数  : EncDestChanID: 编码目的端通道号
-*             bEnable: 初始化的中断状态
+* ????????  : socp????????????????????????
+* ????????  : EncDestChanID: ????????????????
+*             bEnable: ????????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 void bsp_socp_encdst_dsm_init(u32 EncDestChanID, u32 bEnable)
 {
@@ -2131,19 +2131,19 @@ void bsp_socp_encdst_dsm_init(u32 EncDestChanID, u32 bEnable)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_data_send_continue
+* ?? ?? ??  : bsp_socp_data_send_continue
 *
-* 功能描述  : socp编码目的端数据上报使能，在readdone中调用
-              根据diag连接状态判断是否上报
+* ????????  : socp??????????????????????????readdone??????
+              ????diag????????????????????
 
-* 注    意  : 该函数调用时，需要调用者保证同步
+* ??    ??  : ????????????????????????????????
 
-* 输入参数  : EncDestChanID: 编码目的端通道号
-*             bEnable: 中断使能
+* ????????  : EncDestChanID: ????????????????
+*             bEnable: ????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 void bsp_socp_data_send_continue(u32 RealChanID)
 {
@@ -2158,15 +2158,15 @@ void bsp_socp_data_send_continue(u32 RealChanID)
     }
 }
 /*****************************************************************************
-* 函 数 名  : bsp_socp_data_send_manager
+* ?? ?? ??  : bsp_socp_data_send_manager
 *
-* 功能描述  : socp编码目的端上报数据
-* 输入参数  : EncDestChanID: 编码目的端通道号
-*             bEnable: 中断使能
+* ????????  : socp??????????????????
+* ????????  : EncDestChanID: ????????????????
+*             bEnable: ????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 void bsp_socp_data_send_manager(u32 EncDestChanID, u32 bEnable)
 {
@@ -2217,18 +2217,18 @@ void bsp_socp_data_send_manager(u32 EncDestChanID, u32 bEnable)
 }
 
 /***************************************************************************************
-* 函 数 名  : socp_set_reg_wr_addr
+* ?? ?? ??  : socp_set_reg_wr_addr
 *
-* 功能描述  : 配置通道基地址寄存器和读写指针寄存器，函数内区分SOCP32位和64位寻址适配
+* ????????  : ????????????????????????????????????????????????SOCP32????64??????????
 *
-* 输入参数  : ChanId: 通道号，包括通道类型和通道ID
-*             pAttr: 通道配置参数
-              start: 通道buffer起始地址
-              end: 通道buffer结束地址
+* ????????  : ChanId: ??????????????????????????ID
+*             pAttr: ????????????
+              start: ????buffer????????
+              end: ????buffer????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 ****************************************************************************************/
 void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned long end)
 {
@@ -2244,8 +2244,8 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
     RealChanId = SOCP_REAL_CHAN_ID(ChanId);
     ChanType  = SOCP_REAL_CHAN_TYPE(ChanId);
 
-#ifdef FEATURE_SOCP_ADDR_64BITS   // SOCP 64位寻址
-    if(ChanType == SOCP_CODER_SRC_CHAN)   // 编码源通道
+#ifdef FEATURE_SOCP_ADDR_64BITS   // SOCP 64??????
+    if(ChanType == SOCP_CODER_SRC_CHAN)   // ??????????
     {
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFADDR_L(RealChanId), (u32)start);
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFADDR_H(RealChanId), (u32)((u64)start>>32));
@@ -2288,7 +2288,7 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
 
     }
 
-    else if(ChanType == SOCP_CODER_DEST_CHAN)   // 编码目的通道
+    else if(ChanType == SOCP_CODER_DEST_CHAN)   // ????????????
     {
         SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFADDR_L(RealChanId), (u32)start);
         SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFADDR_H(RealChanId), (u32)((u64)start>>32));
@@ -2303,11 +2303,11 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
         pEncDstChan->sEncDstBuf.u32Length   = end - start + 1;//lint !e834
         pEncDstChan->bufThreshold  =   ((SOCP_CODER_DEST_CHAN_S *)pAttr)->sCoderSetDstBuf.u32Threshold;
         pEncDstChan->u32Thrh       =   ((SOCP_CODER_DEST_CHAN_S *)pAttr)->u32EncDstThrh;
-        /* 表明该通道已经配置 */
+        /* ?????????????????? */
         pEncDstChan->u32SetStat = SOCP_CHN_SET;
     }
 
-    else if(ChanType == SOCP_DECODER_SRC_CHAN)   // 解码源通道
+    else if(ChanType == SOCP_DECODER_SRC_CHAN)   // ??????????
     {
         SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR_L(RealChanId),(u32)start);
         SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR_H(RealChanId), (u32)((u64)start>>32));
@@ -2325,7 +2325,7 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
         pDecSrcChan->u32SetStat = SOCP_CHN_SET;
     }
 
-    else if(ChanType == SOCP_DECODER_DEST_CHAN)   // 解码目的通道
+    else if(ChanType == SOCP_DECODER_DEST_CHAN)   // ????????????
     {
         SOCP_REG_WRITE(SOCP_REG_DECDEST_BUFADDR_L(RealChanId), (u32)start);
         SOCP_REG_WRITE(SOCP_REG_DECDEST_BUFADDR_H(RealChanId), (u32)((u64)start>>32));
@@ -2341,9 +2341,9 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
         pDecDstChan->sDecDstBuf.u32Write    = 0;
     }
 
-#else   // SOCP 32位寻址
+#else   // SOCP 32??????
 
-    if(ChanType == SOCP_CODER_SRC_CHAN)   // 编码源通道
+    if(ChanType == SOCP_CODER_SRC_CHAN)   // ??????????
     {
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFADDR(RealChanId),(u32)start);
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFWPTR(RealChanId),(u32)start);
@@ -2382,7 +2382,7 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
         }
     }
 
-    else if(ChanType == SOCP_CODER_DEST_CHAN)   // 编码目的通道
+    else if(ChanType == SOCP_CODER_DEST_CHAN)   // ????????????
     {
         SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFADDR(RealChanId), (u32)start);
         SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFRPTR(RealChanId), (u32)start);
@@ -2397,11 +2397,11 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
         pEncDstChan->bufThreshold  =   ((SOCP_CODER_DEST_CHAN_S *)pAttr)->sCoderSetDstBuf.u32Threshold;
         pEncDstChan->u32Thrh       =   ((SOCP_CODER_DEST_CHAN_S *)pAttr)->u32EncDstThrh;
 
-        /* 表明该通道已经配置 */
+        /* ?????????????????? */
         pEncDstChan->u32SetStat = SOCP_CHN_SET;
     }
 
-    else if(ChanType == SOCP_DECODER_SRC_CHAN)   // 解码源通道
+    else if(ChanType == SOCP_DECODER_SRC_CHAN)   // ??????????
     {
         SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFWPTR(RealChanId), (u32)start);
         SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFADDR(RealChanId), (u32)start);
@@ -2418,7 +2418,7 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
         pDecSrcChan->u32SetStat = SOCP_CHN_SET;
     }
 
-    else if(ChanType == SOCP_DECODER_DEST_CHAN)   // 解码目的通道
+    else if(ChanType == SOCP_DECODER_DEST_CHAN)   // ????????????
     {
         SOCP_REG_WRITE(SOCP_REG_DECDEST_BUFRPTR(RealChanId), (u32)start);
         SOCP_REG_WRITE(SOCP_REG_DECDEST_BUFADDR(RealChanId), (u32)start);
@@ -2436,16 +2436,16 @@ void socp_set_reg_wr_addr(u32 ChanId, void *pAttr, unsigned long start, unsigned
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_coder_set_src_chan
+* ?? ?? ??  : bsp_socp_coder_set_src_chan
 *
-* 功能描述  : 编码源通道配置函数
+* ????????  : ??????????????????
 *
-* 输入参数  : pSrcAttr     编码源通道配置参数
-*             ulSrcChanID  编码源通道ID
+* ????????  : pSrcAttr     ??????????????????
+*             ulSrcChanID  ??????????ID
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 申请及配置成功与否的标识码
+* ?? ?? ??  : ??????????????????????????
 *****************************************************************************/
 s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_SRC_CHAN_S *pSrcAttr)
 {
@@ -2465,13 +2465,13 @@ s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_
 
     g_stSocpDebugInfo.sSocpDebugGBl.u32SocpAllocEncSrcCnt++;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pSrcAttr)
     {
         socp_error("the parameter is NULL\n");
@@ -2525,8 +2525,8 @@ s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_
         return BSP_ERR_SOCP_INVALID_PARA;
     }
 
-    /* 使用配置参数进行配置 */
-    /* 判断起始地址是否8字节对齐 */
+    /* ???????????????????? */
+    /* ????????????????8???????? */
     start   = (unsigned long)pSrcAttr->sCoderSetSrcBuf.pucInputStart;
     end     = (unsigned long)pSrcAttr->sCoderSetSrcBuf.pucInputEnd;
 
@@ -2564,10 +2564,10 @@ s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_
         }
     }
 
-    /* 如果是用链表缓冲区，则配置RDbuffer的起始地址和长度 */
+    /* ??????????????????????????RDbuffer???????????????? */
     if(SOCP_ENCSRC_CHNMODE_LIST == pSrcAttr->eMode)
     {
-        /* 判断RDBuffer的起始地址是否8字节对齐 */
+        /* ????RDBuffer??????????????8???????? */
         base_addr_rdstart = (unsigned long)pSrcAttr->sCoderSetSrcBuf.pucRDStart;
         base_addr_rdend   = (unsigned long)pSrcAttr->sCoderSetSrcBuf.pucRDEnd;
 
@@ -2602,10 +2602,10 @@ s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_
         }
     }
 
-    /* 复位通道 */
+    /* ???????? */
     SOCP_REG_SETBITS(SOCP_REG_ENCRST, srcChanId, 1, 1);
 
-    /* 等待通道自清 */
+    /* ???????????? */
     for (i = 0; i < SOCP_RESET_TIME; i++)
     {
         ResetFlag = SOCP_REG_GETBITS(SOCP_REG_ENCRST, srcChanId, 1);
@@ -2615,7 +2615,7 @@ s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_
         }
     }
 
-    /* 配置编码源通道参数 */
+    /* ?????????????????? */
 	/*lint -save -e647*/
     SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(srcChanId), 1, 2, pSrcAttr->eMode);
     SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(srcChanId), 4, 4, pSrcAttr->u32DestChanID);
@@ -2647,7 +2647,7 @@ s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_
 
     socp_set_reg_wr_addr(enSrcChanID, (void*)pSrcAttr, start, end);
 
-    /* 标记通道状态 */
+    /* ???????????? */
     g_strSocpStat.sEncSrcChan[srcChanId].u32AllocStat = SOCP_CHN_ALLOCATED;
     g_stSocpDebugInfo.sSocpDebugGBl.u32SocpAllocEncSrcSucCnt++;
     return BSP_OK;
@@ -2655,17 +2655,17 @@ s32 bsp_socp_coder_set_src_chan(SOCP_CODER_SRC_ENUM_U32 enSrcChanID, SOCP_CODER_
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_decoder_set_dest_chan
+* ?? ?? ??  : bsp_socp_decoder_set_dest_chan
 *
-* 功能描述  : 解码目的通道申请及配置函数
+* ????????  : ??????????????????????????
 *
-* 输入参数  : pAttr           解码目的通道配置参数
-*             pDestChanID     初始化解码目的通道ID，解码通道源与目的ID有对应关系
+* ????????  : pAttr           ????????????????????
+*             pDestChanID     ??????????????????ID??????????????????ID??????????
                               SrcID = DestChanID%4
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 申请及配置成功与否的标识码
+* ?? ?? ??  : ??????????????????????????
 *****************************************************************************/
 s32 bsp_socp_decoder_set_dest_chan(SOCP_DECODER_DST_ENUM_U32 enDestChanID,
                                                 SOCP_DECODER_DEST_CHAN_STRU *pAttr)
@@ -2682,13 +2682,13 @@ s32 bsp_socp_decoder_set_dest_chan(SOCP_DECODER_DST_ENUM_U32 enDestChanID,
 
     g_stSocpDebugInfo.sSocpDebugGBl.u32SocpAllocDecDstCnt++;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pAttr)
     {
         socp_error("the parameter is NULL\n");
@@ -2720,14 +2720,14 @@ s32 bsp_socp_decoder_set_dest_chan(SOCP_DECODER_DST_ENUM_U32 enDestChanID,
         return ret;
     }
 
-    /* 判断通道ID对应关系 */
+    /* ????????ID???????? */
     if(u32SrcChanID != u32ChanID%4)
     {
         socp_error("dest ID(%d) is not matching src ID(%d)!\n", u32ChanID, u32SrcChanID);
         return BSP_ERR_SOCP_INVALID_PARA;
     }
 
-    /* 判断给定的地址和长度是否为八字节倍数*/
+    /* ????????????????????????????????????*/
     start           = (unsigned long)pAttr->sDecoderDstSetBuf.pucOutputStart;
     end             = (unsigned long)pAttr->sDecoderDstSetBuf.pucOutputEnd;
     bufThreshold    = pAttr->sDecoderDstSetBuf.u32Threshold;
@@ -2779,14 +2779,14 @@ s32 bsp_socp_decoder_set_dest_chan(SOCP_DECODER_DST_ENUM_U32 enDestChanID,
 
     socp_set_reg_wr_addr(enDestChanID, (void*)pAttr, start, end);
 
-    /* 先清中断，再打开中断*/
+    /* ????????????????????*/
     SOCP_REG_SETBITS(SOCP_REG_DEC_RAWINT0, u32ChanID, 1, 1);
     SOCP_REG_SETBITS(SOCP_REG_DEC_CORE0MASK0, u32ChanID, 1, 0);
     SOCP_REG_SETBITS(SOCP_REG_DEC_RAWINT2, u32ChanID, 1, 1);
     SOCP_REG_SETBITS(SOCP_REG_DEC_CORE0MASK2, u32ChanID, 1, 0);
 	/*lint -restore +e647*/
 
-    /* 标记通道分配状态 */
+    /* ???????????????? */
     g_strSocpStat.sDecDstChan[u32ChanID].u32AllocStat = SOCP_CHN_ALLOCATED;
     g_stSocpDebugInfo.sSocpDebugGBl.u32SocpAllocDecDstSucCnt++;
 
@@ -2801,13 +2801,13 @@ static s32 socp_encdst_param_check(SOCP_CODER_DEST_CHAN_S *pDestAttr)
 	u32 buflength;
 	s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pDestAttr)
     {
         socp_error("the parameter is NULL\n");
@@ -2852,15 +2852,15 @@ static s32 socp_encdst_param_check(SOCP_CODER_DEST_CHAN_S *pDestAttr)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_coder_set_dest_chan_attr
+* ?? ?? ??  : bsp_socp_coder_set_dest_chan_attr
 *
-* 功能描述  : 编码目的通道配置函数
+* ????????  : ????????????????????
 *
-* 输入参数  : u32DestChanID      编码目的通道ID
-              pDestAttr          编码目的通道配置参数
+* ????????  : u32DestChanID      ????????????ID
+              pDestAttr          ????????????????????
 *
-* 输出参数  : 无
-* 返 回 值  : 配置成功与否的标识码
+* ????????  : ??
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_coder_set_dest_chan_attr(u32 u32DestChanID, SOCP_CODER_DEST_CHAN_S *pDestAttr)
 {
@@ -2900,8 +2900,8 @@ s32 bsp_socp_coder_set_dest_chan_attr(u32 u32DestChanID, SOCP_CODER_DEST_CHAN_S 
     u32TimeoutMode = pDestAttr->u32EncDstTimeoutMode;
     buflength = (u32)(end - start + 1);
 
-    /* 如果经过配置则不能再次配置,通道复位之后只配置一次 */
-    /* 使用配置参数进行配置 */
+    /* ??????????????????????????,?????????????????????? */
+    /* ???????????????????? */
 	/*lint -save -e647*/
     if (SOCP_CHN_SET == g_strSocpStat.sEncDstChan[u32ChanID].u32SetStat)
     {
@@ -2922,13 +2922,13 @@ s32 bsp_socp_coder_set_dest_chan_attr(u32 u32DestChanID, SOCP_CODER_DEST_CHAN_S 
     {
     	SOCP_REG_SETBITS(SOCP_REG_GBLRST, 4, 1, 1);
         SOCP_REG_SETBITS(SOCP_REG_ENCDEST_SBCFG(u32ChanID), 3, 1, 1);
-        bsp_socp_set_timeout(SOCP_TIMEOUT_TRF_LONG, SOCP_TIMEOUT_TRF_LONG_MIN); /*立即上报:长超时阈值=10ms*/
+        bsp_socp_set_timeout(SOCP_TIMEOUT_TRF_LONG, SOCP_TIMEOUT_TRF_LONG_MIN); /*????????:??????????=10ms*/
     }
     else if((SOCP_TIMEOUT_TRF_SHORT == u32TimeoutMode))
     {
     	SOCP_REG_SETBITS(SOCP_REG_GBLRST, 4, 1, 1);
         SOCP_REG_SETBITS(SOCP_REG_ENCDEST_SBCFG(u32ChanID), 3, 1, 0);
-        bsp_socp_set_timeout(SOCP_TIMEOUT_TRF_SHORT, SOCP_TIMEOUT_TRF_SHORT_VAL); /*短超时阈值=10ms*/
+        bsp_socp_set_timeout(SOCP_TIMEOUT_TRF_SHORT, SOCP_TIMEOUT_TRF_SHORT_VAL); /*??????????=10ms*/
     }
 	else
 	{
@@ -2948,16 +2948,16 @@ s32 bsp_socp_coder_set_dest_chan_attr(u32 u32DestChanID, SOCP_CODER_DEST_CHAN_S 
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_decoder_set_src_chan_attr
+* ?? ?? ??  : bsp_socp_decoder_set_src_chan_attr
 *
-* 功能描述  : 解码源通道配置函数
+* ????????  : ??????????????????
 *
-* 输入参数  : u32SrcChanID    解码源通道ID
-*             pInputAttr      解码源通道配置参数
+* ????????  : u32SrcChanID    ??????????ID
+*             pInputAttr      ??????????????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 配置成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_decoder_set_src_chan_attr(u32 u32SrcChanID, SOCP_DECODER_SRC_CHAN_STRU *pInputAttr)
 {
@@ -2973,13 +2973,13 @@ s32 bsp_socp_decoder_set_src_chan_attr(u32 u32SrcChanID, SOCP_DECODER_SRC_CHAN_S
 
     g_stSocpDebugInfo.sSocpDebugGBl.u32SocpSetDecSrcCnt++;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pInputAttr)
     {
         socp_error("the parameter is NULL\n");
@@ -3039,10 +3039,10 @@ s32 bsp_socp_decoder_set_src_chan_attr(u32 u32SrcChanID, SOCP_DECODER_SRC_CHAN_S
         return BSP_ERR_SOCP_DECSRC_SET;
     }
 
-    /* 首先复位通道 */
+    /* ???????????? */
     SOCP_REG_SETBITS(SOCP_REG_DECRST, u32ChanID, 1, 1);
 
-    /* 等待通道复位状态自清 */
+    /* ???????????????????? */
     for (i = 0; i < SOCP_RESET_TIME; i++)
     {
         u32ResetFlag = SOCP_REG_GETBITS(SOCP_REG_DECRST, u32ChanID, 1);
@@ -3064,15 +3064,15 @@ s32 bsp_socp_decoder_set_src_chan_attr(u32 u32SrcChanID, SOCP_DECODER_SRC_CHAN_S
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_decoder_get_err_cnt
+* ?? ?? ??  : bsp_socp_decoder_get_err_cnt
 *
-* 功能描述  : 解码通道中获取错误计数函数
+* ????????  : ??????????????????????????
 *
-* 输入参数  : u32ChanID       解码通道ID
+* ????????  : u32ChanID       ????????ID
 
-* 输出参数  : pErrCnt         解码通道错误计数结构体指针
+* ????????  : pErrCnt         ??????????????????????????
 *
-* 返 回 值  : 获取成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_decoder_get_err_cnt(u32 u32DstChanID, SOCP_DECODER_ERROR_CNT_STRU *pErrCnt)
 {
@@ -3080,13 +3080,13 @@ s32 bsp_socp_decoder_get_err_cnt(u32 u32DstChanID, SOCP_DECODER_ERROR_CNT_STRU *
     u32 u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断通道ID是否有效 */
+    /* ????????ID???????? */
     u32ChanID   = SOCP_REAL_CHAN_ID(u32DstChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32DstChanID);
     if((ret=socp_check_chan_type(u32ChanType, SOCP_DECODER_SRC_CHAN)) != BSP_OK)
@@ -3102,14 +3102,14 @@ s32 bsp_socp_decoder_get_err_cnt(u32 u32DstChanID, SOCP_DECODER_ERROR_CNT_STRU *
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pErrCnt)
     {
         socp_error("the parameter is NULL\n");
         return BSP_ERR_SOCP_NULL;
     }
 
-    /* 判断通道是否打开，并设置为debug模式*/
+    /* ??????????????????????????debug????*/
     if (g_strSocpStat.sDecSrcChan[u32ChanID].u32ChanEn)
     {
     	/*lint -save -e647*/
@@ -3129,16 +3129,16 @@ s32 bsp_socp_decoder_get_err_cnt(u32 u32DstChanID, SOCP_DECODER_ERROR_CNT_STRU *
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_set_timeout
+* ?? ?? ??  : bsp_socp_set_timeout
 *
-* 功能描述  : 超时阈值设置函数
+* ????????  : ????????????????
 *
-* 输入参数  :   eTmOutEn          设置对象选择及使能
-                u32Timeout        超时阈值
+* ????????  :   eTmOutEn          ??????????????????
+                u32Timeout        ????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 设置成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_set_timeout(SOCP_TIMEOUT_EN_ENUM_UIN32 eTmOutEn, u32 u32Timeout)
 {
@@ -3161,7 +3161,7 @@ s32 bsp_socp_set_timeout(SOCP_TIMEOUT_EN_ENUM_UIN32 eTmOutEn, u32 u32Timeout)
         case SOCP_TIMEOUT_BUFOVF_ENABLE:
         {
             SOCP_REG_SETBITS(SOCP_REG_BUFTIMEOUT, 31, 1, 1);
-            /* 增加换算的方法 */
+            /* ?????????????? */
             SOCP_REG_SETBITS(SOCP_REG_BUFTIMEOUT, 0, 16, u32newtime);
             break;
         }
@@ -3266,15 +3266,15 @@ s32 bsp_socp_set_timeout(SOCP_TIMEOUT_EN_ENUM_UIN32 eTmOutEn, u32 u32Timeout)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_set_dec_pkt_lgth
+* ?? ?? ??  : bsp_socp_set_dec_pkt_lgth
 *
-* 功能描述  : 超时阈值设置函数
+* ????????  : ????????????????
 *
-* 输入参数  :   pPktlgth          解码包长度设置参数结构体
+* ????????  :   pPktlgth          ????????????????????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 设置成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 /* cov_verified_start */
 s32 bsp_socp_set_dec_pkt_lgth(SOCP_DEC_PKTLGTH_STRU *pPktlgth)
@@ -3283,12 +3283,12 @@ s32 bsp_socp_set_dec_pkt_lgth(SOCP_DEC_PKTLGTH_STRU *pPktlgth)
     u32 u32PktMinLgth;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pPktlgth)
     {
         socp_error("the parameter is NULL\n");
@@ -3314,7 +3314,7 @@ s32 bsp_socp_set_dec_pkt_lgth(SOCP_DEC_PKTLGTH_STRU *pPktlgth)
         return BSP_ERR_SOCP_INVALID_PARA;
     }
 
-    /* 配置解码通路包长度配置寄存器*/
+    /* ????????????????????????????*/
     SOCP_REG_SETBITS(SOCP_REG_DEC_PKTLEN, 0, 12, u32PktMaxLgth);
     SOCP_REG_SETBITS(SOCP_REG_DEC_PKTLEN, 12, 5, u32PktMinLgth);
 
@@ -3323,16 +3323,16 @@ s32 bsp_socp_set_dec_pkt_lgth(SOCP_DEC_PKTLGTH_STRU *pPktlgth)
 /* cov_verified_stop */
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_set_debug
+* ?? ?? ??  : bsp_socp_set_debug
 *
-* 功能描述  : 设置解码源通道debug模式函数
+* ????????  : ??????????????debug????????
 *
-* 输入参数  : u32DecChanID  解码源通道ID
-              u32DebugEn    debug模式使能标识
+* ????????  : u32DecChanID  ??????????ID
+              u32DebugEn    debug????????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 设置成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_set_debug(u32 u32DecChanID, u32 u32DebugEn)
 {
@@ -3340,13 +3340,13 @@ s32 bsp_socp_set_debug(u32 u32DecChanID, u32 u32DebugEn)
     u32 u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断通道ID是否有效 */
+    /* ????????ID???????? */
     u32ChanID = SOCP_REAL_CHAN_ID(u32DecChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32DecChanID);
     if((ret=socp_check_chan_type(u32ChanType, SOCP_DECODER_SRC_CHAN)) != BSP_OK)
@@ -3362,7 +3362,7 @@ s32 bsp_socp_set_debug(u32 u32DecChanID, u32 u32DebugEn)
         return ret;
     }
 
-    /* 判断该通道打开模式，没有打开的话，可以设置 */
+    /* ?????????????????????????????????????????? */
     if(g_strSocpStat.sDecSrcChan[u32ChanID].u32ChanEn)
     {
         socp_error("decoder channel is open, can't set debug bit\n");
@@ -3380,15 +3380,15 @@ s32 bsp_socp_set_debug(u32 u32DecChanID, u32 u32DebugEn)
 
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_free_channel
+* ?? ?? ??  : bsp_socp_free_channel
 *
-* 功能描述  : 通道释放函数
+* ????????  : ????????????
 *
-* 输入参数  : u32ChanID       编解码通道指针
+* ????????  : u32ChanID       ??????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 释放成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_free_channel(u32 u32ChanID)
 {
@@ -3396,12 +3396,12 @@ s32 bsp_socp_free_channel(u32 u32ChanID)
     u32 u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
-    /* 判断通道ID是否有效 */
+    /* ????????ID???????? */
     u32RealChanID = SOCP_REAL_CHAN_ID(u32ChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32ChanID);
 
@@ -3442,7 +3442,7 @@ s32 bsp_socp_free_channel(u32 u32ChanID)
             return ret;
         }
 
-        /* 设置数据类型无效 */
+        /* ???????????????? */
 		/*lint -save -e647*/
         SOCP_REG_SETBITS(SOCP_REG_DECDEST_BUFCFG(u32RealChanID), 24, 8, 0xff);
 		/*lint -restore +e647*/
@@ -3461,15 +3461,15 @@ s32 bsp_socp_free_channel(u32 u32ChanID)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_chan_soft_reset
+* ?? ?? ??  : bsp_socp_chan_soft_reset
 *
-* 功能描述  : 通道软复位函数
+* ????????  : ??????????????
 *
-* 输入参数  : u32ChanID       编解码通道ID
+* ????????  : u32ChanID       ??????????ID
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 释放成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_chan_soft_reset(u32 u32ChanID)
 {
@@ -3477,17 +3477,17 @@ s32 bsp_socp_chan_soft_reset(u32 u32ChanID)
     u32 u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断通道ID是否有效 */
+    /* ????????ID???????? */
     u32RealChanID = SOCP_REAL_CHAN_ID(u32ChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32ChanID);
-    /* 编码源通道复位暂只处理动态分配及LTE DSP/BBP通道 */
-    /* 其余通道的复位操作可能涉及特殊的处理，需后续添加接口 */
+    /* ????????????????????????????????LTE DSP/BBP???? */
+    /* ???????????????????????????????????????????????????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         if((ret=socp_check_encsrc_chan_id(u32RealChanID)) != BSP_OK)
@@ -3526,14 +3526,14 @@ s32 bsp_socp_chan_soft_reset(u32 u32ChanID)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_start
+* ?? ?? ??  : bsp_socp_start
 *
-* 功能描述  : 编码或者解码启动函数
+* ????????  : ????????????????????
 *
-* 输入参数  : u32SrcChanID      通道ID
-* 输出参数  :
+* ????????  : u32SrcChanID      ????ID
+* ????????  :
 *
-* 返 回 值  : 启动成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_start(u32 u32SrcChanID)
 {
@@ -3546,16 +3546,16 @@ s32 bsp_socp_start(u32 u32SrcChanID)
     s32 ret;
 
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
-    /* 判断通道ID是否有效 */
+    /* ????????ID???????? */
     u32RealChanID = SOCP_REAL_CHAN_ID(u32SrcChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32SrcChanID);
 
-    /* 编码通道 */
+    /* ???????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         if (u32RealChanID < SOCP_MAX_ENCSRC_CHN)
@@ -3583,22 +3583,22 @@ s32 bsp_socp_start(u32 u32SrcChanID)
             return BSP_ERR_SOCP_DEST_CHAN;
         }
 
-        /* 先清中断，再打开中断*/
+        /* ????????????????????*/
         SOCP_REG_SETBITS(SOCP_REG_ENC_RAWINT1, u32RealChanID, 1, 1);
         SOCP_REG_SETBITS(SOCP_REG_APP_MASK1, u32RealChanID, 1, 0);
         if(socp_version >= SOCP_206_VERSION)
         {
-            SOCP_REG_SETBITS(SOCP_REG_ENCDEST_SBCFG(u32DstId),0,1,1);   // 启动编码目的通道
+            SOCP_REG_SETBITS(SOCP_REG_ENCDEST_SBCFG(u32DstId),0,1,1);   // ????????????????
         }
 
         if (SOCP_ENCSRC_CHNMODE_LIST == g_strSocpStat.sEncSrcChan[u32RealChanID].eChnMode)
         {
             SOCP_REG_SETBITS(SOCP_REG_ENC_RAWINT3, u32RealChanID, 1, 1);
-            /* 保持RD中断屏蔽 */
+            /* ????RD???????? */
             //SOCP_REG_SETBITS(SOCP_REG_APP_MASK3, u32RealChanID, 1, 0);
         }
 
-        /* 设置打开状态*/
+        /* ????????????*/
         SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(u32RealChanID), 0, 1, 1);
         if(u32RealChanID < SOCP_MAX_ENCSRC_CHN)
         {
@@ -3617,7 +3617,7 @@ s32 bsp_socp_start(u32 u32SrcChanID)
             return ret;
         }
 
-        /* 打开rd完成中断*/
+        /* ????rd????????*/
         if (SOCP_DECSRC_CHNMODE_LIST == g_strSocpStat.sDecSrcChan[u32RealChanID].eChnMode)
         {
             SOCP_REG_SETBITS(SOCP_REG_DEC_RAWINT1, u32RealChanID, 1, 1);
@@ -3635,7 +3635,7 @@ s32 bsp_socp_start(u32 u32SrcChanID)
             SOCP_REG_SETBITS(SOCP_REG_DEC_MASK1, i * 4, 4, IntIDMask);
         }
 
-        /* 设置打开状态*/
+        /* ????????????*/
         SOCP_REG_SETBITS(SOCP_REG_DECSRC_BUFCFG0(u32RealChanID), 30, 1, 1);
         g_strSocpStat.sDecSrcChan[u32RealChanID].u32ChanEn = SOCP_CHN_ENABLE;
 
@@ -3653,15 +3653,15 @@ s32 bsp_socp_start(u32 u32SrcChanID)
 
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_stop
+* ?? ?? ??  : bsp_socp_stop
 *
-* 功能描述  : 编码或者解码停止函数
+* ????????  : ????????????????????
 *
-* 输入参数  : u32SrcChanID      通道ID
+* ????????  : u32SrcChanID      ????ID
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 停止成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 
 s32 bsp_socp_stop(u32 u32SrcChanID)
@@ -3673,17 +3673,17 @@ s32 bsp_socp_stop(u32 u32SrcChanID)
     s32 ret;
 
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断通道ID是否有效 */
+    /* ????????ID???????? */
     u32RealChanID = SOCP_REAL_CHAN_ID(u32SrcChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32SrcChanID);
 
-    /* 编码通道 */
+    /* ???????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         if (u32RealChanID < SOCP_MAX_ENCSRC_CHN)
@@ -3709,7 +3709,7 @@ s32 bsp_socp_stop(u32 u32SrcChanID)
             SOCP_REG_SETBITS(SOCP_REG_APP_MASK3, u32RealChanID, 1, 1);
         }
 
-        /* 设置通道关闭状态*/
+        /* ????????????????*/
         SOCP_REG_SETBITS(SOCP_REG_ENCSRC_BUFCFG1(u32RealChanID), 0, 1, 0);
         if (u32RealChanID < SOCP_MAX_ENCSRC_CHN)
         {
@@ -3728,7 +3728,7 @@ s32 bsp_socp_stop(u32 u32SrcChanID)
             return ret;
         }
 
-        /* 关闭中断*/
+        /* ????????*/
         if (SOCP_DECSRC_CHNMODE_LIST == g_strSocpStat.sDecSrcChan[u32RealChanID].eChnMode)
         {
             SOCP_REG_SETBITS(SOCP_REG_DEC_CORE0MASK0, u32RealChanID, 1, 1);
@@ -3741,7 +3741,7 @@ s32 bsp_socp_stop(u32 u32SrcChanID)
             SOCP_REG_SETBITS(SOCP_REG_DEC_CORE0MASK0, i * 4, 4, IntIDMask);
         }
 
-        /* 设置通道关闭状态*/
+        /* ????????????????*/
         SOCP_REG_SETBITS(SOCP_REG_DECSRC_BUFCFG0(u32RealChanID), 30, 1,0);
         g_strSocpStat.sDecSrcChan[u32RealChanID].u32ChanEn = SOCP_CHN_DISABLE;
 
@@ -3758,15 +3758,15 @@ s32 bsp_socp_stop(u32 u32SrcChanID)
 
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_register_event_cb
+* ?? ?? ??  : bsp_socp_register_event_cb
 *
-* 功能描述  : 异常事件回调函数注册函数
+* ????????  : ????????????????????????
 *
-* 输入参数  : u32ChanID      通道ID
-*             EventCB        异常事件的回调函数
-* 输出参数  :
+* ????????  : u32ChanID      ????ID
+*             EventCB        ??????????????????
+* ????????  :
 *
-* 返 回 值  : 注册成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_register_event_cb(u32 u32ChanID, socp_event_cb EventCB)
 {
@@ -3774,19 +3774,19 @@ s32 bsp_socp_register_event_cb(u32 u32ChanID, socp_event_cb EventCB)
     u32  u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 获取通道类型和实际的通道ID */
+    /* ????????????????????????ID */
     u32RealChanID = SOCP_REAL_CHAN_ID(u32ChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32ChanID);
 
     switch (u32ChanType)
     {
-        case SOCP_CODER_SRC_CHAN:      /* 编码源通道 */
+        case SOCP_CODER_SRC_CHAN:      /* ?????????? */
         {
             if (u32RealChanID < SOCP_MAX_ENCSRC_CHN)
             {
@@ -3804,7 +3804,7 @@ s32 bsp_socp_register_event_cb(u32 u32ChanID, socp_event_cb EventCB)
             }
             break;
         }
-        case SOCP_CODER_DEST_CHAN:       /* 编码目的通道*/
+        case SOCP_CODER_DEST_CHAN:       /* ????????????*/
         {
             if((ret=socp_check_chan_id(u32RealChanID, SOCP_MAX_ENCDST_CHN)) != BSP_OK)
             {
@@ -3820,7 +3820,7 @@ s32 bsp_socp_register_event_cb(u32 u32ChanID, socp_event_cb EventCB)
             g_stSocpDebugInfo.sSocpDebugEncDst.u32SocpRegEventEncDstCnt[u32RealChanID]++;
             break;
         }
-        case SOCP_DECODER_SRC_CHAN:       /* 解码源通道*/
+        case SOCP_DECODER_SRC_CHAN:       /* ??????????*/
         {
             if((ret=socp_check_chan_id(u32RealChanID, SOCP_MAX_DECSRC_CHN)) != BSP_OK)
             {
@@ -3836,7 +3836,7 @@ s32 bsp_socp_register_event_cb(u32 u32ChanID, socp_event_cb EventCB)
             g_stSocpDebugInfo.sSocpDebugDecSrc.u32SocpRegEventDecSrcCnt[u32RealChanID]++;
             break;
         }
-        case SOCP_DECODER_DEST_CHAN:       /* 解码目的通道*/
+        case SOCP_DECODER_DEST_CHAN:       /* ????????????*/
         {
             if((ret=socp_check_chan_id(u32RealChanID, SOCP_MAX_DECDST_CHN)) != BSP_OK)
             {
@@ -3863,14 +3863,14 @@ s32 bsp_socp_register_event_cb(u32 u32ChanID, socp_event_cb EventCB)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_get_write_buff
+* ?? ?? ??  : bsp_socp_get_write_buff
 *
-* 功能描述  : 上层获取写数据buffer函数
+* ????????  : ??????????????buffer????
 *
-* 输入参数  : u32SrcChanID    源通道ID
-* 输出参数  : pBuff           获取的buffer
+* ????????  : u32SrcChanID    ??????ID
+* ????????  : pBuff           ??????buffer
 *
-* 返 回 值  : 获取成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_get_write_buff(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
 {
@@ -3879,28 +3879,28 @@ s32 bsp_socp_get_write_buff(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
     u32 uPAddr;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pBuff)
     {
         socp_error("the parameter is NULL\n");
         return BSP_ERR_SOCP_NULL;
     }
-    /* 获得实际通道id */
+    /* ????????????id */
     u32ChanID   = SOCP_REAL_CHAN_ID(u32SrcChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32SrcChanID);
 
-    /* 编码通道 */
+    /* ???????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         g_stSocpDebugInfo.sSocpDebugEncSrc.u32SocpGetWBufEncSrcEtrCnt[u32ChanID]++;
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_encsrc_chan_id(u32ChanID)) != BSP_OK)
         {
             return ret;
@@ -3910,7 +3910,7 @@ s32 bsp_socp_get_write_buff(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
             return ret;
         }
 
-        /* 根据读写指针获取buffer */
+        /* ????????????????buffer */
         SOCP_REG_READ(SOCP_REG_ENCSRC_BUFRPTR(u32ChanID), uPAddr);
         g_strSocpStat.sEncSrcChan[u32ChanID].sEncSrcBuf.u32Read = uPAddr;
         SOCP_REG_READ(SOCP_REG_ENCSRC_BUFWPTR(u32ChanID), uPAddr);
@@ -3918,11 +3918,11 @@ s32 bsp_socp_get_write_buff(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
         socp_get_idle_buffer(&g_strSocpStat.sEncSrcChan[u32ChanID].sEncSrcBuf, pBuff);
         g_stSocpDebugInfo.sSocpDebugEncSrc.u32SocpGetWBufEncSrcSucCnt[u32ChanID]++;
     }
-    else if (SOCP_DECODER_SRC_CHAN == u32ChanType) /* 解码通道 */
+    else if (SOCP_DECODER_SRC_CHAN == u32ChanType) /* ???????? */
     {
         g_stSocpDebugInfo.sSocpDebugDecSrc.u32SocpGetWBufDecSrcEtrCnt[u32ChanID]++;
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_chan_id(u32ChanID, SOCP_MAX_DECSRC_CHN)) != BSP_OK)
         {
             return ret;
@@ -3948,16 +3948,16 @@ s32 bsp_socp_get_write_buff(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_write_done
+* ?? ?? ??  : bsp_socp_write_done
 *
-* 功能描述  : 写数据完成函数
+* ????????  : ??????????????
 *
-* 输入参数  : u32SrcChanID    源通道ID
-              u32WrtSize      写入数据的长度
+* ????????  : u32SrcChanID    ??????ID
+              u32WrtSize      ??????????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 操作完成与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_write_done(u32 u32SrcChanID, u32 u32WrtSize)
 {
@@ -3968,31 +3968,31 @@ s32 bsp_socp_write_done(u32 u32SrcChanID, u32 u32WrtSize)
     u32  uPAddr;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(0 == u32WrtSize)
     {
         socp_error("the u32WrtSize is 0\n");
         return BSP_ERR_SOCP_NULL;
     }
 
-    /* 获得实际通道id */
+    /* ????????????id */
     u32ChanID   = SOCP_REAL_CHAN_ID(u32SrcChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32SrcChanID);
 
-    /* 编码通道 */
+    /* ???????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         SOCP_ENCSRC_CHAN_S *pChan;
 
         g_stSocpDebugInfo.sSocpDebugEncSrc.u32socp_write_doneEncSrcEtrCnt[u32ChanID]++;
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_encsrc_chan_id(u32ChanID)) != BSP_OK)
         {
             return ret;
@@ -4023,21 +4023,21 @@ s32 bsp_socp_write_done(u32 u32SrcChanID, u32 u32WrtSize)
             return BSP_ERR_SOCP_INVALID_PARA;
         }
 
-        /* 设置读写指针 */
+        /* ???????????? */
         socp_write_done(&pChan->sEncSrcBuf, u32WrtSize);
 
-        /* 写入写指针到写指针寄存器*/
-        uPAddr = pChan->sEncSrcBuf.u32Write; /* [false alarm]:屏蔽Fortify错误 */
+        /* ????????????????????????*/
+        uPAddr = pChan->sEncSrcBuf.u32Write; /* [false alarm]:????Fortify???? */
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_BUFWPTR(u32ChanID), uPAddr);
         g_stSocpDebugInfo.sSocpDebugEncSrc.u32socp_write_doneEncSrcSucCnt[u32ChanID]++;
     }
-    else  if(SOCP_DECODER_SRC_CHAN == u32ChanType) /* 解码通道 */
+    else  if(SOCP_DECODER_SRC_CHAN == u32ChanType) /* ???????? */
     {
         SOCP_DECSRC_CHAN_S  *pChan;
 
         g_stSocpDebugInfo.sSocpDebugDecSrc.u32socp_write_doneDecSrcEtrCnt[u32ChanID]++;
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_chan_id(u32ChanID, SOCP_MAX_DECSRC_CHN)) != BSP_OK)
         {
             return ret;
@@ -4061,11 +4061,11 @@ s32 bsp_socp_write_done(u32 u32SrcChanID, u32 u32WrtSize)
             return BSP_ERR_SOCP_INVALID_PARA;
         }
 
-        /* 设置读写指针 */
+        /* ???????????? */
         socp_write_done(&pChan->sDecSrcBuf, u32WrtSize);
 
-        /* 写入写指针到写指针寄存器*/
-        uPAddr = pChan->sDecSrcBuf.u32Write; /* [false alarm]:屏蔽Fortify错误 */
+        /* ????????????????????????*/
+        uPAddr = pChan->sDecSrcBuf.u32Write; /* [false alarm]:????Fortify???? */
         SOCP_REG_WRITE(SOCP_REG_DECSRC_BUFWPTR(u32ChanID), uPAddr);
         g_stSocpDebugInfo.sSocpDebugDecSrc.u32socp_write_doneDecSrcSucCnt[u32ChanID]++;
     }
@@ -4079,16 +4079,16 @@ s32 bsp_socp_write_done(u32 u32SrcChanID, u32 u32WrtSize)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_register_rd_cb
+* ?? ?? ??  : bsp_socp_register_rd_cb
 *
-* 功能描述  : RDbuffer回调函数注册函数
+* ????????  : RDbuffer????????????????
 *
-* 输入参数  : u32SrcChanID    源通道ID
-              RdCB            RDbuffer完成回调函数
+* ????????  : u32SrcChanID    ??????ID
+              RdCB            RDbuffer????????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 注册成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_register_rd_cb(u32 u32SrcChanID, socp_rd_cb RdCB)
 {
@@ -4096,17 +4096,17 @@ s32 bsp_socp_register_rd_cb(u32 u32SrcChanID, socp_rd_cb RdCB)
     u32 u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 获取通道类型和实际的通道ID */
+    /* ????????????????????????ID */
     u32RealChanID = SOCP_REAL_CHAN_ID(u32SrcChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32SrcChanID);
 
-    /* 编码通道 */
+    /* ???????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         if((ret=socp_check_encsrc_chan_id(u32RealChanID)) != BSP_OK)
@@ -4120,7 +4120,7 @@ s32 bsp_socp_register_rd_cb(u32 u32SrcChanID, socp_rd_cb RdCB)
 
         if (SOCP_ENCSRC_CHNMODE_LIST == g_strSocpStat.sEncSrcChan[u32RealChanID].eChnMode)
         {
-            /* 设置对应通道的回调函数*/
+            /* ??????????????????????*/
             g_strSocpStat.sEncSrcChan[u32RealChanID].rd_cb = RdCB;
         }
         else
@@ -4141,15 +4141,15 @@ s32 bsp_socp_register_rd_cb(u32 u32SrcChanID, socp_rd_cb RdCB)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_get_rd_buffer
+* ?? ?? ??  : bsp_socp_get_rd_buffer
 *
-* 功能描述  : 获取RDbuffer函数
+* ????????  : ????RDbuffer????
 *
-* 输入参数  : u32SrcChanID    源通道ID
+* ????????  : u32SrcChanID    ??????ID
 *
-* 输出参数  : pBuff           获取的RDbuffer
+* ????????  : pBuff           ??????RDbuffer
 *
-* 返 回 值  : 获取成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 /* cov_verified_start */
 s32 bsp_socp_get_rd_buffer(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
@@ -4159,29 +4159,29 @@ s32 bsp_socp_get_rd_buffer(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
     u32 uPAddr;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pBuff)
     {
         socp_error("the parameter is NULL\n");
         return BSP_ERR_SOCP_NULL;
     }
 
-    /* 获得实际通道id */
+    /* ????????????id */
     u32ChanID   = SOCP_REAL_CHAN_ID(u32SrcChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32SrcChanID);
 
-    /* 编码通道 */
+    /* ???????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         g_stSocpDebugInfo.sSocpDebugEncSrc.u32SocpGetRdBufEncSrcEtrCnt[u32ChanID]++;
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_encsrc_chan_id(u32ChanID)) != BSP_OK)
         {
             return ret;
@@ -4191,7 +4191,7 @@ s32 bsp_socp_get_rd_buffer(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
             return ret;
         }
 
-        /* 根据读写指针获取buffer */
+        /* ????????????????buffer */
         SOCP_REG_READ(SOCP_REG_ENCSRC_RDQRPTR(u32ChanID), uPAddr);
         g_strSocpStat.sEncSrcChan[u32ChanID].sRdBuf.u32Read = uPAddr;
         SOCP_REG_READ(SOCP_REG_ENCSRC_RDQWPTR(u32ChanID), uPAddr);
@@ -4210,16 +4210,16 @@ s32 bsp_socp_get_rd_buffer(u32 u32SrcChanID, SOCP_BUFFER_RW_STRU *pBuff)
 
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_read_rd_done
+* ?? ?? ??  : bsp_socp_read_rd_done
 *
-* 功能描述  : 读取RDbuffer数据完成函数
+* ????????  : ????RDbuffer????????????
 *
-* 输入参数  : u32SrcChanID   源通道ID
-              u32RDSize      读取的RDbuffer数据长度
+* ????????  : u32SrcChanID   ??????ID
+              u32RDSize      ??????RDbuffer????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 读取成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_read_rd_done(u32 u32SrcChanID, u32 u32RDSize)
 {
@@ -4229,31 +4229,31 @@ s32 bsp_socp_read_rd_done(u32 u32SrcChanID, u32 u32RDSize)
     u32  uPAddr;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(0 == u32RDSize)
     {
         socp_error("the u32RDSize is 0\n");
         return BSP_ERR_SOCP_NULL;
     }
 
-    /* 获得实际通道id */
+    /* ????????????id */
     u32ChanID   = SOCP_REAL_CHAN_ID(u32SrcChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32SrcChanID);
 
-    /* 编码通道 */
+    /* ???????? */
     if (SOCP_CODER_SRC_CHAN == u32ChanType)
     {
         SOCP_ENCSRC_CHAN_S *pChan;
 
         g_stSocpDebugInfo.sSocpDebugEncSrc.u32SocpReadRdDoneEncSrcEtrCnt[u32ChanID]++;
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_encsrc_chan_id(u32ChanID)) != BSP_OK)
         {
             return ret;
@@ -4266,7 +4266,7 @@ s32 bsp_socp_read_rd_done(u32 u32SrcChanID, u32 u32RDSize)
         pChan = &g_strSocpStat.sEncSrcChan[u32ChanID];
         g_strSocpStat.sEncSrcChan[u32ChanID].u32LastRdSize = 0;
 
-        /* 设置读写指针 */
+        /* ???????????? */
         SOCP_REG_READ(SOCP_REG_ENCSRC_RDQWPTR(u32ChanID), uPAddr);
         pChan->sRdBuf.u32Write = uPAddr;
         SOCP_REG_READ(SOCP_REG_ENCSRC_RDQRPTR(u32ChanID), uPAddr);
@@ -4283,8 +4283,8 @@ s32 bsp_socp_read_rd_done(u32 u32SrcChanID, u32 u32RDSize)
 
         socp_read_done(&pChan->sRdBuf, u32RDSize);
 
-        /* 写入读指针到读指针寄存器*/
-        uPAddr= pChan->sRdBuf.u32Read; /* [false alarm]:屏蔽Fortify错误 */
+        /* ????????????????????????*/
+        uPAddr= pChan->sRdBuf.u32Read; /* [false alarm]:????Fortify???? */
         SOCP_REG_WRITE(SOCP_REG_ENCSRC_RDQRPTR(u32ChanID), uPAddr);
         g_stSocpDebugInfo.sSocpDebugEncSrc.u32SocpReadRdDoneEncSrcSucCnt[u32ChanID]++;
     }
@@ -4298,18 +4298,18 @@ s32 bsp_socp_read_rd_done(u32 u32SrcChanID, u32 u32RDSize)
 }
 /* cov_verified_stop */
 
-//以下目的通道专用
+//????????????????
 /*****************************************************************************
-* 函 数 名  : bsp_socp_register_read_cb
+* ?? ?? ??  : bsp_socp_register_read_cb
 *
-* 功能描述  : 读数据回调函数注册函数
+* ????????  : ??????????????????????
 *
-* 输入参数  : u32DestChanID  目的通道邋ID
-              ReadCB         读数据回调函数
+* ????????  : u32DestChanID  ??????????ID
+              ReadCB         ??????????????
 *
-* 输出参数  :
+* ????????  :
 *
-* 返 回 值  : 注册成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_register_read_cb(u32 u32DestChanID, socp_read_cb ReadCB)
 {
@@ -4317,17 +4317,17 @@ s32 bsp_socp_register_read_cb(u32 u32DestChanID, socp_read_cb ReadCB)
     u32 u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 获取通道类型和实际的通道ID */
+    /* ????????????????????????ID */
     u32RealChanID = SOCP_REAL_CHAN_ID(u32DestChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32DestChanID);
 
-    if (SOCP_DECODER_DEST_CHAN == u32ChanType) /* 解码通道 */
+    if (SOCP_DECODER_DEST_CHAN == u32ChanType) /* ???????? */
     {
         if((ret=socp_check_chan_id(u32RealChanID, SOCP_MAX_DECDST_CHN)) != BSP_OK)
         {
@@ -4342,7 +4342,7 @@ s32 bsp_socp_register_read_cb(u32 u32DestChanID, socp_read_cb ReadCB)
 
         g_stSocpDebugInfo.sSocpDebugDecDst.u32SocpRegReadCBDecDstCnt[u32RealChanID]++;
     }
-    else if (SOCP_CODER_DEST_CHAN == u32ChanType)/* 编码通道 */
+    else if (SOCP_CODER_DEST_CHAN == u32ChanType)/* ???????? */
     {
         if((ret=socp_check_chan_id(u32RealChanID, SOCP_MAX_ENCDST_CHN)) != BSP_OK)
         {
@@ -4353,7 +4353,7 @@ s32 bsp_socp_register_read_cb(u32 u32DestChanID, socp_read_cb ReadCB)
             return ret;
         }
 
-        /* 设置对应通道的回调函数*/
+        /* ??????????????????????*/
         g_strSocpStat.sEncDstChan[u32RealChanID].read_cb = ReadCB;
 
         g_stSocpDebugInfo.sSocpDebugEncDst.u32SocpRegReadCBEncDstCnt[u32RealChanID]++;
@@ -4368,15 +4368,15 @@ s32 bsp_socp_register_read_cb(u32 u32DestChanID, socp_read_cb ReadCB)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_get_read_buff
+* ?? ?? ??  : bsp_socp_get_read_buff
 *
-* 功能描述  : 获取读数据buffer函数
+* ????????  : ??????????buffer????
 *
-* 输入参数  : u32DestChanID  目的通道buffer
+* ????????  : u32DestChanID  ????????buffer
 
-* 输出参数  : pBuffer        获取的读数据buffer
+* ????????  : pBuffer        ????????????buffer
 *
-* 返 回 值  : 获取成功与否的标识码
+* ?? ?? ??  : ????????????????????
 *****************************************************************************/
 s32 bsp_socp_get_read_buff(u32 u32DestChanID, SOCP_BUFFER_RW_STRU *pBuffer)
 {
@@ -4385,30 +4385,30 @@ s32 bsp_socp_get_read_buff(u32 u32DestChanID, SOCP_BUFFER_RW_STRU *pBuffer)
     u32  uPAddr;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /* 判断参数有效性 */
+    /* ?????????????? */
     if(NULL == pBuffer)
     {
         socp_error("the parameter is NULL\n");
         return BSP_ERR_SOCP_NULL;
     }
 
-    /* 获得实际通道id */
+    /* ????????????id */
     u32ChanID   = SOCP_REAL_CHAN_ID(u32DestChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32DestChanID);
     pBuffer->u32Size   = 0;
     pBuffer->u32RbSize = 0;
 
-    if (SOCP_DECODER_DEST_CHAN == u32ChanType) /* 解码通道 */
+    if (SOCP_DECODER_DEST_CHAN == u32ChanType) /* ???????? */
     {
         g_stSocpDebugInfo.sSocpDebugDecDst.u32SocpGetReadBufDecDstEtrCnt[u32ChanID]++;
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_chan_id(u32ChanID, SOCP_MAX_DECDST_CHN)) != BSP_OK)
         {
             return ret;
@@ -4417,7 +4417,7 @@ s32 bsp_socp_get_read_buff(u32 u32DestChanID, SOCP_BUFFER_RW_STRU *pBuffer)
         {
             return ret;
         }
-        /* 根据读写指针获取buffer */
+        /* ????????????????buffer */
         SOCP_REG_READ(SOCP_REG_DECDEST_BUFRPTR(u32ChanID), uPAddr);
         g_strSocpStat.sDecDstChan[u32ChanID].sDecDstBuf.u32Read = uPAddr;
         SOCP_REG_READ(SOCP_REG_DECDEST_BUFWPTR(u32ChanID), uPAddr);
@@ -4429,7 +4429,7 @@ s32 bsp_socp_get_read_buff(u32 u32DestChanID, SOCP_BUFFER_RW_STRU *pBuffer)
     {
 
         g_stSocpDebugInfo.sSocpDebugEncDst.u32SocpGetReadBufEncDstEtrCnt[u32ChanID]++;
-        /*deflate使能获取deflate buffer*/
+        /*deflate????????deflate buffer*/
         if((SOCP_COMPRESS == g_strSocpStat.sEncDstChan[u32ChanID].struCompress.bcompress )
             &&(g_strSocpStat.sEncDstChan[u32ChanID].struCompress.ops.getbuffer))
         {
@@ -4437,7 +4437,7 @@ s32 bsp_socp_get_read_buff(u32 u32DestChanID, SOCP_BUFFER_RW_STRU *pBuffer)
 
         }
 
-        /* 检验通道id */
+        /* ????????id */
         if((ret=socp_check_chan_id(u32ChanID, SOCP_MAX_ENCDST_CHN)) != BSP_OK)
         {
             return ret;
@@ -4447,7 +4447,7 @@ s32 bsp_socp_get_read_buff(u32 u32DestChanID, SOCP_BUFFER_RW_STRU *pBuffer)
             return ret;
         }
 
-        /* 根据读写指针获取buffer */
+        /* ????????????????buffer */
         SOCP_REG_READ(SOCP_REG_ENCDEST_BUFRPTR(u32ChanID), uPAddr);
         g_strSocpStat.sEncDstChan[u32ChanID].sEncDstBuf.u32Read = uPAddr;
         SOCP_REG_READ(SOCP_REG_ENCDEST_BUFWPTR(u32ChanID), uPAddr);
@@ -4478,7 +4478,7 @@ s32 socp_decode_read_data_done(u32 u32ChanID, u32 u32ReadSize)
 
     g_stSocpDebugInfo.sSocpDebugDecDst.u32socp_read_doneDecDstEtrCnt[u32ChanID]++;
 
-    /* 检验通道id */
+    /* ????????id */
     if((ret=socp_check_chan_id(u32ChanID, SOCP_MAX_DECDST_CHN)) != BSP_OK)
     {
         return ret;
@@ -4509,11 +4509,11 @@ s32 socp_decode_read_data_done(u32 u32ChanID, u32 u32ReadSize)
         return BSP_ERR_SOCP_INVALID_PARA;
     }
 
-    /* 设置读写指针 */
+    /* ???????????? */
     socp_read_done(&pChan->sDecDstBuf, u32ReadSize);
 
-    /* 写入写指针到写指针寄存器*/
-    uPAddr = pChan->sDecDstBuf.u32Read; /* [false alarm]:屏蔽Fortify错误 */
+    /* ????????????????????????*/
+    uPAddr = pChan->sDecDstBuf.u32Read; /* [false alarm]:????Fortify???? */
     SOCP_REG_WRITE(SOCP_REG_DECDEST_BUFRPTR(u32ChanID), uPAddr);
 
     spin_lock_irqsave(&lock, lock_flag);
@@ -4582,7 +4582,7 @@ s32 socp_encode_read_data_done(u32 u32ChanID, u32 u32ReadSize)
 
     g_stSocpDebugInfo.sSocpDebugEncDst.u32socp_read_doneEncDstEtrCnt[u32ChanID]++;
 
-    /* 检验通道id */
+    /* ????????id */
     if((ret = socp_check_chan_id(u32ChanID, SOCP_MAX_ENCDST_CHN)) != BSP_OK)
     {
         return ret;
@@ -4595,7 +4595,7 @@ s32 socp_encode_read_data_done(u32 u32ChanID, u32 u32ReadSize)
     {
         g_stEncDstStat[g_ulEncDstStatCount].ulReadDoneStartSlice = bsp_get_slice_value();
     }
-    /*判断deflate使能，deflate readdone*/
+    /*????deflate??????deflate readdone*/
     if(( SOCP_COMPRESS == g_strSocpStat.sEncDstChan[u32ChanID].struCompress.bcompress)
         &&(g_strSocpStat.sEncDstChan[u32ChanID].struCompress.ops.readdone))
     {
@@ -4615,7 +4615,7 @@ s32 socp_encode_read_data_done(u32 u32ChanID, u32 u32ReadSize)
     spin_lock_irqsave(&lock, lock_flag);
 
     curmodestate = bsp_socp_mode_ex(u32ChanID);
-    if(0 != curmodestate)   /* ctrl & state 不是阻塞模式*/
+    if(0 != curmodestate)   /* ctrl & state ????????????*/
     {
         spin_unlock_irqrestore(&lock, lock_flag);
         socp_error("no block mode, curmodestate=0x%x\n",curmodestate);
@@ -4644,11 +4644,11 @@ s32 socp_encode_read_data_done(u32 u32ChanID, u32 u32ReadSize)
         return BSP_ERR_SOCP_INVALID_PARA;
     }
 
-    /* 设置读写指针 */
+    /* ???????????? */
     socp_read_done(&pChan->sEncDstBuf, u32ReadSize);
 
-    /* 写入读指针到读指针寄存器*/
-    uPAddr2 = pChan->sEncDstBuf.u32Read; /* [false alarm]:屏蔽Fortify错误 */
+    /* ????????????????????????*/
+    uPAddr2 = pChan->sEncDstBuf.u32Read; /* [false alarm]:????Fortify???? */
     /*lint -save -e732*/
     SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFRPTR(u32ChanID), uPAddr2);
     SOCP_REG_READ(SOCP_REG_ENCDEST_BUFRPTR(u32ChanID), uPAddr3);
@@ -4670,15 +4670,15 @@ s32 socp_encode_read_data_done(u32 u32ChanID, u32 u32ReadSize)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_read_data_done
+* ?? ?? ??  : bsp_socp_read_data_done
 *
-* 功能描述  : 读数据完成函数
+* ????????  : ??????????????
 *
-* 输入参数  : u32DestChanID    目的通道ID
-*             u32ReadSize      读取数据大小
-* 输出参数  : 无
+* ????????  : u32DestChanID    ????????ID
+*             u32ReadSize      ????????????
+* ????????  : ??
 *
-* 返 回 值  : 读数据成功与否的标识码
+* ?? ?? ??  : ??????????????????????
 *****************************************************************************/
 s32 bsp_socp_read_data_done(u32 u32DestChanID, u32 u32ReadSize)
 {
@@ -4686,24 +4686,24 @@ s32 bsp_socp_read_data_done(u32 u32DestChanID, u32 u32ReadSize)
     u32 u32ChanType;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
 
-    /*统计socp目的端上溢次数，上溢判断在接口内部实现*/
+    /*????socp??????????????????????????????????????*/
     socp_encdst_overflow_info();
 
-    /* 获得实际通道id */
+    /* ????????????id */
     u32ChanID   = SOCP_REAL_CHAN_ID(u32DestChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32DestChanID);
 
-    if (SOCP_DECODER_DEST_CHAN == u32ChanType) /* 解码通道 */
+    if (SOCP_DECODER_DEST_CHAN == u32ChanType) /* ???????? */
     {
         ret = socp_decode_read_data_done(u32ChanID, u32ReadSize);
     }
-    else if (SOCP_CODER_DEST_CHAN == u32ChanType)/* 编码通道 */
+    else if (SOCP_CODER_DEST_CHAN == u32ChanType)/* ???????? */
     {
         ret = socp_encode_read_data_done(u32ChanID, u32ReadSize);
     }
@@ -4718,15 +4718,15 @@ s32 bsp_socp_read_data_done(u32 u32DestChanID, u32 u32ReadSize)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_set_bbp_enable
+* ?? ?? ??  : bsp_socp_set_bbp_enable
 *
-* 功能描述  : 使能/禁止BPP LOG和数采
+* ????????  : ????/????BPP LOG??????
 *
-* 输入参数  : bEnable       使能标识
+* ????????  : bEnable       ????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 读数据成功与否的标识码
+* ?? ?? ??  : ??????????????????????
 *****************************************************************************/
 /* cov_verified_start */
 s32 bsp_socp_set_bbp_enable(int bEnable)
@@ -4744,15 +4744,15 @@ s32 bsp_socp_set_bbp_enable(int bEnable)
 
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_set_bbp_ds_mode
+* ?? ?? ??  : bsp_socp_set_bbp_ds_mode
 *
-* 功能描述  : 设置BPP数采模式
+* ????????  : ????BPP????????
 *
-* 输入参数  : eDsMode    数采模式
+* ????????  : eDsMode    ????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :
+* ?? ?? ??  :
 *****************************************************************************/
 s32 bsp_socp_set_bbp_ds_mode(SOCP_BBP_DS_MODE_ENUM_UIN32 eDsMode)
 {
@@ -4775,7 +4775,7 @@ void bsp_socp_set_enc_dst_threshold(bool mode,u32 u32DestChanID)
     u32DestChanID = SOCP_REAL_CHAN_ID(u32DestChanID);
 
     SOCP_REG_READ(SOCP_REG_ENCDEST_BUFCFG(u32DestChanID),bufLength);
-    if(mode == true)/*true为需要打开延时上报的场景*/
+    if(mode == true)/*true????????????????????????*/
     {
         threshold = (bufLength >> 2)*3;
     }
@@ -4792,15 +4792,15 @@ void bsp_socp_set_enc_dst_threshold(bool mode,u32 u32DestChanID)
 
 #ifdef CONFIG_DEFLATE
 /*****************************************************************************
-* 函 数 名  : bsp_socp_compress_enable
+* ?? ?? ??  : bsp_socp_compress_enable
 *
-* 功能描述  : deflate 压缩使能
+* ????????  : deflate ????????
 *
-* 输入参数  : 压缩目的通道ID
+* ????????  : ????????????ID
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :压缩成功与否标志
+* ?? ?? ??  :????????????????
 *****************************************************************************/
 s32 bsp_socp_compress_enable(u32 u32DestChanID)
 {
@@ -4815,7 +4815,7 @@ s32 bsp_socp_compress_enable(u32 u32DestChanID)
     SOCP_CODER_DEST_CHAN_S attr;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
@@ -4838,7 +4838,7 @@ s32 bsp_socp_compress_enable(u32 u32DestChanID)
         socp_error("socp_compress_enable invalid!\n");
         return BSP_ERROR;
     }
-    /*停SOCP*/
+    /*??SOCP*/
     SOCP_REG_SETBITS(SOCP_REG_GBLRST, 16, 1, 1);
     /*lint -save -e732*/
     SOCP_REG_READ(SOCP_REG_ENCSTAT,SocpIdleState);
@@ -4851,7 +4851,7 @@ s32 bsp_socp_compress_enable(u32 u32DestChanID)
     }
     /*lint -restore +e732*/
 
-    /*读写指针重置，当前数据丢弃*/
+    /*??????????????????????????*/
 #ifdef FEATURE_SOCP_ADDR_64BITS
 	SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFRPTR(u32RealChanID),0);
 	SOCP_REG_WRITE(SOCP_REG_ENCDEST_BUFWPTR(u32RealChanID), 0);
@@ -4872,12 +4872,12 @@ s32 bsp_socp_compress_enable(u32 u32DestChanID)
     pChan->struCompress.ops.set(u32DestChanID,&attr);
     pChan->struCompress.ops.register_Readcb(pChan->read_cb);
     pChan->struCompress.ops.register_Eventcb(pChan->event_cb);
-    /*压缩使能*/
+    /*????????*/
     pChan->struCompress.ops.enable(u32DestChanID);
 
-    /*清非压缩通道原始中断，屏蔽中断状态*/
+    /*??????????????????????????????????*/
     bsp_socp_data_send_manager(u32DestChanID,0);
-    /*使能SOCP*/
+    /*????SOCP*/
     /*lint -save -e845*/
     SOCP_REG_SETBITS(SOCP_REG_GBLRST, 16, 1, 0);
     /*lint -restore +e845*/
@@ -4886,15 +4886,15 @@ s32 bsp_socp_compress_enable(u32 u32DestChanID)
     return BSP_OK;
 }
 /*****************************************************************************
-* 函 数 名  : bsp_socp_compress_disable
+* ?? ?? ??  : bsp_socp_compress_disable
 *
-* 功能描述  : deflate 压缩停止
+* ????????  : deflate ????????
 *
-* 输入参数  : 压缩目的通道ID
+* ????????  : ????????????ID
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :压缩停止成功与否标志
+* ?? ?? ??  :????????????????????
 *****************************************************************************/
 s32 bsp_socp_compress_disable(u32 u32DestChanID)
 {
@@ -4906,12 +4906,12 @@ s32 bsp_socp_compress_disable(u32 u32DestChanID)
     u32 cnt=500;
     s32 ret;
 
-    /* 判断是否已经初始化 */
+    /* ?????????????????? */
     if((ret=socp_check_init()) != BSP_OK)
     {
         return ret;
     }
-    /*检查参数是否有效*/
+    /*????????????????*/
     u32RealChanID = SOCP_REAL_CHAN_ID(u32DestChanID);
     u32ChanType = SOCP_REAL_CHAN_TYPE(u32DestChanID);
     pChan = &g_strSocpStat.sEncDstChan[u32RealChanID];
@@ -4927,7 +4927,7 @@ s32 bsp_socp_compress_disable(u32 u32DestChanID)
     }
 
     /*lint -save -e732*/
-     /*停SOCP*/
+     /*??SOCP*/
     SOCP_REG_SETBITS(SOCP_REG_GBLRST, 16, 1, 1);
     SOCP_REG_READ(SOCP_REG_ENCSTAT,SocpIdleState);
 
@@ -4945,7 +4945,7 @@ s32 bsp_socp_compress_disable(u32 u32DestChanID)
     bsp_socp_data_send_manager(u32DestChanID,1);
 
 
-    /*使能SOCP*/
+    /*????SOCP*/
     SOCP_REG_SETBITS(SOCP_REG_GBLRST, 16, 1, 0);
     /*lint -restore +e845*/
     pChan->struCompress.bcompress=SOCP_NO_COMPRESS;
@@ -4953,15 +4953,15 @@ s32 bsp_socp_compress_disable(u32 u32DestChanID)
     return BSP_OK;
 }
 /*****************************************************************************
-* 函 数 名  : bsp_socp_register_compress
+* ?? ?? ??  : bsp_socp_register_compress
 *
-* 功能描述  : 压缩函数注册
+* ????????  : ????????????
 *
-* 输入参数  : 注册函数结构体
+* ????????  : ??????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  :注册成功与否标志
+* ?? ?? ??  :????????????????
 *****************************************************************************/
 s32 bsp_socp_register_compress(socp_compress_ops_stru *ops)
 {
@@ -4984,15 +4984,15 @@ s32 bsp_socp_register_compress(socp_compress_ops_stru *ops)
 
 #endif
 /*****************************************************************************
-* 函 数 名  : bsp_socp_mode_change_chip_bugfix
+* ?? ?? ??  : bsp_socp_mode_change_chip_bugfix
 *
-* 功能描述  : 软件修复芯片在模式切换的时候需要读走一部分数据的bug
+* ????????  : ????????????????????????????????????????????????bug
 *
-* 输入参数  : 通道号
+* ????????  : ??????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 void bsp_socp_mode_change_chip_bugfix(u32 chanid)
 {
@@ -5028,15 +5028,15 @@ void bsp_socp_mode_change_chip_bugfix(u32 chanid)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_encdst_set_cycle
+* ?? ?? ??  : bsp_socp_encdst_set_cycle
 *
-* 功能描述  : SOCP循环模式设置
+* ????????  : SOCP????????????
 *
-* 输入参数  : 通道号、模式
+* ????????  : ????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 /*lint -save -e647*/
 s32 bsp_socp_encdst_set_cycle(u32 chanid, u32 cycle)
@@ -5046,7 +5046,7 @@ s32 bsp_socp_encdst_set_cycle(u32 chanid, u32 cycle)
     u32 u32ChanID = SOCP_REAL_CHAN_ID(chanid);
     u32 waittime = 10000;
 
-    /* 关闭自动时钟门控，否则上报模式配置不生效 */
+    /* ???????????????????????????????????????? */
     SOCP_REG_SETBITS(SOCP_REG_CLKCTRL,0,1,0);
 
     if(socp_version < SOCP_206_VERSION)
@@ -5093,7 +5093,7 @@ s32 bsp_socp_encdst_set_cycle(u32 chanid, u32 cycle)
         {
             g_stSocpDebugInfo.sSocpDebugEncDst.u32SocpEncDstModeChangeFailCnt[u32ChanID]++;
             socp_error("set encdst cycle off timeout!\n");
-            /* 关闭自动时钟门控，否则上报模式配置不生效 */
+            /* ???????????????????????????????????????? */
             SOCP_REG_SETBITS(SOCP_REG_CLKCTRL,0,1,1);
             return BSP_ERROR;
         }
@@ -5147,22 +5147,22 @@ s32 bsp_socp_encdst_set_cycle(u32 chanid, u32 cycle)
         }
     }
 
-    /* 关闭自动时钟门控，否则上报模式配置不生效 */
+    /* ???????????????????????????????????????? */
     SOCP_REG_SETBITS(SOCP_REG_CLKCTRL,0,1,1);
     return BSP_OK;
 }
 /*lint -restore +e647*/
 
 /*****************************************************************************
-* 函 数 名   : socp_enc_dst_stat
+* ?? ?? ??   : socp_enc_dst_stat
 *
-* 功能描述  : 获取socp打印信息
+* ????????  : ????socp????????
 *
-* 输入参数  : 无
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值   : 无
+* ?? ?? ??   : ??
 *****************************************************************************/
 void show_socp_enc_dst_stat(void)
 {
@@ -5182,14 +5182,14 @@ void show_socp_enc_dst_stat(void)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_encdst_overflow_info
+* ?? ?? ??  : socp_encdst_overflow_info
 *
-* 功能描述  : 统计socp目的端阈值上溢
+* ????????  : ????socp??????????????
 *
-* 输入参数  : 无
-* 输出参数  :
+* ????????  : ??
+* ????????  :
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 void socp_encdst_overflow_info(void)
 {
@@ -5203,14 +5203,14 @@ void socp_encdst_overflow_info(void)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_SocpEncDstQueryIntInfo
+* ?? ?? ??  : bsp_SocpEncDstQueryIntInfo
 *
-* 功能描述  : 提供给diag_debug查询socp数据通道目的端中断信息
+* ????????  : ??????diag_debug????socp??????????????????????
 *
-* 输入参数  : 无
-* 输出参数  :
+* ????????  : ??
+* ????????  :
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 void bsp_SocpEncDstQueryIntInfo(u32 *TrfInfo, u32 *ThrOvfInfo)
 {
@@ -5219,14 +5219,14 @@ void bsp_SocpEncDstQueryIntInfo(u32 *TrfInfo, u32 *ThrOvfInfo)
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_clear_socp_encdst_int_info
+* ?? ?? ??  : bsp_clear_socp_encdst_int_info
 *
-* 功能描述  : 清空socp目的端上溢统计值
+* ????????  : ????socp????????????????
 *
-* 输入参数  : 无
-* 输出参数  :
+* ????????  : ??
+* ????????  :
 *
-* 返 回 值  : 无
+* ?? ?? ??  : ??
 *****************************************************************************/
 void bsp_clear_socp_encdst_int_info(void)
 {
@@ -5234,7 +5234,7 @@ void bsp_clear_socp_encdst_int_info(void)
     g_SocpEncDstThresholdOvf = 0;
 }
 #define MALLOC_MAX_SIZE     0x100000
-#define MALLOC_MAX_INDEX    8           /*page_size 为4K*/
+#define MALLOC_MAX_INDEX    8           /*page_size ??4K*/
 #define SOCP_PAGE_SIZE      0x1000
 
 //__inline
@@ -5267,7 +5267,7 @@ void* socp_malloc(u32 u32Size)
     }
 
     index = 4;
-    /* 分配内存 */
+    /* ???????? */
     pItem = (u8*)__get_free_pages(GFP_KERNEL,index);
     if(!pItem)
     {
@@ -5288,8 +5288,8 @@ s32 socp_free(void* pMem)
     return BSP_OK;
 }
 
-/* 低功耗相关 begin */
-/* 低功耗部分暂不修改 */
+/* ?????????? begin */
+/* ?????????????????? */
 /* cov_verified_start */
 void BSP_SOCP_DrxRestoreRegAppOnly(void)
 {
@@ -5325,12 +5325,12 @@ void BSP_SOCP_DrxRestoreRegAppOnly(void)
 /* cov_verified_stop */
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_get_state
+* ?? ?? ??  : bsp_socp_get_state
 *
-* 功能描述  : 获取SOCP状态
+* ????????  : ????SOCP????
 *
-* 返 回 值  : SOCP_IDLE    空闲
-*             SOCP_BUSY    忙碌
+* ?? ?? ??  : SOCP_IDLE    ????
+*             SOCP_BUSY    ????
 *****************************************************************************/
 SOCP_STATE_ENUM_UINT32 bsp_socp_get_state(void)
 {
@@ -5348,15 +5348,15 @@ SOCP_STATE_ENUM_UINT32 bsp_socp_get_state(void)
 }
 
 /*****************************************************************************
-* 函 数 名  : socp_is_encdst_chan_empty
+* ?? ?? ??  : socp_is_encdst_chan_empty
 *
-* 功能描述  : SOCP编码目的通道是否有数据
+* ????????  : SOCP??????????????????????
 *
-* 输入参数  : 无
+* ????????  : ??
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : u32 0:无数据 非0:对应通道置位
+* ?? ?? ??  : u32 0:?????? ??0:????????????
 *****************************************************************************/
 u32 socp_is_encdst_chan_empty(void)
 {
@@ -5365,7 +5365,7 @@ u32 socp_is_encdst_chan_empty(void)
     u32 u32ReadPtr;
     u32 u32WritePtr;
 
-    /* 判断目的通道读写指针是否相等 */
+    /* ???????????????????????????? */
     for(i = 0; i < SOCP_MAX_ENCDST_CHN; i++)
     {
         SOCP_REG_READ(SOCP_REG_ENCDEST_BUFWPTR(i), u32WritePtr);
@@ -5387,15 +5387,15 @@ module_init(socp_init);
 
 
 /*****************************************************************************
-* 函 数 名  : socp_set_clk_autodiv_enable
-* 功能描述  : 调用clk接口clk_disable_unprepare将bypass置0，即开自动降频
-* 输入参数  : 无
-* 输出参数  : 无
-* 返 回 值  : 无
-* 注    意  :
-              clk_prepare_enable 接口与 clk_disable_unprepare 接口必须成对使用
-              clk的自动降频默认处于打开状态，所以
-              必须先进行 clk_prepare_enable 才能进行 clk_disable_unprepare 操作
+* ?? ?? ??  : socp_set_clk_autodiv_enable
+* ????????  : ????clk????clk_disable_unprepare??bypass??0??????????????
+* ????????  : ??
+* ????????  : ??
+* ?? ?? ??  : ??
+* ??    ??  :
+              clk_prepare_enable ?????? clk_disable_unprepare ????????????????
+              clk????????????????????????????????
+              ?????????? clk_prepare_enable ???????? clk_disable_unprepare ????
 *****************************************************************************/
 void bsp_socp_set_clk_autodiv_enable(void)
 {
@@ -5403,29 +5403,29 @@ void bsp_socp_set_clk_autodiv_enable(void)
 
 
 /*****************************************************************************
-* 函 数 名  : socp_set_clk_autodiv_disable
-* 功能描述  : 调用clk接口clk_prepare_enable将bypass置1，即关自动降频
-* 输入参数  : 无
-* 输出参数  : 无
-* 返 回 值  : 无
-* 注    意  :
-              clk_prepare_enable 接口与 clk_disable_unprepare 接口必须成对使用
-              clk的自动降频默认处于打开状态，所以
-              必须先进行 clk_prepare_enable 才能进行 clk_disable_unprepare 操作
+* ?? ?? ??  : socp_set_clk_autodiv_disable
+* ????????  : ????clk????clk_prepare_enable??bypass??1??????????????
+* ????????  : ??
+* ????????  : ??
+* ?? ?? ??  : ??
+* ??    ??  :
+              clk_prepare_enable ?????? clk_disable_unprepare ????????????????
+              clk????????????????????????????????
+              ?????????? clk_prepare_enable ???????? clk_disable_unprepare ????
 *****************************************************************************/
 void bsp_socp_set_clk_autodiv_disable(void)
 {
 }
 
 /*****************************************************************************
-* 函 数 名  : bsp_socp_set_decode_timeout_register
+* ?? ?? ??  : bsp_socp_set_decode_timeout_register
 *
-* 功能描述  :编解码中断超时配置寄存器选择。
-                            1 - 编码通道采用INT_TIMEOUT(0x024)；解码通道采用DEC_INT_TIMEOUT(0x20);
-                            0 - 编解码通道都采用INT_TIMEOUT(0x024)
+* ????????  :??????????????????????????????
+                            1 - ????????????INT_TIMEOUT(0x024)??????????????DEC_INT_TIMEOUT(0x20);
+                            0 - ????????????????INT_TIMEOUT(0x024)
 
 *
-* 返 回 值  :  空
+* ?? ?? ??  :  ??
 *
 *
 *****************************************************************************/

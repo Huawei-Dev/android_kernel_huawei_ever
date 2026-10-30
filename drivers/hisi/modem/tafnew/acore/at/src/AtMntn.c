@@ -48,7 +48,7 @@
 
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 #include "AtMntn.h"
 #include "AtInputProc.h"
@@ -61,22 +61,22 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID        PS_FILE_ID_AT_MNTN_C
 
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  3 枚举定义
+  3 ????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  4 全局变量声明
+  4 ????????????
 *****************************************************************************/
 AT_DEBUG_INFO_STRU                      g_stAtDebugInfo = {VOS_FALSE};
 
@@ -85,33 +85,33 @@ AT_MNTN_STATS_STRU                      g_stAtStatsInfo;
 AT_MNTN_MSG_RECORD_INFO_STRU            g_stAtMsgRecordInfo;
 
 /*****************************************************************************
-  5 消息头定义
+  5 ??????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  6 消息定义
+  6 ????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  7 STRUCT定义
+  7 STRUCT????
 *****************************************************************************/
 
 /*****************************************************************************
-  8 UNION定义
+  8 UNION????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  9 OTHERS定义
+  9 OTHERS????
 *****************************************************************************/
 extern VOS_VOID* GUNAS_FilterAtToAtMsg(
     PS_MSG_HEADER_STRU                 *pstMsg
 );
 
 /*****************************************************************************
-  10 函数实现
+  10 ????????
 *****************************************************************************/
 
 VOS_VOID AT_InitMntnCtx(VOS_VOID)
@@ -229,7 +229,7 @@ VOS_VOID AT_MNTN_TraceEvent(VOS_VOID *pMsg)
 {
     VOS_VOID                           *pLogPrivacyMsg  = VOS_NULL_PTR;
 
-    /* at模块内部维测消息, 增加脱敏处理 */
+    /* at????????????????, ???????????? */
     pLogPrivacyMsg  = pMsg;
 
     if (VOS_TRUE == AT_GetPrivacyFilterEnableFlg())
@@ -240,7 +240,7 @@ VOS_VOID AT_MNTN_TraceEvent(VOS_VOID *pMsg)
             return;
         }
 
-        /* cnas at命令脱敏过滤函数处理 */
+        /* cnas at???????????????????? */
         pLogPrivacyMsg = AT_PrivacyMatchAtCmd(pMsg);
         if (VOS_NULL_PTR == pLogPrivacyMsg)
         {
@@ -252,7 +252,7 @@ VOS_VOID AT_MNTN_TraceEvent(VOS_VOID *pMsg)
     DIAG_TraceReport(pLogPrivacyMsg);
 
 #if (OSA_CPU_ACPU == VOS_OSA_CPU)
-    /* 如果脱敏处理函数申请了新的at命令字符串，释放掉 */
+    /* ??????????????????????????at?????????????????? */
     if (pLogPrivacyMsg != pMsg)
     {
         VOS_MemFree(WUEPS_PID_AT, pLogPrivacyMsg);
@@ -270,14 +270,14 @@ VOS_VOID AT_MNTN_TraceInputMsc(
 {
     AT_MNTN_MSC_STRU                    stMntnMsc;
 
-    /* 填写消息头 */
+    /* ?????????? */
     AT_MNTN_CFG_MSG_HDR(&stMntnMsc, ID_AT_MNTN_INPUT_MSC, (sizeof(AT_MNTN_MSC_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写消息内容 */
+    /* ???????????? */
     stMntnMsc.ulPortId = ucIndex;
     TAF_MEM_CPY_S(&(stMntnMsc.stDceMscInfo), sizeof(stMntnMsc.stDceMscInfo), pstDceMsc, sizeof(AT_DCE_MSC_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     AT_MNTN_TraceEvent(&stMntnMsc);
 
     return;
@@ -291,14 +291,14 @@ VOS_VOID AT_MNTN_TraceOutputMsc(
 {
     AT_MNTN_MSC_STRU                    stMntnMsc;
 
-    /* 填写消息头 */
+    /* ?????????? */
     AT_MNTN_CFG_MSG_HDR(&stMntnMsc, ID_AT_MNTN_OUTPUT_MSC, (sizeof(AT_MNTN_MSC_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写消息内容 */
+    /* ???????????? */
     stMntnMsc.ulPortId = ucIndex;
     TAF_MEM_CPY_S(&(stMntnMsc.stDceMscInfo), sizeof(stMntnMsc.stDceMscInfo), pstDceMsc, sizeof(AT_DCE_MSC_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     AT_MNTN_TraceEvent(&stMntnMsc);
 
     return;
@@ -312,14 +312,14 @@ VOS_VOID AT_MNTN_TraceStartFlowCtrl(
 {
     AT_MNTN_FLOW_CTRL_STRU              stMntnFlowCtrl;
 
-    /* 填写消息头 */
+    /* ?????????? */
     AT_MNTN_CFG_MSG_HDR(&stMntnFlowCtrl, ID_AT_MNTN_START_FLOW_CTRL, (sizeof(AT_MNTN_FLOW_CTRL_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写消息内容 */
+    /* ???????????? */
     stMntnFlowCtrl.ulPortId = ucIndex;
     stMntnFlowCtrl.enDevice = enFcDevive;
 
-    /* 发送消息 */
+    /* ???????? */
     AT_MNTN_TraceEvent(&stMntnFlowCtrl);
 
     return;
@@ -333,14 +333,14 @@ VOS_VOID AT_MNTN_TraceStopFlowCtrl(
 {
     AT_MNTN_FLOW_CTRL_STRU              stMntnFlowCtrl;
 
-    /* 填写消息头 */
+    /* ?????????? */
     AT_MNTN_CFG_MSG_HDR(&stMntnFlowCtrl, ID_AT_MNTN_STOP_FLOW_CTRL, (sizeof(AT_MNTN_FLOW_CTRL_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写消息内容 */
+    /* ???????????? */
     stMntnFlowCtrl.ulPortId = ucIndex;
     stMntnFlowCtrl.enDevice = enFcDevive;
 
-    /* 发送消息 */
+    /* ???????? */
     AT_MNTN_TraceEvent(&stMntnFlowCtrl);
 
     return;
@@ -354,14 +354,14 @@ VOS_VOID AT_MNTN_TraceRegFcPoint(
 {
     AT_MNTN_FC_POINT_STRU               stMntnFcPoint;
 
-    /* 填写消息头 */
+    /* ?????????? */
     AT_MNTN_CFG_MSG_HDR(&stMntnFcPoint, ID_AT_MNTN_REG_FC_POINT, (sizeof(AT_MNTN_FC_POINT_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写消息内容 */
+    /* ???????????? */
     stMntnFcPoint.ulPortId = ucIndex;
     stMntnFcPoint.enPoint  = enFcPoint;
 
-    /* 发送消息 */
+    /* ???????? */
     AT_MNTN_TraceEvent(&stMntnFcPoint);
 
     return;
@@ -375,14 +375,14 @@ VOS_VOID AT_MNTN_TraceDeregFcPoint(
 {
     AT_MNTN_FC_POINT_STRU               stMntnFcPoint;
 
-    /* 填写消息头 */
+    /* ?????????? */
     AT_MNTN_CFG_MSG_HDR(&stMntnFcPoint, ID_AT_MNTN_DEREG_FC_POINT, (sizeof(AT_MNTN_FC_POINT_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写消息内容 */
+    /* ???????????? */
     stMntnFcPoint.ulPortId = ucIndex;
     stMntnFcPoint.enPoint  = enFcPoint;
 
-    /* 发送消息 */
+    /* ???????? */
     AT_MNTN_TraceEvent(&stMntnFcPoint);
 
     return;
@@ -402,7 +402,7 @@ VOS_VOID AT_MNTN_TraceCmdResult(
 
     AT_GetAtMsgStruMsgLength(usDataLen, &ulLength);
 
-    /* 申请消息内存 */
+    /* ???????????? */
     pstMsg = (AT_MSG_STRU *)PS_MEM_ALLOC(WUEPS_PID_AT, (ulLength + VOS_MSG_HEAD_LENGTH));
     if (VOS_NULL_PTR == pstMsg)
     {
@@ -410,11 +410,11 @@ VOS_VOID AT_MNTN_TraceCmdResult(
         return;
     }
 
-    /* 填写消息头 */
+    /* ?????????? */
     enEventId       = AT_GetResultMsgID(ucIndex);
     AT_MNTN_CFG_MSG_HDR(pstMsg, enEventId, ulLength);
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstMsg->ucType  = 0x1;
     pstMsg->ucIndex = ucIndex;
     pstMsg->usLen   = usDataLen;
@@ -434,10 +434,10 @@ VOS_VOID AT_MNTN_TraceCmdResult(
 
     TAF_MEM_CPY_S((TAF_VOID*)pstMsg->aucValue, usDataLen, pucData, usDataLen);
 
-    /* 填写消息内容 */
+    /* ???????????? */
     AT_MNTN_TraceEvent(pstMsg);
 
-    /* 释放消息内存 */
+    /* ???????????? */
     /*lint -save -e830 */
     PS_MEM_FREE(WUEPS_PID_AT, pstMsg);
     /*lint -restore */

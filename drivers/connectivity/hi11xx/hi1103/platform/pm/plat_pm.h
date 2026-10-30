@@ -3,7 +3,7 @@
 #ifndef __PLAT_PM_H__
 #define __PLAT_PM_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <linux/mutex.h>
 #include <linux/kernel.h>
 #if ((LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) && (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION))
@@ -16,7 +16,7 @@
 #include <dsm/dsm_pub.h>
 #endif
 
-/* 宏定义 */
+/* ?????? */
 #define BFG_LOCK_NAME               "bfg_wake_lock_etc"
 #define BT_LOCK_NAME                "bt_wake_lock"
 #define GNSS_LOCK_NAME              "gnss_wake_lock"
@@ -47,7 +47,7 @@
 
 #define DMD_EVENT_BUFF_SIZE 1024
 
-/* 1103 bootloader DTCM 地址区间是0x20019000~0x2001a620，共0xa20(2592)字节 */
+/* 1103 bootloader DTCM ??????????0x20019000~0x2001a620????0xa20(2592)???? */
 #define HI1103_BOOTLOAD_DTCM_BASE_ADDR 0x20019000
 #define HI1103_BOOTLOAD_DTCM_SIZE      2592
 
@@ -57,11 +57,11 @@
 #define ST_SLEEP         8
 #define ST_WAKEUP        9
 
-/* 超时时间要大于wkup dev work中的最长执行时间，否则超时以后进入DFR和work中会同时操作tty，导致冲突 */
+/* ??????????????wkup dev work??????????????????????????????????DFR??work????????????tty?????????? */
 #define WAIT_WKUPDEV_MSEC 10000
 
-#define RAM_TEST_RUN_VOLTAGE_BIAS_HIGH 0x0 /* 拉偏高压 */
-#define RAM_TEST_RUN_VOLTAGE_BIAS_LOW  0x1 /* 拉偏低压 */
+#define RAM_TEST_RUN_VOLTAGE_BIAS_HIGH 0x0 /* ???????? */
+#define RAM_TEST_RUN_VOLTAGE_BIAS_LOW  0x1 /* ???????? */
 
 #define RAM_TEST_RUN_VOLTAGE_REG_ADDR     0x50002010
 #define RAM_TEST_RUN_PROCESS_SEL_REG_ADDR 0x50002014
@@ -74,7 +74,7 @@ enum UART_STATE_ENUM {
     UART_BPS_CHG_SEND_COMPLETE = 4,
 };
 
-/* BFGX系统上电加载异常类型 */
+/* BFGX???????????????????? */
 enum BFGX_POWER_ON_EXCEPTION_ENUM {
     BFGX_POWER_FAILED = -1,
     BFGX_POWER_SUCCESS = 0,
@@ -95,7 +95,7 @@ enum BFGX_POWER_ON_EXCEPTION_ENUM {
     BFGX_POWER_ENUM_BUTT,
 };
 
-/* wifi系统上电加载异常类型 */
+/* wifi???????????????????? */
 enum WIFI_POWER_ON_EXCEPTION_ENUM {
     WIFI_POWER_FAIL = -1,
     WIFI_POWER_SUCCESS = 0,

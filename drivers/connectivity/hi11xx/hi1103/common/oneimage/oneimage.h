@@ -3,10 +3,10 @@
 #ifndef __ONEIMAGE_H__
 #define __ONEIMAGE_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "plat_type.h"
 
-/* 宏定义 */
+/* ?????? */
 #define DTS_COMP_HW_CONNECTIVITY_NAME "hisilicon,hisi_wifi"
 
 /* 2015-12-15 modify by ouyangxiaoyu for nfc one image beg */

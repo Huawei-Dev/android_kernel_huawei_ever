@@ -3,16 +3,16 @@
 #ifndef __OAL_CFG80211_H__
 #define __OAL_CFG80211_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_types.h"
 #include "oal_ext_if.h"
 
 #include "arch/oal_cfg80211.h"
 
-/* 宏定义 */
+/* ?????? */
 #define KEY_DEL_MAXNUM 6
-/* 枚举定义 */
-/* 用于hostapd和supplicant事件上报的属性填写，和hostapd和supplicant侧对应起来，30内核属性很少 */
+/* ???????? */
+/* ????hostapd??supplicant??????????????????????hostapd??supplicant????????????30???????????? */
 enum PRIV_NL80211_ATTRs {
     /* don't change the order or add anything inbetween, this is ABI! */
     PRIV_NL80211_ATTR_UNSPEC,
@@ -640,7 +640,7 @@ enum PRIV_NL80211_CHAN_WIDTH {
     PRIV_NL80211_CHAN_WIDTH_MAX = __PRIV_NL80211_CHAN_WIDTH_AFTER_LAST - 1
 };
 
-/* 函数声明 */
+/* ???????? */
 extern oal_void oal_cfg80211_put_bss_etc(oal_wiphy_stru *pst_wiphy, oal_cfg80211_bss_stru *pst_cfg80211_bss);
 extern oal_void oal_cfg80211_unlink_bss_etc(oal_wiphy_stru *pst_wiphy, oal_cfg80211_bss_stru *pst_cfg80211_bss);
 oal_cfg80211_bss_stru *oal_cfg80211_get_bss_etc(oal_wiphy_stru *pst_wiphy,

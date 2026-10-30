@@ -3,7 +3,7 @@
 #ifndef __OAL_WINDOWS_WORKQUEUE_H__
 #define __OAL_WINDOWS_WORKQUEUE_H__
 
-/* STRUCT定义 */
+/* STRUCT???? */
 typedef struct {
     oal_uint32 ul_resv;
 } oal_workqueue_stru;
@@ -16,7 +16,7 @@ typedef struct {
     oal_work_stru work;
 } oal_delayed_work;
 
-/* 宏定义 */
+/* ?????? */
 #define OAL_INIT_WORK(_p_work, _p_func)
 #define OAL_INIT_DELAYED_WORK(_work, _func)
 
@@ -26,8 +26,8 @@ static oal_workqueue_stru workqueue;
 #define oal_create_workqueue(name)               &workqueue
 
 /*
- * 函 数 名  : oal_create_singlethread_workqueue
- * 功能描述  : 创建一个单线程的工作队列
+ * ?? ?? ??  : oal_create_singlethread_workqueue
+ * ????????  : ????????????????????????
  */
 OAL_STATIC OAL_INLINE oal_workqueue_stru *oal_create_singlethread_workqueue(const oal_int8 *pc_workqueue_name)
 {
@@ -35,8 +35,8 @@ OAL_STATIC OAL_INLINE oal_workqueue_stru *oal_create_singlethread_workqueue(cons
 }
 
 /*
- * 函 数 名  : oal_destroy_workqueue
- * 功能描述  : 销毁工作队列
+ * ?? ?? ??  : oal_destroy_workqueue
+ * ????????  : ????????????
  */
 OAL_STATIC OAL_INLINE oal_void oal_destroy_workqueue(oal_workqueue_stru *pst_workqueue)
 {
@@ -44,8 +44,8 @@ OAL_STATIC OAL_INLINE oal_void oal_destroy_workqueue(oal_workqueue_stru *pst_wor
 }
 
 /*
- * 函 数 名  : oal_queue_work
- * 功能描述  : 添加一个任务到工作队列
+ * ?? ?? ??  : oal_queue_work
+ * ????????  : ??????????????????????
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_queue_work(oal_workqueue_stru *pst_workqueue, oal_work_stru *pst_work)
 {
@@ -81,9 +81,9 @@ OAL_STATIC OAL_INLINE oal_int32 oal_queue_delayed_work_on(oal_int32 cpu, oal_wor
 }
 
 /*
- * 函 数 名  : oal_queue_delayed_system_work
- * 功能描述  : queue work on system wq after delay
- * 输入参数  : @dwork: delayable work to queue
+ * ?? ?? ??  : oal_queue_delayed_system_work
+ * ????????  : queue work on system wq after delay
+ * ????????  : @dwork: delayable work to queue
  *             @delay: number of jiffies to wait before queueing
  */
 OAL_STATIC OAL_INLINE oal_int32 oal_queue_delayed_system_work(oal_delayed_work *pst_work, oal_ulong delay)

@@ -47,7 +47,7 @@
  */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 
 #include <linux/kernel.h>
@@ -74,15 +74,15 @@ extern print_report_hook g_bsp_print_hook;
 #endif
 #define BSP_PRINT_BUF_LEN (256)
 /*****************************************************************************
-* 函 数 名	: mdrv_print
+* ?? ?? ??	: mdrv_print
 *
-* 功能描述	: print
+* ????????	: print
 *
-* 输入参数	: u32 modid: module's id, BSP_LOG_LEVEL level: print level, char *fmt: string
+* ????????	: u32 modid: module's id, BSP_LOG_LEVEL level: print level, char *fmt: string
 *
-* 输出参数	:
+* ????????	:
 *
-* 返 回 值	:
+* ?? ?? ??	:
 *****************************************************************************/
 /*lint -save -e530 -e830*/
 void mdrv_print(unsigned int level, char *fmt, ...)

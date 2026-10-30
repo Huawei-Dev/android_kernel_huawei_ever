@@ -56,28 +56,28 @@ extern "C"
 #include <osl_types.h>
 
 /* DIAG_SERVICE_HEAD_STRU:sessionid8b */
-#define MSP_SERVICE_SESSION_ID        (0x1) /* 标识Service与Client之间的连接,固定为1*/
+#define MSP_SERVICE_SESSION_ID        (0x1) /* ????Service??Client??????????,??????1*/
 
 /* DIAG_SERVICE_HEAD_STRU:ssid4b */
 typedef enum _diag_frame_ssid_type
 {
 #ifdef DIAG_SYSTEM_5G
-    DIAG_FRAME_SSID_DEFAULT       = 0x0,  /* 0x00：未指定（仅下发REQ使用，表示由UE确定分发目标，CNF和IND不能使用该值） */
-    DIAG_FRAME_SSID_APP_CPU       = 0x1,  /* 0x01：A-CPU */
-    DIAG_FRAME_SSID_MODEM_CPU     = 0x2,  /* 0x02：2G/3G/4.5G子系统C-CPU（底软、PS使用） */
-    DIAG_FRAME_SSID_TLDSP_BBE_NX  = 0x3,  /* 0x03：BBE NX（TL DSP使用） */
-    DIAG_FRAME_SSID_BBP_DEBUG     = 0x4,  /* 0x04：2G/3G/4.5G BBP Debug   //原来是LTE BBP */
-    DIAG_FRAME_SSID_GUC_BBE_NX    = 0x5,  /* 0x05：BBE NX（GUC DSP SDR使用）  //因GUC PHY与TL PHY没有融合，仍需单独分配 */
+    DIAG_FRAME_SSID_DEFAULT       = 0x0,  /* 0x00????????????????REQ????????????UE??????????????CNF??IND?????????????? */
+    DIAG_FRAME_SSID_APP_CPU       = 0x1,  /* 0x01??A-CPU */
+    DIAG_FRAME_SSID_MODEM_CPU     = 0x2,  /* 0x02??2G/3G/4.5G??????C-CPU????????PS?????? */
+    DIAG_FRAME_SSID_TLDSP_BBE_NX  = 0x3,  /* 0x03??BBE NX??TL DSP?????? */
+    DIAG_FRAME_SSID_BBP_DEBUG     = 0x4,  /* 0x04??2G/3G/4.5G BBP Debug   //??????LTE BBP */
+    DIAG_FRAME_SSID_GUC_BBE_NX    = 0x5,  /* 0x05??BBE NX??GUC DSP SDR??????  //??GUC PHY??TL PHY?????????????????????? */
     DIAG_FRAME_SSID_HIFI          = 0x6,
-    DIAG_FRAME_SSID_LTE_V_DSP     = 0x7,  /* 0x07：LTE-V DSP（预留）//原来是TDS DSP */
+    DIAG_FRAME_SSID_LTE_V_DSP     = 0x7,  /* 0x07??LTE-V DSP????????//??????TDS DSP */
     DIAG_FRAME_SSID_RESERVE0      = 0x8,
     DIAG_FRAME_SSID_MCU           = 0x9,
-    DIAG_FRAME_SSID_TEE           = 0xA,  /* 0x0A：TEE        //原来是GPU */
-    DIAG_FRAME_SSID_RESERVE1      = 0xB,  /* 0x0B：保留       //原来是GUX BBP */
+    DIAG_FRAME_SSID_TEE           = 0xA,  /* 0x0A??TEE        //??????GPU */
+    DIAG_FRAME_SSID_RESERVE1      = 0xB,  /* 0x0B??????       //??????GUX BBP */
     DIAG_FRAME_SSID_IOM3          = 0xC,
     DIAG_FRAME_SSID_EASYRF0       = 0xD,
     DIAG_FRAME_SSID_X_DSP         = 0xE,
-    DIAG_FRAME_SSID_GUC_L1C       = 0xE,  /* 0x0E：2G/3G/4.5G子系统C-CPU（GUC L1C使用）   //因GUC L1C没有通过C核MSP进行OAM数据上报，仍需单独分配 */
+    DIAG_FRAME_SSID_GUC_L1C       = 0xE,  /* 0x0E??2G/3G/4.5G??????C-CPU??GUC L1C??????   //??GUC L1C????????C??MSP????OAM?????????????????????? */
     DIAG_FRAME_SSID_RESERVE2      = 0xF,
     DIAG_FRAME_SSID_5G_CCPU       = 0x10,
     DIAG_FRAME_SSID_L2HAC         = 0x11,
@@ -117,7 +117,7 @@ typedef enum _diag_frame_ssid_type
 }diag_frame_ssid_type;
 
 /* DIAG_SERVICE_HEAD_STRU:sessionid8b */
-#define DIAG_FRAME_MSP_SERVICE_SESSION_ID        (0x1) /* 标识Service与Client之间的连接,固定为1*/
+#define DIAG_FRAME_MSP_SERVICE_SESSION_ID        (0x1) /* ????Service??Client??????????,??????1*/
 
 /* DIAG_SERVICE_HEAD_STRU:mt2b */
 typedef enum _diag_frame_msgtype_type
@@ -196,7 +196,7 @@ typedef enum _diag_frame_msg_sub_type
     DIAG_FRAME_MSG_DSP_PRINT   = 0x9,
     DIAG_FRAME_MSG_CNF     = 0xa,
     DIAG_FRAME_MSG_IND     = 0xb,
-    DIAG_FRAME_MSG_DT      = 0xF,/* 路测消息 */
+    DIAG_FRAME_MSG_DT      = 0xF,/* ???????? */
     DIAG_FRAME_MSG_STAT    = 0x1f
 
 }diag_frame_msg_sub_type;
@@ -233,21 +233,21 @@ enum _diag_frame_ver_type
 
 typedef struct
 {
-    u32 u32module;                        /* 打印信息所在的模块ID */
-    u32 u32level;                         /* 输出级别 */
-    u32 u32no;                            /* IND标号 */
+    u32 u32module;                        /* ??????????????????ID */
+    u32 u32level;                         /* ???????? */
+    u32 u32no;                            /* IND???? */
 } diag_print_head_stru;
-/* 描述 :一级头: service头 */
+/* ???? :??????: service?? */
 typedef struct
 {
-    u32 ulModule;     /* 源模块ID*/
+    u32 ulModule;     /* ??????ID*/
     u32 ulMsgId;      /* ID*/
-    u32 ulNo;         /* 序号*/
-    u8  aucDta[0];    /* 用户数据缓存区*//*lint !e43 */
+    u32 ulNo;         /* ????*/
+    u8  aucDta[0];    /* ??????????????*//*lint !e43 */
 } diag_trans_head_stru;
 
 #ifdef DIAG_SYSTEM_5G
-/* 描述 :5G 一级头: service头 */
+/* ???? :5G ??????: service?? */
 typedef struct
 {
     u32    sid4b       :4;   /* service id, value:DIAG_SID_TYPE */
@@ -261,12 +261,12 @@ typedef struct
     u32    ff1b        :1;
 
     u16    MsgTransId;
-    u16    SocpEncDstId;      /* SOCP填写 */
+    u16    SocpEncDstId;      /* SOCP???? */
 
     u8     aucTimeStamp[4];
 }diag_service_head_stru;
 #else
-/* 描述 :一级头: service头 */
+/* ???? :??????: service?? */
 typedef struct
 {
     u32    sid8b       :8;
@@ -282,7 +282,7 @@ typedef struct
     u8     aucTimeStamp[8];
 }diag_service_head_stru;
 #endif
-/* 描述 :二级头: DIAG消息头 */
+/* ???? :??????: DIAG?????? */
 typedef struct
 {
     u32    cmdid19b:19;
@@ -292,23 +292,23 @@ typedef struct
 } diag_stid_stru;
 
 
-/* 描述 :三级头: 工具软件信息头，用于REQ/CNF消息 */
+/* ???? :??????: ????????????????????REQ/CNF???? */
 typedef struct
 {
-    u32 ulAuid;         /* 原AUID*/
-    u32 ulSn;           /* HSO分发，插件命令管理*/
-    u8  ucData[0];      /* 参数的数据*//*lint !e43 */
+    u32 ulAuid;         /* ??AUID*/
+    u32 ulSn;           /* HSO??????????????????*/
+    u8  ucData[0];      /* ??????????*//*lint !e43 */
 }MSP_DIAG_DATA_REQ_STRU;
 
 
-/* 描述 :整体帧结构 */
+/* ???? :?????????? */
 typedef struct
 {
     diag_service_head_stru  stService;
 
     union
     {
-        u32                 u32CmdId;           /* 结构化ID */
+        u32                 u32CmdId;           /* ??????ID */
         diag_stid_stru      stID;
     };
 
@@ -320,14 +320,14 @@ typedef struct
 typedef struct
 {
     u32                  u32HisiMagic;   /*"HISI"*/
-    u32                  u32DataLen;     /*数据长度*/
+    u32                  u32DataLen;     /*????????*/
     u8                   aucData[0];     /*lint !e43 */
 }diag_socp_head_stru;
 
 typedef struct
 {
-    u32  ulAuid;                     /* 原AUID*/
-    u32  ulSn;                       /* HSO分发，插件命令管理*/
+    u32  ulAuid;                     /* ??AUID*/
+    u32  ulSn;                       /* HSO??????????????????*/
     u32  ulRet;
 }DIAG_BSP_COMM_CNF_STRU;
 

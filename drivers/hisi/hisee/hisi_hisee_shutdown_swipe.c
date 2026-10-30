@@ -68,7 +68,7 @@ int inse_shutdown_swipe_t_nfc_en_func(const void *buf, int para)
 	unsigned int reg_value;
 
 	if (HISEE_TRUE == pdswipe_feature_switch_is_enable()) {
-		/* 使能PMU响应NFC指示信号上电的功能 */
+		/* ????PMU????NFC?????????????????? */
 		reg_value = hisi_pmic_reg_read(NP_NFC_PWRON_MASK);
 		if (NFC_RESPOND_NFC_DIS == (reg_value & NFC_RESPOND_NFC_EN)) {
 			hisi_pmic_reg_write(NP_NFC_PWRON_MASK, NFC_RESPOND_NFC_EN);
@@ -89,7 +89,7 @@ int inse_shutdown_swipe_t_nfc_dis_func(const void *buf, int para)
 {
 	unsigned int reg_value;
 
-	/* 禁止PMU响应NFC指示信号上电的功能 */
+	/* ????PMU????NFC?????????????????? */
 	reg_value = hisi_pmic_reg_read(NP_NFC_PWRON_MASK);
 	if (NFC_RESPOND_NFC_EN == (reg_value & NFC_RESPOND_NFC_EN)) {
 		hisi_pmic_reg_write(NP_NFC_PWRON_MASK, NFC_RESPOND_NFC_DIS);

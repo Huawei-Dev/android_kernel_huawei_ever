@@ -11,12 +11,12 @@ extern "C" {
 
 //#if (_PRE_PRODUCT_ID == _PRE_PRODUCT_ID_HI1105_HOST)
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 #include "oal_ext_if.h"
 
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *************************************************************************/
 #ifdef _PRE_WLAN_ONLINE_DPD
 #define HI1105_2G_DPD_CALI_CHANNEL_NUM_20M (4)
@@ -35,12 +35,12 @@ extern "C" {
 #define HI1105_5G_CHANNEL_NUM         (HI1105_5G_20M_CHANNEL_NUM + HI1105_5G_80M_CHANNEL_NUM + HI1105_5G_160M_CHANNEL_NUM)
 #define HI1105_CALI_IQ_TONE_NUM       (16)
 
-#define HI1105_CALI_RXDC_GAIN_LVL_NUM (8)            /* rx dc补偿值档位数目 */
+#define HI1105_CALI_RXDC_GAIN_LVL_NUM (8)            /* rx dc?????????????? */
 
 #define HI1105_TXDC_LPF_DAC_GAIN_LVL_NUM 8
 #define HI1105_TXDC_MIXBUF_GAIN_LVL_NUM 4
 
-#define HI1105_CALI_ADC_CH_NUM    4            /* 4路ADC */
+#define HI1105_CALI_ADC_CH_NUM    4            /* 4??ADC */
 
 #define HI1105_CALI_TXIQ_LS_FIR_NUM     7
 #define HI1105_CALI_TXIQ_GAIN_LVL_NUM   4
@@ -48,9 +48,9 @@ extern "C" {
 #define HI1105_CALI_RXIQ_LS_FIR_NUM     7
 #define HI1105_CALI_RXIQ_GAIN_LVL_NUM   3
 
-/* 校准信道个数定义*/
-#define HI1105_CALI_2G_OTHER_CHANNEL_NUM        1    /* g_ast_2g_other_cali_channel校准信道数 */
-#define HI1105_CALI_5G_OTHER_CHANNEL_NUM        1    /* g_ast_5g_other_cali_channel校准信道数 */
+/* ????????????????*/
+#define HI1105_CALI_2G_OTHER_CHANNEL_NUM        1    /* g_ast_2g_other_cali_channel?????????? */
+#define HI1105_CALI_5G_OTHER_CHANNEL_NUM        1    /* g_ast_5g_other_cali_channel?????????? */
 
 #define HI1105_CALI_IQ_LS_FILTER_TAP_NUM     7
 
@@ -67,7 +67,7 @@ extern "C" {
 #define HI1105_CALI_TXIQ_LS_FILTER_FEQ_NUM_160M_FPGA    64
 
 /*****************************************************************************
-  3 枚举定义
+  3 ????????
 *****************************************************************************/
 typedef enum
 {
@@ -79,24 +79,24 @@ typedef enum
 typedef oal_uint8 hi1105_rf_cali_chain_num_enum_uint8;
 
 /*****************************************************************************
-  4 全局变量声明
+  4 ????????????
 *****************************************************************************/
 
 /*****************************************************************************
-  5 消息头定义
-*****************************************************************************/
-
-
-/*****************************************************************************
-  6 消息定义
+  5 ??????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  7 STRUCT定义
+  6 ????????
 *****************************************************************************/
 
-/* 复数结构 */
+
+/*****************************************************************************
+  7 STRUCT????
+*****************************************************************************/
+
+/* ???????? */
 typedef struct
 {
     oal_int32 l_real;
@@ -105,9 +105,9 @@ typedef struct
 
 typedef struct
 {
-    oal_uint8   uc_rx_gain_cmp_code;     /* 仅pilot RF使用，C校准补偿值 */
+    oal_uint8   uc_rx_gain_cmp_code;     /* ??pilot RF??????C?????????? */
 
-    /* LODIV 暂时和rx gain复用结构 */
+    /* LODIV ??????rx gain???????? */
     oal_uint8   uc_rx_mimo_cmp;
     oal_uint8   uc_dpd_siso_cmp;
     oal_uint8   uc_dpd_mimo_cmp;
@@ -241,8 +241,8 @@ typedef struct
 typedef struct
 {
     oal_uint8              uc_rc_cmp_code;
-    oal_uint8              uc_r_cmp_code;       /* 保存PMU的原始5bit R code */
-    oal_uint8              uc_c_cmp_code;       /* 重要: MPW2和PILOT RF公用, mpw2代表c校准值; pilot代表800M rejection补偿code，根据C code计算得到 */
+    oal_uint8              uc_r_cmp_code;       /* ????PMU??????5bit R code */
+    oal_uint8              uc_c_cmp_code;       /* ????: MPW2??PILOT RF????, mpw2????c??????; pilot????800M rejection????code??????C code???????? */
     oal_uint8              uc_20M_rc_cmp_code;
 }hi1105_rc_r_c_cali_param_stru;
 
@@ -280,15 +280,15 @@ struct hi1105_cali_param_tag
 typedef struct hi1105_cali_param_tag hi1105_cali_param_stru;
 
 /*****************************************************************************
-  8 UNION定义
+  8 UNION????
 *****************************************************************************/
 
 /*****************************************************************************
-  9 OTHERS定义
+  9 OTHERS????
 *****************************************************************************/
 
 /*****************************************************************************
-  10 函数声明
+  10 ????????
 *****************************************************************************/
 
 #ifdef __cplusplus

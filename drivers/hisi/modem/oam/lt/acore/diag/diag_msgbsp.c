@@ -192,7 +192,7 @@ VOS_UINT32 diag_BspMsgProc(DIAG_FRAME_INFO_STRU *pData)
     nrmcmd_flag = diag_BspIsNrmCmd(pData->ulCmdId);
 
     if(VOS_TRUE == acmd_flag)
-    {/*直接在acore处理*/
+    {/*??????acore????*/
         ulRet = mdrv_hds_msg_proc((VOS_VOID *)pData);
         if(ulRet != 0)
         {
@@ -202,12 +202,12 @@ VOS_UINT32 diag_BspMsgProc(DIAG_FRAME_INFO_STRU *pData)
     }
 
     if(VOS_TRUE == ccmd_flag)
-    {/*通知LRCCPU*/
+    {/*????LRCCPU*/
        DIAG_MSG_BSP_ACORE_CFG_PROC(ulLen, pData, pstInfo, ulRet);
     }
 
     if(VOS_TRUE == nrmcmd_flag)
-    {/*通知NRCCPU*/
+    {/*????NRCCPU*/
         DIAG_MSG_BSP_CFG_ACORE_TO_NRM(ulLen, pData, pstInfo, ulRet);
     }
 
@@ -268,7 +268,7 @@ VOS_UINT32 diag_BspConnMgr(VOS_UINT8 *pData)
 }
 /*****************************************************************************
  Function Name   : diag_BspMsgInit
- Description     : MSP dsp部分初始化
+ Description     : MSP dsp??????????
  Input           : None
  Output          : None
  Return          : None
@@ -279,7 +279,7 @@ VOS_VOID diag_BspMsgInit(VOS_VOID)
 {
     VOS_UINT32 ulRet;
 
-    /*注册message消息回调*/
+    /*????message????????*/
     DIAG_MsgProcReg(DIAG_MSG_TYPE_BSP, diag_BspMsgProc);
     mdrv_hds_cnf_register((hds_cnf_func)DIAG_MsgReport);
     diag_fsInit();

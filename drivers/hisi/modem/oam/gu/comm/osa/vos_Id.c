@@ -85,7 +85,7 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID        PS_FILE_ID_VOS_ID_C
 #define    THIS_MODU           mod_pam_osa
@@ -155,12 +155,12 @@ extern VOS_VOID V_LogRecord(VOS_UINT32 ulIndex, VOS_UINT32 ulValue);
 
 #if VOS_YES == VOS_ANALYZE_PID_MEM
 
-/* 自旋锁，用来作PID 内存消耗统计临界资源保护 */
+/* ??????????????PID ???????????????????????? */
 VOS_SPINLOCK             g_stVosPidMemAnaSpinLock;
 
 #endif
 
-/* 自旋锁，用来作querey pid info 的临界资源保护 */
+/* ??????????????querey pid info ?????????????? */
 VOS_SPINLOCK             g_stVosQuereyPidInfoSpinLock;
 
 /*****************************************************************************
@@ -361,7 +361,7 @@ VOS_UINT32 VOS_PidsInitOnePhase( enum VOS_INIT_PHASE_DEFINE InitPhrase)
         if(ulReturnValue != VOS_OK)
         {
             mdrv_err("<VOS_PidsInitOnePhase> InitFunc Fail. Pid=0x%x\n",i);
-            /*由于PID扩展后,PID已经扩展超过了0xffff，需要扩展*/
+            /*????PID??????,PID??????????????0xffff??????????*/
             g_ulOmPidInit |= (i & 0xFFFFFF);
             V_LogRecord(9, g_ulOmPidInit);
             ulErrorCounter++;
@@ -1449,7 +1449,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_GetTCBFromPid(VOS_UINT32 ulPid)
 #if ((OSA_CPU_CCPU == VOS_OSA_CPU) || (VOS_OS_VER == VOS_WIN32))
 /*****************************************************************************
  Function   : VOS_GetModemIDFromPid
- Description: Get Modem ID From Pid,该API不能查询卡模块PID(usim/pih/stk/pb)
+ Description: Get Modem ID From Pid,??API??????????????PID(usim/pih/stk/pb)
  Input      : Pid
  Return     : Modem ID
  Other      :

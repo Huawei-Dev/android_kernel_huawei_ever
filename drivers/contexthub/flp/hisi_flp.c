@@ -195,7 +195,7 @@ static int flp_genlink_checkin(flp_port_t *flp_port, unsigned int count, unsigne
 }
 /*lint -e826 -e834 -e776*/
 /*
- * 生成netlink数据包并发送给HAL
+ * ??????netlink?????????????????????HAL
  */
 static int flp_generate_netlink_packet(flp_port_t *flp_port, const char *buf,
 		unsigned int count, unsigned char cmd_type)
@@ -306,7 +306,7 @@ static int flp_generate_netlink_packet(flp_port_t *flp_port, const char *buf,
 }
 /*lint -e845*/
 /*
- * 发送关闭PDR命令给contexthub
+ * ????????????PDR?????????contexthub
  */
 static int  flp_pdr_stop_cmd(flp_port_t *flp_port, unsigned long arg)
 {
@@ -372,7 +372,7 @@ static int  flp_pdr_stop_cmd(flp_port_t *flp_port, unsigned long arg)
 /*lint +e826 +e834 +e776 +e845*/
 /*lint -e845*/
 /*
- * 计算PDR配置参数
+ * ??????PDR????????????
  */
 static int get_pdr_cfg(pdr_start_config_t *pdr_config, const char __user *buf, size_t len)
 {
@@ -417,7 +417,7 @@ static int get_pdr_cfg(pdr_start_config_t *pdr_config, const char __user *buf, s
 }
 
 /*
- * 发送启动PDR命令给contexthub
+ * ????????????PDR?????????contexthub
  */
 static int  flp_pdr_start_cmd(flp_port_t *flp_port, const char __user *buf, size_t len, unsigned int cmd)
 {
@@ -512,7 +512,7 @@ PDR_START_ERR:
 /*lint +e838*/
 /*lint -e845*/
 /*
- * 发送更新PDR配置命令给contexthub
+ * ????????????PDR???????????????contexthub
  */
 static int  flp_pdr_update_cmd(flp_port_t *flp_port, const char __user *buf, size_t len)
 {
@@ -611,7 +611,7 @@ static void copy_data_to_buf(flp_data_buf_t *pdata, const char *data,
 }
 
 /*
- * 将contexthub上报的pdr可信度数据发送给HAL
+ * ???contexthub?????????pdr????????????????????????HAL
  */
 static int get_pdr_notify_from_mcu(const pkt_header_t *head)
 {
@@ -651,7 +651,7 @@ static int get_pdr_notify_from_mcu(const pkt_header_t *head)
 }
 /*lint -e845 -e826*/
 /*
- * 将contexthub上报的pdr数据发送给HAL
+ * ???contexthub?????????pdr???????????????HAL
  */
 static void __get_pdr_data_from_mcu(flp_pdr_data_t *data, unsigned int count)
 {
@@ -755,7 +755,7 @@ static void __get_pdr_data_from_mcu(flp_pdr_data_t *data, unsigned int count)
 }
 
 /*
- * 将contexthub上报的pdr数据发送给HAL
+ * ???contexthub?????????pdr???????????????HAL
  */
 static int get_pdr_data_from_mcu(const pkt_header_t *head)
 {
@@ -829,7 +829,7 @@ static int get_pdr_data_from_mcu(const pkt_header_t *head)
 }
 
 /*
- * 将contexthub 上报的cellbatching数据发送给HAL
+ * ???contexthub ?????????cellbatching???????????????HAL
  */
 #ifdef CONFIG_HISI_GEOFENCE_TRAJECTORY_FEATURE
 /*lint +e845 */
@@ -900,7 +900,7 @@ static void flp_send_data_to_uplayer(flp_port_t *flp_port, const char *msg, unsi
 }
 
 /*
- * 将contexthub 上报的数据发送给HAL
+ * ???contexthub ????????????????????????HAL
  */
 static int get_common_data_from_mcu(const pkt_header_t *head)
 {
@@ -972,7 +972,7 @@ static int get_common_data_from_mcu(const pkt_header_t *head)
 }
 #else
 /*
- * 将contexthub 上报的数据发送给HAL
+ * ???contexthub ????????????????????????HAL
  */
 static int get_common_data_from_mcu(const pkt_header_t *head)
 {
@@ -1037,7 +1037,7 @@ static int get_common_data_from_mcu(const pkt_header_t *head)
 #endif
 #ifdef CONFIG_INPUTHUB_20
 /*
- * 将contexthub 上报的已知ID的数据发送给HAL
+ * ???contexthub ???????????????ID??????????????????HAL
  */
 static int get_data_from_mcu(const pkt_header_t *head)
 {
@@ -1066,7 +1066,7 @@ static int get_data_from_mcu(const pkt_header_t *head)
 #endif
 #endif
 /*
- * contexthub复位后业务恢复
+ * contexthub?????????????????????
  */
 static void  flp_service_recovery(void)
 {
@@ -1157,7 +1157,7 @@ void flp_port_resume(void)
 	mutex_unlock(&g_flp_dev.lock);
 }
 /*
- * FLP命令ID检验
+ * FLP??????ID??????
  */
 static bool flp_check_cmd(flp_port_t *flp_port, unsigned int cmd, int type)
 {
@@ -1191,7 +1191,7 @@ static bool flp_check_cmd(flp_port_t *flp_port, unsigned int cmd, int type)
 }
 /*lint -e845 */
 /*
- * 发送pdr flush命令给contexthub
+ * ??????pdr flush?????????contexthub
  */
 static int  flp_pdr_flush(flp_port_t *flp_port)
 {
@@ -1209,7 +1209,7 @@ static int  flp_pdr_flush(flp_port_t *flp_port)
 }
 /*lint +e845 */
 /*
- * 更新pdr step cfg
+ * ??????pdr step cfg
  */
 static int flp_pdr_step(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1236,7 +1236,7 @@ static int flp_pdr_step(flp_port_t *flp_port, unsigned long arg)
 
 /*lint -e845 -e747 -e712*/
 /*
- * pdr ioctl 命令处理
+ * pdr ioctl ????????????
  */
 static int flp_pdr_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -1269,7 +1269,7 @@ static int flp_pdr_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long a
 /*lint +e845 +e747 +e712*/
 /*lint -e715 -e502*/
 /*
- * 发送启动pdr 的消息给contexthub
+ * ????????????pdr ????????????contexthub
  */
 static int flp_common_ioctl_open_service(flp_port_t *flp_port)
 {
@@ -1301,7 +1301,7 @@ static int flp_common_ioctl_open_service(flp_port_t *flp_port)
 	return 0;
 }
 /*
- * 发送关闭pdr 的消息给contexthub
+ * ????????????pdr ????????????contexthub
  */
 static int flp_common_ioctl_close_service(flp_port_t *flp_port)
 {
@@ -1328,7 +1328,7 @@ static int flp_common_ioctl_close_service(flp_port_t *flp_port)
 
 #ifdef CONFIG_HISI_GEOFENCE_TRAJECTORY_FEATURE
 /*
- * 发送停止服务的消息给contexthub
+ * ??????????????????????????????contexthub
  */
 static int flp_stop_service_type(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1402,7 +1402,7 @@ static int flp_iomcu_template (flp_port_t *flp_port, unsigned long arg, unsigned
 				    usr, (unsigned long)cfence_hdr.len);
 }
 /*
- * cellfence命令处理
+ * cellfence????????????
  */
 int cellfence_operate (flp_port_t *flp_port, unsigned long arg)
 {
@@ -1415,7 +1415,7 @@ int cellfence_operate (flp_port_t *flp_port, unsigned long arg)
 	return flp_iomcu_template(flp_port, arg, sub_cmd);
 }
 /*
- * cellfence数据注入
+ * cellfence????????????
  */
 int cellfence_inject_result(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1429,7 +1429,7 @@ int cellfence_inject_result(flp_port_t *flp_port, unsigned long arg)
 }
 
 /*
- * 发送wifi消息给contexthub
+ * ??????wifi?????????contexthub
  */
 static int flp_wifi_cfg(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1439,7 +1439,7 @@ static int flp_wifi_cfg(flp_port_t *flp_port, unsigned long arg)
 }
 #endif
 /*
- * flp 服务开关
+ * flp ????????????
  */
 static inline void flp_service_ops(flp_port_t *flp_port, unsigned int data)
 {
@@ -1455,7 +1455,7 @@ static inline void flp_service_ops(flp_port_t *flp_port, unsigned int data)
 
 #ifdef CONFIG_HISI_GEOFENCE_TRAJECTORY_FEATURE
 /*
- * 位置信息注入
+ * ??????????????????
  */
 static int flp_common_inject_location(unsigned long arg)
 {
@@ -1468,7 +1468,7 @@ static int flp_common_inject_location(unsigned long arg)
 }
 
 /*
- * 发送push location status 消息给contexthub
+ * ??????push location status ?????????contexthub
  */
 static int flp_common_push_location_status(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1508,7 +1508,7 @@ static int flp_common_push_location_status(flp_port_t *flp_port, unsigned long a
 }
 
 /*
- * 发送debug config 消息给contexthub
+ * ??????debug config ?????????contexthub
  */
 static int flp_common_set_debug_config(unsigned long arg)
 {
@@ -1528,7 +1528,7 @@ static int flp_common_set_debug_config(unsigned long arg)
 }
 
 /*
- * hifence ioctl 消息处理
+ * hifence ioctl ????????????
  */
 static int flp_hifence_common_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -1552,7 +1552,7 @@ static int flp_hifence_common_ioctl(flp_port_t *flp_port, unsigned int cmd, unsi
 #endif
 
 /*
- * flp common ioctl 消息处理
+ * flp common ioctl ????????????
  */
 static int flp_common_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -1628,7 +1628,7 @@ static int flp_open_send_status_flp(flp_port_t *flp_port)
 	return ret;
 }
 /*
- * 通过share memory 发送  fence消息给contexthub
+ * ??????share memory ??????  fence?????????contexthub
  */
 static int flp_add_fence_shmem(flp_port_t *flp_port, hal_config_t *config,
 									unsigned short int shmem_cmd, unsigned int type)
@@ -1678,7 +1678,7 @@ ADD_FENCE:
 }
 
 /*
- * 发送添加fence消息给contexthub
+ * ????????????fence?????????contexthub
  */
 static int flp_ioctl_add_geofence(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1699,7 +1699,7 @@ static int flp_ioctl_add_geofence(flp_port_t *flp_port, unsigned long arg)
 	return ret;
 }
 /*
- * 读取fence状态
+ * ??????fence??????
  */
 static int flp_fence_status_cmd(flp_port_t *flp_port, unsigned long arg, unsigned int cmd)
 {
@@ -1736,7 +1736,7 @@ STATUS_FIN:
 }
 
 /*
- * 读取fence状态
+ * ??????fence??????
  */
 static int flp_geofence_status_cmd(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1753,7 +1753,7 @@ static int flp_geofence_status_cmd(flp_port_t *flp_port, unsigned long arg)
 }
 
 /*
- * 发送删除geofence消息给contexthub
+ * ????????????geofence?????????contexthub
  */
 static int flp_ioctl_remove_geofence(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1789,7 +1789,7 @@ static int flp_ioctl_remove_geofence(flp_port_t *flp_port, unsigned long arg)
 }
 
 /*
- * 发送修改geofence消息给contexthub
+ * ????????????geofence?????????contexthub
  */
 static int flp_ioctl_modify_geofence(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1811,7 +1811,7 @@ static int flp_ioctl_modify_geofence(flp_port_t *flp_port, unsigned long arg)
 }
 
 /*
- * 发送获取geofence位置的消息给contexthub
+ * ????????????geofence??????????????????contexthub
  */
 static int flp_geofence_get_location(flp_port_t *flp_port, unsigned long arg)
 {
@@ -1825,7 +1825,7 @@ static int flp_geofence_get_location(flp_port_t *flp_port, unsigned long arg)
 }
 
 /*
- * geofence IOCTL消息处理
+ * geofence IOCTL????????????
  */
 static int flp_geofence_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -1857,7 +1857,7 @@ static int flp_geofence_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned l
 /*lint +e438*/
 /*max complexiy must less than 15*/
 /*
- * 发送location BATCHING命令给contexthub
+ * ??????location BATCHING?????????contexthub
  */
 static int __flp_location_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -1939,7 +1939,7 @@ static int __flp_location_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned
 }
 
 /*
- * location batching ioctl消息处理
+ * location batching ioctl????????????
  */
 static int flp_location_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -1998,7 +1998,7 @@ static int flp_location_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned l
 
 /*lint -e438*/
 /*
- * 发送添加cellfence的消息给contexthub
+ * ????????????cellfence????????????contexthub
  */
 static int cellfence_add(flp_port_t *flp_port, unsigned long arg, unsigned short int cmd)
 {
@@ -2099,7 +2099,7 @@ MEM_FREE:
 }
 
  /*
- * 发送基站轨迹消息给contexthub
+ * ???????????????????????????contexthub
  */
 static int celltrajectory_cfg(flp_port_t *flp_port, unsigned long arg)
 {
@@ -2138,7 +2138,7 @@ static int celltrajectory_cfg(flp_port_t *flp_port, unsigned long arg)
 	return ret;
 }
  /*
- * 发送基站轨迹请求的消息给contexthub
+ * ????????????????????????????????????contexthub
  */
 static int celltrajectory_request(flp_port_t *flp_port)
 {
@@ -2152,7 +2152,7 @@ static int celltrajectory_request(flp_port_t *flp_port)
 }
 
  /*
- * 发送cellbatching config给contexthub
+ * ??????cellbatching config???contexthub
  */
 static int flp_cellbatching_cfg(flp_port_t *flp_port, unsigned long arg)
 {
@@ -2200,7 +2200,7 @@ static int flp_cellbatching_cfg(flp_port_t *flp_port, unsigned long arg)
 }
 
  /*
- * 发送cellbatching 请求给contexthub
+ * ??????cellbatching ?????????contexthub
  */
 static int flp_cellbatching_request(flp_port_t *flp_port)
 {
@@ -2215,7 +2215,7 @@ static int flp_cellbatching_request(flp_port_t *flp_port)
 }
 
 /*
- * cellfence ioctl 消息处理
+ * cellfence ioctl ????????????
  */
 static int cellfence_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -2246,7 +2246,7 @@ static int cellfence_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long
 }
 
 /*
- * 发送添加 wififence的消息给contexthub
+ * ???????????? wififence????????????contexthub
  */
 static int flp_add_wififence(flp_port_t *flp_port, unsigned long arg)
 {
@@ -2267,7 +2267,7 @@ static int flp_add_wififence(flp_port_t *flp_port, unsigned long arg)
 }
 
 /*
- * 发送操作（包括暂停、恢复、删除）WIFI围栏消息给contexthub
+ * ????????????????????????????????????????????????WIFI???????????????contexthub
  */
 static int flp_oper_wififence(flp_port_t *flp_port, unsigned long arg, unsigned int cmd)
 {
@@ -2304,7 +2304,7 @@ static int flp_oper_wififence(flp_port_t *flp_port, unsigned long arg, unsigned 
 }
 
 /*
- * 发送查询WIFI围栏状态命令给contexthub
+ * ????????????WIFI?????????????????????contexthub
  */
 static int flp_wififence_status_cmd(flp_port_t *flp_port, unsigned long arg)
 {
@@ -2319,7 +2319,7 @@ static int flp_wififence_status_cmd(flp_port_t *flp_port, unsigned long arg)
 }
 
 /*
- * wififence ioctl消息处理
+ * wififence ioctl????????????
  */
 static int flp_wififence_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -2344,7 +2344,7 @@ static int flp_wififence_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned 
 }
 
 /*
- * 发送diag命令给contexthub
+ * ??????diag?????????contexthub
  */
 static int flp_diag_send_cmd(flp_port_t *flp_port, unsigned long arg)
 {
@@ -2405,7 +2405,7 @@ FLP_DIAG_EXIT:
 }
 
 /*
- * diag ioctl 消息处理
+ * diag ioctl ????????????
  */
 static int flp_diag_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long arg)
 {
@@ -2424,7 +2424,7 @@ static int flp_diag_ioctl(flp_port_t *flp_port, unsigned int cmd, unsigned long 
 #endif
 /*lint -e732*/
 /*
- * flp ioctl消息处理
+ * flp ioctl????????????
  */
 static long flp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
@@ -2491,7 +2491,7 @@ static long flp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 /*lint +e732*/
 /*lint -e438*/
 /*
- * 设备节点open函数，内部资源初始化
+ * ????????????open??????????????????????????????
  */
 static int flp_open(struct inode *inode, struct file *filp)/*lint -e715*/
 {
@@ -2547,7 +2547,7 @@ static void __flp_release(flp_port_t *flp_port)
 }
 
 /*
- * 设备节点close函数，内部资源释放
+ * ????????????close???????????????????????????
  */
 static int flp_release(struct inode *inode, struct file *file)/*lint -e715*/
 {
@@ -2600,7 +2600,7 @@ static int flp_release(struct inode *inode, struct file *file)/*lint -e715*/
 #ifdef CONFIG_HISI_GEOFENCE_TRAJECTORY_FEATURE
 #if defined (DDR_SHMEMEXT_ADDR_AP) && defined (DDR_SHMEMEXT_SIZE)
 /*
- * 设备节点mmap函数
+ * ????????????mmap??????
  */
 static int flp_mmap(struct file *filp, struct vm_area_struct *vma)
 {
@@ -2656,7 +2656,7 @@ static int flp_mmap(struct file *filp, struct vm_area_struct *vma)
 }
 #else
 /*
- * 设备节点mmap函数
+ * ????????????mmap??????
  */
 static int flp_mmap(struct file *filp, struct vm_area_struct *vma)
 {

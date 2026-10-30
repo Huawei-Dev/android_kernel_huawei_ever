@@ -52,7 +52,7 @@ EXPORT_SYMBOL(board_info);
 OAL_STATIC int32 board_probe_ret = 0;
 OAL_STATIC struct completion board_driver_complete;
 
-/* 主要用于识别timesync初始化时获取dts属性成功与否的标志位 */
+/* ????????????timesync????????????dts???????????????????? */
 uint8 uc_timesync_run_state = TIMESYNC_RUN_SUCC;
 
 int hi11xx_kernel_crash = 0; /* linux kernel crash */
@@ -448,7 +448,7 @@ int32 board_fm_lan_init(void)
 
     board_info.fm_lan_support = OAL_FALSE;
 
-    /* 获取ini的配置值 */
+    /* ????ini???????? */
     ret = get_cust_conf_int32(INI_MODU_PLAT, INI_FM_LAN_EN, &cfg_value);
     if (ret == INI_FAILED) {
         PS_PRINT_ERR("[fm_lan]: fail to get support ini, default disabled\n");
@@ -703,7 +703,7 @@ int32 board_func_init(void)
 
     ret = find_device_board_version();
     if (ret != BOARD_SUCC) {
-        /* 兼容1102 */
+        /* ????1102 */
         board_info.chip_nr = BOARD_VERSION_HI1102;
         board_info.chip_type = device_board_version_list[board_info.chip_nr].name;
         PS_PRINT_WARNING("can not find device_board_version ,choose default:%s\n", board_info.chip_type);
@@ -825,7 +825,7 @@ int32 get_ssi_dump_cfg(void)
     int32 l_cfg_value = 0;
     int32 l_ret;
 
-    /* 获取ini的配置值 */
+    /* ????ini???????? */
     l_ret = get_cust_conf_int32(INI_MODU_PLAT, INI_SSI_DUMP_EN, &l_cfg_value);
 
     if (l_ret == INI_FAILED) {
@@ -881,14 +881,14 @@ void gnss_timesync_gpio_intr_enable(uint32 ul_en)
         return;
     }
 
-    /* 如果支持i3c或初始化timesync失败，无需执行timesync gpio中断相关操作 */
+    /* ????????i3c????????timesync??????????????timesync gpio???????????? */
     if ((get_i3c_switch_mode() == INI_USE_I3C) || (get_timesync_run_state() == TIMESYNC_RUN_FAIL)) {
         return;
     }
 
     spin_lock_irqsave(&pm_data->time_sync_irq_spinlock, flags);
     if (ul_en) {
-        /* 不再支持中断开关嵌套 */
+        /* ???????????????????? */
         if (pm_data->ul_ts_irq_stat) {
             enable_irq(pm_data->time_sync_irq);
             pm_data->ul_ts_irq_stat = 0;
@@ -931,8 +931,8 @@ int32 register_gnss_timesync_irq_init(struct pm_drv_data *pm_data, BOARD_INFO *b
 {
     int ret;
 
-    /* lint -save -e670 -specific(-e670) */ /* 屏蔽spin_lock_init函数未判断返回值告警 */
-    /* 内核函数，屏蔽 */
+    /* lint -save -e670 -specific(-e670) */ /* ????spin_lock_init???????????????????? */
+    /* ?????????????? */
     spin_lock_init(&pm_data->time_sync_irq_spinlock);
 
     pm_data->board = bd_info;
@@ -976,7 +976,7 @@ int32 gnss_timesync_event_init(void)
         PS_PRINT_ERR("board info is err\n");
         return BOARD_FAIL;
     }
-    // 暂时不返回失败
+    // ??????????????
     ret = board_timesync_gpio_init();
     if (ret != BOARD_SUCC) {
         set_timesync_run_state_fail();
@@ -1013,7 +1013,7 @@ void gnss_timesync_event_exit(void)
         return;
     }
 
-    /* 之前初始化失败，不用走exit流程 */
+    /* ??????????????????????exit???? */
     if (get_timesync_run_state() == TIMESYNC_RUN_FAIL) {
         return;
     }
@@ -1135,7 +1135,7 @@ int32 hi110x_board_resume(struct platform_device *pdev)
     return BOARD_SUCC;
 }
 
-/* SSI调试代码start */
+/* SSI????????start */
 #ifdef _PRE_CONFIG_GPIO_TO_SSI_DEBUG
 #define HI110X_SSI_CLK_GPIO_NAME  "hi110x ssi clk"
 #define HI110X_SSI_DATA_GPIO_NAME "hi110x ssi data"
@@ -1146,95 +1146,95 @@ int32 hi110x_board_resume(struct platform_device *pdev)
 #define HI1102A_GLB_CTL_AON_CRG_CKEN_W_REG            (HI1102A_GLB_CTL_BASE + 0x20)
 #define HI1102A_GLB_CTL_AON_CRG_CKEN_B_REG            (HI1102A_GLB_CTL_BASE + 0x24)
 #define HI1102A_GLB_CTL_WTOP_CRG_CLKEN_REG            (HI1102A_GLB_CTL_BASE + 0x60)
-#define HI1102A_GLB_CTL_AON_PERP_CLKSEL_W_REG         (HI1102A_GLB_CTL_BASE + 0x70)   /* AON PERP时钟选择 */
-#define HI1102A_GLB_CTL_AON_PERP_CLKSEL_B_REG         (HI1102A_GLB_CTL_BASE + 0x74)   /* AON PERP时钟选择 */
-#define HI1102A_GLB_CTL_CLK_STS_REG                   (HI1102A_GLB_CTL_BASE + 0x7C)   /* GPIO、RTC模块时钟MUX，32k时钟状态 */
+#define HI1102A_GLB_CTL_AON_PERP_CLKSEL_W_REG         (HI1102A_GLB_CTL_BASE + 0x70)   /* AON PERP???????? */
+#define HI1102A_GLB_CTL_AON_PERP_CLKSEL_B_REG         (HI1102A_GLB_CTL_BASE + 0x74)   /* AON PERP???????? */
+#define HI1102A_GLB_CTL_CLK_STS_REG                   (HI1102A_GLB_CTL_BASE + 0x7C)   /* GPIO??RTC????????MUX??32k???????? */
 #define HI1102A_GLB_CTL_SOFT_RST_BCPU_REG             (HI1102A_GLB_CTL_BASE + 0x94)
-#define HI1102A_GLB_CTL_SYS_TICK_CFG_W_REG            (HI1102A_GLB_CTL_BASE + 0xC0)   /* bit1写1清零systick，写0无效 */
+#define HI1102A_GLB_CTL_SYS_TICK_CFG_W_REG            (HI1102A_GLB_CTL_BASE + 0xC0)   /* bit1??1????systick????0???? */
 #define HI1102A_GLB_CTL_SYS_TICK_VALUE_W_0_REG        (HI1102A_GLB_CTL_BASE + 0xD0)
 #define HI1102A_GLB_CTL_PAD_SDIO_CFG0_REG             (HI1102A_GLB_CTL_BASE + 0x200)
 #define HI1102A_GLB_CTL_PINMUX_CFG_CR_MODE_REG        (HI1102A_GLB_CTL_BASE + 0x268)
 #define HI1102A_GLB_CTL_PINMUX_CFG_RSV_MODE_REG       (HI1102A_GLB_CTL_BASE + 0x26C)
 #define HI1102A_GLB_CTL_PINMUX_CFG_GNSSHUB2_MODE_REG  (HI1102A_GLB_CTL_BASE + 0x294)
-#define HI1102A_GLB_CTL_TCXO_DET_CTL_REG              (HI1102A_GLB_CTL_BASE + 0x600)  /* TCXO时钟检测控制寄存器 */
-#define HI1102A_GLB_CTL_TCXO_32K_DET_CNT_REG          (HI1102A_GLB_CTL_BASE + 0x604)  /* TCXO时钟检测控制寄存器 */
-#define HI1102A_GLB_CTL_TCXO_32K_DET_RESULT_REG       (HI1102A_GLB_CTL_BASE + 0x608)  /* TCXO时钟检测控制寄存器 */
-#define HI1102A_GLB_CTL_WL_WAKEUP_EVENT_EN_REG        (HI1102A_GLB_CTL_BASE + 0xA60)  /* WLAN系统唤醒事件 */
-#define HI1102A_GLB_CTL_WL_WAKEUP_EVENT_STS_REG       (HI1102A_GLB_CTL_BASE + 0xA64)  /* WLAN系统唤醒事件 */
-#define HI1102A_GLB_CTL_WL_WAKEUP_INT_EN_REG          (HI1102A_GLB_CTL_BASE + 0xA70)  /* WLAN系统唤醒中断 */
-#define HI1102A_GLB_CTL_WL_WAKEUP_INT_STS_REG         (HI1102A_GLB_CTL_BASE + 0xA74)  /* WLAN系统唤醒中断 */
-#define HI1102A_GLB_CTL_BFGN_WAKEUP_EVENT_EN_REG      (HI1102A_GLB_CTL_BASE + 0xAA0)  /* BFGN系统唤醒事件 */
-#define HI1102A_GLB_CTL_BFGN_WAKEUP_EVENT_STS_REG     (HI1102A_GLB_CTL_BASE + 0xAA4)  /* BFGN系统唤醒事件 */
-#define HI1102A_GLB_CTL_BFGN_WAKEUP_INT_EN_REG        (HI1102A_GLB_CTL_BASE + 0xAB0)  /* BFGN系统唤醒中断 */
-#define HI1102A_GLB_CTL_BFGN_WAKEUP_INT_STS_REG       (HI1102A_GLB_CTL_BASE + 0xAB4)  /* BFGN系统唤醒中断 */
+#define HI1102A_GLB_CTL_TCXO_DET_CTL_REG              (HI1102A_GLB_CTL_BASE + 0x600)  /* TCXO?????????????????? */
+#define HI1102A_GLB_CTL_TCXO_32K_DET_CNT_REG          (HI1102A_GLB_CTL_BASE + 0x604)  /* TCXO?????????????????? */
+#define HI1102A_GLB_CTL_TCXO_32K_DET_RESULT_REG       (HI1102A_GLB_CTL_BASE + 0x608)  /* TCXO?????????????????? */
+#define HI1102A_GLB_CTL_WL_WAKEUP_EVENT_EN_REG        (HI1102A_GLB_CTL_BASE + 0xA60)  /* WLAN???????????? */
+#define HI1102A_GLB_CTL_WL_WAKEUP_EVENT_STS_REG       (HI1102A_GLB_CTL_BASE + 0xA64)  /* WLAN???????????? */
+#define HI1102A_GLB_CTL_WL_WAKEUP_INT_EN_REG          (HI1102A_GLB_CTL_BASE + 0xA70)  /* WLAN???????????? */
+#define HI1102A_GLB_CTL_WL_WAKEUP_INT_STS_REG         (HI1102A_GLB_CTL_BASE + 0xA74)  /* WLAN???????????? */
+#define HI1102A_GLB_CTL_BFGN_WAKEUP_EVENT_EN_REG      (HI1102A_GLB_CTL_BASE + 0xAA0)  /* BFGN???????????? */
+#define HI1102A_GLB_CTL_BFGN_WAKEUP_EVENT_STS_REG     (HI1102A_GLB_CTL_BASE + 0xAA4)  /* BFGN???????????? */
+#define HI1102A_GLB_CTL_BFGN_WAKEUP_INT_EN_REG        (HI1102A_GLB_CTL_BASE + 0xAB0)  /* BFGN???????????? */
+#define HI1102A_GLB_CTL_BFGN_WAKEUP_INT_STS_REG       (HI1102A_GLB_CTL_BASE + 0xAB4)  /* BFGN???????????? */
 #define HI1102A_GLB_CTL_WCPU_WAIT_CTL_REG             (HI1102A_GLB_CTL_BASE + 0xE00)
 #define HI1102A_GLB_CTL_BCPU_WAIT_CTL_REG             (HI1102A_GLB_CTL_BASE + 0xE04)
 #define HI1102A_GLB_CTL_DEBUG_GLB_SIGNAL_2_STS_REG    (HI1102A_GLB_CTL_BASE + 0xF68)
 
 #define HI1102A_XOADC_CTL_BASE (0x50001000)
-#define HI1102A_XOADC_CTL_GP_REG3_REG                  (HI1102A_XOADC_CTL_BASE + 0xC1C) /* 通用寄存器 */
+#define HI1102A_XOADC_CTL_GP_REG3_REG                  (HI1102A_XOADC_CTL_BASE + 0xC1C) /* ?????????? */
 
 #define HI1102A_PMU_CMU_CTL_BASE                      0x50002000
-#define HI1102A_PMU_CMU_CTL_PMU_STS_0_REG             (HI1102A_PMU_CMU_CTL_BASE + 0x114)  /* PMU_0 实际状态 */
-#define HI1102A_PMU_CMU_CTL_PMU_STS_1_REG             (HI1102A_PMU_CMU_CTL_BASE + 0x134)  /* PMU_1 实际状态 */
-#define HI1102A_PMU_CMU_CTL_PMU_MAN_STS_2_REG         (HI1102A_PMU_CMU_CTL_BASE + 0x150)  /* PMU_2 手动状态 */
-#define HI1102A_PMU_CMU_CTL_PMU_STS_3_REG             (HI1102A_PMU_CMU_CTL_BASE + 0x170)  /* PMU_3 实际状态 */
-#define HI1102A_PMU_CMU_CTL_EN_PALDO_STS_REG          (HI1102A_PMU_CMU_CTL_BASE + 0x18C)  /* PALDO控制 */
-#define HI1102A_PMU_CMU_CTL_EN_PALDO_W_REG            (HI1102A_PMU_CMU_CTL_BASE + 0x190)  /* PALDO控制 */
-#define HI1102A_PMU_CMU_CTL_EN_PALDO_B_REG            (HI1102A_PMU_CMU_CTL_BASE + 0x194)  /* PALDO控制 */
-#define HI1102A_PMU_CMU_CTL_PMU_STATUS_RAW_REG        (HI1102A_PMU_CMU_CTL_BASE + 0x300)  /* PMU状态查询 */
-#define HI1102A_PMU_CMU_CTL_PMU_STATUS_RAW_STICK_REG  (HI1102A_PMU_CMU_CTL_BASE + 0x304)  /* PMU状态查询 */
-#define HI1102A_PMU_CMU_CTL_PMU_STATUS_RAW_STICK_CLR_REG  (HI1102A_PMU_CMU_CTL_BASE + 0x308)  /* PMU状态查询 */
-#define HI1102A_PMU_CMU_CTL_PMU_STATUS_GRM_REG        (HI1102A_PMU_CMU_CTL_BASE + 0x320)  /* PMU状态查询 */
-#define HI1102A_PMU_CMU_CTL_PMU_STATUS_GRM_STICK_REG  (HI1102A_PMU_CMU_CTL_BASE + 0x324)  /* PMU状态查询 */
-#define HI1102A_PMU_CMU_CTL_PMU_PROTECT_STATUS_REG    (HI1102A_PMU_CMU_CTL_BASE + 0x380)  /* PMU状态查询 */
-#define HI1102A_PMU_CMU_CTL_PMU_PROTECT_DISABLE_REG   (HI1102A_PMU_CMU_CTL_BASE + 0x390)  /* PMU状态查询 */
-#define HI1102A_PMU_CMU_CTL_SYS_STATUS_REG            (HI1102A_PMU_CMU_CTL_BASE + 0xB00)  /* 系统状态寄存器 */
+#define HI1102A_PMU_CMU_CTL_PMU_STS_0_REG             (HI1102A_PMU_CMU_CTL_BASE + 0x114)  /* PMU_0 ???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_STS_1_REG             (HI1102A_PMU_CMU_CTL_BASE + 0x134)  /* PMU_1 ???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_MAN_STS_2_REG         (HI1102A_PMU_CMU_CTL_BASE + 0x150)  /* PMU_2 ???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_STS_3_REG             (HI1102A_PMU_CMU_CTL_BASE + 0x170)  /* PMU_3 ???????? */
+#define HI1102A_PMU_CMU_CTL_EN_PALDO_STS_REG          (HI1102A_PMU_CMU_CTL_BASE + 0x18C)  /* PALDO???? */
+#define HI1102A_PMU_CMU_CTL_EN_PALDO_W_REG            (HI1102A_PMU_CMU_CTL_BASE + 0x190)  /* PALDO???? */
+#define HI1102A_PMU_CMU_CTL_EN_PALDO_B_REG            (HI1102A_PMU_CMU_CTL_BASE + 0x194)  /* PALDO???? */
+#define HI1102A_PMU_CMU_CTL_PMU_STATUS_RAW_REG        (HI1102A_PMU_CMU_CTL_BASE + 0x300)  /* PMU???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_STATUS_RAW_STICK_REG  (HI1102A_PMU_CMU_CTL_BASE + 0x304)  /* PMU???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_STATUS_RAW_STICK_CLR_REG  (HI1102A_PMU_CMU_CTL_BASE + 0x308)  /* PMU???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_STATUS_GRM_REG        (HI1102A_PMU_CMU_CTL_BASE + 0x320)  /* PMU???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_STATUS_GRM_STICK_REG  (HI1102A_PMU_CMU_CTL_BASE + 0x324)  /* PMU???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_PROTECT_STATUS_REG    (HI1102A_PMU_CMU_CTL_BASE + 0x380)  /* PMU???????? */
+#define HI1102A_PMU_CMU_CTL_PMU_PROTECT_DISABLE_REG   (HI1102A_PMU_CMU_CTL_BASE + 0x390)  /* PMU???????? */
+#define HI1102A_PMU_CMU_CTL_SYS_STATUS_REG            (HI1102A_PMU_CMU_CTL_BASE + 0xB00)  /* ?????????????? */
 
 #define HI1102A_W_CTL_BASE                            0x40000000
 #define HI1102A_W_CTL_WCBB_SOFT_CLKEN1_REG            (HI1102A_W_CTL_BASE + 0x30)
 
 #define HI1102A_DIAG_CTL_BASE                         0x50013000
-#define HI1102A_DIAG_CTL_CFG_MONITOR_CLOCK_REG        (HI1102A_DIAG_CTL_BASE + 0x264)  /* 数采时钟配置 */
+#define HI1102A_DIAG_CTL_CFG_MONITOR_CLOCK_REG        (HI1102A_DIAG_CTL_BASE + 0x264)  /* ???????????? */
 #define HI1102A_DIAG_CTL_WCPU_LOAD_REG                (HI1102A_DIAG_CTL_BASE + 0x2C0)  /* WCPU_LOAD */
-#define HI1102A_DIAG_CTL_WCPU_PC_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2C8)  /* WCPU_PC低16bit */
-#define HI1102A_DIAG_CTL_WCPU_PC_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2CC)  /* WCPU_PC高16bit */
-#define HI1102A_DIAG_CTL_WCPU_LR_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2D0)  /* WCPU_LR低16bit */
-#define HI1102A_DIAG_CTL_WCPU_LR_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2D4)  /* WCPU_LR高16bit */
-#define HI1102A_DIAG_CTL_WCPU_SP_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2D8)  /* WCPU_SP低16bit */
-#define HI1102A_DIAG_CTL_WCPU_SP_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2DC)  /* WCPU_SP高16bit */
+#define HI1102A_DIAG_CTL_WCPU_PC_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2C8)  /* WCPU_PC??16bit */
+#define HI1102A_DIAG_CTL_WCPU_PC_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2CC)  /* WCPU_PC??16bit */
+#define HI1102A_DIAG_CTL_WCPU_LR_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2D0)  /* WCPU_LR??16bit */
+#define HI1102A_DIAG_CTL_WCPU_LR_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2D4)  /* WCPU_LR??16bit */
+#define HI1102A_DIAG_CTL_WCPU_SP_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2D8)  /* WCPU_SP??16bit */
+#define HI1102A_DIAG_CTL_WCPU_SP_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2DC)  /* WCPU_SP??16bit */
 #define HI1102A_DIAG_CTL_BCPU_LOAD_REG                (HI1102A_DIAG_CTL_BASE + 0x2E0)  /* BCPU_LOAD */
-#define HI1102A_DIAG_CTL_BCPU_PC_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2E8)  /* BCPU_PC低16bit */
-#define HI1102A_DIAG_CTL_BCPU_PC_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2EC)  /* BCPU_PC高16bit */
-#define HI1102A_DIAG_CTL_BCPU_LR_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2F0)  /* BCPU_LR低16bit */
-#define HI1102A_DIAG_CTL_BCPU_LR_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2F4)  /* BCPU_LR高16bit */
-#define HI1102A_DIAG_CTL_BCPU_SP_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2F8)  /* BCPU_SP低16bit */
-#define HI1102A_DIAG_CTL_BCPU_SP_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2FC)  /* BCPU_SP高16bit */
+#define HI1102A_DIAG_CTL_BCPU_PC_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2E8)  /* BCPU_PC??16bit */
+#define HI1102A_DIAG_CTL_BCPU_PC_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2EC)  /* BCPU_PC??16bit */
+#define HI1102A_DIAG_CTL_BCPU_LR_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2F0)  /* BCPU_LR??16bit */
+#define HI1102A_DIAG_CTL_BCPU_LR_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2F4)  /* BCPU_LR??16bit */
+#define HI1102A_DIAG_CTL_BCPU_SP_L_REG                (HI1102A_DIAG_CTL_BASE + 0x2F8)  /* BCPU_SP??16bit */
+#define HI1102A_DIAG_CTL_BCPU_SP_H_REG                (HI1102A_DIAG_CTL_BASE + 0x2FC)  /* BCPU_SP??16bit */
 
 #define HI1102A_WCPU_PATCH_BASE                       0x40020000
 #define HI1102A_WCPU_PATCH_WCPU_CFG_TRACE_EN_REG      (HI1102A_WCPU_PATCH_BASE + 0x804)
 
 #define HI1102A_COM_CTL_BASE                          0x50014000
-#define HI1102A_COM_CTL_COMCRG_SOFT_RESET_REG         (HI1102A_COM_CTL_BASE + 0x20)     /* COM_SUB软复位寄存器 */
-#define HI1102A_COM_CTL_COMCRG_CKEN_REG               (HI1102A_COM_CTL_BASE + 0x30)     /* UART时钟门控寄存器 */
-#define HI1102A_COM_CTL_CLKSEL_REG                    (HI1102A_COM_CTL_BASE + 0x80)     /* WLAN TCXO/PLL时钟模式选择寄存器 */
-#define HI1102A_COM_CTL_CLKMUX_STS_REG                (HI1102A_COM_CTL_BASE + 0x90)     /* TCXO/PLL时钟模式状态寄存器 */
-#define HI1102A_COM_CTL_CLK_480M_GT_REG               (HI1102A_COM_CTL_BASE + 0x420)    /* WLAN CMU PLL_480M 时钟门控寄存器 */
-#define HI1102A_COM_CTL_CLK_ADC_320M_GT_W_REG         (HI1102A_COM_CTL_BASE + 0x488)    /* WLAN CMU ADC_320M_W 时钟门控寄存器 */
-#define HI1102A_COM_CTL_CLK_DAC_320M_GT_W_REG         (HI1102A_COM_CTL_BASE + 0x48C)    /* WLAN CMU DAC_320M_W 时钟门控寄存器 */
-#define HI1102A_COM_CTL_CLK_240M_GT_W_REG             (HI1102A_COM_CTL_BASE + 0x494)    /* WLAN CMU PLL_240M 时钟门控寄存器 */
-#define HI1102A_COM_CTL_CLK_320M_GT_W_REG             (HI1102A_COM_CTL_BASE + 0x498)    /* WLAN CMU PLL_320M 时钟门控寄存器 */
-#define HI1102A_COM_CTL_CMU_STATUS_RAW_REG            (HI1102A_COM_CTL_BASE + 0x600)    /* CMU状态查询寄存器 */
-#define HI1102A_COM_CTL_CMU_STATUS_RAW_STICK_REG      (HI1102A_COM_CTL_BASE + 0x604)    /* CMU状态查询寄存器 */
-#define HI1102A_COM_CTL_CMU_STATUS_GRM_REG            (HI1102A_COM_CTL_BASE + 0x620)    /* CMU滤毛刺状态查询寄存器 */
-#define HI1102A_COM_CTL_CMU_STATUS_GRM_STICK_REG      (HI1102A_COM_CTL_BASE + 0x624)    /* CMU滤毛刺状态查询寄存器 */
-#define HI1102A_COM_CTL_CMU_EN_STS_REG                (HI1102A_COM_CTL_BASE + 0x640)    /* CMU 使能状态寄存器 */
+#define HI1102A_COM_CTL_COMCRG_SOFT_RESET_REG         (HI1102A_COM_CTL_BASE + 0x20)     /* COM_SUB???????????? */
+#define HI1102A_COM_CTL_COMCRG_CKEN_REG               (HI1102A_COM_CTL_BASE + 0x30)     /* UART?????????????? */
+#define HI1102A_COM_CTL_CLKSEL_REG                    (HI1102A_COM_CTL_BASE + 0x80)     /* WLAN TCXO/PLL?????????????????? */
+#define HI1102A_COM_CTL_CLKMUX_STS_REG                (HI1102A_COM_CTL_BASE + 0x90)     /* TCXO/PLL?????????????????? */
+#define HI1102A_COM_CTL_CLK_480M_GT_REG               (HI1102A_COM_CTL_BASE + 0x420)    /* WLAN CMU PLL_480M ?????????????? */
+#define HI1102A_COM_CTL_CLK_ADC_320M_GT_W_REG         (HI1102A_COM_CTL_BASE + 0x488)    /* WLAN CMU ADC_320M_W ?????????????? */
+#define HI1102A_COM_CTL_CLK_DAC_320M_GT_W_REG         (HI1102A_COM_CTL_BASE + 0x48C)    /* WLAN CMU DAC_320M_W ?????????????? */
+#define HI1102A_COM_CTL_CLK_240M_GT_W_REG             (HI1102A_COM_CTL_BASE + 0x494)    /* WLAN CMU PLL_240M ?????????????? */
+#define HI1102A_COM_CTL_CLK_320M_GT_W_REG             (HI1102A_COM_CTL_BASE + 0x498)    /* WLAN CMU PLL_320M ?????????????? */
+#define HI1102A_COM_CTL_CMU_STATUS_RAW_REG            (HI1102A_COM_CTL_BASE + 0x600)    /* CMU?????????????? */
+#define HI1102A_COM_CTL_CMU_STATUS_RAW_STICK_REG      (HI1102A_COM_CTL_BASE + 0x604)    /* CMU?????????????? */
+#define HI1102A_COM_CTL_CMU_STATUS_GRM_REG            (HI1102A_COM_CTL_BASE + 0x620)    /* CMU???????????????????? */
+#define HI1102A_COM_CTL_CMU_STATUS_GRM_STICK_REG      (HI1102A_COM_CTL_BASE + 0x624)    /* CMU???????????????????? */
+#define HI1102A_COM_CTL_CMU_EN_STS_REG                (HI1102A_COM_CTL_BASE + 0x640)    /* CMU ?????????????? */
 
 #define HI1102A_BCPU_PATCH_BASE                       0x4B080000
 #define HI1102A_BCPU_PATCH_BCPU_CFG_TRACE_EN_REG      (HI1102A_BCPU_PATCH_BASE + 0xC00)
 
 #define HI1103_PMU2_CMU_IR_BASE                       0x50003000
-#define HI1103_PMU2_CMU_IR_CMU_RESERVE1_REG           (HI1103_PMU2_CMU_IR_BASE + 0x338)  /* RESERVE 控制 */
+#define HI1103_PMU2_CMU_IR_CMU_RESERVE1_REG           (HI1103_PMU2_CMU_IR_BASE + 0x338)  /* RESERVE ???? */
 
 #ifdef BFGX_UART_DOWNLOAD_SUPPORT
 #define SSI_CLK_GPIO  89
@@ -1271,7 +1271,7 @@ char *ssi_hi1102a_cpu_sys_st_str[] = {
     "WORKING", /* 0x1 */
 };
 
-/* 过流过压状态 */
+/* ???????????? */
 char *ssi_hi1102a_pmu_protect_st_str[] = {
     "ocp_cldo1_grm_1stick",    /* 0x0 */
     "ocp_rfldo1_grm_1stick",   /* 0x1 */
@@ -1291,7 +1291,7 @@ char *ssi_hi1102a_pmu_protect_st_str[] = {
     "reserved",                /* 0xf */
 };
 
-/* 下电状态 */
+/* ???????? */
 char *ssi_hi1102a_pmu_protect_rpt_str[] = {
     "buck_scp_off",                    /* 0x0 */
     "buck_scp_off_rpt",                /* 0x1 */
@@ -1312,7 +1312,7 @@ char *ssi_hi1102a_pmu_protect_rpt_str[] = {
 };
 
 #define SSI_CPU_ARM_REG_DUMP_CNT 2
-static uint32 halt_det_cnt = 0; /* 检测soc异常次数 */
+static uint32 halt_det_cnt = 0; /* ????soc???????? */
 typedef struct _ssi_cpu_info_ {
     uint32 cpu_state;
     uint32 pc[SSI_CPU_ARM_REG_DUMP_CNT];
@@ -1331,16 +1331,16 @@ static ssi_cpu_infos st_ssi_cpu_infos;
 #define SSI_WRITE_DATA 0x5a5a
 ssi_trans_test_st ssi_test_st = {0};
 
-uint32 ssi_clk = 0;              /* 模拟ssi时钟的GPIO管脚号 */
-uint32 ssi_data = 0;             /* 模拟ssi数据线的GPIO管脚号 */
-uint16 ssi_base = 0x8000;        /* ssi基址 */
-uint32 interval = INTERVAL_TIME; /* GPIO拉出来的波形保持时间，单位us */
+uint32 ssi_clk = 0;              /* ????ssi??????GPIO?????? */
+uint32 ssi_data = 0;             /* ????ssi????????GPIO?????? */
+uint16 ssi_base = 0x8000;        /* ssi???? */
+uint32 interval = INTERVAL_TIME; /* GPIO??????????????????????????us */
 uint32 delay = 5;
 
 /*
- * ssi 工作时必须切换ssi clock,
- * 此时aon会受到影响，
- * BCPU/WCPU 有可能异常，慎用!
+ * ssi ??????????????ssi clock,
+ * ????aon????????????
+ * BCPU/WCPU ????????????????!
  */
 int32 ssi_try_lock(void)
 {
@@ -1373,7 +1373,7 @@ int32 wait_for_ssi_idle_timeout(int32 mstimeout)
     } else {
         can_sleep = 1;
     }
-    /* 考虑效率，这里需要判断是否可以睡眠 */
+    /* ?????????????????????????????????? */
     while (ssi_try_lock()) {
         if (can_sleep) {
             msleep(1);
@@ -1503,17 +1503,17 @@ int32 ssi_write_data(uint16 addr, uint16 value)
         ssi_data_output(0);
     }
 
-    /* 发送SYNC位 */
+    /* ????SYNC?? */
     PS_PRINT_DBG("tx sync bit\n");
     ssi_clk_output();
     ssi_data_output(1);
 
-    /* 指示本次操作为写，高读低写 */
+    /* ?????????????????????????? */
     PS_PRINT_DBG("tx r/w->w\n");
     ssi_clk_output();
     ssi_data_output(0);
 
-    /* 发送地址 */
+    /* ???????? */
     PS_PRINT_DBG("write addr:0x%x\n", addr);
     for (i = 0; i < SSI_DATA_LEN; i++) {
         tx = (addr >> (SSI_DATA_LEN - i - 1)) & 0x0001;
@@ -1522,7 +1522,7 @@ int32 ssi_write_data(uint16 addr, uint16 value)
         ssi_data_output(tx);
     }
 
-    /* 发送数据 */
+    /* ???????? */
     PS_PRINT_DBG("write value:0x%x\n", value);
     for (i = 0; i < SSI_DATA_LEN; i++) {
         tx = (value >> (SSI_DATA_LEN - i - 1)) & 0x0001;
@@ -1531,7 +1531,7 @@ int32 ssi_write_data(uint16 addr, uint16 value)
         ssi_data_output(tx);
     }
 
-    /* 数据发送完成以后，保持delay个周期的0 */
+    /* ??????????????????????delay????????0 */
     PS_PRINT_DBG("ssi write:finish, delay %d cycle\n", delay);
     for (i = 0; i < delay; i++) {
         ssi_clk_output();
@@ -1555,17 +1555,17 @@ uint16 ssi_read_data(uint16 addr)
         ssi_data_output(0);
     }
 
-    /* 发送SYNC位 */
+    /* ????SYNC?? */
     PS_PRINT_DBG("tx sync bit\n");
     ssi_clk_output();
     ssi_data_output(1);
 
-    /* 指示本次操作为读，高读低写 */
+    /* ?????????????????????????? */
     PS_PRINT_DBG("tx r/w->r\n");
     ssi_clk_output();
     ssi_data_output(1);
 
-    /* 发送地址 */
+    /* ???????? */
     PS_PRINT_DBG("read addr:0x%x\n", addr);
     for (i = 0; i < SSI_DATA_LEN; i++) {
         tx = (addr >> (SSI_DATA_LEN - i - 1)) & 0x0001;
@@ -1574,15 +1574,15 @@ uint16 ssi_read_data(uint16 addr)
         ssi_data_output(tx);
     }
 
-    /* 延迟一个clk，否则上一个数据只保持了半个时钟周期 */
+    /* ????????clk???????????????????????????????????? */
     ssi_clk_output();
 
-    /* 设置data线GPIO为输入，准备读取数据 */
+    /* ????data??GPIO???????????????????? */
     gpio_direction_input(ssi_data);
 
     PS_PRINT_DBG("data in mod, current gpio level is %d\n", gpio_get_value(ssi_data));
 
-    /* 读取SYNC同步位 */
+    /* ????SYNC?????? */
     do {
         ssi_clk_output();
         SSI_DELAY(interval);
@@ -1607,7 +1607,7 @@ uint16 ssi_read_data(uint16 addr)
         data = data | (rx << (SSI_DATA_LEN - i - 1));
     }
 
-    /* 恢复data线GPIO为输出，并输出0 */
+    /* ????data??GPIO??????????????0 */
     ssi_data_output(0);
 
     return data;
@@ -1653,13 +1653,13 @@ int32 ssi_write32(uint32 addr, uint16 value)
     addr_half_word_high = (addr >> 16) & 0xffff;
     addr_half_word_low = (addr & 0xffff) >> 1;
 
-    /* 往基地址写地址的高16位 */
+    /* ??????????????????16?? */
     if (ssi_write16(ssi_base, addr_half_word_high) < 0) {
         PS_PRINT_ERR("ssi write: 0x%x=0x%x fail\n", addr, value);
         return BOARD_FAIL;
     }
 
-    /* 低地址写实际要写入的value */
+    /* ????????????????????value */
     if (ssi_write16(addr_half_word_low, value) < 0) {
         PS_PRINT_ERR("ssi write: 0x%x=0x%x fail\n", addr, value);
         return BOARD_FAIL;
@@ -1705,17 +1705,17 @@ int32 ssi_read_data16(uint16 addr, uint16 *value)
         ssi_data_output(0);
     }
 
-    /* 发送SYNC位 */
+    /* ????SYNC?? */
     PS_PRINT_DBG("tx sync bit\n");
     ssi_clk_output();
     ssi_data_output(1);
 
-    /* 指示本次操作为读，高读低写 */
+    /* ?????????????????????????? */
     PS_PRINT_DBG("tx r/w->r\n");
     ssi_clk_output();
     ssi_data_output(1);
 
-    /* 发送地址 */
+    /* ???????? */
     PS_PRINT_DBG("read addr:0x%x\n", addr);
     for (i = 0; i < SSI_DATA_LEN; i++) {
         tx = (addr >> (SSI_DATA_LEN - i - 1)) & 0x0001;
@@ -1724,15 +1724,15 @@ int32 ssi_read_data16(uint16 addr, uint16 *value)
         ssi_data_output(tx);
     }
 
-    /* 延迟一个clk，否则上一个数据只保持了半个时钟周期 */
+    /* ????????clk???????????????????????????????????? */
     ssi_clk_output();
 
-    /* 设置data线GPIO为输入，准备读取数据 */
+    /* ????data??GPIO???????????????????? */
     gpio_direction_input(ssi_data);
 
     PS_PRINT_DBG("data in mod, current gpio level is %d\n", gpio_get_value(ssi_data));
 
-    /* 读取SYNC同步位 */
+    /* ????SYNC?????? */
     do {
         ssi_clk_output();
         SSI_DELAY(interval);
@@ -1757,7 +1757,7 @@ int32 ssi_read_data16(uint16 addr, uint16 *value)
         data = data | (rx << (SSI_DATA_LEN - i - 1));
     }
 
-    /* 恢复data线GPIO为输出，并输出0 */
+    /* ????data??GPIO??????????????0 */
     ssi_data_output(0);
 
     *value = data;
@@ -1790,11 +1790,11 @@ int32 ssi_read_value16(uint32 addr, uint16 *value, int16 last_high_addr)
 
 /*
  * Prototype    : ssi_read_value32
- * Description  : gpio模拟SSI 读32BIT value
- *                1.配置SSI 为32BIT模式
- *                2.第一次读16BIT操作，SOC发起32BIT操作，返回低16BIT给HOST
- *                3.第二次读同一地址16BIT操作，SOC不发起总线操作，返回高16BIT给HOST
- *                4.如果跳过步骤3 读其他地址，SOC侧高16BIT 会被丢弃
+ * Description  : gpio????SSI ??32BIT value
+ *                1.????SSI ??32BIT????
+ *                2.????????16BIT??????SOC????32BIT????????????16BIT??HOST
+ *                3.????????????????16BIT??????SOC??????????????????????16BIT??HOST
+ *                4.????????????3 ????????????SOC????16BIT ????????
  */
 int32 ssi_read_value32(uint32 addr, uint32 *value, int16 last_high_addr)
 {
@@ -1808,7 +1808,7 @@ int32 ssi_read_value32(uint32 addr, uint32 *value, int16 last_high_addr)
     }
     *value = (uint32)reg;
 
-    /* 读32位地址的高16位 */
+    /* ??32??????????16?? */
     ret = ssi_read_value16(addr + 0x2, &reg, (addr >> 16));
     if (ret) {
         PS_PRINT_ERR("read addr 0x%x high 16 bit failed, ret=%d\n", addr, ret);
@@ -1839,7 +1839,7 @@ int32 do_ssi_file_test(ssi_file_st *file_st, ssi_trans_test_st *pst_ssi_test)
     int32 rdlen = 0;
     uint32 ul_addr;
     int32 l_ret = BOARD_FAIL;
-    const uint32 ul_count_everytime = 2; /* 表示每次循环读的字节数 */
+    const uint32 ul_count_everytime = 2; /* ?????????????????????? */
 
     if ((pst_ssi_test == NULL) || (file_st == NULL)) {
         return BOARD_FAIL;
@@ -2030,7 +2030,7 @@ int32 ssi_file_test(ssi_trans_test_st *pst_ssi_test)
 
     /* reset wcpu */
     if (ssi_write32(HI1102A_W_CTL_WCBB_SOFT_CLKEN1_REG, 0xfe5e) != BOARD_SUCC) {
-        // 脉冲复位
+        // ????????
     }
     /* boot flag */
     if (ssi_write32(HI1102A_GLB_CTL_PAD_SDIO_CFG0_REG, 0xbeaf) != BOARD_SUCC) {
@@ -2092,7 +2092,7 @@ int32 do_ssi_mem_test(ssi_trans_test_st *pst_ssi_test)
     }
 
     for (i = 0; i < pst_ssi_test->trans_len; i++) {
-        ul_addr = ul_write_base + 2 * i;  // 按2字节读写
+        ul_addr = ul_write_base + 2 * i;  // ??2????????
         l_ret = ssi_write32(ul_addr, SSI_WRITE_DATA);
         if (l_ret != BOARD_SUCC) {
             PS_PRINT_ERR(" write data error, ul_addr=0x%x, l_ret=%d\n", ul_addr, l_ret);
@@ -2157,7 +2157,7 @@ ssi_reg_info hi1103_w_ctrl_full = { 0x40000000, 0x408,  SSI_RW_WORD_MOD };
 ssi_reg_info hi1103_w_key_mem = { 0x2001e620, 0x80,   SSI_RW_DWORD_MOD };
 ssi_reg_info hi1103_b_ctrl_full = { 0x48000000, 0x40c,  SSI_RW_WORD_MOD };
 ssi_reg_info hi1103_pcie_ctrl_full = { 0x40007000, 0x488,  SSI_RW_DWORD_MOD };
-ssi_reg_info hi1103_pcie_dbi_full = { 0x40102000, 0x900,  SSI_RW_DWORD_MOD };         /* 没建链之前不能读 */
+ssi_reg_info hi1103_pcie_dbi_full = { 0x40102000, 0x900,  SSI_RW_DWORD_MOD };         /* ???????????????? */
 ssi_reg_info hi1103_pcie_pilot_iatu_full = { 0x40104000, 0x2000, SSI_RW_DWORD_MOD }; /* 8KB */
 ssi_reg_info hi1103_pcie_pilot_dma_full = { 0x40106000, 0x1000, SSI_RW_DWORD_MOD };  /* 4KB */
 ssi_reg_info hi1103_pcie_dma_ctrl_full = { 0x40008000, 0x34,   SSI_RW_DWORD_MOD };
@@ -2236,9 +2236,9 @@ int ssi_read_wpcu_pc_lr_sp(int trace_en)
     int i;
     uint32 reg_low, reg_high, pc, lr, sp;
 
-    /* 1102A 采PC逻辑处于com_ctl */
+    /* 1102A ??PC????????com_ctl */
     for (i = 0; i < SSI_CPU_ARM_REG_DUMP_CNT; i++) {
-        /* w/b clk en */ /* debug uart ,IPC, RF，ABB(ADC),coex,etc..(单系统不在com_ctl) */
+        /* w/b clk en */ /* debug uart ,IPC, RF??ABB(ADC),coex,etc..(??????????com_ctl) */
         ssi_write32(HI1102A_DIAG_CTL_CFG_MONITOR_CLOCK_REG, 0x18);
         oal_mdelay(1);
 
@@ -2526,12 +2526,12 @@ void ssi_read_cmu_state(void)
 {
     uint32 reg;
 
-    // 如果wcpu不处于工作状态，返回
+    // ????wcpu????????????????????
     if (ssi_check_wcpu_is_working() == 0) {
         return;
     }
 
-    // COM_CTL区域
+    // COM_CTL????
     reg = (uint32)ssi_read32(HI1102A_COM_CTL_COMCRG_SOFT_RESET_REG);
     PS_PRINT_INFO("COMCRG_SOFT_RESET[0x50014020] = 0x%x\n", reg);
     reg = (uint32)ssi_read32(HI1102A_COM_CTL_COMCRG_CKEN_REG);
@@ -2561,7 +2561,7 @@ void ssi_read_cmu_state(void)
     reg = (uint32)ssi_read32(HI1102A_COM_CTL_CMU_EN_STS_REG);
     PS_PRINT_INFO("EN_STS[0x50014640] = 0x%x\n", reg);
 
-    // AON 区域
+    // AON ????
     reg = (uint32)ssi_read32(HI1102A_GLB_CTL_AON_CRG_CKEN_W_REG);
     PS_PRINT_INFO("CKEN_W[0x50000020] = 0x%x\n", reg);
     reg = (uint32)ssi_read32(HI1102A_GLB_CTL_AON_CRG_CKEN_B_REG);
@@ -2605,9 +2605,9 @@ int ssi_check_bcpu_is_working(void)
 }
 
 /*
- * 1102a pc采样属于comm_ctl 区域，不在AON电源域，
- * 当WBUS异常时访问可能会导致AON也无法正常读写，
- * 所以顺序调整到AON读完后
+ * 1102a pc????????comm_ctl ??????????AON????????
+ * ??WBUS????????????????????AON????????????????
+ * ??????????????AON??????
  */
 int ssi_read_device_arm_register(int trace_en)
 {
@@ -2702,7 +2702,7 @@ static int ssi_read_reg_prep(ssi_reg_info *pst_reg_info, oal_int32 *is_logfile, 
                          pst_reg_info->base_addr,
                          pst_reg_info->base_addr + pst_reg_info->len - 1,
                          tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-                         tm.tm_hour, tm.tm_min, tm.tm_sec); /* 转换成当前时间 */
+                         tm.tm_hour, tm.tm_min, tm.tm_sec); /* ?????????????? */
         if (ret < 0) {
             PS_PRINT_ERR("log str format err line[%d]\n", __LINE__);
             return -OAL_EFAIL;
@@ -2835,7 +2835,7 @@ retry:
 #ifdef CONFIG_PRINTK
             /* print to kenrel msg */
             print_hex_dump(KERN_DEBUG, "gpio-ssi: ", DUMP_PREFIX_OFFSET, 32, 4,
-                           buf, seg_size, false); /* 内核函数固定传参 */
+                           buf, seg_size, false); /* ???????????????? */
 #endif
         }
     }
@@ -2865,7 +2865,7 @@ fail_read:
 #ifdef CONFIG_PRINTK
             /* print the read buf before errors */
             print_hex_dump(KERN_DEBUG, "gpio-ssi: ", DUMP_PREFIX_OFFSET, 32, 4,
-                           buf, OAL_MIN(buf_len, ssi_address - pst_reg_info->base_addr), false); /* 内核函数固定传参 */
+                           buf, OAL_MIN(buf_len, ssi_address - pst_reg_info->base_addr), false); /* ???????????????? */
 #endif
         }
     }
@@ -2990,14 +2990,14 @@ int ssi_read_reg_info_arry(ssi_reg_info **pst_reg_info, oal_uint32 reg_nums, oal
 
 static oal_void ssi_force_dereset_reg(oal_void)
 {
-    /* 解复位AON，注意寄存器配置顺序 */
+    /* ??????AON???????????????????? */
     ssi_write16(GPIO_SSI_REG(SSI_SSI_CTRL), 0x60);
     ssi_write16(GPIO_SSI_REG(SSI_SEL_CTRL), 0x60);
 }
 
 static oal_void ssi_force_reset_reg(oal_void)
 {
-    /* 先复位再解复位AON，注意寄存器配置顺序 */
+    /* ??????????????AON???????????????????? */
     ssi_write16(GPIO_SSI_REG(SSI_SEL_CTRL), 0x60);
     ssi_write16(GPIO_SSI_REG(SSI_SSI_CTRL), 0x60);
 }
@@ -3041,14 +3041,14 @@ static void dsm_cpu_info_dump(void)
     int32 ret;
     int32 count = 0;
     char buf[DSM_CPU_INFO_SIZE];
-    /* dsm cpu信息上报 */
+    /* dsm cpu???????? */
     if (halt_det_cnt || (hi11xx_kernel_crash)) {
         PS_PRINT_INFO("halt_det_cnt=%u hi11xx_kernel_crash=%d dsm_cpu_info_dump return\n",
                       halt_det_cnt, hi11xx_kernel_crash);
         return;
     }
 
-    /* 没有检测到异常，上报记录的CPU信息 */
+    /* ??????????????????????????CPU???? */
     memset_s((void *)buf, sizeof(buf), 0, sizeof(buf));
     ret = snprintf_s(buf + count, sizeof(buf) - count, sizeof(buf) - count - 1,
                      "wcpu_state=0x%x %s, bcpu_state=0x%x %s ",
@@ -3094,9 +3094,9 @@ done:
 int ssi_detect_tcxo_is_normal(void)
 {
     /*
-     * tcxo detect 依赖tcxo时钟，
-     * 如果在启动后tcxo 异常那么tcxo_32k_det_result 为旧值
-     * 如果在启动后32k异常 那么sytem_tick为旧值
+     * tcxo detect ????tcxo??????
+     * ????????????tcxo ????????tcxo_32k_det_result ??????
+     * ????????????32k???? ????sytem_tick??????
      */
     int ret;
     char *tcxo_str = "";
@@ -3128,11 +3128,11 @@ int ssi_detect_tcxo_is_normal(void)
 
     tcxo_det_value_target = TCXO_32K_DET_VALUE;
     if (tcxo_det_value_src == tcxo_det_value_target) {
-        /* 刚做过detect,改变det_value，观测值是否改变 */
+        /* ??????detect,????det_value???????????????? */
         tcxo_det_value_target = TCXO_32K_DET_VALUE + 2;
     }
 
-    /* 为了计算误差范围 */
+    /* ???????????????? */
     tcxo_tmp = div_u64(base_tcxo_clock, 100);
     tcxo_limit_low = (tcxo_tmp * (100 - TCXO_LIMIT_THRESHOLD));
     tcxo_limit_high = (tcxo_tmp * (100 + TCXO_LIMIT_THRESHOLD));
@@ -3140,7 +3140,7 @@ int ssi_detect_tcxo_is_normal(void)
     sys_tick_old = (uint32)ssi_read32(HI1102A_GLB_CTL_SYS_TICK_VALUE_W_0_REG);
     tcxo_det_res_old = (uint32)ssi_read32(HI1102A_GLB_CTL_TCXO_32K_DET_RESULT_REG);
 
-    ssi_write32(HI1102A_GLB_CTL_SYS_TICK_CFG_W_REG, 0x2); /* 清零w systick */
+    ssi_write32(HI1102A_GLB_CTL_SYS_TICK_CFG_W_REG, 0x2); /* ????w systick */
     oal_get_time_cost_start(cost);
 
     if (tcxo_enable) {
@@ -3157,7 +3157,7 @@ int ssi_detect_tcxo_is_normal(void)
         ssi_write32(HI1102A_GLB_CTL_TCXO_DET_CTL_REG, 0x1); /* tcxo_det_en enable */
         /* to tcxo */
         ssi_write16(GPIO_SSI_REG(SSI_AON_CLKSEL), SSI_AON_CLKSEL_TCXO);
-        oal_udelay(31 * tcxo_det_value_target * 2); /* wait detect done,根据设置的计数周期数等待 */
+        oal_udelay(31 * tcxo_det_value_target * 2); /* wait detect done,???????????????????????? */
 
         /* to ssi */
         ssi_write16(GPIO_SSI_REG(SSI_AON_CLKSEL), SSI_AON_CLKSEL_SSI);
@@ -3188,7 +3188,7 @@ int ssi_detect_tcxo_is_normal(void)
     } else {
         oal_uint64 us_to_s;
         us_to_s = time_cost_var_sub(cost);
-        us_to_s += 5010; /* 经验值,误差5010us */
+        us_to_s += 5010; /* ??????,????5010us */
         clock_32k = (sys_tick_new * 1000) / (oal_uint32)us_to_s;
         PS_PRINT_ERR("32k runtime:%llu us , sys_tick:%u\n", us_to_s, sys_tick_new);
         PS_PRINT_ERR("32k realclock real= %u Khz[base=32768]\n", clock_32k);
@@ -3197,15 +3197,15 @@ int ssi_detect_tcxo_is_normal(void)
     /* tcxo enabled */
     if (tcxo_enable) {
         if (tcxo_det_res_new == tcxo_det_res_old) {
-            /* tcxo 软件配置为打开此时应该有时钟 */
+            /* tcxo ???????????????????????????? */
             PS_PRINT_ERR("tcxo don't change after detect, tcxo or 32k maybe abnormal, tcxo=0x%x\n", tcxo_det_res_new);
             if (tcxo_det_res_new == 0) {
-                /* 大于0表示tcxo有异常 */
+                /* ????0????tcxo?????? */
                 tcxo_is_abnormal = 1;
                 tcxo_str = "non-tcxo";
             } else {
-                /* 这里可能是无效的探测，
-                   要结合详细日志分析，此处DSM忽略改分支，不上报 */
+                /* ??????????????????????
+                   ????????????????????????DSM?????????????????? */
                 tcxo_is_abnormal = 0;
                 tcxo_str = "tcxo-detect-invalid";
                 DECLARE_DFT_TRACE_KEY_INFO("tcxo-detect-invalid", OAL_DFT_TRACE_FAIL);
@@ -3213,13 +3213,13 @@ int ssi_detect_tcxo_is_normal(void)
         } else {
             /*
              * tcxo_det_res_new read from 16bit width register  <= 0xffff
-             * (tcxo_det_res_new * 32768) = (检测到的计数周期数 * 32k时钟)
+             * (tcxo_det_res_new * 32768) = (?????????????????? * 32k????)
              */
             clock_tcxo = (oal_uint64)((tcxo_det_res_new * 32768) / (tcxo_det_value_target));
             div_clock = clock_tcxo;
             div_clock = div_u64(div_clock, 1000000); /* hz to Mhz */
             if ((clock_tcxo < tcxo_limit_low) || (clock_tcxo > tcxo_limit_high)) {
-                /* 时钟误差超过阈值，大于0表示tcxo有异常 */
+                /* ??????????????????????0????tcxo?????? */
                 tcxo_is_abnormal = 2;
                 tcxo_str = "tcxo clock-abnormal";
             } else {
@@ -3235,7 +3235,7 @@ int ssi_detect_tcxo_is_normal(void)
             /* Check Reg Config DCXO or TCXO */
             reg = (uint32)ssi_read32(HI1102A_GLB_CTL_PINMUX_CFG_CR_MODE_REG);
             if (reg == 0x2) {
-                /* dcxo mode, 共时钟方案 */
+                /* dcxo mode, ?????????? */
                 PS_PRINT_ERR("dcxo mode, tcxo abnormal, please check the clk req io pin & tcxo device\n");
             } else if (reg == 0x8) {
                 /* tcxo mode */
@@ -3315,7 +3315,7 @@ int ssi_dump_arm_regs(unsigned long long module_set)
 {
     int ret;
 
-    /* com_ctl不在AON,假如失败可能是总线异常 */
+    /* com_ctl????AON,?????????????????????? */
     if (module_set & SSI_MODULE_MASK_ARM_REG) {
         ret = ssi_read_device_arm_register(0);
         if (ret) {
@@ -3333,7 +3333,7 @@ int ssi_dump_arm_regs(unsigned long long module_set)
 int ssi_dump_ctrl_regs(unsigned long long module_set)
 {
     int ret;
-    /* com_ctl,当wcpu on or */
+    /* com_ctl,??wcpu on or */
     ret = ssi_read_com_ctl_reg();
     if (ret) {
         PS_PRINT_ERR("ssi_read_com_ctl_reg return, ssi failed\n");
@@ -3380,10 +3380,10 @@ OAL_STATIC int ssi_dump_device_regs_check_condition(unsigned long long module_se
 {
     struct st_exception_info *pst_exception_data = NULL;
 
-    /* 系统crash后强行dump,系统正常时user版本受控 */
+    /* ????crash??????dump,??????????user???????? */
     if ((hi11xx_get_os_build_variant() == HI1XX_OS_BUILD_VARIANT_USER) && (hi11xx_kernel_crash == 0)) {
         /* user build, limit the ssi dump */
-        if (!oal_print_rate_limit(30 * PRINT_RATE_SECOND)) { /* 30s打印一次 */
+        if (!oal_print_rate_limit(30 * PRINT_RATE_SECOND)) { /* 30s???????? */
             PS_PRINT_ERR("ssi dump print limit\n");
 
             /* print limit */
@@ -3526,7 +3526,7 @@ ssi_fail:
 
 #endif
 
-/* SSI调试代码end */
+/* SSI????????end */
 #ifdef _PRE_CONFIG_USE_DTS
 static struct of_device_id hi110x_board_match_table[] = {
     {

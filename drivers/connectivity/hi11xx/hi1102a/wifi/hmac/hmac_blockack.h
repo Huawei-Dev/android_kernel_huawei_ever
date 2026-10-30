@@ -9,7 +9,7 @@ extern "C" {
 #endif
 #endif
 
-/* 1 其他头文件包含 */
+/* 1 ?????????????? */
 #include "oal_ext_if.h"
 #include "dmac_ext_if.h"
 #include "hmac_ext_if.h"
@@ -21,14 +21,14 @@ extern "C" {
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_BLOCKACK_H
 
-/* 2 宏定义 */
+/* 2 ?????? */
 /* Default values for receive timeout */
 #define HMAC_BA_RX_VO_TIMEOUT 40  /* 40 milliseconds */
 #define HMAC_BA_RX_VI_TIMEOUT 100 /* 100 milliseconds */
 #define HMAC_BA_RX_BE_TIMEOUT 60  /* 100 milliseconds */
 #define HMAC_BA_RX_BK_TIMEOUT 100 /* 100 milliseconds */
 
-/* 为改善游戏体验,当接收吞吐量较低时,冲排序队列超时定时器周期调小,避免在业务侧堵塞游戏报文 */
+/* ??????????????,??????????????????,????????????????????????????,???????????????????????? */
 #define HMAC_BA_RX_VO_TIMEOUT_MIN 20 /* 20 milliseconds */
 #define HMAC_BA_RX_VI_TIMEOUT_MIN 20 /* 20 milliseconds */
 #define HMAC_BA_RX_BE_TIMEOUT_MIN 20 /* 20 milliseconds */
@@ -41,14 +41,14 @@ extern "C" {
 #define HMAC_BA_LUT_IDX_BMAP_LEN ((HAL_MAX_BA_LUT_SIZE + 7) >> 3)
 #define HMAC_TX_BA_LUT_BMAP_LEN  ((HAL_MAX_AMPDU_LUT_SIZE + 7) >> 3)
 
-/* 3 枚举定义 */
-/* 4 全局变量声明 */
-/* 5 消息头定义 */
-/* 6 消息定义 */
-/* 7 STRUCT定义 */
-/* 8 UNION定义 */
-/* 9 OTHERS定义 */
-/* 10 inline函数定义 */
+/* 3 ???????? */
+/* 4 ???????????? */
+/* 5 ?????????? */
+/* 6 ???????? */
+/* 7 STRUCT???? */
+/* 8 UNION???? */
+/* 9 OTHERS???? */
+/* 10 inline???????? */
 
 OAL_STATIC OAL_INLINE oal_bool_enum_uint8 hmac_ba_rx_seqno_lt(oal_uint16 us_seq1, oal_uint16 us_seq2)
 {
@@ -100,11 +100,11 @@ OAL_STATIC OAL_INLINE oal_bool_enum_uint8 hmac_ba_rx_seqno_geq(oal_uint16 us_seq
     return hmac_ba_rx_seqno_leq(us_seq2, us_seq1);
 }
 
-/* 计算seq num到ba窗start的偏移量 */
+/* ????seq num??ba??start???????? */
 #define HMAC_BA_INDEX(_st, _seq) (((_seq) - (_st)) & 4095)
 
 #define HMAC_TX_BUF_BITMAP_LOG2_WORD_SIZE 5 /* log2(32) == 5 */
-/* 发送BA窗口记录seq number的bitmap所使用的类型长度 */
+/* ????BA????????seq number??bitmap???????????????? */
 #define HMAC_TX_BUF_BITMAP_WORD_SIZE 32
 
 #define HMAC_TX_BUF_BITMAP_WORD_MASK (HMAC_TX_BUF_BITMAP_WORD_SIZE - 1)
@@ -119,11 +119,11 @@ OAL_STATIC OAL_INLINE oal_bool_enum_uint8 hmac_ba_rx_seqno_geq(oal_uint16 us_seq
 
 #define HMAC_BA_BMP_SIZE 64
 
-/* 判断index为n 在bitmap中的bit位是否是1 */
+/* ????index??n ??bitmap????bit????????1 */
 #define HMAC_BA_ISSET(_bm, _n) (((_n) < (HMAC_BA_BMP_SIZE)) && \
                                 ((_bm)[(_n) >> 5] & (1 << ((_n)&31))))
 
-/* 判断一个seq num是否在发送窗口内 */
+/* ????????seq num???????????????? */
 #define HMAC_BAW_WITHIN(_start, _bawsz, _seqno) \
     ((((_seqno) - (_start)) & 4095) < (_bawsz))
 
@@ -173,7 +173,7 @@ OAL_STATIC OAL_INLINE oal_void hmac_ba_update_rx_bitmap(hmac_user_stru *pst_hmac
     oal_uint8               uc_tid;
     hmac_ba_rx_stru        *pst_ba_rx_hdl;
 
-    /* 考虑四地址情况获取报文的tid */
+    /* ????????????????????????tid */
     uc_is_tods = mac_hdr_get_to_ds((oal_uint8 *)pst_frame_hdr);
     uc_is_from_ds = mac_hdr_get_from_ds((oal_uint8 *)pst_frame_hdr);
     en_is_4addr = uc_is_tods && uc_is_from_ds;
@@ -230,7 +230,7 @@ OAL_STATIC OAL_INLINE oal_uint8 hmac_tcp_ack_bitmap_index_get(oal_uint16 us_seq_
 {
     oal_uint8 uc_rx_bitmap_size = WLAN_AMPDU_RX_BUFFER_SIZE * 2 - 1;
 
-    /* 使用大于reorder队列大小的bitmap，防止一次性接收超过64个mpdu造成的翻转 */
+    /* ????????reorder??????????bitmap????????????????????64??mpdu?????????? */
     return (us_seq_num & uc_rx_bitmap_size) / WLAN_AMPDU_RX_BUFFER_SIZE;
 }
 
@@ -258,7 +258,7 @@ OAL_STATIC OAL_INLINE hmac_rx_buf_stru *hmac_remove_frame_from_reorder_q(hmac_ba
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
     oal_spin_lock(&pst_ba_rx_hdl->st_ba_lock);
 
-    /* 新增device tcp ack过滤功能后, BA移窗需要同时参考tcp ack bitmap和in_use字段 */
+    /* ????device tcp ack??????????, BA????????????????tcp ack bitmap??in_use???? */
     if (pst_rx_buff->en_tcp_ack_filtered[uc_bitmap_index]) {
         *pen_tcp_ack_filtered = OAL_TRUE;
         pst_rx_buff->en_tcp_ack_filtered[uc_bitmap_index] = OAL_FALSE;
@@ -323,7 +323,7 @@ OAL_STATIC OAL_INLINE oal_void hmac_ba_del_lut_index(oal_uint8 *puc_ba_lut_index
 }
 
 /*****************************************************************************
-  10 函数声明
+  10 ????????
 *****************************************************************************/
 extern oal_uint32 hmac_ba_filter_serv(mac_vap_stru *pst_vap,
                                       hmac_user_stru *pst_hmac_user,

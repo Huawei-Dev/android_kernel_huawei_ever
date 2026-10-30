@@ -48,7 +48,7 @@
 
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 
 #include "product_config.h"
@@ -76,7 +76,7 @@
 
 VOS_UINT32                              g_ulChrOmAcpuDbgFlag = VOS_FALSE;
 
-OM_APP_MSG_RECORD_STRU                  g_stOmAppMsgRecord; /* OM收到AP需要在全局变量中记录内容 */
+OM_APP_MSG_RECORD_STRU                  g_stOmAppMsgRecord; /* OM????AP???????????????????????? */
       
 struct semaphore                        g_stOmRxErrorLogBuffSem;
 
@@ -84,17 +84,17 @@ OM_VCOM_DEBUG_INFO                      g_stErrLogVcomDebugInfo   = {0};
 
 OM_ERR_LOG_DEBUG_INFO                   g_stRcvUESendAP           = {0};
 
-HTIMER                                  g_AcpuErrLogFullTmr       = VOS_NULL_PTR ;/*查询上报起定时器*/
+HTIMER                                  g_AcpuErrLogFullTmr       = VOS_NULL_PTR ;/*????????????????*/
 
-HTIMER                                  g_AcpuCltInfoFullTmr      = VOS_NULL_PTR ;/*信息收集起定时器*/
+HTIMER                                  g_AcpuCltInfoFullTmr      = VOS_NULL_PTR ;/*????????????????*/
 
-/* 新增下发上报请求时的时间戳，用于故障上报结束时的消息 */
+/* ???????????????????????????????????????????????????? */
 VOS_UINT64                              g_ulTriggerTime64Bit = 0;
 
 NV_ID_CHR_CONFIG_CTRL_INFO_STRU         g_stChrFaultMapGutl = {0};
 NV_ID_CHR_C_CONFIG_CTRL_INFO_STRU       g_stChrFaultMapCdma = {0};
 
-/* 1表示超时后下次下发采集请求前，MTA上报的消息将不被OM处理 */
+/* 1??????????????????????????????MTA????????????????OM???? */
 VOS_UINT32                              g_AcpuCtlInfoCnfNotNeedProcess = 0;
 VOS_UINT8                               g_ucErrRptFlag[256] = {0};
 
@@ -128,7 +128,7 @@ VOS_VOID OM_AcpuRcvMsgFinish(VOS_VOID)
    
     OM_AcpuSendVComData((VOS_UINT8 *)&stOmAppReportStatus,(VOS_UINT32)sizeof(OM_APP_REPORT_STATUS_STRU));
     VOS_MemSet_s(g_ucErrRptFlag, sizeof(g_ucErrRptFlag),OM_MSG_RECEIVE_FLAG, 256*sizeof(VOS_UINT8));
-    /* 防止消息再次下发不成功 */
+    /* ?????????????????????? */
     g_stOmAppMsgRecord.ulErrLogReportSend   = OM_AP_SEND_MSG_FINISH;
     g_stOmAppMsgRecord.ulErrLogState        = ERRLOG_IDLE;
     chr_print("success!\r\n ");
@@ -182,7 +182,7 @@ VOS_VOID OM_AcpuSendSkipPid(VOS_UINT32 index)
 VOS_INT OM_AcpuRcvAppMsgCheck(APP_OM_REQ_ERR_LOG_STRU *pstAppOmReqErrLog)
 {
  
-    /* 如果没有上报完成 */
+    /* ???????????????? */
     if ((OM_AP_SEND_MSG_FINISH != g_stOmAppMsgRecord.ulErrLogReportSend)
         || (ERRLOG_IDLE != g_stOmAppMsgRecord.ulErrLogState))
     {
@@ -351,7 +351,7 @@ VOS_INT OM_AcpuSendReq(VOS_UINT32 *pulSendCount)
             continue;
         }
         
-        /* 给对应的PID发送消息 */
+        /* ????????PID???????? */
         ulSendPidCount++;
         pstOmErrLogReportReq  = (OM_ERR_LOG_REPORT_REQ_STRU*)VOS_AllocMsg(MSP_PID_CHR,
                                  (sizeof(OM_ERR_LOG_REPORT_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
@@ -384,7 +384,7 @@ VOS_INT OM_AcpuSendReq(VOS_UINT32 *pulSendCount)
 
 VOS_INT OM_AcpuStartTimer(VOS_VOID)
 {
-    /* 起5s定时器 */
+    /* ??5s?????? */
     g_AcpuErrLogFullTmr = VOS_NULL_PTR;
     if (VOS_OK != VOS_StartRelTimer(&g_AcpuErrLogFullTmr, MSP_PID_CHR, OM_ERRLOG_TIMER_LENTH,
                                     OM_ERRORLOG_TIMER_NAME, OM_ERRORLOG_TIMER_PARA, VOS_RELTIMER_NOLOOP, VOS_TIMER_PRECISION_5))
@@ -421,10 +421,10 @@ VOS_INT OM_AcpuReportErrLogMsg(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         return OM_APP_MSG_LENGTH_ERR;
         
     }
-     /* 收到AP消息检查 */
+     /* ????AP???????? */
     pstAppOmReqErrLog = (APP_OM_REQ_ERR_LOG_STRU*)pucData;
      
-    /*输入消息长度的检查*/
+    /*??????????????????*/
     if(ulLen != (pstAppOmReqErrLog->stOmHeader.ulMsgLen + sizeof(OM_ALARM_MSG_HEAD_STRU)))
     {     
 
@@ -432,7 +432,7 @@ VOS_INT OM_AcpuReportErrLogMsg(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
           return OM_APP_MSG_LENGTH_ERR;
     }
     
-    /*是否完成上一次上报，OM是否处于BUSY状态*/
+    /*????????????????????OM????????BUSY????*/
     ulRest = OM_AcpuRcvAppMsgCheck(pstAppOmReqErrLog);
     if (VOS_OK != ulRest)
     {
@@ -469,10 +469,10 @@ VOS_INT OM_AcpuReportErrLogMsg(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         chr_print("faultnv = %d ulAlarmIdNum = %d!\n",*pulNvId,pFaultCfg->ulAlarmNum);
     }
 
-    /* 因各组件任务优先级较高，先给AP回复消息。后便存在失败的场景，但可维可测，不以过度考虑 */
+    /* ????????????????????????????AP?????????????????????????????????????????????????????? */
    // OM_AcpuSendAppResult(OM_APP_MSG_OK, pstAppOmReqErrLog->usModemID);    
 
-    /* 根据告警相关性，向对应PID发送消息 */    
+    /* ??????????????????????PID???????? */    
     ulRest = OM_AcpuSendReq(&ulSendPidCount);
     if(VOS_OK != ulRest)
     {    
@@ -480,14 +480,14 @@ VOS_INT OM_AcpuReportErrLogMsg(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         return ulRest;
     }
     
-    /* 假如没有告警相关性PID，直接给AP回复消息上报完毕 */
+    /* ??????????????????PID????????AP???????????????? */
     if (0 == ulSendPidCount)
     {
         chr_print("no PID send.\n");
         OM_AcpuRcvMsgFinish();
         return VOS_OK;
     }
-    /* 起timer定时器 */
+    /* ??timer?????? */
     ulRest = OM_AcpuStartTimer();
     if(VOS_OK != ulRest)
     {
@@ -517,14 +517,14 @@ VOS_VOID OM_AcpuErrLogHook(VOS_UINT8 *pucData, VOS_UINT32 ulLen, VOS_UINT32 ulDa
 
 VOS_VOID OM_AcpuSendVComData(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
 {
-    /* 调用注册函数，给Vcom发数据 */
+    /* ????????????????Vcom?????? */
     g_stErrLogVcomDebugInfo.ulVCOMSendNum++;
     g_stErrLogVcomDebugInfo.ulVCOMSendLen += ulLen;
 
     OM_ACPU_CHR_DEBUG_TRACE((VOS_UINT8*)pucData, ulLen, OM_ACPU_ERRLOG_SEND);
  
 
-    /* 增加Trans勾包 */
+    /* ????Trans???? */
     OM_AcpuErrLogHook(pucData, ulLen, OM_ERRLOG_SEND_MSG);
 
     if(VOS_OK != APP_VCOM_SEND(APP_VCOM_DEV_INDEX_ERRLOG, pucData, ulLen))
@@ -555,7 +555,7 @@ VOS_UINT32 OM_AcpuRcvErrLogMsgCheck(OM_RCV_REPORT_STRU *pstOmRcvDataInfo, VOS_UI
     
  
     
-    /* 记录对应组件已上报消息 */
+    /* ?????????????????????? */
     for (i=0; i<g_stOmAppMsgRecord.ulAlarmIdNum; i++)
     {
         if ((pFaultCfg->aucAlarmMap[i].ulPid     == pstOmRcvDataInfo->stChrRcvOmHeader.ulSenderPid)
@@ -586,7 +586,7 @@ VOS_UINT32 OM_AcpuRcvMsgCheck(OM_RCV_REPORT_STRU *pstOmRcvDataInfo)
     switch(pstOmRcvDataInfo->unComChrType.ulMsgType)
     {
         case OM_ERR_LOG_MSG_ERR_REPORT:
-            /* Error Log 上报 */
+            /* Error Log ???? */
             if(VOS_OK != OM_AcpuRcvErrLogMsgCheck(pstOmRcvDataInfo, &ulSendPidCount))
             {
                 return VOS_ERR;
@@ -594,23 +594,23 @@ VOS_UINT32 OM_AcpuRcvMsgCheck(OM_RCV_REPORT_STRU *pstOmRcvDataInfo)
             break;
 
         case OM_ERR_LOG_MSG_FAULT_REPORT:
-            /* 平台检测故障主动上报 */
+            /* ???????????????????? */
             ulSendPidCount++;
             break;
 
         case OM_ERR_LOG_MSG_ALARM_REPORT:
-            /* 平台检测告警主动上报 */
+            /* ???????????????????? */
             ulSendPidCount++;
             break;
             
         default:
-            /* 异常 */         
+            /* ???? */         
             (VOS_VOID)chr_print("Msg type wrong!\r\n ");
            
             return VOS_ERR;
     }
 
-    /* 不是预期上报,丢弃消息 */
+    /* ????????????,???????? */
     if (OM_AP_NO_MSG_SEND == ulSendPidCount)
     {
         
@@ -647,15 +647,15 @@ VOS_INT OM_AcpuReportErrLog(VOS_UINT16 usModemID, VOS_UINT16 usFaultId)
     return ret;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuCfgBlackListTest
- 功能描述  : 测试桩函数:模拟AP下发黑名单配置
- 输入参数  : usModemID : MODEM id
-             usFaultId :告警相关性
+ ?? ?? ??  : OM_AcpuCfgBlackListTest
+ ????????  : ??????????:????AP??????????????
+ ????????  : usModemID : MODEM id
+             usFaultId :??????????
 
- 输出参数  : 无
- 返 回 值  :
- 调用函数  :
- 被调函数  :
+ ????????  : ??
+ ?? ?? ??  :
+ ????????  :
+ ????????  :
  
 *****************************************************************************/
 VOS_INT OM_AcpuCfgBlackListTest(VOS_UINT32  ulMsgModuleID, VOS_UINT16  usAlarmId, VOS_UINT16  usAlmType)
@@ -701,13 +701,13 @@ VOS_INT OM_AcpuCfgBlackListTest(VOS_UINT32  ulMsgModuleID, VOS_UINT16  usAlarmId
     return ret;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuCfgPriorityTest
- 功能描述  : 测试桩函数:模拟AP下发高优先级
- 输入参数  : 
- 输出参数  : 无
- 返 回 值  :
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : OM_AcpuCfgPriorityTest
+ ????????  : ??????????:????AP????????????
+ ????????  : 
+ ????????  : ??
+ ?? ?? ??  :
+ ????????  :
+ ????????  :
  
 *****************************************************************************/
 VOS_INT OM_AcpuCfgPriorityTest(VOS_UINT32  ulMsgModuleID, VOS_UINT16  usAlarmId ,VOS_UINT8 ucSn,VOS_UINT16 usAlmType)
@@ -754,13 +754,13 @@ VOS_INT OM_AcpuCfgPriorityTest(VOS_UINT32  ulMsgModuleID, VOS_UINT16  usAlarmId 
     return ret;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuCfgPeriodTest
- 功能描述  : 测试桩函数:模拟AP下发上报周期配置
- 输入参数  : 
- 输出参数  : 无
- 返 回 值  :
- 调用函数  :
- 被调函数  :
+ ?? ?? ??  : OM_AcpuCfgPeriodTest
+ ????????  : ??????????:????AP????????????????
+ ????????  : 
+ ????????  : ??
+ ?? ?? ??  :
+ ????????  :
+ ????????  :
  
 *****************************************************************************/
 VOS_INT OM_AcpuCfgPeriodTest(VOS_UINT32  ulMsgModuleID, VOS_UINT32  ulCount ,VOS_UINT8 ucSn)
@@ -808,24 +808,24 @@ VOS_INT OM_AcpuCfgPeriodTest(VOS_UINT32  ulMsgModuleID, VOS_UINT32  ulCount ,VOS
     return ret;
 }
 
-/* 设置采集信息回复消息不需要处理标志 */
+/* ?????????????????????????????????? */
 VOS_VOID OM_AcpuCltInfoCnfNotNeedProcessSetFlag(VOS_VOID)
 {
     g_AcpuCtlInfoCnfNotNeedProcess = OM_CLTINFO_CNF_NOT_NEED_PROCESS;
 }
 
-/* 复位采集信息回复消息不需要处理标志 */
+/* ?????????????????????????????????? */
 VOS_VOID OM_AcpuCltInfoCnfNotNeedProcessReSetFlag(VOS_VOID)
 {
     g_AcpuCtlInfoCnfNotNeedProcess = OM_CLTINFO_CNF_NEED_PROCESS;
 }
-/* 获取采集信息回复消息不需要处理标志 */
+/* ?????????????????????????????????? */
 VOS_UINT32 OM_AcpuCltInfoCnfGetNotNeedProcessFlag(VOS_VOID)
 {
     return g_AcpuCtlInfoCnfNotNeedProcess;
 }
 
-/* 通过modemID获对应的MTA的pid ，当前只将请求发给MTA */
+/* ????modemID????????MTA??pid ??????????????????MTA */
 VOS_UINT32 OM_AcpuCltInfoGetMTAPid(VOS_UINT32 modemId)
 {
     if (modemId == 0)
@@ -839,7 +839,7 @@ VOS_UINT32 OM_AcpuCltInfoGetMTAPid(VOS_UINT32 modemId)
 }
 
 
-/* OM收到采集信息请求消息处理 */
+/* OM???????????????????????? */
 VOS_INT OM_AcpuCltInfoReqMsgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
 {
     APP_OM_INFO_CLT_REQ_STRU *pOMCltInfo = NULL;
@@ -886,7 +886,7 @@ VOS_INT OM_AcpuCltInfoReqMsgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
     OM_AcpuCltInfoCnfNotNeedProcessReSetFlag();
     g_stOmAppMsgRecord.usModemId=pOMCltInfo->usModemID;
 
-    /* 起5s定时器 */
+    /* ??5s?????? */
     g_AcpuCltInfoFullTmr = VOS_NULL_PTR;
     if (VOS_OK != VOS_StartRelTimer(&g_AcpuCltInfoFullTmr, MSP_PID_CHR, OM_CLTINFO_TIMER_LENTH,
                                 OM_CLTINFO_TIMER_NAME, OM_CLTINFO_TIMER_PARA, VOS_RELTIMER_NOLOOP, VOS_TIMER_PRECISION_5))
@@ -898,7 +898,7 @@ VOS_INT OM_AcpuCltInfoReqMsgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
     return VOS_OK;
 }
 
-/* 采集信息回复消息结束消息，msgType 0x11 */
+/* ??????????????????????????msgType 0x11 */
 VOS_VOID OM_AcpuRcvCltInfoFinish(VOS_VOID)
 {
     OM_APP_REPORT_STATUS_STRU               stOmAppReportStatus = {};
@@ -917,7 +917,7 @@ VOS_VOID OM_AcpuRcvCltInfoFinish(VOS_VOID)
     return ;
 }
  
-/* 采集信息下发请求消息打桩函数，用于测试 */
+/* ?????????????????????????????????????? */
 VOS_INT OM_AcpuReportCltInfo(VOS_UINT16 modemID, VOS_UINT16 infoId, VOS_UINT32 mcc, VOS_UINT32 mnc)
 {
     APP_OM_INFO_CLT_REQ_STRU *cltInfoReq = NULL;
@@ -925,7 +925,7 @@ VOS_INT OM_AcpuReportCltInfo(VOS_UINT16 modemID, VOS_UINT16 infoId, VOS_UINT32 m
 
     VOS_INT ret;
     void *cltInfoalloc = NULL;
-    VOS_UINT32 allocSize = sizeof(APP_OM_INFO_CLT_REQ_STRU) + 4; /* mcc/mnc 共8字节 */
+    VOS_UINT32 allocSize = sizeof(APP_OM_INFO_CLT_REQ_STRU) + 4; /* mcc/mnc ??8???? */
 
     cltInfoalloc  = VOS_MemAlloc(MSP_PID_CHR, DYNAMIC_MEM_PT, allocSize);
 
@@ -967,7 +967,7 @@ VOS_VOID OM_AcpuErrLogTimeoutShowPid(VOS_VOID)
     VOS_UINT32 i;
     
    
-    /* 记录对应组件已上报消息 */
+    /* ?????????????????????? */
     for (i=0; i<g_stOmAppMsgRecord.ulAlarmIdNum; i++)
     {
         if (OM_AcpuChkRptFlag(i))
@@ -990,20 +990,20 @@ VOS_VOID OM_AcpuErrLogTimeoutProc(VOS_VOID)
     return ;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuErrLogReqProc
- 功能描述  : 把从ap接收的查询命令数据发送到chr acore任务
- 输入参数  :  pucData    : 收到数据
-              ulLen : 数据长度
+ ?? ?? ??  : OM_AcpuErrLogReqProc
+ ????????  : ????ap????????????????????????chr acore????
+ ????????  :  pucData    : ????????
+              ulLen : ????????
 
- 输出参数  : 无
- 返 回 值  : VOS_ERR/VOS_OK
+ ????????  : ??
+ ?? ?? ??  : VOS_ERR/VOS_OK
  
 *****************************************************************************/
 VOS_INT OM_AcpuErrLogReqProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
 {
      CHR_APP_REQ_STRU     *pReqMsg;
      
-     /* 给对应的PID发送消息 */
+     /* ????????PID???????? */
      pReqMsg  = (CHR_APP_REQ_STRU*)VOS_AllocMsg(MSP_PID_CHR, 
                         (((sizeof(CHR_APP_REQ_STRU)) - VOS_MSG_HEAD_LENGTH) + ulLen));
      if (VOS_NULL_PTR == pReqMsg)
@@ -1023,20 +1023,20 @@ VOS_INT OM_AcpuErrLogReqProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
      
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuBlackListReqProc
- 功能描述  : 把从ap接收的黑名单配置数据发送到chr acore任务
- 输入参数  :  pucData    : 收到数据
-              ulLen : 数据长度
+ ?? ?? ??  : OM_AcpuBlackListReqProc
+ ????????  : ????ap??????????????????????????chr acore????
+ ????????  :  pucData    : ????????
+              ulLen : ????????
 
- 输出参数  : 无
- 返 回 值  : VOS_ERR/VOS_OK
+ ????????  : ??
+ ?? ?? ??  : VOS_ERR/VOS_OK
  
 *****************************************************************************/
 VOS_INT OM_AcpuBlackListReqProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
 {
      CHR_APP_REQ_STRU     *pReqMsg;
      
-     /* 给对应的PID发送消息 */
+     /* ????????PID???????? */
      pReqMsg  = (CHR_APP_REQ_STRU*)VOS_AllocMsg(MSP_PID_CHR, 
                         (((sizeof(CHR_APP_REQ_STRU)) - VOS_MSG_HEAD_LENGTH) + ulLen));
      if (VOS_NULL_PTR == pReqMsg)
@@ -1057,20 +1057,20 @@ VOS_INT OM_AcpuBlackListReqProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
      
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuPriorityReqProc
- 功能描述  : 把从ap接收的高优先级配置数据发送到chr acore任务
- 输入参数  :  pucData    : 收到数据
-              ulLen : 数据长度
+ ?? ?? ??  : OM_AcpuPriorityReqProc
+ ????????  : ????ap????????????????????????????chr acore????
+ ????????  :  pucData    : ????????
+              ulLen : ????????
 
- 输出参数  : 无
- 返 回 值  : VOS_ERR/VOS_OK
+ ????????  : ??
+ ?? ?? ??  : VOS_ERR/VOS_OK
  
 *****************************************************************************/
 VOS_INT OM_AcpuPriorityReqProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
 {
      CHR_APP_REQ_STRU     *pReqMsg;
      
-     /* 给对应的PID发送消息 */
+     /* ????????PID???????? */
      pReqMsg  = (CHR_APP_REQ_STRU*)VOS_AllocMsg(MSP_PID_CHR, 
                         (((sizeof(CHR_APP_REQ_STRU)) - VOS_MSG_HEAD_LENGTH) + ulLen));
      if (VOS_NULL_PTR == pReqMsg)
@@ -1090,20 +1090,20 @@ VOS_INT OM_AcpuPriorityReqProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
      
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuPeriodReqProc
- 功能描述  : 把从ap接收的上报周期配置数据发送到chr acore任务
- 输入参数  :  pucData    : 收到数据
-              ulLen : 数据长度
+ ?? ?? ??  : OM_AcpuPeriodReqProc
+ ????????  : ????ap????????????????????????????chr acore????
+ ????????  :  pucData    : ????????
+              ulLen : ????????
 
- 输出参数  : 无
- 返 回 值  : VOS_ERR/VOS_OK
+ ????????  : ??
+ ?? ?? ??  : VOS_ERR/VOS_OK
  
 *****************************************************************************/
 VOS_INT OM_AcpuPeriodReqProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
 {
      CHR_APP_REQ_STRU     *pReqMsg;
      
-     /* 给对应的PID发送消息 */
+     /* ????????PID???????? */
      pReqMsg  = (CHR_APP_REQ_STRU*)VOS_AllocMsg(MSP_PID_CHR, 
                         (((sizeof(CHR_APP_REQ_STRU)) - VOS_MSG_HEAD_LENGTH) + ulLen));
      if (VOS_NULL_PTR == pReqMsg)
@@ -1152,7 +1152,7 @@ VOS_INT OM_AcpuReadVComData(VOS_UINT8 ucDevIndex, VOS_UINT8 *pucData, VOS_UINT32
         return VOS_ERR;
     }
 
-     /* 根据消息头判断命令类型 */
+     /* ?????????????????????? */
     pstOmAlarmMsgHead = (OM_ALARM_MSG_HEAD_STRU *)pucData;  
     if (ulLen!= pstOmAlarmMsgHead->ulMsgLen +sizeof(OM_ALARM_MSG_HEAD_STRU))
     {
@@ -1166,11 +1166,11 @@ VOS_INT OM_AcpuReadVComData(VOS_UINT8 ucDevIndex, VOS_UINT8 *pucData, VOS_UINT32
     CHR_LogReport("receive msg. Msgtype:0x%x,MsgLen:0x%x,len:0x%x!\n",
         pstOmAlarmMsgHead->ulMsgType,pstOmAlarmMsgHead->ulMsgLen,ulLen);
    
-    /*串口打印码流*/
+    /*????????????*/
 
     OM_ACPU_CHR_DEBUG_TRACE((VOS_UINT8*)pucData, ulLen, OM_ACPU_ERRLOG_RCV);
 
-    /* 增加Trans勾包 */
+    /* ????Trans???? */
     OM_AcpuErrLogHook(pucData, ulLen, OM_ERRLOG_RCV_MSG);
 
     g_stErrLogVcomDebugInfo.ulVCOMRcvNum++;
@@ -1217,11 +1217,11 @@ VOS_INT OM_AcpuReadVComData(VOS_UINT8 ucDevIndex, VOS_UINT8 *pucData, VOS_UINT32
 }
 
 /*****************************************************************************
- 函 数 名  : OM_AcpuErrLogMsgProc
- 功能描述  : OM收到各业务模块上报消息处理
- 输入参数  : pMsg: 收到数据
+ ?? ?? ??  : OM_AcpuErrLogMsgProc
+ ????????  : OM??????????????????????????
+ ????????  : pMsg: ????????
 
- 输出参数  : 无
+ ????????  : ??
  
 *****************************************************************************/
 VOS_VOID OM_AcpuErrLogMsgProc(MsgBlock* pMsg)
@@ -1231,7 +1231,7 @@ VOS_VOID OM_AcpuErrLogMsgProc(MsgBlock* pMsg)
 
     pstOmRcvDataInfo = (OM_RCV_REPORT_STRU*)pMsg;
     
-    /*判断是否是主动上报或者被动上报*/
+    /*??????????????????????????????*/
     if ((ID_OM_ERR_LOG_REPORT_CNF != pstOmRcvDataInfo->stChrRcvOmHeader.ulMsgName)       
          && (ID_OM_FAULT_ERR_LOG_IND != pstOmRcvDataInfo->stChrRcvOmHeader.ulMsgName)
          && (ID_OM_ALARM_ERR_LOG_IND != pstOmRcvDataInfo->stChrRcvOmHeader.ulMsgName))
@@ -1240,13 +1240,13 @@ VOS_VOID OM_AcpuErrLogMsgProc(MsgBlock* pMsg)
         return ;
     }
 
-    /*  收到消息检查是否需要上报 */
+    /*  ???????????????????????? */
     if (VOS_OK !=OM_AcpuRcvMsgCheck(pstOmRcvDataInfo))
     {
         CHR_LogReport("rcv msg wrong!\r\n ");
         return ;
     }
-    /*兼容ap的x模解析*/ 
+    /*????ap??x??????*/ 
 
     pstOmRcvDataInfo->unComChrType.stComChrType.usMsgType = pstOmRcvDataInfo->unComChrType.ulMsgType&0xffff;
     pstOmRcvDataInfo->unComChrType.stComChrType.usFaultId = pstOmRcvDataInfo->stChrRcvOmHeader.usFaultId;
@@ -1269,7 +1269,7 @@ VOS_VOID OM_AcpuErrLogMsgProc(MsgBlock* pMsg)
      if ((OM_ERR_LOG_MSG_ERR_REPORT == pstOmRcvDataInfo->unComChrType.stComChrType.usMsgType)
         && ( OM_AP_SEND_MSG_FINISH==g_stOmAppMsgRecord.ulErrLogReportSend))
     {
-        /* 停定时器*/
+        /* ????????*/
          
        (void)VOS_StopRelTimer(&g_AcpuErrLogFullTmr);
         
@@ -1281,7 +1281,7 @@ VOS_VOID OM_AcpuErrLogMsgProc(MsgBlock* pMsg)
 }
 
 
-/* 采集信息回复消息处理函数 */
+/* ???????????????????????? */
 VOS_VOID OM_AcpuCltInfoCnfMsgProc(MsgBlock* pMsg)
 {
 
@@ -1303,7 +1303,7 @@ VOS_VOID OM_AcpuCltInfoCnfMsgProc(MsgBlock* pMsg)
 
         if (OM_ERR_LOG_MSG_INFO_CLT_CNF == pCltInfoCnf->ulMsgType)
         {
-            /* 停定时器 */
+            /* ???????? */
             VOS_StopRelTimer(&g_AcpuCltInfoFullTmr);
             OM_AcpuRcvCltInfoFinish();
         }
@@ -1312,14 +1312,14 @@ VOS_VOID OM_AcpuCltInfoCnfMsgProc(MsgBlock* pMsg)
     return;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuErrLogRcvMsgProc
- 功能描述  : OM收到查询上报请求的处理函数
- 输入参数  : pMsg    : 收到数据
+ ?? ?? ??  : OM_AcpuErrLogRcvMsgProc
+ ????????  : OM??????????????????????????
+ ????????  : pMsg    : ????????
 
- 输出参数  : 无
- 返 回 值  :
- 调用函数  :
- 被调函数  :
+ ????????  : ??
+ ?? ?? ??  :
+ ????????  :
+ ????????  :
  
 *****************************************************************************/
 VOS_VOID OM_AcpuErrLogRcvMsgProc(MsgBlock* pMsg)
@@ -1338,14 +1338,14 @@ VOS_VOID OM_AcpuErrLogRcvMsgProc(MsgBlock* pMsg)
       return;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuBlackListRcvMsgProc
- 功能描述  : OM收到黑名单请求的处理函数
- 输入参数  : pMsg    : 收到数据
+ ?? ?? ??  : OM_AcpuBlackListRcvMsgProc
+ ????????  : OM????????????????????????
+ ????????  : pMsg    : ????????
 
- 输出参数  : 无
- 返 回 值  :
- 调用函数  :
- 被调函数  :
+ ????????  : ??
+ ?? ?? ??  :
+ ????????  :
+ ????????  :
  
 *****************************************************************************/
 VOS_VOID OM_AcpuBlackListRcvMsgProc(MsgBlock* pMsg)
@@ -1360,19 +1360,19 @@ VOS_VOID OM_AcpuBlackListRcvMsgProc(MsgBlock* pMsg)
          chr_print("blacklist msg failed. err code = 0x%x!\n",ulRet); 
          return;
       }
-      /*先回复一个结果给apk，释放vcom口*/
+      /*????????????????apk??????vcom??*/
       OM_AcpuSendAppcfgResult(OM_APP_MSG_OK);
       return;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuPriorityRcvMsgProc
- 功能描述  : OM收到高优先级配置请求的处理函数
- 输入参数  : pMsg    : 收到数据
+ ?? ?? ??  : OM_AcpuPriorityRcvMsgProc
+ ????????  : OM??????????????????????????????
+ ????????  : pMsg    : ????????
 
- 输出参数  : 无
- 返 回 值  :
- 调用函数  :
- 被调函数  :
+ ????????  : ??
+ ?? ?? ??  :
+ ????????  :
+ ????????  :
  
 *****************************************************************************/
 VOS_VOID OM_AcpuPriorityRcvMsgProc(MsgBlock* pMsg)
@@ -1388,19 +1388,19 @@ VOS_VOID OM_AcpuPriorityRcvMsgProc(MsgBlock* pMsg)
          chr_print("prio msg failed. err code = 0x%x!\n",ulRet);
          return;
       }
-      /*先回复一个结果给apk，释放vcom口*/
+      /*????????????????apk??????vcom??*/
       OM_AcpuSendAppcfgResult(OM_APP_MSG_OK);
       return;
 }
 /*****************************************************************************
- 函 数 名  : OM_AcpuPeriodRcvMsgProc
- 功能描述  : OM收到上报周期配置请求的处理函数
- 输入参数  : pMsg    : 收到数据
+ ?? ?? ??  : OM_AcpuPeriodRcvMsgProc
+ ????????  : OM??????????????????????????????
+ ????????  : pMsg    : ????????
 
- 输出参数  : 无
- 返 回 值  :
- 调用函数  :
- 被调函数  :
+ ????????  : ??
+ ?? ?? ??  :
+ ????????  :
+ ????????  :
  
 *****************************************************************************/
 VOS_VOID OM_AcpuPeriodRcvMsgProc(MsgBlock* pMsg)
@@ -1416,7 +1416,7 @@ VOS_VOID OM_AcpuPeriodRcvMsgProc(MsgBlock* pMsg)
          chr_print("period msg failed. err code = 0x%x!\n",ulRet);  
          return;
       }
-      /*先回复一个结果给apk，释放vcom口*/
+      /*????????????????apk??????vcom??*/
       OM_AcpuSendAppcfgResult(OM_APP_MSG_OK);
 
       return;
@@ -1428,16 +1428,16 @@ VOS_VOID OM_AcpuChrMsgProc(MsgBlock* pMsgBlock)
     REL_TIMER_MSG *pTimer =NULL;
     CHR_APP_REQ_STRU  *pReqMsg = NULL;
     COVERITY_TAINTED_SET((VOS_VOID *)(pMsgBlock->aucValue));
-    /*入参判断*/
+    /*????????*/
     if (NULL == pMsgBlock)
     {
         return;
     }
     
-    /*根据发送PID，执行不同处理*/
+    /*????????PID??????????????*/
     switch(pMsgBlock->ulSenderPid)
     {
-        /*超时消息，按照超时包格式，打包回复*/
+        /*??????????????????????????????????*/
         case DOPRA_PID_TIMER:
 
             pTimer   = (REL_TIMER_MSG*)pMsgBlock;
@@ -1498,8 +1498,8 @@ VOS_UINT32 OM_AcpuChrInit(enum VOS_INIT_PHASE_DEFINE ip)
 
     if(ip == VOS_IP_LOAD_CONFIG)
     {
-        /* 商用ERR LOG上报全局变量初始化 */
-        g_stOmAppMsgRecord.ulErrLogReportSend = 0;/* 记录Err Log需要上报组件 */
+        /* ????ERR LOG?????????????????? */
+        g_stOmAppMsgRecord.ulErrLogReportSend = 0;/* ????Err Log???????????? */
 
         g_stOmAppMsgRecord.usModemId          = MODEM_ID_BUTT;
         g_stOmAppMsgRecord.ulErrLogState      = ERRLOG_IDLE;
@@ -1508,7 +1508,7 @@ VOS_UINT32 OM_AcpuChrInit(enum VOS_INIT_PHASE_DEFINE ip)
         sema_init(&g_stOmRxErrorLogBuffSem, 1);
  
         
-        /* 注册收Vcom Error log函数给NAS */    
+        /* ??????Vcom Error log??????NAS */    
         ulRest = APP_VCOM_REG_DATA_CALLBACK(APP_VCOM_DEV_INDEX_ERRLOG, OM_AcpuReadVComData);
         if(VOS_OK != ulRest)
         {

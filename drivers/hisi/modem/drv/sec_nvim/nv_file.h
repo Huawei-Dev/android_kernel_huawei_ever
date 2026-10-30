@@ -106,7 +106,7 @@ enum
 struct nv_global_ctrl_stru
 {
     nv_dload_packet_head_s nv_dload;  /*data info in dload flag*/
-    xnv_map_file_s *other_card_info;  /*除卡1 2外的其他卡的NV信息*/
+    xnv_map_file_s *other_card_info;  /*????1 2????????????NV????*/
     nv_file_map_s  dload_nv;
     nv_file_map_s  dload_nvcust;
     nv_file_map_s  bak_sec;

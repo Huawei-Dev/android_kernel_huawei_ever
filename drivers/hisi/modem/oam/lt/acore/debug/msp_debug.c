@@ -78,8 +78,8 @@
 *****************************************************************************/
 
 /*****************************************************************************
- Function Name   : PTR : Process Trace Record (流程跟踪记录)
- Description     : 跟踪整个处理流程
+ Function Name   : PTR : Process Trace Record (????????????)
+ Description     : ????????????????
 *****************************************************************************/
 extern OM_ACPU_DEBUG_INFO g_stAcpuDebugInfo;
 
@@ -101,7 +101,7 @@ VOS_VOID DIAG_DebugCommon(VOS_VOID)
     VOS_UINT32 ullen,offset;
     VOS_CHAR   aucInfo[DIAG_DEBUG_INFO_LEN];
 
-    /* 前两个U32保存A/C核PID个数 */
+    /* ??????U32????A/C??PID???? */
     ullen =   sizeof(g_ulDiagCfgInfo)
             + sizeof(g_stPortCfg)
             + sizeof(VOS_UINT32) + sizeof(g_stAcpuDebugInfo);
@@ -112,7 +112,7 @@ VOS_VOID DIAG_DebugCommon(VOS_VOID)
         return;
     }
 
-    /* 如果DIAG目录不存在则先创建目录 */
+    /* ????DIAG?????????????????????? */
     if (VOS_OK != mdrv_file_access(DirPath, 0))
     {
         if (VOS_OK != mdrv_file_mkdir(DirPath))
@@ -145,7 +145,7 @@ VOS_VOID DIAG_DebugCommon(VOS_VOID)
     (VOS_VOID)VOS_MemSet_s(aucInfo, sizeof(aucInfo), 0, sizeof(aucInfo));
     (VOS_VOID)VOS_MemCpy_s(aucInfo, sizeof(aucInfo), "DIAG common info", VOS_StrNLen("DIAG common info", sizeof(aucInfo)-1));
 
-    /* 通用信息 */
+    /* ???????? */
     ret = mdrv_file_write(aucInfo, 1, DIAG_DEBUG_INFO_LEN, pFile);
     if(ret != DIAG_DEBUG_INFO_LEN)
     {
@@ -154,15 +154,15 @@ VOS_VOID DIAG_DebugCommon(VOS_VOID)
 
     offset  = 0;
 
-    /* 当前DIAG的连接状态 */
+    /* ????DIAG?????????? */
     (VOS_VOID)VOS_MemCpy_s((pData + offset), (ullen - offset), &g_ulDiagCfgInfo, sizeof(g_ulDiagCfgInfo));
     offset += sizeof(g_ulDiagCfgInfo);
 
-    /* CPM记录的当前连接的通道 */
+    /* CPM???????????????????? */
     (VOS_VOID)VOS_MemCpy_s((pData + offset), (ullen - offset), &g_stPortCfg, sizeof(g_stPortCfg));
     offset += sizeof(g_stPortCfg);
 
-    /* USB端口的相关可维可测信息 */
+    /* USB?????????????????????? */
     ulValue = DIAG_DEBUG_SIZE_FLAG | sizeof(g_stAcpuDebugInfo);
     (VOS_VOID)VOS_MemCpy_s((pData + offset), (ullen - offset), &ulValue, sizeof(ulValue));
     offset += sizeof(ulValue);
@@ -170,7 +170,7 @@ VOS_VOID DIAG_DebugCommon(VOS_VOID)
     (VOS_VOID)VOS_MemCpy_s((pData + offset), (ullen - offset), &g_stAcpuDebugInfo, sizeof(g_stAcpuDebugInfo));
     offset += sizeof(g_stAcpuDebugInfo);
 
-    /* netlink端口的相关可维可测信息 */
+    /* netlink?????????????????????? */
     ulValue = DIAG_DEBUG_SIZE_FLAG | sizeof(g_stVComDebugInfo);
     (VOS_VOID)VOS_MemCpy_s((pData + offset), (ullen - offset), &ulValue, sizeof(ulValue));
     offset += sizeof(ulValue);
@@ -209,14 +209,14 @@ VOS_VOID diag_numberinfo(void *pFile)
     (VOS_VOID)VOS_MemSet_s(aucInfo, sizeof(aucInfo),0, DIAG_DEBUG_INFO_LEN);
     (VOS_VOID)VOS_MemCpy_s(aucInfo, sizeof(aucInfo), "DIAG number info", VOS_StrNLen("DIAG number info",sizeof(aucInfo)-1));
 
-    /* 上报次数信息 */
+    /* ???????????? */
     ret = (VOS_UINT32)mdrv_file_write(aucInfo, 1, DIAG_DEBUG_INFO_LEN, pFile);
     if(ret != DIAG_DEBUG_INFO_LEN)
     {
         diag_error(" mdrv_file_write DIAG number info failed.\n");
     }
 
-    /* 当前的slice */
+    /* ??????slice */
     ulValue = VOS_GetSlice();
     ret = (VOS_UINT32)mdrv_file_write(&ulValue, 1, sizeof(ulValue), pFile);
     if(ret != sizeof(ulValue))
@@ -224,7 +224,7 @@ VOS_VOID diag_numberinfo(void *pFile)
         diag_error(" mdrv_file_write ulTime failed.\n");
     }
 
-    /* 变量的size */
+    /* ??????size */
     ulValue = DIAG_DEBUG_SIZE_FLAG | sizeof(g_astCBTInfoTbl);
     ret = (VOS_UINT32)mdrv_file_write(&ulValue, 1, sizeof(ulValue), pFile);
     if(ret != sizeof(ulValue))
@@ -232,7 +232,7 @@ VOS_VOID diag_numberinfo(void *pFile)
         diag_error(" mdrv_file_write ulTime failed.\n");
     }
 
-    /* 各上报次数统计量 */
+    /* ???????????????? */
     ret = (VOS_UINT32)mdrv_file_write(&g_astCBTInfoTbl[0], 1, sizeof(g_astCBTInfoTbl), pFile);
     if(ret != sizeof(g_astCBTInfoTbl))
     {
@@ -252,7 +252,7 @@ VOS_VOID DIAG_DebugNoIndLog(VOS_VOID)
     VOS_UINT8 *pData;
     VOS_UINT32 ullen,offset;
 
-    /* 前两个U32保存A/C核PID个数 */
+    /* ??????U32????A/C??PID???? */
     ullen = (2 * sizeof(VOS_UINT32))
             + sizeof(VOS_UINT32) + sizeof(g_ALayerSrcModuleCfg)
             + sizeof(VOS_UINT32) + sizeof(g_CLayerSrcModuleCfg)
@@ -269,7 +269,7 @@ VOS_VOID DIAG_DebugNoIndLog(VOS_VOID)
         return;
     }
 
-    /* 如果DIAG目录不存在则先创建目录 */
+    /* ????DIAG?????????????????????? */
     if (VOS_OK != mdrv_file_access(DirPath, 0))
     {
         if (VOS_OK != mdrv_file_mkdir(DirPath))
@@ -303,7 +303,7 @@ VOS_VOID DIAG_DebugNoIndLog(VOS_VOID)
     (VOS_VOID)VOS_MemSet_s(aucInfo, sizeof(aucInfo), 0, sizeof(aucInfo));
     (VOS_VOID)VOS_MemCpy_s(aucInfo, sizeof(aucInfo), "DIAG config info", VOS_StrNLen("DIAG config info", sizeof(aucInfo)-1));
 
-    /* 配置开关信息 */
+    /* ???????????? */
     ret = (VOS_UINT32)mdrv_file_write(aucInfo, 1, DIAG_DEBUG_INFO_LEN, pFile);
     if(ret != DIAG_DEBUG_INFO_LEN)
     {
@@ -312,12 +312,12 @@ VOS_VOID DIAG_DebugNoIndLog(VOS_VOID)
 
     offset  = 0;
 
-    /* A核PID个数 */
+    /* A??PID???? */
     ulValue = VOS_CPU_ID_1_PID_BUTT - VOS_PID_CPU_ID_1_DOPRAEND;
     (VOS_VOID)VOS_MemCpy_s((pData + offset), (ullen - offset), &ulValue, sizeof(ulValue));
     offset += sizeof(ulValue);
 
-    /* C核PID个数 */
+    /* C??PID???? */
     ulValue = VOS_CPU_ID_0_PID_BUTT - VOS_PID_CPU_ID_0_DOPRAEND;
     (VOS_VOID)VOS_MemCpy_s((pData + offset), (ullen - offset), &ulValue, sizeof(ulValue));
     offset += sizeof(ulValue);
@@ -386,7 +386,7 @@ VOS_VOID DIAG_DebugNoIndLog(VOS_VOID)
 
     diag_numberinfo(pFile);
 
-    /* 延迟5秒后再统计一次 */
+    /* ????5?????????????? */
     (VOS_VOID)VOS_TaskDelay(5000);
 
     diag_numberinfo(pFile);

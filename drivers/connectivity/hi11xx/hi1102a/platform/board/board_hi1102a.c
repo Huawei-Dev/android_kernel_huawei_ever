@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #define HI11XX_LOG_MODULE_NAME     "[HI1102A_BOARD]"
 #define HI11XX_LOG_MODULE_NAME_VAR hi1102a_board_loglevel
 #ifdef _PRE_CONFIG_USE_DTS
@@ -30,14 +30,14 @@
 #define WLAN_DEV2HOST_GPIO ((unsigned int)(1 << 0))
 #define WLAN_FLOWCTRL_GPIO ((unsigned int)(1 << 13))
 
-#define GPIO_LEVEL_CONFIG_REGADDR       0x0  /* GPIO管脚的电平值拉高或拉低寄存器 */
-#define GPIO_INOUT_CONFIG_REGADDR       0x04 /* GPIO管脚的数据方向存器 */
-#define GPIO_TYPE_CONFIG_REGADDR        0x30 /* GPIO管脚的模式寄存器:IO or INT */
-#define GPIO_INT_POLARITY_REGADDR       0x3C /* GPIO中断极性寄存器 */
-#define GPIO_INT_TYPE_REGADDR           0x38 /* GPIO中断触发类型寄存器:电平触发或边沿触发 */
-#define GPIO_INT_CLEAR_REGADDR          0x4C /* GPIO清除中断寄存器，只对边沿触发的中断有效 */
-#define GPIO_LEVEL_GET_REGADDR          0x50 /* GPIO管脚当前电平值寄存器 */
-#define GPIO_INTERRUPT_DEBOUNCE_REGADDR 0x48 /* GPIO管脚是否使能去抖动 */
+#define GPIO_LEVEL_CONFIG_REGADDR       0x0  /* GPIO???????????????????????????? */
+#define GPIO_INOUT_CONFIG_REGADDR       0x04 /* GPIO?????????????????? */
+#define GPIO_TYPE_CONFIG_REGADDR        0x30 /* GPIO????????????????:IO or INT */
+#define GPIO_INT_POLARITY_REGADDR       0x3C /* GPIO?????????????? */
+#define GPIO_INT_TYPE_REGADDR           0x38 /* GPIO??????????????????:?????????????????? */
+#define GPIO_INT_CLEAR_REGADDR          0x4C /* GPIO?????????????????????????????????????? */
+#define GPIO_LEVEL_GET_REGADDR          0x50 /* GPIO???????????????????? */
+#define GPIO_INTERRUPT_DEBOUNCE_REGADDR 0x48 /* GPIO?????????????????? */
 
 /* just for p10+ start */
 #define DTS_PROP_TCXO_CTRL_ENABLE    "hi110x,tcxo_ctrl_enable"
@@ -311,7 +311,7 @@ int32 hi1102a_board_timesync_gpio_init(void)
     int32 ret;
     int32 physical_gpio = 0;
 
-    /* 根据设备树DTS文件获取gnss_timesync GPIO在host侧对应的管脚，保存在physical_gpio中 */
+    /* ??????????DTS????????gnss_timesync GPIO??host????????????????????physical_gpio?? */
     ret = get_board_gpio(DTS_NODE_HI110X_BFGX, DTS_PROP_HI110X_GPIO_TIMESYNC, &physical_gpio);
     if (ret != BOARD_SUCC) {
         PS_PRINT_ERR("get dts prop %s failed\n", DTS_PROP_HI110X_GPIO_TIMESYNC);
@@ -320,7 +320,7 @@ int32 hi1102a_board_timesync_gpio_init(void)
 
     board_info.timesync_gpio = physical_gpio;
 
-    /* 向内核申请使用该管脚 */
+    /* ???????????????????? */
 #ifdef GPIOF_IN
     ret = gpio_request_one(physical_gpio, GPIOF_IN, PROC_NAME_HI110X_GPIO_TIMESYNC);
     if (ret) {
@@ -347,15 +347,15 @@ void hi1102a_free_board_timesync_gpio(void)
 }
 
 /*
- * 函 数 名  : hi1102a_board_flowctrl_gpio_init
- * 功能描述  : 注册gpio流控中断
+ * ?? ?? ??  : hi1102a_board_flowctrl_gpio_init
+ * ????????  : ????gpio????????
  */
 int32 hi1102a_board_flowctrl_gpio_init(void)
 {
     int32 ret;
     int32 physical_gpio = 0;
 
-    /* 根据设备树DTS文件获取流控GPIO在host侧对应的管脚，保存在physical_gpio中 */
+    /* ??????????DTS????????????GPIO??host????????????????????physical_gpio?? */
     ret = get_board_gpio(DTS_NODE_HI110X_WIFI, DTS_PROP_GPIO_WLAN_FLOWCTRL, &physical_gpio);
     if (ret != BOARD_SUCC) {
         PS_PRINT_ERR("get dts prop %s failed\n", DTS_PROP_GPIO_WLAN_FLOWCTRL);
@@ -364,7 +364,7 @@ int32 hi1102a_board_flowctrl_gpio_init(void)
 
     board_info.flowctrl_gpio = physical_gpio;
 
-    /* 向内核申请使用该管脚 */
+    /* ???????????????????? */
 #ifdef GPIOF_IN
     ret = gpio_request_one(physical_gpio, GPIOF_IN, PROC_NAME_GPIO_WLAN_FLOWCTRL);
     if (ret) {
@@ -435,7 +435,7 @@ int32 hi1102a_wifi_enable(void)
     int32 ret;
     uintptr_t gpio = board_info.wlan_power_on_enable;
 
-    /* 第一次枚举时BUS 还未初始化 */
+    /* ????????????BUS ?????????? */
     ret = hcc_bus_power_ctrl_register(hcc_get_current_110x_bus(), HCC_BUS_CTRL_POWER_UP,
                                       board_wlan_gpio_power_on, (void *)gpio);
     if (ret) {
@@ -604,7 +604,7 @@ int32 hi1102a_bfgx_dev_power_on(void)
             hi1102a_wifi_disable();
         }
     } else {
-        /* 此时BFGX 需要解复位BCPU */
+        /* ????BFGX ??????????BCPU */
         PS_PRINT_ERR("wifi dereset bcpu\n");
         if (wlan_pm_open_bcpu() != BFGX_POWER_SUCCESS) {
             PS_PRINT_ERR("wifi dereset bcpu fail!\n");
@@ -643,14 +643,14 @@ int32 hi1102a_bfgx_dev_power_off(void)
     }
 
     if (uart_bfgx_close_cmd() != SUCCESS) {
-        /* bfgx self close fail 了，后面也要通过wifi shutdown bcpu */
+        /* bfgx self close fail ????????????????wifi shutdown bcpu */
         PS_PRINT_ERR("bfgx self close fail\n");
         CHR_EXCEPTION_REPORT(CHR_PLATFORM_EXCEPTION_EVENTID, CHR_SYSTEM_GNSS, CHR_LAYER_DRV,
                              CHR_GNSS_DRV_EVENT_PLAT, CHR_PLAT_DRV_ERROR_CLOSE_BCPU);
     }
 
     if (release_tty_drv(ps_core_d->pm_data) != SUCCESS) {
-        /* 代码执行到此处，说明六合一所有业务都已经关闭，无论tty是否关闭成功，device都要下电 */
+        /* ??????????????????????????????????????????????????tty??????????????device???????? */
         PS_PRINT_ERR("wifi off, close tty is err!");
     }
 
@@ -682,12 +682,12 @@ int32 hi1102a_hitalk_power_off(void)
         return -FAILURE;
     }
 
-    /* 先关闭SDIO TX通道 */
+    /* ??????SDIO TX???? */
     hcc_bus_disable_state(hcc_get_current_110x_bus(), OAL_BUS_STATE_TX);
 
     /* wakeup dev,send poweroff cmd to wifi */
     if (wlan_pm_poweroff_cmd() != OAL_SUCC) {
-        /* wifi self close 失败了也继续往下执行，uart关闭WCPU，异常恢复推迟到wifi下次open的时候执行 */
+        /* wifi self close ??????????????????????uart????WCPU????????????????wifi????open?????????? */
         DECLARE_DFT_TRACE_KEY_INFO("hitalk_poweroff_by_sdio_fail", OAL_DFT_TRACE_FAIL);
         CHR_EXCEPTION_REPORT(CHR_PLATFORM_EXCEPTION_EVENTID, CHR_SYSTEM_WIFI, CHR_LAYER_DRV,
                              CHR_WIFI_DRV_EVENT_PLAT, CHR_PLAT_DRV_ERROR_CLOSE_WCPU);
@@ -762,12 +762,12 @@ int32 hi1102a_wlan_power_off(void)
         return -FAILURE;
     }
 
-    /* 先关闭SDIO TX通道 */
+    /* ??????SDIO TX???? */
     hcc_bus_disable_state(hcc_get_current_110x_bus(), OAL_BUS_STATE_TX);
 
     /* wakeup dev,send poweroff cmd to wifi */
     if (wlan_pm_poweroff_cmd() != OAL_SUCC) {
-        /* wifi self close 失败了也继续往下执行，uart关闭WCPU，异常恢复推迟到wifi下次open的时候执行 */
+        /* wifi self close ??????????????????????uart????WCPU????????????????wifi????open?????????? */
         DECLARE_DFT_TRACE_KEY_INFO("wlan_poweroff_by_sdio_fail", OAL_DFT_TRACE_FAIL);
         CHR_EXCEPTION_REPORT(CHR_PLATFORM_EXCEPTION_EVENTID, CHR_SYSTEM_WIFI, CHR_LAYER_DRV,
                              CHR_WIFI_DRV_EVENT_PLAT, CHR_PLAT_DRV_ERROR_CLOSE_WCPU);
@@ -863,7 +863,7 @@ int32 hi1102a_get_board_uart_port(void)
         return BOARD_FAIL;
     }
 
-    /* 使用uart4，需要在dts里新增DTS_PROP_UART_PCLK项，指明uart4不依赖sensorhub */
+    /* ????uart4????????dts??????DTS_PROP_UART_PCLK????????uart4??????sensorhub */
     ret = of_property_read_bool(np, DTS_PROP_HI110X_UART_PCLK);
     if (ret) {
         PS_PRINT_INFO("uart pclk normal\n");
@@ -1018,7 +1018,7 @@ int32 hi1102a_board_fm_lan_gpio_init(void)
     int32 ret;
     int32 physical_gpio = 0;
 
-    /* 根据设备树DTS文件获fm_lan在host侧对应的管脚，保存在physical_gpio中 */
+    /* ??????????DTS??????fm_lan??host????????????????????physical_gpio?? */
     ret = get_board_gpio(DTS_NODE_HI110X_BFGX, DTS_PROP_HI110X_GPIO_FM_LAN, &physical_gpio);
     if (ret != BOARD_SUCC) {
         PS_PRINT_ERR("[fm_lan]get dts prop %s failed\n", DTS_PROP_HI110X_GPIO_FM_LAN);
@@ -1090,8 +1090,8 @@ int32 hi1102a_board_get_power_pinctrl(struct platform_device *pdev)
     struct pinctrl_state *pinctrl_def = NULL;
     struct pinctrl_state *pinctrl_idle = NULL;
 
-    /* 检查是否需要prepare before board power on */
-    /* JTAG SELECT 拉低，XLDO MODE选择2.8v */
+    /* ????????????prepare before board power on */
+    /* JTAG SELECT ??????XLDO MODE????2.8v */
     ret = get_board_dts_node(&np, DTS_NODE_HISI_HI110X);
     if (ret != BOARD_SUCC) {
         PS_PRINT_ERR("DTS read node %s fail!!!\n", DTS_NODE_HISI_HI110X);
@@ -1252,7 +1252,7 @@ int32 hi1102a_check_device_ready(void)
         return -OAL_EFAIL;
     }
 
-    /* 读到0x101表示成功 */
+    /* ????0x101???????? */
     if (value != 0x101) {
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "device sysctrl reg error, value=0x%x", value);
         return -OAL_EFAIL;
@@ -1281,7 +1281,7 @@ int32 hi1102a_check_wlan_wakeup_host(void)
         return -1;
     }
 
-    /* 输出 */
+    /* ???? */
     value |= (WLAN_DEV2HOST_GPIO);
 
     ret = write_device_reg16(GPIO_BASE_ADDR + GPIO_INOUT_CONFIG_REGADDR, value);
@@ -1349,7 +1349,7 @@ int32 hi1102a_check_host_wakeup_wlan(void)
         return -1;
     }
 
-    /* 输入 */
+    /* ???? */
     value &= (~WLAN_HOST2DEV_GPIO);
 
     ret = write_device_reg16(GPIO_BASE_ADDR + GPIO_INOUT_CONFIG_REGADDR, value);
@@ -1444,7 +1444,7 @@ int32 hi1102a_check_wlan_flow_ctrl(void)
         return -1;
     }
 
-    /* 输出 */
+    /* ???? */
     value |= (WLAN_FLOWCTRL_GPIO);
 
     ret = write_device_reg16(GPIO_BASE_ADDR + GPIO_INOUT_CONFIG_REGADDR, value);

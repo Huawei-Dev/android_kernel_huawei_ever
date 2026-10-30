@@ -11,7 +11,7 @@
 #ifdef CONFIG_INPUTHUB_20
 /*lint -e655*/
 /*
- * 发送IPC消息给contexthub并等待回复
+ * ??????IPC?????????contexthub???????????????
  */
 int send_cmd_format(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count, bool is_lock, struct read_info *rd)
@@ -75,7 +75,7 @@ int send_cmd_format(unsigned char cmd_tag, unsigned char cmd_type,
 }
 
 /*
- * 发送IPC消息给contexthub
+ * ??????IPC?????????contexthub
  */
 int send_cmd_from_kernel(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count)
@@ -84,7 +84,7 @@ int send_cmd_from_kernel(unsigned char cmd_tag, unsigned char cmd_type,
 }
 
 /*
- * 发送IPC消息给contexthub nolock
+ * ??????IPC?????????contexthub nolock
  */
 int send_cmd_from_kernel_nolock(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count)
@@ -93,7 +93,7 @@ int send_cmd_from_kernel_nolock(unsigned char cmd_tag, unsigned char cmd_type,
 }
 
 /*
- * 发送IPC消息给contexthub 并等待回复
+ * ??????IPC?????????contexthub ???????????????
  */
 int send_cmd_from_kernel_response(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count, struct read_info *rd)
@@ -103,7 +103,7 @@ int send_cmd_from_kernel_response(unsigned char cmd_tag, unsigned char cmd_type,
 #else
 /*lint -e655*/
 /*
- * 发送IPC消息给contexthub nolock
+ * ??????IPC?????????contexthub nolock
  */
 static int adapter_unify(const void *buf, unsigned int length, struct read_info *rd)
 {
@@ -111,7 +111,7 @@ static int adapter_unify(const void *buf, unsigned int length, struct read_info 
 }
 
 /*
- * 发送IPC消息给contexthub并等待回复
+ * ??????IPC?????????contexthub???????????????
  */
 int send_cmd_format(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count, int (*adapter)(const void *buf, unsigned int length, struct read_info *rd), struct read_info *rd)
@@ -173,7 +173,7 @@ int send_cmd_format(unsigned char cmd_tag, unsigned char cmd_type,
 }
 
 /*
- * 发送IPC消息给contexthub
+ * ??????IPC?????????contexthub
  */
 int send_cmd_from_kernel(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count)
@@ -182,7 +182,7 @@ int send_cmd_from_kernel(unsigned char cmd_tag, unsigned char cmd_type,
 }
 
 /*
- * 发送IPC消息给contexthub nolock
+ * ??????IPC?????????contexthub nolock
  */
 int send_cmd_from_kernel_nolock(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count)
@@ -191,7 +191,7 @@ int send_cmd_from_kernel_nolock(unsigned char cmd_tag, unsigned char cmd_type,
 }
 
 /*
- * 发送IPC消息给contexthub并等待回复
+ * ??????IPC?????????contexthub???????????????
  */
 int send_cmd_from_kernel_response(unsigned char cmd_tag, unsigned char cmd_type,
     unsigned int subtype, const char *buf, size_t count, struct read_info *rd)

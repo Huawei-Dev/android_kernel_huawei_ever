@@ -84,8 +84,8 @@ VOS_UINT32 g_DiagDebugCfg = DIAG_CFG_SWT_CLOSE;
 *****************************************************************************/
 
 /*****************************************************************************
- Function Name   : CBT : Count Branch Timestamp (计数、分支、时间戳定位功能)
- Description     : 用于统计次数和所走分支的问题定位
+ Function Name   : CBT : Count Branch Timestamp (??????????????????????????)
+ Description     : ????????????????????????????????
 *****************************************************************************/
 
 DIAG_CBT_INFO_TBL_STRU g_astCBTInfoTbl[EN_DIAG_DEBUG_INFO_MAX] = {{0}};
@@ -115,8 +115,8 @@ VOS_VOID diag_CBT(DIAG_CBT_ID_ENUM ulType,
 
 
 /*****************************************************************************
- Function Name   : LNR : Last N Ring buffer store (最后N条信息循环存储功能)
- Description     : 保存最近的N条信息
+ Function Name   : LNR : Last N Ring buffer store (????N??????????????????)
+ Description     : ??????????N??????
 *****************************************************************************/
 
 DIAG_LNR_INFO_TBL_STRU g_astLNRInfoTbl[EN_DIAG_LNR_INFO_MAX] = {{0}};
@@ -144,13 +144,13 @@ VOS_VOID DIAG_ShowLNR(DIAG_LNR_ID_ENUM ulType, VOS_UINT32 n)
 }
 /*****************************************************************************
  Function Name   : DIAG_ShowLogCfg
- Description     : 根据输入的任务PID查询log配置开关信息
+ Description     : ??????????????PID????log????????????
 *****************************************************************************/
 VOS_VOID DIAG_ShowLogCfg(VOS_UINT32 ulModuleId)
 {
     VOS_UINT32 level;
 
-    /*检查DIAG是否初始化且HSO是否连接上*/
+    /*????DIAG????????????HSO??????????*/
     if(!DIAG_IS_CONN_ON)
     {
         diag_crit("do not connect tool\n");
@@ -164,7 +164,7 @@ VOS_VOID DIAG_ShowLogCfg(VOS_UINT32 ulModuleId)
 
     diag_crit("open global switch 0x%x(0xffffffff = invalid).\n", g_PrintTotalCfg);
 
-    /* level中存储的值(0|ERROR|WARNING|NORMAL|INFO|0|0|0) bit 6-3 分别表示ERROR-INFO */
+    /* level??????????(0|ERROR|WARNING|NORMAL|INFO|0|0|0) bit 6-3 ????????ERROR-INFO */
     level = g_PrintModuleCfg[ulModuleId - VOS_PID_DOPRAEND];
     if(level & 0x08)
     {
@@ -193,11 +193,11 @@ VOS_VOID DIAG_ShowLogCfg(VOS_UINT32 ulModuleId)
 
 /*****************************************************************************
  Function Name   : DIAG_ShowEventCfg
- Description     : 查询EVENT配置开关信息
+ Description     : ????EVENT????????????
 *****************************************************************************/
 VOS_VOID DIAG_ShowEventCfg(VOS_UINT32 ulpid)
 {
-    /*检查DIAG是否初始化且HSO是否连接上*/
+    /*????DIAG????????????HSO??????????*/
     if(!DIAG_IS_CONN_ON)
     {
         diag_crit("do not connect tool\n");
@@ -233,11 +233,11 @@ VOS_VOID DIAG_ShowEventCfg(VOS_UINT32 ulpid)
 
 /*****************************************************************************
  Function Name   : DIAG_ShowAirCfg
- Description     : 查询空口配置开关信息
+ Description     : ????????????????????
 *****************************************************************************/
 VOS_VOID DIAG_ShowAirCfg(VOS_VOID)
 {
-    /*检查DIAG是否初始化且HSO是否连接上*/
+    /*????DIAG????????????HSO??????????*/
     if(!DIAG_IS_CONN_ON)
     {
         diag_crit("do not connect tool\n");
@@ -257,20 +257,20 @@ VOS_VOID DIAG_ShowAirCfg(VOS_VOID)
 
 /*****************************************************************************
  Function Name   : DIAG_ShowLayerCfg
- Description     : 根据输入的任务PID查询层间消息配置开关信息
+ Description     : ??????????????PID????????????????????????
 *****************************************************************************/
 VOS_VOID DIAG_ShowLayerCfg(VOS_UINT32 ulModuleId, VOS_UINT32 ulSrcDst)
 {
     VOS_UINT32 ulOffset = 0;
     VOS_UINT32 ulState = 0;
 
-    /*检查DIAG是否初始化且HSO是否连接上*/
+    /*????DIAG????????????HSO??????????*/
     if(!DIAG_IS_CONN_ON)
     {
         diag_crit("do not connect tool\n");
     }
 
-    /* 0表示源模块 */
+    /* 0?????????? */
     if(DIAG_CMD_LAYER_MOD_SRC == ulSrcDst)
     {
         if(DIAG_CFG_LAYER_MODULE_IS_ACORE(ulModuleId))
@@ -348,7 +348,7 @@ VOS_VOID DIAG_ShowLayerCfg(VOS_UINT32 ulModuleId, VOS_UINT32 ulSrcDst)
 
 /*****************************************************************************
  Function Name   : DIAG_ShowUsrCfg
- Description     : 查询用户面配置开关信息
+ Description     : ??????????????????????
 *****************************************************************************/
 VOS_VOID DIAG_ShowUsrCfg(VOS_VOID)
 {
@@ -358,7 +358,7 @@ VOS_VOID DIAG_ShowUsrCfg(VOS_VOID)
 
 /*****************************************************************************
  Function Name   : DIAG_ShowTrans
- Description     : 查询最后n个透传上报相关信息
+ Description     : ????????n??????????????????
 *****************************************************************************/
 VOS_VOID DIAG_ShowTrans(VOS_UINT32 n)
 {
@@ -373,7 +373,7 @@ VOS_VOID DIAG_ShowTrans(VOS_UINT32 n)
 
 /*****************************************************************************
  Function Name   : DIAG_ShowTrans
- Description     : 查询最后n个透传上报相关信息
+ Description     : ????????n??????????????????
 *****************************************************************************/
 VOS_VOID DIAG_ShowPsTransCmd(VOS_UINT32 n)
 {
@@ -385,12 +385,12 @@ extern HTIMER g_DebugTimer;
 
 /*****************************************************************************
  Function Name   : diag_ReportMntn
- Description     : 通过控制通道定时上报可维可测信息
+ Description     : ????????????????????????????????
 *****************************************************************************/
 DIAG_MNTN_API_OK_STRU g_ind_src_mntn_info = {};
 /*****************************************************************************
  Function Name   : diag_ReportMntn
- Description     : 通过控制通道定时上报可维可测信息
+ Description     : ????????????????????????????????
 *****************************************************************************/
 VOS_VOID diag_ReportSrcMntn(VOS_VOID)
 {
@@ -425,7 +425,7 @@ VOS_VOID diag_ReportSrcMntn(VOS_VOID)
     stDiagInfo.pstMntnInfo.ulOverFlow50Num  = pstDebugInfo->ulOverFlow50Num;
     stDiagInfo.pstMntnInfo.ulOverFlow80Num  = pstDebugInfo->ulOverFlow80Num;
 
-    /* 各类消息上报次数 */
+    /* ???????????????? */
     stDiagInfo.pstMntnInfo.ulTraceNum       = g_astCBTInfoTbl[EN_DIAG_CBT_API_TRACE_OK].ulCalledNum - g_ind_src_mntn_info.ulTraceNum;
     stDiagInfo.pstMntnInfo.ulLayerNum       = g_astCBTInfoTbl[EN_DIAG_API_MSG_LAYER_OK].ulCalledNum - g_ind_src_mntn_info.ulLayerNum;
     stDiagInfo.pstMntnInfo.ulEventNum       = g_astCBTInfoTbl[EN_DIAG_CBT_API_EVENT_OK].ulCalledNum - g_ind_src_mntn_info.ulEventNum;
@@ -451,7 +451,7 @@ VOS_VOID diag_ReportSrcMntn(VOS_VOID)
     if(!ulRet)
     {
         last_slice = current_slice;
-        /*发送成功，清除本地记录*/
+        /*??????????????????????*/
         mdrv_diag_reset_mntn_info(DIAGLOG_SRC_MNTN);
     }
     return;
@@ -503,7 +503,7 @@ VOS_VOID diag_ReportDstMntn(VOS_VOID)
     ulRet = mdrv_diag_report_trans((DRV_DIAG_TRANS_IND_STRU *)&stDiagInfo);
     if(!ulRet)
     {
-        /*发送成功，清除本地记录*/
+        /*??????????????????????*/
         mdrv_diag_reset_mntn_info(DIAGLOG_DST_MNTN);
 	    last_slice = current_slice;
         mdrv_clear_socp_encdst_int_info();
@@ -514,20 +514,20 @@ VOS_VOID diag_ReportDstMntn(VOS_VOID)
 
 VOS_VOID diag_ReportMntn(VOS_VOID)
 {
-    /* 开机log */
+    /* ????log */
     if(!DIAG_IS_POLOG_ON)
     {
-        /* HIDS未连接 */
+        /* HIDS?????? */
         if(!DIAG_IS_CONN_ON)
         {
             return;
         }
     }
 
-    /*源端维测信息上报*/
+    /*????????????????*/
     diag_ReportSrcMntn();
 
-    /*目的端维测信息上报*/
+    /*??????????????????*/
     diag_ReportDstMntn();
 
     return;
@@ -535,7 +535,7 @@ VOS_VOID diag_ReportMntn(VOS_VOID)
 
 VOS_VOID diag_StopMntnTimer(VOS_VOID)
 {
-    /* 删除定时器 */
+    /* ?????????? */
     if(DIAG_CFG_SWT_CLOSE == g_DiagDebugCfg)
     {
         diag_info("mntn is not active\n");
@@ -569,7 +569,7 @@ VOS_VOID diag_StartMntnTimer(VOS_UINT32 ulMntnReportTime)
 /*****************************************************************************
  Function Name   : diag_UserPlaneCfgProc
  Description     : deal witch user plane msg cfg
- Input           : pstReq 待处理数据
+ Input           : pstReq ??????????
  Output          : None
  Return          : VOS_UINT32
 *****************************************************************************/
@@ -597,14 +597,14 @@ VOS_UINT32 diag_MntnCfgProc(VOS_UINT8* pstReq)
     if(DIAG_CFG_SWT_CLOSE == pstDebugReq->usMntnSwitch)
     {
         diag_info("switch to close\n");
-        /* 删除定时器 */
+        /* ?????????? */
         diag_StopMntnTimer();
     }
     else
     {
         if(pstDebugReq->usMntnTime == 0)
         {
-            pstDebugReq->usMntnTime = 0x1388;  // 如果工具下发维测周期为0，MSP修改为默认值 = 5s
+            pstDebugReq->usMntnTime = 0x1388;  // ??????????????????????0??MSP???????????? = 5s
         }
         diag_info("switch to open, Mntn Cycle = %d ms\n", pstDebugReq->usMntnTime);
         diag_StartMntnTimer(pstDebugReq->usMntnTime);
@@ -619,13 +619,13 @@ DIAG_ERROR:
     stDiagInfo.ulMsgType = DIAG_MSG_TYPE_MSP;
     stDebugCnf.ulRc = ret;
 
-    /*组包给FW回复*/
+    /*??????FW????*/
     ret = DIAG_MsgReport(&stDiagInfo, &stDebugCnf, (VOS_UINT32)sizeof(stDebugCnf));
     return (VOS_UINT32)ret;
 }
 
 
-/* EVENT上报调测接口 */
+/* EVENT???????????? */
 VOS_VOID DIAG_DebugEventReport(VOS_UINT32 ulpid)
 {
     DIAG_EVENT_IND_STRU stEvent = {0};
@@ -641,7 +641,7 @@ VOS_VOID DIAG_DebugEventReport(VOS_UINT32 ulpid)
 }
 
 
-/* 层间消息上报调测接口 */
+/* ???????????????????? */
 VOS_VOID DIAG_DebugLayerReport(VOS_UINT32 ulsndpid, VOS_UINT32 ulrcvpid, VOS_UINT32 ulMsg)
 {
     DIAG_DATA_MSG_STRU *pDataMsg;
@@ -664,7 +664,7 @@ VOS_VOID DIAG_DebugLayerReport(VOS_UINT32 ulsndpid, VOS_UINT32 ulrcvpid, VOS_UIN
     }
 }
 
-/* 层间消息上报调测接口 */
+/* ???????????????????? */
 VOS_VOID DIAG_DebugVosLayerReport(VOS_UINT32 ulsndpid, VOS_UINT32 ulrcvpid, VOS_UINT32 ulMsg)
 {
     DIAG_DATA_MSG_STRU *pDataMsg;
@@ -688,7 +688,7 @@ VOS_VOID DIAG_DebugVosLayerReport(VOS_UINT32 ulsndpid, VOS_UINT32 ulrcvpid, VOS_
 }
 
 
-/* log上报调测接口 */
+/* log???????????? */
 VOS_VOID DIAG_DebugLogReport(VOS_UINT32 ulpid, VOS_UINT32 level)
 {
     VOS_UINT32 ulMod = DIAG_GEN_LOG_MODULE(1, 2, level);
@@ -696,7 +696,7 @@ VOS_VOID DIAG_DebugLogReport(VOS_UINT32 ulpid, VOS_UINT32 level)
 }
 
 
-/* 透传上报调测接口 */
+/* ???????????????? */
 VOS_VOID DIAG_DebugTransReport(VOS_UINT32 ulpid)
 {
     DIAG_TRANS_IND_STRU std;
@@ -712,7 +712,7 @@ VOS_VOID DIAG_DebugTransReport(VOS_UINT32 ulpid)
 }
 
 
-/* 层间开关调测接口 */
+/* ???????????????? */
 VOS_VOID DIAG_DebugLayerCfg(VOS_UINT32 ulModuleId, VOS_UINT8 ucFlag)
 {
     VOS_UINT32 ulOffset = 0;
@@ -802,7 +802,7 @@ VOS_UINT32 DIAG_ApiTest(VOS_UINT8* pstReq)
 
     VOS_MemFree(MSP_PID_DIAG_APP_AGENT, ptr);
 
-    /* 修改后接口也支持在串口调用 */
+    /* ?????????????????????????? */
     if(pstReq)
     {
         pstDiagHead = (DIAG_FRAME_INFO_STRU*)(pstReq);

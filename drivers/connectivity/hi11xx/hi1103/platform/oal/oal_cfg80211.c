@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include "oal_net.h"
 #include "oal_cfg80211.h"
 #include "oam_wdk.h"
@@ -16,8 +16,8 @@ static oal_kobj_uevent_env_stru env;
 #endif
 
 /*
- * 函 数 名  : oal_cfg80211_ready_on_channel_etc
- * 功能描述  : 上报linux 内核已经处于指定信道
+ * ?? ?? ??  : oal_cfg80211_ready_on_channel_etc
+ * ????????  : ????linux ????????????????????
  */
 oal_void oal_cfg80211_ready_on_channel_etc(oal_wireless_dev_stru *pst_wdev,
                                            oal_uint64 ull_cookie,
@@ -30,21 +30,21 @@ oal_void oal_cfg80211_ready_on_channel_etc(oal_wireless_dev_stru *pst_wdev,
 #endif
 }
 /*
- * 函 数 名  : oal_cfg80211_vowifi_report_etc
- * 功能描述  : 上报linux 内核vowifi/volte逻辑切换申请
+ * ?? ?? ??  : oal_cfg80211_vowifi_report_etc
+ * ????????  : ????linux ????vowifi/volte????????????
  */
 oal_void oal_cfg80211_vowifi_report_etc(oal_net_device_stru *pst_netdev,
                                         oal_gfp_enum_uint8 en_gfp)
 {
 #ifdef CONFIG_HW_VOWIFI
-    /* 此接口为终端实现的内核接口，定义处用内核宏CONFIG_HW_VOWIFI包裹 */
+    /* ??????????????????????????????????????????CONFIG_HW_VOWIFI???? */
     cfg80211_drv_vowifi(pst_netdev, en_gfp);
 #endif /* CONFIG_HW_VOWIFI */
 }
 
 /*
- * 函 数 名  : oal_cfg80211_remain_on_channel_expired_etc
- * 功能描述  : 监听超时上报
+ * ?? ?? ??  : oal_cfg80211_remain_on_channel_expired_etc
+ * ????????  : ????????????
  */
 oal_void oal_cfg80211_remain_on_channel_expired_etc(oal_wireless_dev_stru *pst_wdev,
                                                     oal_uint64 ull_cookie,
@@ -84,11 +84,11 @@ extern struct genl_multicast_group nl80211_mlme_mcgrp;
 #if (KERNEL_VERSION(2, 6, 34) <= LINUX_VERSION_CODE)
 #ifdef _PRE_WLAN_FEATURE_HILINK
 /*
- * 函 数 名  : oal_cfg80211_calculate_bitrate
- * 功能描述  : oal_cfg80211_new_sta上报new sta事件获取比特率值(参考内核实现)
- *             如果MCS大于等于32，就返回错误OAL_ERR_CODE_CFG80211_MCS_EXCEED
- * 输入参数  : pst_rate: 速率信息结构
- * 返 回 值  : l_bitrate: 比特率
+ * ?? ?? ??  : oal_cfg80211_calculate_bitrate
+ * ????????  : oal_cfg80211_new_sta????new sta????????????????(????????????)
+ *             ????MCS????????32????????????OAL_ERR_CODE_CFG80211_MCS_EXCEED
+ * ????????  : pst_rate: ????????????
+ * ?? ?? ??  : l_bitrate: ??????
  */
 OAL_STATIC oal_int32 oal_cfg80211_calculate_bitrate(oal_rate_info_stru *pst_rate)
 {
@@ -104,7 +104,7 @@ OAL_STATIC oal_int32 oal_cfg80211_calculate_bitrate(oal_rate_info_stru *pst_rate
     if (pst_rate->mcs >= 32) {
         return -OAL_ERR_CODE_CFG80211_MCS_EXCEED;
     }
-    /* 根据MCS来获取对应的比特率 */
+    /* ????MCS?????????????????? */
     l_modulation = pst_rate->mcs & 7;
     l_streams = (pst_rate->mcs >> 3) + 1;
 
@@ -127,8 +127,8 @@ OAL_STATIC oal_int32 oal_cfg80211_calculate_bitrate(oal_rate_info_stru *pst_rate
 }
 
 /*
- * 函 数 名  : oal_nl80211_send_find_station_msg
- * 功能描述  : netlink上报send new sta事件进行命令符号和属性值填充
+ * ?? ?? ??  : oal_nl80211_send_find_station_msg
+ * ????????  : netlink????send new sta????????????????????????????
  */
 OAL_STATIC oal_int32 oal_nl80211_send_find_station_msg(oal_netbuf_stru *pst_buf, oal_uint32 ul_pid,
                                                        oal_uint32 ul_seq, oal_int32 l_flags,
@@ -223,8 +223,8 @@ OAL_STATIC oal_int32 oal_nl80211_send_find_station_msg(oal_netbuf_stru *pst_buf,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_fbt_notify_find_sta
- * 功能描述  : hilink fbt 通知找到sta
+ * ?? ?? ??  : oal_cfg80211_fbt_notify_find_sta
+ * ????????  : hilink fbt ????????sta
  */
 oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
                                             const oal_uint8 *puc_mac_addr,
@@ -234,7 +234,7 @@ oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
     oal_netbuf_stru *pst_msg = OAL_PTR_NULL;
     oal_int32 l_let;
 
-    /* 分配一个新的netlink消息 */
+    /* ????????????netlink???? */
     pst_msg = oal_nlmsg_new(OAL_NLMSG_GOODSIZE, en_gfp);
     if (pst_msg == OAL_PTR_NULL) {
         return OAL_ERR_CODE_CFG80211_ENOBUFS;
@@ -246,7 +246,7 @@ oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
         return l_let;
     }
 
-    /* 调用封装的内核netlink广播发送函数，发送成功返回0，失败为负值 */
+    /* ??????????????netlink??????????????????????????0???????????? */
     l_let = oal_genlmsg_multicast(pst_msg, 0, NL80211_GID, en_gfp);
     if (l_let < 0) {
         return OAL_FAIL;
@@ -259,11 +259,11 @@ oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
 
 #else
 /*
- * 函 数 名  : oal_cfg80211_calculate_bitrate
- * 功能描述  : oal_cfg80211_new_sta上报new sta事件获取比特率值(参考内核实现)
- *             如果MCS大于等于32，就返回错误OAL_ERR_CODE_CFG80211_MCS_EXCEED
- * 输入参数  : pst_rate: 速率信息结构
- * 返 回 值  : l_bitrate: 比特率
+ * ?? ?? ??  : oal_cfg80211_calculate_bitrate
+ * ????????  : oal_cfg80211_new_sta????new sta????????????????(????????????)
+ *             ????MCS????????32????????????OAL_ERR_CODE_CFG80211_MCS_EXCEED
+ * ????????  : pst_rate: ????????????
+ * ?? ?? ??  : l_bitrate: ??????
  */
 OAL_STATIC oal_int32 oal_cfg80211_calculate_bitrate(oal_rate_info_stru *pst_rate)
 {
@@ -279,7 +279,7 @@ OAL_STATIC oal_int32 oal_cfg80211_calculate_bitrate(oal_rate_info_stru *pst_rate
     if (pst_rate->mcs >= 32) {
         return -OAL_ERR_CODE_CFG80211_MCS_EXCEED;
     }
-    /* 根据MCS来获取对应的比特率 */
+    /* ????MCS?????????????????? */
     l_modulation = pst_rate->mcs & 7;
     l_streams = (pst_rate->mcs >> 3) + 1;
 
@@ -302,8 +302,8 @@ OAL_STATIC oal_int32 oal_cfg80211_calculate_bitrate(oal_rate_info_stru *pst_rate
 }
 
 /*
- * 函 数 名  : oal_nl80211_send_station
- * 功能描述  : netlink上报send new sta事件进行命令符号和属性值填充
+ * ?? ?? ??  : oal_nl80211_send_station
+ * ????????  : netlink????send new sta????????????????????????????
  */
 OAL_STATIC oal_uint32 oal_nl80211_send_station(oal_netbuf_stru *pst_buf, oal_uint32 ul_pid, oal_uint32 ul_seq,
                                                oal_int32 l_flags, oal_net_device_stru *pst_net_dev,
@@ -324,7 +324,7 @@ OAL_STATIC oal_uint32 oal_nl80211_send_station(oal_netbuf_stru *pst_buf, oal_uin
     OAL_NLA_PUT(pst_buf, PRIV_NL80211_ATTR_MAC, OAL_ETH_ALEN_SIZE, puc_mac_addr);
 
     /*
-     * linux-2.6.30内核station_info没有generation成员
+     * linux-2.6.30????station_info????generation????
      * NLA_PUT_U32(pst_buf, PRIV_NL80211_ATTR_GENERATION, pst_station_info->generation);
      */
     pst_sinfoattr = oal_nla_nest_start(pst_buf, PRIV_NL80211_ATTR_STA_INFO);
@@ -399,8 +399,8 @@ nla_put_failure:
 
 #ifdef _PRE_WLAN_FEATURE_HILINK
 /*
- * 函 数 名  : oal_nl80211_send_find_station_msg
- * 功能描述  : netlink上报send new sta事件进行命令符号和属性值填充
+ * ?? ?? ??  : oal_nl80211_send_find_station_msg
+ * ????????  : netlink????send new sta????????????????????????????
  */
 OAL_STATIC oal_int32 oal_nl80211_send_find_station_msg(oal_netbuf_stru *pst_buf, oal_uint32 ul_pid,
                                                        oal_uint32 ul_seq, oal_int32 l_flags,
@@ -423,7 +423,7 @@ OAL_STATIC oal_int32 oal_nl80211_send_find_station_msg(oal_netbuf_stru *pst_buf,
     OAL_NLA_PUT(pst_buf, PRIV_NL80211_ATTR_MAC, OAL_ETH_ALEN_SIZE, puc_mac_addr);
 
     /*
-     * linux-2.6.30内核station_info没有generation成员
+     * linux-2.6.30????station_info????generation????
      * NLA_PUT_U32(pst_buf, PRIV_NL80211_ATTR_GENERATION, pst_station_info->generation);
      */
     pst_sinfoattr = oal_nla_nest_start(pst_buf, PRIV_NL80211_ATTR_STA_INFO);
@@ -497,8 +497,8 @@ nla_put_failure:
 }
 
 /*
- * 函 数 名  : oal_cfg80211_fbt_notify_find_sta
- * 功能描述  : hilink fbt 通知找到sta
+ * ?? ?? ??  : oal_cfg80211_fbt_notify_find_sta
+ * ????????  : hilink fbt ????????sta
  */
 oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
                                             const oal_uint8 *puc_mac_addr,
@@ -508,7 +508,7 @@ oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
     oal_netbuf_stru *pst_msg = OAL_PTR_NULL;
     oal_int32 l_let;
 
-    /* 分配一个新的netlink消息 */
+    /* ????????????netlink???? */
     pst_msg = oal_nlmsg_new(OAL_NLMSG_GOODSIZE, en_gfp);
     if (pst_msg == OAL_PTR_NULL) {
         return OAL_ERR_CODE_CFG80211_ENOBUFS;
@@ -520,7 +520,7 @@ oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
         return l_let;
     }
 
-    /* 调用封装的内核netlink广播发送函数，发送成功返回0，失败为负值 */
+    /* ??????????????netlink??????????????????????????0???????????? */
     l_let = oal_genlmsg_multicast(pst_msg, 0, NL80211_GID, en_gfp);
     if (l_let < 0) {
         return OAL_FAIL;
@@ -531,8 +531,8 @@ oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
 #endif
 
 /*
- * 函 数 名  : oal_nl80211_send_connect_result
- * 功能描述  : 驱动调用内核netlink接口上报关联结构
+ * ?? ?? ??  : oal_nl80211_send_connect_result
+ * ????????  : ????????????netlink????????????????
  */
 OAL_STATIC oal_uint32 oal_nl80211_send_connect_result(oal_netbuf_stru *pst_buf,
                                                       oal_net_device_stru *pst_net_device,
@@ -554,7 +554,7 @@ OAL_STATIC oal_uint32 oal_nl80211_send_connect_result(oal_netbuf_stru *pst_buf,
     }
 
     /*
-     * 这个属性上层没有解析，可以不上报
+     * ????????????????????????????????
      * OAL_NLA_PUT_U32(pst_buf, PRIV_NL80211_ATTR_WIPHY, pst_net_device->wiphy_idx);
      */
     OAL_NLA_PUT_U32(pst_buf, PRIV_NL80211_ATTR_IFINDEX, pst_net_device->ifindex);
@@ -576,7 +576,7 @@ OAL_STATIC oal_uint32 oal_nl80211_send_connect_result(oal_netbuf_stru *pst_buf,
 
     ul_let = oal_genlmsg_multicast(pst_buf, 0, NL80211_GID, en_gfp);
     if (ul_let < 0) {
-        /* 如果不加载hostapd和wpa_supplicant的话，这个也会失败，这里报fail，影响使用，去掉报错 */
+        /* ??????????hostapd??wpa_supplicant??????????????????????????fail???????????????????? */
         return OAL_FAIL;
     }
 
@@ -611,7 +611,7 @@ OAL_STATIC oal_uint32 oal_nl80211_send_disconnected(oal_net_device_stru *pst_net
     }
 
     /*
-     * 这个属性上层没有解析，可以不上报
+     * ????????????????????????????????
      * OAL_NLA_PUT_U32(pst_msg, PRIV_NL80211_ATTR_WIPHY, pst_net_device->wiphy_idx);
      */
     OAL_NLA_PUT_U32(pst_msg, PRIV_NL80211_ATTR_IFINDEX, pst_net_device->ifindex);
@@ -632,7 +632,7 @@ OAL_STATIC oal_uint32 oal_nl80211_send_disconnected(oal_net_device_stru *pst_net
 
     ul_let = oal_genlmsg_multicast(pst_msg, 0, NL80211_GID, en_gfp);
     if (ul_let < 0) {
-        /* oal_genlmsg_multicast接口内部会释放skb，返回失败不需要手动释放 */
+        /* oal_genlmsg_multicast??????????????skb???????????????????????? */
         return OAL_FAIL;
     }
 
@@ -708,8 +708,8 @@ nla_put_failure:
     (_PRE_CONFIG_TARGET_PRODUCT == _PRE_TARGET_PRODUCT_TYPE_E5) ||  \
     (_PRE_CONFIG_TARGET_PRODUCT == _PRE_TARGET_PRODUCT_TYPE_CPE)
 /*
- * 函 数 名  : oal_nl80211_send_cac_msg
- * 功能描述  : netlink上报cac事件进行命令符号和属性值填充
+ * ?? ?? ??  : oal_nl80211_send_cac_msg
+ * ????????  : netlink????cac????????????????????????????
  */
 OAL_STATIC oal_int32 oal_nl80211_send_cac_msg(oal_netbuf_stru *pst_buf, oal_net_device_stru *pst_net_dev,
                                               oal_uint32 ul_freq,
@@ -765,8 +765,8 @@ nla_put_failure:
 #endif
 
 /*
- * 函 数 名  : oal_cfg80211_notify_cac_event
- * 功能描述  : 上报CAC事件
+ * ?? ?? ??  : oal_cfg80211_notify_cac_event
+ * ????????  : ????CAC????
  */
 oal_uint32 oal_cfg80211_notify_cac_event(oal_net_device_stru *pst_net_device,
                                          oal_uint32 ul_freq,
@@ -780,7 +780,7 @@ oal_uint32 oal_cfg80211_notify_cac_event(oal_net_device_stru *pst_net_device,
     oal_netbuf_stru *pst_msg = OAL_PTR_NULL;
     oal_int32 l_let;
 
-    /* 分配一个新的netlink消息 */
+    /* ????????????netlink???? */
     pst_msg = oal_nlmsg_new(OAL_NLMSG_GOODSIZE, en_gfp);
     if (pst_msg == OAL_PTR_NULL) {
         return OAL_ERR_CODE_CFG80211_ENOBUFS;
@@ -792,7 +792,7 @@ oal_uint32 oal_cfg80211_notify_cac_event(oal_net_device_stru *pst_net_device,
         return OAL_FAIL;
     }
 
-    /* 调用封装的内核netlink广播发送函数，发送成功返回0，失败为负值 */
+    /* ??????????????netlink??????????????????????????0???????????? */
     l_let = oal_genlmsg_multicast(pst_msg, 0, NL80211_GID, en_gfp);
     if (l_let < 0) {
         return OAL_FAIL;
@@ -805,8 +805,8 @@ oal_uint32 oal_cfg80211_notify_cac_event(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_sched_scan_result_etc
- * 功能描述  : 上报调度扫描结果
+ * ?? ?? ??  : oal_cfg80211_sched_scan_result_etc
+ * ????????  : ????????????????
  */
 oal_void oal_cfg80211_sched_scan_result_etc(oal_wiphy_stru *pst_wiphy)
 {
@@ -817,7 +817,7 @@ oal_void oal_cfg80211_sched_scan_result_etc(oal_wiphy_stru *pst_wiphy)
     cfg80211_sched_scan_results(pst_wiphy);
     return;
 #else
-    /* 51不支持，do nothing */
+    /* 51????????do nothing */
     return;
 #endif
 }
@@ -826,7 +826,7 @@ oal_void oal_cfg80211_sched_scan_result_etc(oal_wiphy_stru *pst_wiphy)
 oal_void oal_kobject_uevent_env_sta_join_etc(oal_net_device_stru *pst_net_device, const oal_uint8 *puc_mac_addr)
 {
     memset_s(&env, sizeof(env), 0, sizeof(env));
-    /* 上层需要STA_JOIN和mac地址，中间参数无效，但是必须是4个参数 */
+    /* ????????STA_JOIN??mac??????????????????????????????4?????? */
     add_uevent_var(&env, "SOFTAP=STA_JOIN wlan0 wlan0 %02x:%02x:%02x:%02x:%02x:%02x",
                    puc_mac_addr[0], puc_mac_addr[1], puc_mac_addr[2],
                    puc_mac_addr[3], puc_mac_addr[4], puc_mac_addr[5]);
@@ -840,7 +840,7 @@ oal_void oal_kobject_uevent_env_sta_join_etc(oal_net_device_stru *pst_net_device
 oal_void oal_kobject_uevent_env_sta_leave_etc(oal_net_device_stru *pst_net_device, const unsigned char *puc_mac_addr)
 {
     memset_s(&env, sizeof(env), 0, sizeof(env));
-    /* 上层需要STA_LEAVE和mac地址，中间参数无效，但是必须是4个参数 */
+    /* ????????STA_LEAVE??mac??????????????????????????????4?????? */
     add_uevent_var(&env, "SOFTAP=STA_LEAVE wlan0 wlan0 %02x:%02x:%02x:%02x:%02x:%02x",
                    puc_mac_addr[0], puc_mac_addr[1], puc_mac_addr[2],
                    puc_mac_addr[3], puc_mac_addr[4], puc_mac_addr[5]);
@@ -862,8 +862,8 @@ oal_void oal_cfg80211_put_bss_etc(oal_wiphy_stru *pst_wiphy, oal_cfg80211_bss_st
 }
 
 /*
- * 函 数 名  : oal_cfg80211_get_bss_etc
- * 功能描述  : 根据bssid 和ssid 查找内核保存的bss 信息
+ * ?? ?? ??  : oal_cfg80211_get_bss_etc
+ * ????????  : ????bssid ??ssid ??????????????bss ????
  */
 oal_cfg80211_bss_stru *oal_cfg80211_get_bss_etc(oal_wiphy_stru *pst_wiphy,
                                                 oal_ieee80211_channel_stru *pst_channel,
@@ -881,8 +881,8 @@ oal_cfg80211_bss_stru *oal_cfg80211_get_bss_etc(oal_wiphy_stru *pst_wiphy,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_unlink_bss_etc
- * 功能描述  : 从kernel删除bss entry项
+ * ?? ?? ??  : oal_cfg80211_unlink_bss_etc
+ * ????????  : ??kernel????bss entry??
  */
 oal_void oal_cfg80211_unlink_bss_etc(oal_wiphy_stru *pst_wiphy, oal_cfg80211_bss_stru *pst_cfg80211_bss)
 {
@@ -900,8 +900,8 @@ oal_cfg80211_bss_stru *oal_cfg80211_inform_bss_frame_etc(oal_wiphy_stru *pst_wip
 }
 
 /*
- * 函 数 名  : oal_cfg80211_scan_done_etc
- * 功能描述  : 上报扫描完成结果
+ * ?? ?? ??  : oal_cfg80211_scan_done_etc
+ * ????????  : ????????????????
  */
 oal_void oal_cfg80211_scan_done_etc(oal_cfg80211_scan_request_stru *pst_cfg80211_scan_request, oal_int8 c_aborted)
 {
@@ -915,8 +915,8 @@ oal_void oal_cfg80211_scan_done_etc(oal_cfg80211_scan_request_stru *pst_cfg80211
 }
 
 /*
- * 函 数 名  : oal_cfg80211_connect_result_etc
- * 功能描述  : STA上报给关联结果结构体
+ * ?? ?? ??  : oal_cfg80211_connect_result_etc
+ * ????????  : STA????????????????????
  */
 oal_uint32 oal_cfg80211_connect_result_etc(oal_net_device_stru *pst_net_device,
                                            const oal_uint8 *puc_bssid,
@@ -936,7 +936,7 @@ oal_uint32 oal_cfg80211_connect_result_etc(oal_net_device_stru *pst_net_device,
     oal_netbuf_stru *pst_msg = OAL_PTR_NULL;
     oal_wireless_dev_stru *pst_wdev = OAL_PTR_NULL;
 
-    /* 分配一个新的netlink消息 */
+    /* ????????????netlink???? */
     pst_msg = oal_nlmsg_new(OAL_NLMSG_GOODSIZE, en_gfp);
     if (pst_msg == OAL_PTR_NULL) {
         return OAL_ERR_CODE_CFG80211_ENOBUFS;
@@ -954,8 +954,8 @@ oal_uint32 oal_cfg80211_connect_result_etc(oal_net_device_stru *pst_net_device,
     }
 
     /*
-     * 如果不加载hostapd和wpa_supplicant的话，这个也会失败，这里报fail，影响使用，去掉报错
-     * 成功的话，打印SUCC, 不成功的话，不打印
+     * ??????????hostapd??wpa_supplicant??????????????????????????fail????????????????????
+     * ??????????????SUCC, ??????????????????
      */
     return oal_nl80211_send_connect_result(pst_msg, pst_net_device, puc_bssid, puc_req_ie, ul_req_ie_len,
                                            puc_resp_ie, ul_resp_ie_len, us_status, en_gfp);
@@ -963,8 +963,8 @@ oal_uint32 oal_cfg80211_connect_result_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_disconnected_etc
- * 功能描述  : STA上报给内核去关联结果
+ * ?? ?? ??  : oal_cfg80211_disconnected_etc
+ * ????????  : STA????????????????????
  */
 oal_uint32 oal_cfg80211_disconnected_etc(oal_net_device_stru *pst_net_device,
                                          oal_uint16 us_reason,
@@ -1006,8 +1006,8 @@ oal_uint32 oal_cfg80211_disconnected_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_roamed_etc
- * 功能描述  : STA上报给内核去关联结果
+ * ?? ?? ??  : oal_cfg80211_roamed_etc
+ * ????????  : STA????????????????????
  */
 oal_uint32 oal_cfg80211_roamed_etc(oal_net_device_stru *pst_net_device,
                                    struct ieee80211_channel *pst_channel,
@@ -1041,8 +1041,8 @@ oal_uint32 oal_cfg80211_roamed_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_ft_event_etc
- * 功能描述  : STA上报给内核ft事件
+ * ?? ?? ??  : oal_cfg80211_ft_event_etc
+ * ????????  : STA??????????ft????
  */
 oal_uint32 oal_cfg80211_ft_event_etc(oal_net_device_stru *pst_net_device, oal_cfg80211_ft_event_stru *pst_ft_event)
 {
@@ -1057,8 +1057,8 @@ oal_uint32 oal_cfg80211_ft_event_etc(oal_net_device_stru *pst_net_device, oal_cf
 }
 
 /*
- * 函 数 名  : cfg80211_new_sta
- * 功能描述  : AP上报新关联某个STA情况
+ * ?? ?? ??  : cfg80211_new_sta
+ * ????????  : AP??????????????STA????
  */
 oal_uint32 oal_cfg80211_new_sta_etc(oal_net_device_stru *pst_net_device,
                                     const oal_uint8 *puc_mac_addr,
@@ -1078,7 +1078,7 @@ oal_uint32 oal_cfg80211_new_sta_etc(oal_net_device_stru *pst_net_device,
     oal_uint32 ul_ret;
     oal_int32 l_let;
 
-    /* 分配一个新的netlink消息 */
+    /* ????????????netlink???? */
     pst_msg = oal_nlmsg_new(OAL_NLMSG_GOODSIZE, en_gfp);
     if (pst_msg == OAL_PTR_NULL) {
         return OAL_ERR_CODE_CFG80211_ENOBUFS;
@@ -1090,7 +1090,7 @@ oal_uint32 oal_cfg80211_new_sta_etc(oal_net_device_stru *pst_net_device,
         return ul_ret;
     }
 
-    /* 调用封装的内核netlink广播发送函数，发送成功返回0，失败为负值 */
+    /* ??????????????netlink??????????????????????????0???????????? */
     l_let = oal_genlmsg_multicast(pst_msg, 0, NL80211_GID, en_gfp);
     if (l_let < 0) {
         return OAL_FAIL;
@@ -1101,8 +1101,8 @@ oal_uint32 oal_cfg80211_new_sta_etc(oal_net_device_stru *pst_net_device,
 }
 #ifdef _PRE_WLAN_FEATURE_11R_AP
 /*
- * 函 数 名  : oal_cfg80211_send_rx_auth
- * 功能描述  : AP上报auth
+ * ?? ?? ??  : oal_cfg80211_send_rx_auth
+ * ????????  : AP????auth
  */
 oal_void oal_cfg80211_send_rx_auth(oal_net_device_stru *pst_dev,
                                    const oal_uint8 *puc_buf,
@@ -1118,8 +1118,8 @@ oal_void oal_cfg80211_send_rx_auth(oal_net_device_stru *pst_dev,
 #endif
 
 /*
- * 函 数 名  : oal_cfg80211_mic_failure_etc
- * 功能描述  : 上报mic攻击
+ * ?? ?? ??  : oal_cfg80211_mic_failure_etc
+ * ????????  : ????mic????
  */
 oal_void oal_cfg80211_mic_failure_etc(oal_net_device_stru *pst_net_device,
                                       const oal_uint8 *puc_mac_addr,
@@ -1158,7 +1158,7 @@ oal_void oal_cfg80211_mic_failure_etc(oal_net_device_stru *pst_net_device,
         return;
     }
 
-    /* rdev对应内核core.h中的cfg80211_registered_device结构体，这个属性在上层没有处理 */
+    /* rdev????????core.h????cfg80211_registered_device?????????????????????????????? */
     OAL_NLA_PUT_U32(pst_msg, PRIV_NL80211_ATTR_WIPHY, pst_rdev->wiphy_idx);
     OAL_NLA_PUT_U32(pst_msg, PRIV_NL80211_ATTR_IFINDEX, pst_net_device->ifindex);
 
@@ -1168,7 +1168,7 @@ oal_void oal_cfg80211_mic_failure_etc(oal_net_device_stru *pst_net_device,
     OAL_NLA_PUT_U32(pst_msg, PRIV_NL80211_ATTR_KEY_TYPE, key_type);
     OAL_NLA_PUT_U8(pst_msg, PRIV_NL80211_ATTR_KEY_IDX, key_id);
     if (puc_tsc != OAL_PTR_NULL) {
-        OAL_NLA_PUT(pst_msg, PRIV_NL80211_ATTR_KEY_SEQ, 6, puc_tsc); /* 6为附加的长度 */
+        OAL_NLA_PUT(pst_msg, PRIV_NL80211_ATTR_KEY_SEQ, 6, puc_tsc); /* 6???????????? */
     }
 
     if (oal_genlmsg_end(pst_msg, p_hdr) < 0) {
@@ -1189,8 +1189,8 @@ nla_put_failure:
 }
 
 /*
- * 函 数 名  : oal_cfg80211_del_sta_etc
- * 功能描述  : AP上报去关联某个STA情况
+ * ?? ?? ??  : oal_cfg80211_del_sta_etc
+ * ????????  : AP??????????????STA????
  */
 oal_int32 oal_cfg80211_del_sta_etc(oal_net_device_stru *pst_net_device,
                                    const oal_uint8 *puc_mac_addr,
@@ -1234,9 +1234,9 @@ oal_int32 oal_cfg80211_del_sta_etc(oal_net_device_stru *pst_net_device,
     }
 
     /*
-     * liuux-2.6.30和liuux-2.6.34内核都是从这个函数上,都能达到要求
-     * linux-2.6.34内核接着调用genlmsg_multicast_netns(&init_net......)
-     * linux-2.6.30内核接着调用nlmsg_multicast(genl_sock......)
+     * liuux-2.6.30??liuux-2.6.34????????????????????,????????????
+     * linux-2.6.34????????????genlmsg_multicast_netns(&init_net......)
+     * linux-2.6.30????????????nlmsg_multicast(genl_sock......)
      */
     l_let = oal_genlmsg_multicast(pst_msg, 0, NL80211_GID, en_gfp);
 
@@ -1245,9 +1245,9 @@ oal_int32 oal_cfg80211_del_sta_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_rx_mgmt_etc
- * 功能描述  : 上报接收到的管理帧
- * 输出参数  : OAL_SUCC 上报成功，其它错误码 上报失败
+ * ?? ?? ??  : oal_cfg80211_rx_mgmt_etc
+ * ????????  : ??????????????????
+ * ????????  : OAL_SUCC ???????????????????? ????????
  */
 oal_uint32 oal_cfg80211_rx_mgmt_etc(oal_net_device_stru *pst_dev,
                                     oal_int32 l_freq,
@@ -1287,8 +1287,8 @@ oal_uint32 oal_cfg80211_rx_mgmt_etc(oal_net_device_stru *pst_dev,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_rx_exception_etc
- * 功能描述  : 收到异常后上报上层,私有命令
+ * ?? ?? ??  : oal_cfg80211_rx_exception_etc
+ * ????????  : ??????????????????,????????
  */
 oal_uint32 oal_cfg80211_rx_exception_etc(oal_net_device_stru *pst_netdev,
                                          oal_uint8 *puc_data,
@@ -1300,10 +1300,10 @@ oal_uint32 oal_cfg80211_rx_exception_etc(oal_net_device_stru *pst_netdev,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_vendor_cmd_alloc_reply_skb_etc
- * 功能描述  : 申请厂家自定义返回数据
- * 输入参数  : oal_wiphy_stru * pst_wiphy: wiphy 结构
- *             oal_uint32     ul_len     : 申请长度
+ * ?? ?? ??  : oal_cfg80211_vendor_cmd_alloc_reply_skb_etc
+ * ????????  : ??????????????????????
+ * ????????  : oal_wiphy_stru * pst_wiphy: wiphy ????
+ *             oal_uint32     ul_len     : ????????
  */
 oal_netbuf_stru *oal_cfg80211_vendor_cmd_alloc_reply_skb_etc(oal_wiphy_stru *pst_wiphy, oal_uint32 ul_len)
 {
@@ -1315,9 +1315,9 @@ oal_netbuf_stru *oal_cfg80211_vendor_cmd_alloc_reply_skb_etc(oal_wiphy_stru *pst
 }
 
 /*
- * 函 数 名  : oal_cfg80211_vendor_cmd_reply_etc
- * 功能描述  : 厂家自定义数据上报
- * 输入参数  : oal_netbuf_stru *pst_skb: 返回数据
+ * ?? ?? ??  : oal_cfg80211_vendor_cmd_reply_etc
+ * ????????  : ??????????????????
+ * ????????  : oal_netbuf_stru *pst_skb: ????????
  */
 oal_int32 oal_cfg80211_vendor_cmd_reply_etc(oal_netbuf_stru *pst_skb)
 {
@@ -1329,22 +1329,22 @@ oal_int32 oal_cfg80211_vendor_cmd_reply_etc(oal_netbuf_stru *pst_skb)
 }
 
 /*
- * 函 数 名  : oal_cfg80211_m2s_status_report
- * 功能描述  : 上报linux 内核m2s切换结果
+ * ?? ?? ??  : oal_cfg80211_m2s_status_report
+ * ????????  : ????linux ????m2s????????
  */
 oal_void oal_cfg80211_m2s_status_report(oal_net_device_stru *pst_netdev,
                                         oal_gfp_enum_uint8 en_gfp, oal_uint8 *puc_buf, oal_uint32 ul_len)
 {
 #ifdef CONFIG_HW_WIFI_MSS
-    /* 此接口为终端实现的内核接口，定义处用内核宏CONFIG_HW_WIFI_MSS包裹 */
+    /* ??????????????????????????????????????????CONFIG_HW_WIFI_MSS???? */
     cfg80211_drv_mss_result(pst_netdev, en_gfp, puc_buf, ul_len);
 #endif
 }
 
 #ifdef _PRE_WLAN_FEATURE_TAS_ANT_SWITCH
 /*
- * 函 数 名  : oal_cfg80211_tas_rssi_access_report
- * 功能描述  : 上报linux 内核TAS天线测量结果
+ * ?? ?? ??  : oal_cfg80211_tas_rssi_access_report
+ * ????????  : ????linux ????TAS????????????
  */
 oal_void oal_cfg80211_tas_rssi_access_report(oal_net_device_stru *pst_netdev, oal_gfp_enum_uint8 en_gfp,
                                              oal_uint8 *puc_buf, oal_uint32 ul_len)
@@ -1356,8 +1356,8 @@ oal_void oal_cfg80211_tas_rssi_access_report(oal_net_device_stru *pst_netdev, oa
 #endif
 
 /*
- * 函 数 名  : oal_cfg80211_external_auth_request
- * 功能描述  : 上报内核external_auth 事件
+ * ?? ?? ??  : oal_cfg80211_external_auth_request
+ * ????????  : ????????external_auth ????
  */
 oal_int oal_cfg80211_external_auth_request(oal_net_device_stru *pst_netdev,
                                            oal_cfg80211_external_auth_stru *pst_params,
@@ -1376,16 +1376,16 @@ oal_void oal_cfg80211_put_bss_etc(oal_wiphy_stru *pst_wiphy, oal_cfg80211_bss_st
 }
 
 /*
- * 函 数 名  : oal_cfg80211_unlink_bss_etc
- * 功能描述  : 从kernel删除bss entry项
+ * ?? ?? ??  : oal_cfg80211_unlink_bss_etc
+ * ????????  : ??kernel????bss entry??
  */
 oal_void oal_cfg80211_unlink_bss_etc(oal_wiphy_stru *pst_wiphy, oal_cfg80211_bss_stru *pst_cfg80211_bss)
 {
 }
 
 /*
- * 函 数 名  : oal_cfg80211_get_bss_etc
- * 功能描述  : 根据bssid 和ssid 查找保存的bss 信息
+ * ?? ?? ??  : oal_cfg80211_get_bss_etc
+ * ????????  : ????bssid ??ssid ??????????bss ????
  */
 oal_cfg80211_bss_stru *oal_cfg80211_get_bss_etc(oal_wiphy_stru *pst_wiphy,
                                                 oal_ieee80211_channel_stru *pst_channel,
@@ -1411,8 +1411,8 @@ oal_void oal_cfg80211_scan_done_etc(oal_cfg80211_scan_request_stru *pst_cfg80211
 }
 
 /*
- * 函 数 名  : oal_cfg80211_sched_scan_result_etc
- * 功能描述  : 上报调度扫描结果
+ * ?? ?? ??  : oal_cfg80211_sched_scan_result_etc
+ * ????????  : ????????????????
  */
 oal_void oal_cfg80211_sched_scan_result_etc(oal_wiphy_stru *pst_wiphy)
 {
@@ -1432,8 +1432,8 @@ oal_uint32 oal_cfg80211_connect_result_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_notify_cac_event
- * 功能描述  : 上报CAC事件
+ * ?? ?? ??  : oal_cfg80211_notify_cac_event
+ * ????????  : ????CAC????
  */
 oal_uint32 oal_cfg80211_notify_cac_event(oal_net_device_stru *pst_net_device,
                                          oal_uint32 ul_freq,
@@ -1471,8 +1471,8 @@ oal_uint32 oal_cfg80211_disconnected_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_new_sta_etc
- * 功能描述  : AP 上报关联了某个sta的情况
+ * ?? ?? ??  : oal_cfg80211_new_sta_etc
+ * ????????  : AP ??????????????sta??????
  */
 oal_uint32 oal_cfg80211_new_sta_etc(oal_net_device_stru *pst_net_device,
                                     const oal_uint8 *puc_mac_addr,
@@ -1483,8 +1483,8 @@ oal_uint32 oal_cfg80211_new_sta_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_fbt_notify_find_sta
- * 功能描述  : hilink fbt 通知找到sta
+ * ?? ?? ??  : oal_cfg80211_fbt_notify_find_sta
+ * ????????  : hilink fbt ????????sta
  */
 oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
                                             const oal_uint8 *puc_mac_addr,
@@ -1495,8 +1495,8 @@ oal_uint32 oal_cfg80211_fbt_notify_find_sta(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_mic_failure_etc
- * 功能描述  : 上报mic攻击
+ * ?? ?? ??  : oal_cfg80211_mic_failure_etc
+ * ????????  : ????mic????
  */
 oal_void oal_cfg80211_mic_failure_etc(oal_net_device_stru *pst_net_device,
                                       const oal_uint8 *puc_mac_addr,
@@ -1509,8 +1509,8 @@ oal_void oal_cfg80211_mic_failure_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_del_sta_etc
- * 功能描述  : AP 上报去关联了某个sta的情况
+ * ?? ?? ??  : oal_cfg80211_del_sta_etc
+ * ????????  : AP ????????????????sta??????
  */
 oal_int32 oal_cfg80211_del_sta_etc(oal_net_device_stru *pst_net_device,
                                    const oal_uint8 *puc_mac_addr,
@@ -1520,9 +1520,9 @@ oal_int32 oal_cfg80211_del_sta_etc(oal_net_device_stru *pst_net_device,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_rx_mgmt_etc
- * 功能描述  : 上报接收到的管理帧
- * 输出参数  : OAL_SUCC 上报成功，其它错误码 上报失败
+ * ?? ?? ??  : oal_cfg80211_rx_mgmt_etc
+ * ????????  : ??????????????????
+ * ????????  : OAL_SUCC ???????????????????? ????????
  */
 oal_uint32 oal_cfg80211_rx_mgmt_etc(oal_net_device_stru *pst_dev,
                                     oal_int32 l_freq,
@@ -1535,8 +1535,8 @@ oal_uint32 oal_cfg80211_rx_mgmt_etc(oal_net_device_stru *pst_dev,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_rx_exception_etc
- * 功能描述  : 收到异常后上报上层,私有命令
+ * ?? ?? ??  : oal_cfg80211_rx_exception_etc
+ * ????????  : ??????????????????,????????
  */
 oal_uint32 oal_cfg80211_rx_exception_etc(oal_net_device_stru *pst_netdev,
                                          oal_uint8 *puc_data,
@@ -1547,10 +1547,10 @@ oal_uint32 oal_cfg80211_rx_exception_etc(oal_net_device_stru *pst_netdev,
 }
 
 /*
- * 函 数 名  : oal_cfg80211_vendor_cmd_alloc_reply_skb_etc
- * 功能描述  : 申请厂家自定义返回数据
- * 输入参数  : oal_wiphy_stru * pst_wiphy: wiphy 结构
- *             oal_uint32     ul_len     : 申请长度
+ * ?? ?? ??  : oal_cfg80211_vendor_cmd_alloc_reply_skb_etc
+ * ????????  : ??????????????????????
+ * ????????  : oal_wiphy_stru * pst_wiphy: wiphy ????
+ *             oal_uint32     ul_len     : ????????
  */
 oal_netbuf_stru *oal_cfg80211_vendor_cmd_alloc_reply_skb_etc(oal_wiphy_stru *pst_wiphy, oal_uint32 ul_approxlen)
 {
@@ -1558,9 +1558,9 @@ oal_netbuf_stru *oal_cfg80211_vendor_cmd_alloc_reply_skb_etc(oal_wiphy_stru *pst
 }
 
 /*
- * 函 数 名  : oal_cfg80211_vendor_cmd_reply_etc
- * 功能描述  : 厂家自定义数据上报
- * 输入参数  : oal_netbuf_stru *pst_skb: 返回数据
+ * ?? ?? ??  : oal_cfg80211_vendor_cmd_reply_etc
+ * ????????  : ??????????????????
+ * ????????  : oal_netbuf_stru *pst_skb: ????????
  */
 oal_int32 oal_cfg80211_vendor_cmd_reply_etc(oal_netbuf_stru *pst_skb)
 {
@@ -1568,8 +1568,8 @@ oal_int32 oal_cfg80211_vendor_cmd_reply_etc(oal_netbuf_stru *pst_skb)
 }
 #ifdef _PRE_WLAN_FEATURE_11R_AP
 /*
- * 函 数 名  : oal_cfg80211_send_rx_auth
- * 功能描述  : AP上报auth
+ * ?? ?? ??  : oal_cfg80211_send_rx_auth
+ * ????????  : AP????auth
  */
 oal_void oal_cfg80211_send_rx_auth(oal_net_device_stru *pst_dev,
                                    const oal_uint8 *puc_buf,
@@ -1580,8 +1580,8 @@ oal_void oal_cfg80211_send_rx_auth(oal_net_device_stru *pst_dev,
 #endif
 
 /*
- * 函 数 名  : oal_cfg80211_external_auth_request
- * 功能描述  : 上报内核external_auth 事件
+ * ?? ?? ??  : oal_cfg80211_external_auth_request
+ * ????????  : ????????external_auth ????
  */
 
 oal_int oal_cfg80211_external_auth_request(oal_net_device_stru *pst_netdev,

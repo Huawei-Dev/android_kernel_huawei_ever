@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include <linux/platform_device.h>
 #include <linux/module.h>
 #include <linux/io.h>
@@ -35,7 +35,7 @@ struct hisi_proc_info proc_info_etc[] = {
     {},
 };
 
-/* 全局变量定义 */
+/* ???????????? */
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION)
 bool is_my_chip_etc(void)
 {

@@ -73,7 +73,7 @@ void bsp_reboot_callback_register(void (*hook)(void))
 *         None
 *  Return:
 *         None
-*  Note  : ÷±Ω”÷ÿ∆Ù
+*  Note  : ????????
 ********************************************************************************/
 void bsp_drv_power_reboot_direct( void )
 {

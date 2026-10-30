@@ -66,7 +66,7 @@ extern "C" {
 #endif
 
 /*****************************************************************************
-#pragma pack(*)    设置字节对齐方式
+#pragma pack(*)    ????????????????
 *****************************************************************************/
 #if (VOS_OS_VER != VOS_WIN32)
 #pragma pack(4)
@@ -78,7 +78,7 @@ extern "C" {
   2 macro
 *****************************************************************************/
 #define VOICE_AGENT_LOG_SRC_BUF_LEN                 0x100000
-#define VOICE_AGENT_LOG_DATA_LEN                    ((4*1024) - 4) /* 一次传输4K的数据，但是有4个字节是用来标记数据长度的 */
+#define VOICE_AGENT_LOG_DATA_LEN                    ((4*1024) - 4) /* ????????4K??????????????4?????????????????????????? */
 #define VOICE_AGENT_LOG_DATA_NUM                    (16)
 #define VOICE_AGENT_LOG_BUFFER_LEN                  0x1000
 #define VOICE_AGENT_SOCP_HEAD_MAGIC_NUM             0x48495349

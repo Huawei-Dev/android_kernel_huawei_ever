@@ -70,12 +70,12 @@ extern "C" {
 #pragma pack(4)
 
 
-/* 连接鉴权Timer */
+/* ????????Timer */
 #define     DIAG_AUTH_TIMER_LEN             (2*1000)
 #define     DIAG_AUTH_TIMER_NAME            (0x00008008)
 #define     DIAG_AUTH_TIMER_PARA            (0x10050000)
 
-/* 通道断开时填写固定的SN */
+/* ????????????????????SN */
 #define     DIAG_CHANN_DIS_SN               (0x5D5D5D5D)
 
 #define DIAG_GET_MODEM_INFO_BIT             (1<<1)
@@ -116,20 +116,20 @@ enum DIAG_AUTH_TYPE_E
 };
 
 
-/* 建连失败时的回复 */
+/* ???????????????? */
 typedef struct
 {
-    VOS_UINT32 ulAuid;          /* 原AUID*/
-    VOS_UINT32 ulSn;            /* HSO分发，插件命令管理*/
-    VOS_UINT32 ulRc;            /* 结果码*/
+    VOS_UINT32 ulAuid;          /* ??AUID*/
+    VOS_UINT32 ulSn;            /* HSO??????????????????*/
+    VOS_UINT32 ulRc;            /* ??????*/
 
-    VOS_UINT32 ulChannelNum;    /* 通道数量 */
+    VOS_UINT32 ulChannelNum;    /* ???????? */
     DIAG_CONNECT_RESULT stResult[0];
 }DIAG_CMD_HOST_CONNECT_FAIL_CNF_STRU;
 
 
-/* 任何情况下工具下发的链接命令都是旧的贞格式 */
-/* 描述 :4G 一级头: service头 */
+/* ?????????????????????????????????????????? */
+/* ???? :4G ??????: service?? */
 typedef struct
 {
     VOS_UINT32    sid8b       :8;   /* service id, value:DIAG_SID_TYPE */
@@ -152,7 +152,7 @@ typedef struct
 
     union
     {
-        VOS_UINT32          ulCmdId;           /* 结构化ID */
+        VOS_UINT32          ulCmdId;           /* ??????ID */
         MSP_DIAG_STID_STRU  stID;
     };
 

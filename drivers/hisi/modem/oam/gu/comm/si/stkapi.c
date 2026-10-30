@@ -64,11 +64,11 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID PS_FILE_ID_STK_API_C
 
-/*Envelope 命令回复列表 */
+/*Envelope ???????????? */
 VOS_UINT8 gucCallCtrlRsp[]      = {CAP_CFG_PARA_TAG,SUBADDRESS_TAG,ALPHA_IDENTIFIER_TAG,BC_REPEAT_INDICATOR_TAG,CAP_CFG_PARA_TAG};
 
 VOS_UINT8 gucMOSMSCtrlRsp[]     = {ALPHA_IDENTIFIER_TAG};
@@ -89,7 +89,7 @@ VOS_UINT32 SI_STK_GetReceiverPid(
     MODEM_ID_ENUM_UINT16                enModemID;
     SI_PIH_CARD_SLOT_ENUM_UINT32        enSlotId;
 
-    /* 调用接口获取Modem ID */
+    /* ????????????Modem ID */
     if(VOS_OK != AT_GetModemIdFromClient(ClientId,&enModemID))
     {
         return VOS_ERR;
@@ -189,7 +189,7 @@ VOS_UINT32 SI_STK_SendReqMsg(
     ulSendPid = WUEPS_PID_AT;
 
 #if (1 < MULTI_MODEM_NUMBER)
-    /* 调用接口获取Modem ID */
+    /* ????????????Modem ID */
     if(VOS_OK != AT_GetModemIdFromClient(ClientId,&enModemID))
     {
       STK_ERROR_LOG("SI_STK_SendReqMsg: AT_GetModemIdFromClient Return Error");
@@ -351,7 +351,7 @@ VOS_UINT32 SI_STKIsDualImsiSupport(VOS_VOID)
         STK_WARNING_LOG("STK_InitGobal: Read en_NV_Item_NV_HUAWEI_DOUBLE_IMSI_CFG_I Fail");
     }
 
-    /* 前后两个自节均为1，Dual IMSI功能才开启，第一个字节为NV激活标志，第二个为使能位 */
+    /* ????????????????1??Dual IMSI????????????????????????NV???????????????????????? */
     if ( STK_NV_ENABLED == usDualIMSIFlag )
     {
         return VOS_TRUE;
@@ -387,7 +387,7 @@ VOS_UINT32 SI_STK_SetUpCallConfirm(
     MN_CLIENT_ID_T                      ClientId,
     SI_STK_SETUPCALLCONFIRM_ENUM_UINT32 enAction)
 {
-    /* 参数检查 */
+    /* ???????? */
     if (SI_STK_SETUPCALL_BUTT <= enAction)
     {
         STK_ERROR_LOG("SI_STK_SetUpCallConfirm: The Input Para is Error");
@@ -425,7 +425,7 @@ MODULE_EXPORTED VOS_VOID SI_STKGetCurImsiSign(
 
     pstSetUpMenuData = SI_STK_GetSetUpMenuDataAddr(enSlotId);
 
-    /* 判断是否存在主菜单 */
+    /* ?????????????????? */
     if (SI_STK_MENU_EXIST != pstSetUpMenuData->ucUsatTag)
     {
         STK_WARNING_LOG("SI_STKGetCurImsiSign: There is any Main Menu Content");
@@ -450,7 +450,7 @@ MODULE_EXPORTED VOS_VOID SI_STKGetCurImsiSign(
         return;
     }
 
-    /* 在主菜单中匹配，如果匹配失败pusDualIMSIEnable设置为Disable，*/
+    /* ????????????????????????????pusDualIMSIEnable??????Disable??*/
     for (i = 0; i < pstSetUpMenuData->stSetUpMenu.ulItemNum; i++)
     {
         for (j = 0; j < stIMSIMatch.usMatchStrCnt; j++)
@@ -509,7 +509,7 @@ MODULE_EXPORTED VOS_VOID SI_STK_CCResultInd(
         return;
     }
 
-    /* COPY aplhaid 字段 */
+    /* COPY aplhaid ???? */
     if (VOS_TRUE == pstRspData->uResp.CallCtrlRsp.OP_Alaph)
     {
         stEvent.STKCmdStru.CmdStru.STKCcIndInfo.stAlphaIdInfo.ulAlphaLen
@@ -523,13 +523,13 @@ MODULE_EXPORTED VOS_VOID SI_STK_CCResultInd(
 
     if (VOS_TRUE == pstRspData->uResp.CallCtrlRsp.OP_SepcialData)
     {
-        /* 解析类型字段 */
+        /* ???????????? */
         stEvent.STKCmdStru.CmdStru.STKCcIndInfo.uInfo.stCtrlDataInfo.ucDataType
                                                        = pstRspData->uResp.CallCtrlRsp.SpecialData.pValue[0];
 
         if (pstRspData->uResp.CallCtrlRsp.SpecialData.ucLen > 1)
         {
-            /* 数据字段copy */
+            /* ????????copy */
             stEvent.STKCmdStru.CmdStru.STKCcIndInfo.uInfo.stCtrlDataInfo.usDataLen
                                                         = pstRspData->uResp.CallCtrlRsp.SpecialData.ucLen - 1;
 
@@ -550,7 +550,7 @@ MODULE_EXPORTED VOS_VOID SI_STK_SMSCtrlResultInd(
     MODEM_ID_ENUM_UINT16                enModemId,
     SI_STK_ENVELOPE_RSP_STRU           *pstRspData)
 {
-    //需要确认addr1是目的地址还是addr2
+    //????????addr1??????????????addr2
 /*lint -e813*/
     SI_STK_EVENT_INFO_STRU              stEvent;
     SI_PIH_CARD_SLOT_ENUM_UINT32        enSlotId;
@@ -570,7 +570,7 @@ MODULE_EXPORTED VOS_VOID SI_STK_SMSCtrlResultInd(
     stEvent.STKCmdStru.CmdStru.STKCcIndInfo.ucType      = SI_STK_SMS_CTRL;
 
 
-    /* COPY aplhaid 字段 */
+    /* COPY aplhaid ???? */
     if (VOS_TRUE == pstRspData->uResp.MoSmsCtrlRsp.OP_Alaph)
     {
         stEvent.STKCmdStru.CmdStru.STKCcIndInfo.stAlphaIdInfo.ulAlphaLen
@@ -584,10 +584,10 @@ MODULE_EXPORTED VOS_VOID SI_STK_SMSCtrlResultInd(
 
     if (VOS_TRUE == pstRspData->uResp.MoSmsCtrlRsp.OP_Addr1)
     {
-        /* 解析目的地址类型字段 */
+        /* ???????????????????? */
         stEvent.STKCmdStru.CmdStru.STKCcIndInfo.uInfo.stMoSmsCtrlInfo.stDstAddrInfo.ucNumType
                                                             = pstRspData->uResp.MoSmsCtrlRsp.Addr1.ucNumType;
-        /* copy目的地址 */
+        /* copy???????? */
         stEvent.STKCmdStru.CmdStru.STKCcIndInfo.uInfo.stMoSmsCtrlInfo.stDstAddrInfo.ucAddrLen
                                                             = pstRspData->uResp.MoSmsCtrlRsp.Addr1.ucLen;
 
@@ -599,11 +599,11 @@ MODULE_EXPORTED VOS_VOID SI_STK_SMSCtrlResultInd(
 
     if (VOS_TRUE == pstRspData->uResp.MoSmsCtrlRsp.OP_Addr2)
     {
-        /* 解析服务中心地址类型字段 */
+        /* ???????????????????????? */
         stEvent.STKCmdStru.CmdStru.STKCcIndInfo.uInfo.stMoSmsCtrlInfo.stSerCenterAddrInfo.ucNumType
                                                           = pstRspData->uResp.MoSmsCtrlRsp.Addr2.ucNumType;
 
-        /* copy服务中心号码 */
+        /* copy???????????? */
         stEvent.STKCmdStru.CmdStru.STKCcIndInfo.uInfo.stMoSmsCtrlInfo.stSerCenterAddrInfo.ucAddrLen
                                                             =pstRspData->uResp.MoSmsCtrlRsp.Addr2.ucLen;
 
@@ -766,7 +766,7 @@ MODULE_EXPORTED VOS_UINT32 SI_STK_EnvelopeRsp_Decode(
     pstRspData->EnvelopeType    = enDataType;
     pstRspData->Result          = pucCmdData[0];
 
-    if(pucCmdData[0] > 0x80)/*确定主动命令的长度字节*/
+    if(pucCmdData[0] > 0x80)/*??????????????????????*/
     {
         ulOffset = 0x02;
     }
@@ -860,7 +860,7 @@ MODULE_EXPORTED VOS_UINT32 SI_STK_EnvelopeData_Code(
             pucData[7] = pstENStru->uEnvelope.CallCtrl.SpecialData.ucTag;
             pucData[8] = pstENStru->uEnvelope.CallCtrl.SpecialData.ucLen;
 
-            /* 调用该API的函数，传入的pucData长度为256 */
+            /* ??????API??????????????pucData??????256 */
             PAM_MEM_CPY_S(&pucData[9],
                          (256 - 9),
                          pstENStru->uEnvelope.CallCtrl.SpecialData.pValue,

@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 
 #include "mdrv.h"
@@ -58,19 +58,19 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID                 PS_FILE_ID_RNIC_MNTN_C
 
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 RNIC_STATS_INFO_STRU                    g_astRnicStats;
 
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 
@@ -99,7 +99,7 @@ VOS_VOID RNIC_MNTN_ReportPktStats(VOS_UINT8 ucRmNetId)
     struct rnic_data_stats_s           *pstDataStats = VOS_NULL_PTR;
     RNIC_MNTN_PKT_STATS_STRU            stStats;
 
-    /* 调用驱动接口获取数据统计信息 */
+    /* ???????????????????????????? */
     pstDataStats = rnic_get_data_stats(ucRmNetId);
     if (VOS_NULL_PTR == pstDataStats)
     {
@@ -134,7 +134,7 @@ VOS_VOID RNIC_MNTN_ReportNapiInfo(VOS_UINT8 ucRmNetId)
     TAF_MEM_SET_S(&stNapiInfo, sizeof(stNapiInfo),
               0x00, sizeof(RNIC_MNTN_NAIP_INFO_STRU));
 
-    /* 调用驱动接口获取Napi统计信息 */
+    /* ????????????????Napi???????? */
     if (rnic_get_napi_stats(ucRmNetId, &stNapiInfo.stNapiStats))
     {
         return;
@@ -163,7 +163,7 @@ VOS_VOID RNIC_MNTN_ReportAllStatsInfo(VOS_VOID)
     RNIC_PS_IFACE_INFO_STRU            *pstPsIfaceInfo   = VOS_NULL_PTR;
     VOS_UINT32                          i;
 
-    /* 勾包所有激活网卡状态 */
+    /* ???????????????????? */
     for (i = 0; i < RNIC_DEV_ID_BUTT; i++)
     {
         pstPsIfaceInfo = RNIC_GET_IFACE_PDN_INFO_ADR(i);
@@ -184,7 +184,7 @@ VOS_VOID RNIC_MNTN_TraceDialConnEvt(VOS_VOID)
 {
     RNIC_MNTN_DIAL_CONN_EVT_STRU       *pstDialEvt = VOS_NULL_PTR;
 
-    /* 构造消息 */
+    /* ???????? */
     pstDialEvt = (RNIC_MNTN_DIAL_CONN_EVT_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                         ACPU_PID_RNIC,
                         sizeof(RNIC_MNTN_DIAL_CONN_EVT_STRU));
@@ -194,12 +194,12 @@ VOS_VOID RNIC_MNTN_TraceDialConnEvt(VOS_VOID)
         return;
     }
 
-    /* 填写消息 */
+    /* ???????? */
     pstDialEvt->ulReceiverCpuId = VOS_LOCAL_CPUID;
     pstDialEvt->ulReceiverPid   = ACPU_PID_RNIC;
     pstDialEvt->enMsgId         = ID_RNIC_MNTN_EVT_DIAL_CONNECT;
 
-    /* 钩出可维可测消息 */
+    /* ???????????????? */
     if (VOS_OK != PS_SEND_MSG(ACPU_PID_RNIC, pstDialEvt))
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_MNTN_TraceDialConnEvt():WARNING:SEND MSG FIAL");
@@ -216,7 +216,7 @@ VOS_VOID RNIC_MNTN_TraceDialDisconnEvt(
 {
     RNIC_MNTN_DIAL_DISCONN_EVT_STRU    *pstDialEvt = VOS_NULL_PTR;
 
-    /* 构造消息 */
+    /* ???????? */
     pstDialEvt = (RNIC_MNTN_DIAL_DISCONN_EVT_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                         ACPU_PID_RNIC,
                         sizeof(RNIC_MNTN_DIAL_DISCONN_EVT_STRU));
@@ -226,16 +226,16 @@ VOS_VOID RNIC_MNTN_TraceDialDisconnEvt(
         return;
     }
 
-    /* 填写消息头 */
+    /* ?????????? */
     pstDialEvt->ulReceiverCpuId = VOS_LOCAL_CPUID;
     pstDialEvt->ulReceiverPid   = ACPU_PID_RNIC;
     pstDialEvt->enMsgId         = ID_RNIC_MNTN_EVT_DIAL_DISCONNECT;
 
-    /* 填写消息内容 */
+    /* ???????????? */
     pstDialEvt->ulPktNum        = ulPktNum;
     pstDialEvt->ulUsrExistFlg   = ulUsrExistFlg;
 
-    /* 钩出可维可测消息 */
+    /* ???????????????? */
     if (VOS_OK != PS_SEND_MSG(ACPU_PID_RNIC, pstDialEvt))
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_MNTN_TraceDialDisconnEvt():WARNING:SEND MSG FIAL");
@@ -255,7 +255,7 @@ VOS_VOID RNIC_ShowULProcStats(VOS_UINT8 ucRmNetId)
         return;
     }
 
-    /* 调用驱动接口获取数据统计信息 */
+    /* ???????????????????????????? */
     pstDataStats = rnic_get_data_stats(ucRmNetId);
     if (VOS_NULL_PTR == pstDataStats)
     {
@@ -263,7 +263,7 @@ VOS_VOID RNIC_ShowULProcStats(VOS_UINT8 ucRmNetId)
         return;
     }
 
-    /* 上行统计量 */
+    /* ?????????? */
     PS_PRINTF_INFO("[RMNET%d] tx_total_packets               %10u\n", ucRmNetId, pstDataStats->tx_total_packets);
     PS_PRINTF_INFO("[RMNET%d] tx_packets                     %10u\n", ucRmNetId, pstDataStats->tx_packets);
     PS_PRINTF_INFO("[RMNET%d] tx_dropped                     %10u\n", ucRmNetId, pstDataStats->tx_dropped);
@@ -286,14 +286,14 @@ VOS_VOID RNIC_ShowDLProcStats(VOS_UINT8 ucRmNetId)
         PS_PRINTF_WARNING("NetId overtop, RmnetId: %d\n", ucRmNetId);
         return;
     }
-    /* 调用驱动接口获取数据统计信息 */
+    /* ???????????????????????????? */
     pstDataStats = rnic_get_data_stats(ucRmNetId);
     if (VOS_NULL_PTR == pstDataStats)
     {
         return;
     }
 
-    /* 下行统计量 */
+    /* ?????????? */
     PS_PRINTF_INFO("[RMNET%d] rx_total_packets               %10u\n", ucRmNetId, pstDataStats->rx_total_packets);
     PS_PRINTF_INFO("[RMNET%d] rx_packets                     %10u\n", ucRmNetId, pstDataStats->rx_packets);
     PS_PRINTF_INFO("[RMNET%d] rx_dropped                     %10u\n", ucRmNetId, pstDataStats->rx_dropped);
@@ -356,7 +356,7 @@ VOS_VOID RNIC_ShowNapiInfo(VOS_UINT8 ucRmNetId)
     TAF_MEM_SET_S(&stNapiStats, sizeof(stNapiStats),
               0x00, sizeof(struct rnic_napi_stats_s));
 
-    /* 调用驱动接口获取Napi统计信息 */
+    /* ????????????????Napi???????? */
     if (rnic_get_napi_stats(ucRmNetId, &stNapiStats))
     {
         PS_PRINTF("Get napi stats error.\n");

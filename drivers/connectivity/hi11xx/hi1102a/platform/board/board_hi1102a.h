@@ -3,7 +3,7 @@
 #ifndef __BOARD_HI1102A_H__
 #define __BOARD_HI1102A_H__
 
-/* 宏定义 */
+/* ?????? */
 #define BOARD_VERSION_NAME_HI1102A "hi1102a"
 
 #define BFGX_AND_WIFI_CFG_HI1102A_PILOT_PATH    "/vendor/firmware/hi1102a/pilot/bfgx_and_wifi_cfg"
@@ -14,7 +14,7 @@
 #define BFGX_AND_HITALK_CFG_HI1102A_HITALK_PATH "/vendor/firmware/hi1102a/hitalk/bfgx_and_hitalk_cfg"
 #define HITALK_CFG_HI1102A_HITALK_PATH          "/vendor/firmware/hi1102a/hitalk/hitalk_cfg"
 
-/* 函数声明 */
+/* ???????? */
 extern int32 hi1102a_bfgx_dev_power_off(void);
 extern int32 hi1102a_bfgx_dev_power_on(void);
 extern void hi1102a_bfgx_disable(void);

@@ -137,7 +137,7 @@ do {							\
 }
 /*lint -e683*/
 /*
-*参数类型
+*????????
 *spinlock_t *  __specific_lock,
 *unsigned long __specific_flags
 */
@@ -149,7 +149,7 @@ do { \
 		spin_lock(__specific_lock); \
 	} while (0)
 /*
-*参数类型
+*????????
 *spinlock_t *  __specific_lock,
 *unsigned long __specific_flags
 */
@@ -298,7 +298,7 @@ static inline int raw_smp_spin_trylock(spinlock_t *p_lock)
 
 
 /*
-*参数类型
+*????????
 *spinlock_t *  __specific_lock,
 *unsigned long __specific_flags
 */
@@ -312,7 +312,7 @@ do { \
 	} while (0)/*lint !e683*/
 
 /*
-*参数类型
+*????????
 *spinlock_t *  __specific_lock,
 *unsigned long __specific_flags
 */

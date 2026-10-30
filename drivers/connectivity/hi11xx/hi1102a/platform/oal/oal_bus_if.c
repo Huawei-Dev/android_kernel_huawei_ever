@@ -1,13 +1,13 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include "oal_bus_if.h"
 
 #include "oal_ext_if.h"
 #include "oam_ext_if.h"
 
-/* 全局变量定义 */
-/* 实际chip数量 */
+/* ???????????? */
+/* ????chip???? */
 OAL_STATIC oal_uint8 bus_chip_num = 0;
 #if (((_PRE_OS_VERSION_WIN32 == _PRE_OS_VERSION) && (_PRE_TEST_MODE == _PRE_TEST_MODE_UT)) ||  \
      (_PRE_PRODUCT_ID == _PRE_PRODUCT_ID_HI1151))
@@ -22,10 +22,10 @@ OAL_STATIC oal_bus_chip_stru bus_chip[WLAN_CHIP_MAX_NUM_PER_BOARD] = {{0}};
 OAL_STATIC oal_int8 *pac_irq_pc_name[OAL_1151_IRQ_NAME_BUFF_SIZE] = { "wlan1", "wlan2", "wlan3", "wlan4" };
 
 /*
- * 函 数 名  : oal_bus_find_dev_instance
- * 功能描述  : 获取总线设备接口
- * 输入参数  : oal_bus_dev_stru **ppst_bus_dev, oal_uint8 uc_index
- * 输出参数  : ppst_bus_dev: 总线设备
+ * ?? ?? ??  : oal_bus_find_dev_instance
+ * ????????  : ????????????????
+ * ????????  : oal_bus_dev_stru **ppst_bus_dev, oal_uint8 uc_index
+ * ????????  : ppst_bus_dev: ????????
  */
 oal_void oal_bus_find_dev_instance(oal_bus_dev_stru **ppst_bus_dev, oal_void *p_dev)
 {
@@ -34,7 +34,7 @@ oal_void oal_bus_find_dev_instance(oal_bus_dev_stru **ppst_bus_dev, oal_void *p_
 
     for (uc_chip_index = 0; uc_chip_index < bus_chip_num; uc_chip_index++) {
         for (uc_device_index = 0; uc_device_index < bus_chip[uc_chip_index].uc_device_num; uc_device_index++) {
-            /* 两个地址相等 */
+            /* ???????????? */
             if (bus_chip[uc_chip_index].st_bus_dev[uc_device_index].p_dev == p_dev) {
                 *ppst_bus_dev = &bus_chip[uc_chip_index].st_bus_dev[uc_device_index];
                 return;
@@ -45,11 +45,11 @@ oal_void oal_bus_find_dev_instance(oal_bus_dev_stru **ppst_bus_dev, oal_void *p_
     *ppst_bus_dev = OAL_PTR_NULL;
 }
 /*
- * 函 数 名  : oal_bus_get_dev_instance
- * 功能描述  : 获取bus dev
- * 输入参数  : uc_chip_id     : CHIP ID
+ * ?? ?? ??  : oal_bus_get_dev_instance
+ * ????????  : ????bus dev
+ * ????????  : uc_chip_id     : CHIP ID
  *             uc_device_id   : DEVICE ID
- * 返 回 值  : 错误码
+ * ?? ?? ??  : ??????
  */
 OAL_STATIC oal_bus_dev_stru *oal_bus_get_dev_instance(oal_uint8 uc_chip_id, oal_uint8 uc_device_id)
 {
@@ -70,9 +70,9 @@ OAL_STATIC oal_bus_dev_stru *oal_bus_get_dev_instance(oal_uint8 uc_chip_id, oal_
     return &pst_bus_chip->st_bus_dev[uc_device_id];
 }
 /*
- * 函 数 名  : oal_bus_unregister_irq
- * 功能描述  : 注销中断
- * 返 回 值  : 错误码
+ * ?? ?? ??  : oal_bus_unregister_irq
+ * ????????  : ????????
+ * ?? ?? ??  : ??????
  */
 oal_void oal_bus_unregister_irq(oal_uint8 uc_chip_id, oal_uint8 uc_device_id)
 {
@@ -86,11 +86,11 @@ oal_void oal_bus_unregister_irq(oal_uint8 uc_chip_id, oal_uint8 uc_device_id)
     oal_irq_free(&pst_bus_dev->st_irq_info);
 }
 /*
- * 函 数 名  : oal_bus_register_irq
- * 功能描述  : 注册中断
- * 输入参数  : pst      : 设备结构体
- *             p_func   : 回调函数指针
- * 返 回 值  : 错误码
+ * ?? ?? ??  : oal_bus_register_irq
+ * ????????  : ????????
+ * ????????  : pst      : ??????????
+ *             p_func   : ????????????
+ * ?? ?? ??  : ??????
  */
 oal_uint32 oal_bus_register_irq(oal_void *pst, oal_irq_intr_func p_func, oal_uint8 uc_chip_id, oal_uint8 uc_device_id)
 {
@@ -116,10 +116,10 @@ oal_uint32 oal_bus_register_irq(oal_void *pst, oal_irq_intr_func p_func, oal_uin
 }
 
 /*
- * 函 数 名  : oal_bus_get_chip_instance
- * 功能描述  : 获取总线设备接口
- * 输入参数  : oal_bus_dev_stru **ppst_bus_dev, oal_uint8 uc_index
- * 输出参数  : ppst_bus_dev: 总线设备
+ * ?? ?? ??  : oal_bus_get_chip_instance
+ * ????????  : ????????????????
+ * ????????  : oal_bus_dev_stru **ppst_bus_dev, oal_uint8 uc_index
+ * ????????  : ppst_bus_dev: ????????
  */
 oal_void oal_bus_get_chip_instance(oal_bus_chip_stru **ppst_bus_chip, oal_uint8 uc_index)
 {
@@ -134,9 +134,9 @@ oal_void oal_bus_get_chip_instance(oal_bus_chip_stru **ppst_bus_chip, oal_uint8 
 #endif
 
 /*
- * 函 数 名  : oal_bus_get_chip_num
- * 功能描述  : 获取硬件总线接口个数
- * 返 回 值  : chip 个数
+ * ?? ?? ??  : oal_bus_get_chip_num
+ * ????????  : ????????????????????
+ * ?? ?? ??  : chip ????
  */
 oal_uint8 oal_bus_get_chip_num(oal_void)
 {
@@ -144,9 +144,9 @@ oal_uint8 oal_bus_get_chip_num(oal_void)
 }
 
 /*
- * 函 数 名  : oal_bus_inc_chip_num
- * 功能描述  : 获取硬件总线接口个数
- * 返 回 值  : chip 个数
+ * ?? ?? ??  : oal_bus_inc_chip_num
+ * ????????  : ????????????????????
+ * ?? ?? ??  : chip ????
  */
 oal_uint32 oal_bus_inc_chip_num(oal_void)
 {
@@ -157,7 +157,7 @@ oal_uint32 oal_bus_inc_chip_num(oal_void)
         return OAL_FAIL;
     }
 
-    /* WINDOWS下UT代码 */
+    /* WINDOWS??UT???? */
 #if (_PRE_OS_VERSION_WIN32 == _PRE_OS_VERSION) && (_PRE_TEST_MODE == _PRE_TEST_MODE_UT)
     bus_chip[0].uc_device_num = bus_chip_num;
 #endif
@@ -169,7 +169,7 @@ oal_void oal_bus_init_chip_num(oal_void)
 {
     bus_chip_num = 0;
 
-    /* WINDOWS下UT代码 */
+    /* WINDOWS??UT???? */
 #if (_PRE_OS_VERSION_WIN32 == _PRE_OS_VERSION) && (_PRE_TEST_MODE == _PRE_TEST_MODE_UT)
     bus_chip[0].uc_device_num = bus_chip_num;
 #endif
@@ -178,8 +178,8 @@ oal_void oal_bus_init_chip_num(oal_void)
 
 #ifdef _PRE_WLAN_FEATURE_SMP_SUPPORT
 /*
- * 函 数 名  : oal_bus_irq_affinity_init
- * 功能描述  : 中断和核绑定初始化
+ * ?? ?? ??  : oal_bus_irq_affinity_init
+ * ????????  : ??????????????????
  */
 oal_void oal_bus_irq_affinity_init(oal_uint8 uc_chip_id, oal_uint8 uc_device_id, oal_uint32 ul_core_id)
 {

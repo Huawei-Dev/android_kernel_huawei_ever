@@ -53,7 +53,7 @@ struct softtimer_ctrl {
 static struct softtimer_ctrl timer_control;
 /*lint  -e438 -e550 -e732 -e838*/
 /*
- * 获取timer的数值
+ * ??????timer?????????
  */
 static __inline__ unsigned int  timer_get_value(void)
 {
@@ -73,7 +73,7 @@ static __inline__ unsigned int  timer_get_value(void)
 }
 
 /*
- * 开启硬件timer
+ * ????????????timer
  */
 static void start_hard_timer(unsigned int ulvalue)
 {
@@ -89,7 +89,7 @@ static void start_hard_timer(unsigned int ulvalue)
 }
 
 /*
- * 停止硬件timer
+ * ????????????timer
  */
 static void stop_hard_timer(void)
 {
@@ -101,7 +101,7 @@ static void stop_hard_timer(void)
 /*lint  +e438 +e550 +e732 +e838*/
 /*lint  -e834 -e838*/
  /*
- * 硬计时器计时当前时间
+ * ??????????????????????????????
  */
 static unsigned int hard_timer_elapsed_time(void)
 {
@@ -116,7 +116,7 @@ static unsigned int hard_timer_elapsed_time(void)
 /*lint  +e834 +e838*/
 /*lint  -e826 -e64*/
 /*
- * 触发一个softtimer
+ * ????????????softtimer
  */
 void hisi_softtimer_add(struct softtimer_list *timer)
 {
@@ -179,7 +179,7 @@ void hisi_softtimer_add(struct softtimer_list *timer)
 }
 
 /*
- * 软计时器删除
+ * ??????????????????
  */
 static int hisi_softtimer_try_to_del_sync(struct softtimer_list *timer)
 {
@@ -223,7 +223,7 @@ static int hisi_softtimer_try_to_del_sync(struct softtimer_list *timer)
 	return 0;
 }
 /*
- * 删除一个softtimer
+ * ????????????softtimer
  */
 int hisi_softtimer_delete(struct softtimer_list *timer)
 {
@@ -240,7 +240,7 @@ int hisi_softtimer_delete(struct softtimer_list *timer)
 }
 /*lint  +e826 +e64*/
 /*
- * 创建软计时器
+ * ??????????????????
  */
 int hisi_softtimer_create(struct softtimer_list *sft_info, softtimer_func func,
 unsigned long para, unsigned int timeout)
@@ -267,7 +267,7 @@ unsigned long para, unsigned int timeout)
 }
 
 /*
- * 修改软计时器
+ * ??????????????????
  */
 int hisi_softtimer_modify(struct softtimer_list *timer, unsigned int new_expire_time)
 {
@@ -287,7 +287,7 @@ int hisi_softtimer_modify(struct softtimer_list *timer, unsigned int new_expire_
 }
 
 /*
- * 释放软计时器资源
+ * ????????????????????????
  */
 int hisi_softtimer_free(struct softtimer_list *p)
 {
@@ -306,7 +306,7 @@ static void fun_para(softtimer_func func, unsigned long para)
 }
 /*lint -e715 -e826*/
 /*
- * 软计时器线程
+ * ??????????????????
  */
 static void thread_softtimer_fun(unsigned long arg)
 {
@@ -366,7 +366,7 @@ static void thread_softtimer_fun(unsigned long arg)
 /*lint +e715 +e826*/
 /*lint -e715 -e732 -e838*/
 /*
- * 计时器中断回调
+ * ?????????????????????
  */
 static irqreturn_t IntTimerHandler(int irq, void *dev_id)
 {
@@ -384,7 +384,7 @@ static irqreturn_t IntTimerHandler(int irq, void *dev_id)
 }
 /*lint +e715 +e732 +e838*/
 /*
- * 软计时器去初始化
+ * ????????????????????????
  */
 void hisi_softtimer_uninit(void)
 {
@@ -399,7 +399,7 @@ void hisi_softtimer_uninit(void)
 }
 
 /*
- * 软计时器初始化
+ * ?????????????????????
  */
 static int hisi_softtimer_init (struct platform_device *pdev)
 {
@@ -454,7 +454,7 @@ iomap_fin:
 /*lint -e715*/
 #ifdef CONFIG_HISI_DEBUG_FS
 /*
- * 软计时器超时回调
+ * ????????????????????????
  */
 static void hisi_softtimer_timeout(unsigned long data)
 {
@@ -484,7 +484,7 @@ void hisi_softtimer_test(int timeout)
 /*lint +e727*/
 /*lint -e715*/
 /*
-* softtimer probe 函数
+* softtimer probe ??????
 */
 static int generic_softtimer_probe(struct platform_device *pdev)
 {
@@ -505,7 +505,7 @@ static int generic_softtimer_probe(struct platform_device *pdev)
 }
 
 /*
-* softtimer remove 函数
+* softtimer remove ??????
 */
 static int generic_softtimer_remove(struct platform_device *pdev)
 {
@@ -532,7 +532,7 @@ static struct platform_driver generic_softtimer_platdrv = {
 /*lint +e785*/
 /*lint -e64*/
 /*
-* softtimer功能的初始化
+* softtimer??????????????????
 */
 static int __init hisi_timer_init(void)
 {
@@ -540,7 +540,7 @@ static int __init hisi_timer_init(void)
 }
 /*lint +e64*/
 /*
- * 释放softtimer功能资源
+ * ??????softtimer????????????
  */
 static void __exit hisi_timer_exit(void)
 {

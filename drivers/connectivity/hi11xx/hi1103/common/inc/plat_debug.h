@@ -3,11 +3,11 @@
 #ifndef __PLAT_DEBUG_H__
 #define __PLAT_DEBUG_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "bfgx_user_ctrl.h"
 #include "chr_user.h"
 
-/* 宏定义 */
+/* ?????? */
 #define PS_PRINT_FUNCTION_NAME                                    \
     do {                                                          \
         if (plat_loglevel_etc >= PLAT_LOG_DEBUG) {              \

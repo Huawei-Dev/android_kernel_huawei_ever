@@ -69,9 +69,9 @@ u32 g_ulCnfTransId = 0;
 DIAG_LOG_PKT_NUM_ACC_STRU g_DiagLogPktNum ={0};
 
 /*****************************************************************************
- 函 数 名  : diag_GetFileNameFromPath
- 功能描述  : 得到文件路径名的偏移值
- 输入参数  : char* pcFileName
+ ?? ?? ??  : diag_GetFileNameFromPath
+ ????????  : ??????????????????????
+ ????????  : char* pcFileName
 *****************************************************************************/
 char * diag_GetFileNameFromPath(char* pcFileName)
 {
@@ -79,14 +79,14 @@ char * diag_GetFileNameFromPath(char* pcFileName)
     char    *pcPathPos2;
     char    *pcPathPos;
 
-    /* 操作系统可能使用'\'来查找路径 */
+    /* ????????????????'\'?????????? */
     pcPathPos1 = (char*)strrchr(pcFileName, '\\');
     if(NULL == pcPathPos1)
     {
         pcPathPos1 = pcFileName;
     }
 
-    /* 操作系统可能使用'/'来查找路径 */
+    /* ????????????????'/'?????????? */
     pcPathPos2 = (char*)strrchr(pcFileName, '/');
     if(NULL == pcPathPos2)
     {
@@ -95,7 +95,7 @@ char * diag_GetFileNameFromPath(char* pcFileName)
 
     pcPathPos = (pcPathPos1 > pcPathPos2) ? pcPathPos1 : pcPathPos2;
 
-    /* 如果没找到'\'或'/'则使用原来的字符串，否则使用截断后的字符串 */
+    /* ??????????'\'??'/'?????????????????????????????????????????? */
     if (pcFileName != pcPathPos)
     {
         pcPathPos++;
@@ -105,15 +105,15 @@ char * diag_GetFileNameFromPath(char* pcFileName)
 }
 
 /*****************************************************************************
- 函 数 名  : diag_report_log
- 功能描述  : 打印上报接口
- 输入参数  : ulModuleId( 31-24:modemid,23-16:modeid,15-12:level )
-                          pcFileName(上报时会把文件路径删除，只保留文件名)
-                          ulLineNum(行号)
-                          pszFmt(可变参数)
-注意事项   : 由于此接口会被协议栈频繁调用，为提高处理效率，本接口内部会使用1K的局部变量保存上报的字符串信息，
-             从而此接口对协议栈有两点限制，一是调用此接口的任务栈中的内存要至少为此接口预留1K空间；
-                                           二是调用此接口输出的log不要超过1K（超出部分会自动丢弃）
+ ?? ?? ??  : diag_report_log
+ ????????  : ????????????
+ ????????  : ulModuleId( 31-24:modemid,23-16:modeid,15-12:level )
+                          pcFileName(????????????????????????????????????)
+                          ulLineNum(????)
+                          pszFmt(????????)
+????????   : ??????????????????????????????????????????????????????????????1K????????????????????????????????
+             ??????????????????????????????????????????????????????????????????????????????1K??????
+                                           ????????????????????log????????1K??????????????????????
 *****************************************************************************/
 u32 diag_report_log(u32 ulModuleId, u32 ulPid, u32 ullevel, char *cFileName, u32 ulLineNum, char *pszFmt, va_list arg)
 {
@@ -131,10 +131,10 @@ u32 diag_report_log(u32 ulModuleId, u32 ulPid, u32 ullevel, char *cFileName, u32
         cFileName= " ";
     }
 
-    /* 文件名截短 */
+    /* ?????????? */
     cOffsetName = diag_GetFileNameFromPath(cFileName);
 
-    /*给HSO的打印字符串形式如下:pszFileName[ulLineNum]data。HSO根据中括号[]去截取相应的信息*/
+    /*??HSO????????????????????:pszFileName[ulLineNum]data??HSO??????????[]????????????????*/
     /* coverity[negative_return_fn] */
     ulParamLen = snprintf_s(stRptInfo.szText, DIAG_PRINTF_MAX_LEN, DIAG_PRINTF_MAX_LEN-1, "%s[%d]", cOffsetName, ulLineNum);
     if(ulParamLen < 0)
@@ -144,7 +144,7 @@ u32 diag_report_log(u32 ulModuleId, u32 ulPid, u32 ullevel, char *cFileName, u32
     }
     else if(ulParamLen > DIAG_PRINTF_MAX_LEN)
     {
-        /* 内存越界，主动复位 */
+        /* ?????????????????? */
         system_error(DRV_ERRNO_DIAG_OVERFLOW, __LINE__, ulParamLen, 0, 0);
         return ERR_MSP_FAILURE;
     }
@@ -160,27 +160,27 @@ u32 diag_report_log(u32 ulModuleId, u32 ulPid, u32 ullevel, char *cFileName, u32
     ulParamLen += usRet;
     if(ulParamLen > DIAG_PRINTF_MAX_LEN)
     {
-        /* 内存越界，主动复位 */
+        /* ?????????????????? */
         system_error(DRV_ERRNO_DIAG_OVERFLOW, __LINE__, ulParamLen, 0, 0);
     }
 
     stRptInfo.szText[DIAG_PRINTF_MAX_LEN-1] = '\0';
     ulDataLength = strnlen(stRptInfo.szText, DIAG_PRINTF_MAX_LEN) + 1;
 
-    /*组装DIAG命令参数*/
+    /*????DIAG????????*/
     stRptInfo.ulModule = ulPid;
     /* 1:error, 2:warning, 3:normal, 4:info */
     /* (0|ERROR|WARNING|NORMAL|INFO|0|0|0) */
     stRptInfo.ulLevel  = ullevel;
 
-    /* 字符串的长度加上信息的长度 */
+    /* ?????????????????????????? */
     ulDataLength += (sizeof(DIAG_CMD_LOG_PRINT_RAW_TXT_IND_STRU) - (DIAG_PRINTF_MAX_LEN + 1));
 
     spin_lock_irqsave(&g_DiagLogPktNum.ulPrintLock, ulLockLevel);
     stRptInfo.ulNo = (g_DiagLogPktNum.ulPrintNum)++;
     spin_unlock_irqrestore(&g_DiagLogPktNum.ulPrintLock, ulLockLevel);
 
-    /* 填充数据头 */
+    /* ?????????? */
     diag_SvcFillHeader((DIAG_SRV_HEADER_STRU *)&stLogHeader);
     DIAG_SRV_SET_MODEM_ID(&stLogHeader.frame_header, DIAG_GET_MODEM_ID(ulModuleId));
     DIAG_SRV_SET_TRANS_ID(&stLogHeader.frame_header, g_ulTransId++);
@@ -197,12 +197,12 @@ u32 diag_report_log(u32 ulModuleId, u32 ulPid, u32 ullevel, char *cFileName, u32
 }
 
 /*****************************************************************************
- 函 数 名  : DIAG_TransReport_Ex
- 功能描述  : 结构化数据上报扩展接口(比DIAG_TransReport多传入了DIAG_MESSAGE_TYPE)
- 输入参数  : DRV_DIAG_TRANS_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-8:groupid )
-             DRV_DIAG_TRANS_IND_STRU->ulMsgId(透传命令ID)
-             DRV_DIAG_TRANS_IND_STRU->ulLength(透传信息的长度)
-             DRV_DIAG_TRANS_IND_STRU->pData(透传信息)
+ ?? ?? ??  : DIAG_TransReport_Ex
+ ????????  : ??????????????????????(??DIAG_TransReport????????DIAG_MESSAGE_TYPE)
+ ????????  : DRV_DIAG_TRANS_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-8:groupid )
+             DRV_DIAG_TRANS_IND_STRU->ulMsgId(????????ID)
+             DRV_DIAG_TRANS_IND_STRU->ulLength(??????????????)
+             DRV_DIAG_TRANS_IND_STRU->pData(????????)
 *****************************************************************************/
 u32 diag_report_trans(DRV_DIAG_TRANS_IND_STRU *pstData)
 {
@@ -219,7 +219,7 @@ u32 diag_report_trans(DRV_DIAG_TRANS_IND_STRU *pstData)
     pstTransInfo->ulNo     = (g_DiagLogPktNum.ulTransNum)++;
     spin_unlock_irqrestore(&g_DiagLogPktNum.ulTransLock, ulLockLevel);
 
-    /* 填充数据头 */
+    /* ?????????? */
     diag_SvcFillHeader((DIAG_SRV_HEADER_STRU *)&stTransHeader);
     DIAG_SRV_SET_MODEM_ID(&stTransHeader.frame_header, DIAG_GET_MODEM_ID(pstData->ulModule));
     DIAG_SRV_SET_TRANS_ID(&stTransHeader.frame_header, g_ulTransId++);
@@ -236,12 +236,12 @@ u32 diag_report_trans(DRV_DIAG_TRANS_IND_STRU *pstData)
 }
 
 /*****************************************************************************
- 函 数 名  : DIAG_EventReport
- 功能描述  : 事件上报接口，给PS使用(替换原来的DIAG_ReportEventLog)
- 输入参数  : DRV_DIAG_EVENT_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
+ ?? ?? ??  : DIAG_EventReport
+ ????????  : ????????????????PS????(??????????DIAG_ReportEventLog)
+ ????????  : DRV_DIAG_EVENT_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
              DRV_DIAG_EVENT_IND_STRU->ulEventId(event ID)
-             DRV_DIAG_EVENT_IND_STRU->ulLength(event的长度)
-             DRV_DIAG_EVENT_IND_STRU->pData(event信息)
+             DRV_DIAG_EVENT_IND_STRU->ulLength(event??????)
+             DRV_DIAG_EVENT_IND_STRU->pData(event????)
 *****************************************************************************/
 u32 diag_report_event(DRV_DIAG_EVENT_IND_STRU *pstEvent)
 {
@@ -251,7 +251,7 @@ u32 diag_report_event(DRV_DIAG_EVENT_IND_STRU *pstEvent)
     unsigned long  ulLockLevel;
 
     pstEventIndInfo = &stEventHeader.event_header;
-    /*组装DIAG命令参数*/
+    /*????DIAG????????*/
     spin_lock_irqsave(&g_DiagLogPktNum.ulEventLock, ulLockLevel);
     pstEventIndInfo->ulNo     = (g_DiagLogPktNum.ulEventNum)++;
     spin_unlock_irqrestore(&g_DiagLogPktNum.ulEventLock, ulLockLevel);
@@ -259,7 +259,7 @@ u32 diag_report_event(DRV_DIAG_EVENT_IND_STRU *pstEvent)
     pstEventIndInfo->ulId     = pstEvent->ulEventId;
     pstEventIndInfo->ulModule = pstEvent->ulPid;
 
-    /* 填充数据头 */
+    /* ?????????? */
     diag_SvcFillHeader((DIAG_SRV_HEADER_STRU *)&stEventHeader);
     DIAG_SRV_SET_MODEM_ID(&stEventHeader.frame_header, DIAG_GET_MODEM_ID(pstEvent->ulModule));
     DIAG_SRV_SET_TRANS_ID(&stEventHeader.frame_header, g_ulTransId++);
@@ -276,13 +276,13 @@ u32 diag_report_event(DRV_DIAG_EVENT_IND_STRU *pstEvent)
 }
 
 /*****************************************************************************
- 函 数 名  : DIAG_AirMsgReport
- 功能描述  : 空口消息上报接口，给PS使用(替换原来的DIAG_ReportAirMessageLog)
- 输入参数  : DRV_DIAG_AIR_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
-             DRV_DIAG_AIR_IND_STRU->ulMsgId(空口消息ID)
-             DRV_DIAG_AIR_IND_STRU->ulDirection(空口消息的方向)
-             DRV_DIAG_AIR_IND_STRU->ulLength(空口消息的长度)
-             DRV_DIAG_AIR_IND_STRU->pData(空口消息信息)
+ ?? ?? ??  : DIAG_AirMsgReport
+ ????????  : ????????????????????PS????(??????????DIAG_ReportAirMessageLog)
+ ????????  : DRV_DIAG_AIR_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
+             DRV_DIAG_AIR_IND_STRU->ulMsgId(????????ID)
+             DRV_DIAG_AIR_IND_STRU->ulDirection(??????????????)
+             DRV_DIAG_AIR_IND_STRU->ulLength(??????????????)
+             DRV_DIAG_AIR_IND_STRU->pData(????????????)
 *****************************************************************************/
 u32 diag_report_air(DRV_DIAG_AIR_IND_STRU *pstAir)
 {
@@ -301,7 +301,7 @@ u32 diag_report_air(DRV_DIAG_AIR_IND_STRU *pstAir)
     pstRptInfo->ulNo      = (g_DiagLogPktNum.ulAirNum)++;
     spin_unlock_irqrestore(&g_DiagLogPktNum.ulAirLock, ulLockLevel);
 
-    /* 填充数据头 */
+    /* ?????????? */
     diag_SvcFillHeader((DIAG_SRV_HEADER_STRU *)&stAirHeader);
     DIAG_SRV_SET_MODEM_ID(&stAirHeader.frame_header, DIAG_GET_MODEM_ID(pstAir->ulModule));
     DIAG_SRV_SET_TRANS_ID(&stAirHeader.frame_header, g_ulTransId++);
@@ -318,9 +318,9 @@ u32 diag_report_air(DRV_DIAG_AIR_IND_STRU *pstAir)
 }
 
 /*****************************************************************************
- 函 数 名  : DIAG_TraceReport
- 功能描述  : 层间消息上报接口，给PS使用(替换原来的DIAG_ReportLayerMessageLog)
- 输入参数  : pMsg(标准的VOS消息体，源模块、目的模块信息从消息体中获取)
+ ?? ?? ??  : DIAG_TraceReport
+ ????????  : ????????????????????PS????(??????????DIAG_ReportLayerMessageLog)
+ ????????  : pMsg(??????VOS??????????????????????????????????????????)
 *****************************************************************************/
 u32 diag_report_trace(void *pMsg, u32 modemid)
 {
@@ -340,7 +340,7 @@ u32 diag_report_trace(void *pMsg, u32 modemid)
     pstTrace->ulNo        = (g_DiagLogPktNum.ulTraceNum++);
     spin_unlock_irqrestore(&g_DiagLogPktNum.ulTraceLock, ulLockLevel);
 
-    /* 填充数据头 */
+    /* ?????????? */
     diag_SvcFillHeader((DIAG_SRV_HEADER_STRU *)&stTraceHeader);
     DIAG_SRV_SET_MODEM_ID(&stTraceHeader.frame_header, modemid);
     DIAG_SRV_SET_TRANS_ID(&stTraceHeader.frame_header, g_ulTransId++);
@@ -358,9 +358,9 @@ u32 diag_report_trace(void *pMsg, u32 modemid)
 }
 
 /*****************************************************************************
- 函 数 名     : diag_report_msg_trans
- 功能描述  : 通用消息上报接口
- 输入参数  : void
+ ?? ?? ??     : diag_report_msg_trans
+ ????????  : ????????????????
+ ????????  : void
 *****************************************************************************/
 u32 diag_report_msg_trans(DRV_DIAG_TRANS_IND_STRU *pstData, u32 ulcmdid)
 {
@@ -376,7 +376,7 @@ u32 diag_report_msg_trans(DRV_DIAG_TRANS_IND_STRU *pstData, u32 ulcmdid)
     pstTransInfo->ulNo     = (g_DiagLogPktNum.ulTransNum)++;
     spin_unlock_irqrestore(&g_DiagLogPktNum.ulTransLock, ulLockLevel);
 
-    /* 填充数据头 */
+    /* ?????????? */
     diag_SvcFillHeader((DIAG_SRV_HEADER_STRU *)&stTransHeader);
     DIAG_SRV_SET_MODEM_ID(&stTransHeader.frame_header, DIAG_GET_MODEM_ID(pstData->ulModule));
     DIAG_SRV_SET_TRANS_ID(&stTransHeader.frame_header, g_ulTransId++);
@@ -393,7 +393,7 @@ u32 diag_report_msg_trans(DRV_DIAG_TRANS_IND_STRU *pstData, u32 ulcmdid)
 
 /*****************************************************************************
  Function Name   : DIAG_MsgReport
- Description        : DIAG message 层上报接口
+ Description        : DIAG message ??????????
 *****************************************************************************/
 u32 diag_report_cnf(DRV_DIAG_CNF_INFO_STRU *pstDiagInfo, void *pstData, u32 ulLen)
 {
@@ -418,11 +418,11 @@ u32 diag_report_cnf(DRV_DIAG_CNF_INFO_STRU *pstDiagInfo, void *pstData, u32 ulLe
 }
 
 /*************************************************************************
- 函 数 名	: diag_report_drv_log
- 功能描述	: 上报字符串数据到工具，不能超过300字节，超过300字节部分自动截断
- 输入参数	: 无
- 返 回 值	: 成功与否标识码
- 修改历史	:
+ ?? ?? ??	: diag_report_drv_log
+ ????????	: ??????????????????????????????300??????????300????????????????
+ ????????	: ??
+ ?? ?? ??	: ??????????????
+ ????????	:
 *************************************************************************/
 u32 diag_report_drv_log(u32 level, char* fmt, va_list arg)
 {
@@ -434,7 +434,7 @@ u32 diag_report_drv_log(u32 level, char* fmt, va_list arg)
     s32 len = 0;
     s32 usRet = 0;
 
-    /* 由于底软打印中会增加[], HIDS识别时会认为底软中的[] 为行号，因此此处默认填写[] */
+    /* ????????????????????[], HIDS????????????????????[] ????????????????????????[] */
     usRet = snprintf_s(string, DIAG_DRV_PRINTLOG_MAX_BUFF_LEN, DIAG_DRV_PRINTLOG_MAX_BUFF_LEN - 1, "%s", "ap[0]");
     if(usRet < 0)
     {
@@ -453,7 +453,7 @@ u32 diag_report_drv_log(u32 level, char* fmt, va_list arg)
 
     if(len > DIAG_DRV_PRINTLOG_MAX_BUFF_LEN)
     {
-        /* 内存越界，主动复位 */
+        /* ?????????????????? */
         system_error(DRV_ERRNO_DIAG_OVERFLOW, __LINE__, len, 0, 0);
     }
 
@@ -463,7 +463,7 @@ u32 diag_report_drv_log(u32 level, char* fmt, va_list arg)
     /* 1:error, 2:warning, 3:normal, 4:info */
     /* (0|ERROR|WARNING|NORMAL|INFO|0|0|0) */
     print_head->u32level = (0x80000000) >> level;
-    print_head->u32module = 0x8003;//0x8003为底软的PID
+    print_head->u32module = 0x8003;//0x8003????????PID
 
     spin_lock_irqsave(&g_DiagLogPktNum.ulPrintLock, ulLockLevel);
     print_head->u32no = (g_DiagLogPktNum.ulPrintNum)++;
@@ -496,9 +496,9 @@ void diag_report_init(void)
 }
 
 /*****************************************************************************
- 函 数 名  : diag_report_reset_msg
- 功能描述  :
- 输入参数  : 上报单独复位消息
+ ?? ?? ??  : diag_report_reset_msg
+ ????????  :
+ ????????  : ????????????????
 *****************************************************************************/
 u32 diag_report_reset_msg(DRV_DIAG_TRANS_IND_STRU *pstData)
 {
@@ -515,7 +515,7 @@ u32 diag_report_reset_msg(DRV_DIAG_TRANS_IND_STRU *pstData)
     pstTransInfo->ulNo     = (g_DiagLogPktNum.ulTransNum)++;
     spin_unlock_irqrestore(&g_DiagLogPktNum.ulTransLock, ulLockLevel);
 
-    /* 填充数据头 */
+    /* ?????????? */
     diag_SvcFillHeader((DIAG_SRV_HEADER_STRU *)&stTransHeader);
     DIAG_SRV_SET_MODEM_ID(&stTransHeader.frame_header, DIAG_GET_MODEM_ID(pstData->ulModule));
     DIAG_SRV_SET_TRANS_ID(&stTransHeader.frame_header, g_ulTransId++);

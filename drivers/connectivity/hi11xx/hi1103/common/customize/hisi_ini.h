@@ -3,14 +3,14 @@
 #ifndef __HISI_INI_H__
 #define __HISI_INI_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
 #include "hw_bfg_ps.h"
 #include "bfgx_user_ctrl.h"
 #endif
 #include "plat_type.h"
 
-/* 宏定义 */
+/* ?????? */
 #define INI_TIME_TEST
 
 #define INI_MIN(_A, _B)        (((_A) < (_B)) ? (_A) : (_B))
@@ -131,12 +131,12 @@ typedef struct ini_param_vervion {
 
 typedef struct file INI_FILE;
 
-/* 全局变量声明 */
+/* ???????????? */
 extern char ini_file_name_etc[INI_FILE_PATH_LEN];
 extern INI_BOARD_VERSION_STRU board_version_etc;
 extern INI_PARAM_VERSION_STRU param_version_etc;
 
-/* 函数声明 */
+/* ???????? */
 extern int32 get_cust_conf_int32_etc(int32 tag_index, int8 *puc_var, int32 *pul_value);
 extern int32 get_cust_conf_string_etc(int32 tag_index, int8 *puc_var, int8 *puc_value, uint32 size);
 extern int32 find_download_channel_etc(uint8 *buff, uint32 buf_len, int8 *puc_var);

@@ -47,7 +47,7 @@ OAL_STATIC oal_uint32 wal_cfgvendor_copy_channel_list(mac_vendor_cmd_channel_lis
         return OAL_FAIL;
     }
 
-    /* 获取2G,信道列表 */
+    /* ????2G,???????? */
     if ((band & WIFI_BAND_24_GHZ) && (0 != pst_channel_list->uc_channel_num_2g))
     {
         puc_chanel_list = pst_channel_list->auc_channel_list_2g;
@@ -61,7 +61,7 @@ OAL_STATIC oal_uint32 wal_cfgvendor_copy_channel_list(mac_vendor_cmd_channel_lis
         }
     }
 
-    /* 获取5G Band信道列表，包括非DFS Channels和DFS Channels */
+    /* ????5G Band????????????????DFS Channels??DFS Channels */
     if ((band & (WIFI_BAND_5_GHZ | WIFI_BAND_5_GHZ_DFS_ONLY)) && (0 != pst_channel_list->uc_channel_num_5g))
     {
         oal_bool_enum_uint8 en_dfs = OAL_FALSE;
@@ -114,20 +114,20 @@ OAL_STATIC oal_uint32 wal_cfgvendor_get_current_channel_list(oal_net_device_stru
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 上层在任何时候都可能下发此命令，需要先判断当前netdev的状态并及时返回 */
+    /* ??????????????????????????????????????????????netdev???????????????? */
     if (OAL_UNLIKELY(OAL_PTR_NULL == OAL_NET_DEV_PRIV(pst_netdev)))
     {
         OAM_WARNING_LOG0(0, OAM_SF_ANY, "{wal_cfgvendor_get_current_channel_list::NET_DEV_PRIV is NULL.}");
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 消息参数准备 */
+    /* ???????????? */
     st_query_msg.en_wid = WLAN_CFGID_VENDOR_CMD_GET_CHANNEL_LIST;
 
     /***************************************************************************
-        抛事件到wal层处理
+        ????????wal??????
     ***************************************************************************/
-    /* 发送消息 */
+    /* ???????? */
     l_ret = wal_send_cfg_event_etc(pst_netdev,
                                WAL_MSG_TYPE_QUERY,
                                WAL_MSG_WID_LENGTH,
@@ -165,7 +165,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_get_channel_list(oal_wiphy_stru *wiphy,
     oal_int32  err = 0;
     oal_int32  type;
     oal_int32  al_channel_list[VENDOR_CHANNEL_LIST_ALL + 1] = {0};
-    oal_uint32 band = 0; /* 上层下发的band值 */
+    oal_uint32 band = 0; /* ??????????band?? */
     oal_uint32 mem_needed;
     oal_uint32 num_channels = 0;
     oal_uint32 reply_len = 0;
@@ -181,7 +181,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_get_channel_list(oal_wiphy_stru *wiphy,
     type = oal_nla_type(data);
     if (type == GSCAN_ATTRIBUTE_BAND)
     {
-        /* 获取band值 bit0:2G信道列表 bit1:5G信道列表 bit2:DFS channel */
+        /* ????band?? bit0:2G???????? bit1:5G???????? bit2:DFS channel */
         band = oal_nla_get_u32(data);
     }
     else
@@ -201,7 +201,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_get_channel_list(oal_wiphy_stru *wiphy,
     reply_len = OAL_SIZEOF(al_channel_list[0])*(num_channels);
     mem_needed = reply_len + VENDOR_REPLY_OVERHEAD + (ATTRIBUTE_U32_LEN * 2);
 
-    /* 申请SKB 上报信道列表 */
+    /* ????SKB ???????????? */
     skb = oal_cfg80211_vendor_cmd_alloc_reply_skb_etc(wiphy, mem_needed);
     if (OAL_UNLIKELY(!skb))
     {
@@ -235,7 +235,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_set_country(oal_wiphy_stru *wiphy,
     oal_int8  auc_country_code[WLAN_COUNTRY_STR_LEN] = {0};
     OAL_CONST oal_nlattr_stru *iter;
 
-    /* 测试阶段可采用定制化99配置 */
+    /* ????????????????????99???? */
 #ifdef _PRE_PLAT_FEATURE_CUSTOMIZE
     if (OAL_TRUE == cust_country_code_ignore_flag.en_country_code_ingore_ini_flag)
     {
@@ -259,7 +259,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_set_country(oal_wiphy_stru *wiphy,
                     return -OAL_EFAIL;
                 }
                 OAM_WARNING_LOG1(0, OAM_SF_ANY, "{wal_cfgvendor_set_country:: len = %d!}",oal_nla_len(iter));
-                /* 设置国家码到wifi 驱动 */
+                /* ????????????wifi ???? */
                 l_ret = wal_regdomain_update_country_code_etc(wdev->netdev, auc_country_code);
 #else
                 OAM_WARNING_LOG0(0, OAM_SF_ANY, "{wal_cfgvendor_set_country::_PRE_WLAN_FEATURE_11D is not define!}\r\n");
@@ -356,7 +356,7 @@ OAL_STATIC oal_int32 wal_send_random_mac_oui(oal_net_device_stru *pst_net_dev,
     }
 
     /***************************************************************************
-        抛事件到wal层处理
+        ????????wal??????
     ***************************************************************************/
     WAL_WRITE_MSG_HDR_INIT(&st_write_msg, WLAN_CFGID_SET_RANDOM_MAC_OUI, WLAN_RANDOM_MAC_OUI_LEN);
     if (EOK != memcpy_s(st_write_msg.auc_value, WLAN_RANDOM_MAC_OUI_LEN, auc_random_mac_oui, WLAN_RANDOM_MAC_OUI_LEN)) {
@@ -364,7 +364,7 @@ OAL_STATIC oal_int32 wal_send_random_mac_oui(oal_net_device_stru *pst_net_dev,
         return -OAL_EFAIL;
     }
 
-    /* 发送消息 */
+    /* ???????? */
     l_ret = wal_send_cfg_event_etc(pst_net_dev,
                                WAL_MSG_TYPE_WRITE,
                                WAL_MSG_WRITE_MSG_HDR_LENGTH + WLAN_RANDOM_MAC_OUI_LEN,
@@ -395,7 +395,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_set_random_mac_oui(oal_wiphy_stru *pst_wiphy,
 
     if (ANDR_WIFI_ATTRIBUTE_RANDOM_MAC_OUI == l_type)
     {
-        /* 随机mac地址前3字节(mac oui)由系统下发,wps pbc场景和hilink关联场景会将此3字节清0 */
+        /* ????mac??????3????(mac oui)??????????,wps pbc??????hilink??????????????3??????0 */
         if (EOK != memcpy_s(auc_random_mac_oui, WLAN_RANDOM_MAC_OUI_LEN, oal_nla_data(p_data), WLAN_RANDOM_MAC_OUI_LEN)) {
             OAM_ERROR_LOG0(0, OAM_SF_ANY, "wal_cfgvendor_set_random_mac_oui::memcpy fail!");
             return -OAL_EFAIL;
@@ -426,7 +426,7 @@ OAL_STATIC oal_uint32  wal_cfgvendor_blacklist_mode(oal_net_device_stru *pst_net
     oal_uint16                      us_len;
 
     /***************************************************************************
-                                抛事件到wal层处理
+                                ????????wal??????
     ***************************************************************************/
     memset_s((oal_uint8*)&st_write_msg, OAL_SIZEOF(st_write_msg), 0, OAL_SIZEOF(st_write_msg));
 
@@ -460,7 +460,7 @@ OAL_STATIC oal_uint32  wal_cfgvendor_blacklist_add(oal_net_device_stru *pst_net_
     mac_blacklist_stru             *pst_blklst;
 
     /***************************************************************************
-                                抛事件到wal层处理
+                                ????????wal??????
     ***************************************************************************/
     memset_s((oal_uint8*)&st_write_msg, OAL_SIZEOF(st_write_msg), 0, OAL_SIZEOF(st_write_msg));
     pst_blklst = (mac_blacklist_stru*)(st_write_msg.auc_value);
@@ -499,7 +499,7 @@ OAL_STATIC oal_uint32  wal_cfgvendor_blacklist_del(oal_net_device_stru *pst_net_
     oal_uint16                      us_len;
 
     /***************************************************************************
-                                抛事件到wal层处理
+                                ????????wal??????
     ***************************************************************************/
     memset_s((oal_uint8*)&st_write_msg, OAL_SIZEOF(st_write_msg), 0, OAL_SIZEOF(st_write_msg));
 
@@ -627,7 +627,7 @@ OAL_STATIC oal_uint32 wal_cfgvendor_roam_enable(oal_net_device_stru *pst_net_dev
     }
 
     /***************************************************************************
-                                抛事件到wal层处理
+                                ????????wal??????
     ***************************************************************************/
     WAL_WRITE_MSG_HDR_INIT(&st_write_msg, WLAN_CFGID_ROAM_ENABLE, OAL_SIZEOF(oal_uint32));
     *((oal_bool_enum_uint8 *)(st_write_msg.auc_value)) = roam_state;
@@ -820,7 +820,7 @@ OAL_STATIC oal_int32 wal_send_vowifi_nat_keep_alive_params(oal_net_device_stru *
     memset_s(&st_write_msg, OAL_SIZEOF(wal_msg_write_stru), 0, OAL_SIZEOF(wal_msg_write_stru));
 
     /***************************************************************************
-        抛事件到wal层处理  WLAN_CFGID_SET_VOWIFI_KEEP_ALIVE
+        ????????wal??????  WLAN_CFGID_SET_VOWIFI_KEEP_ALIVE
     ***************************************************************************/
     WAL_WRITE_MSG_HDR_INIT(&st_write_msg, WLAN_CFGID_SET_VOWIFI_KEEP_ALIVE, uc_msg_len);
     if (EOK != memcpy_s(st_write_msg.auc_value, uc_msg_len, pc_keep_alive_info, uc_msg_len)) {
@@ -828,7 +828,7 @@ OAL_STATIC oal_int32 wal_send_vowifi_nat_keep_alive_params(oal_net_device_stru *
         return -OAL_EFAIL;
     }
 
-    /* 发送消息 */
+    /* ???????? */
     l_ret = wal_send_cfg_event_etc(pst_net_dev,
                                WAL_MSG_TYPE_WRITE,
                                WAL_MSG_WRITE_MSG_HDR_LENGTH + uc_msg_len,
@@ -990,7 +990,7 @@ OAL_STATIC oal_int32 wl_cfgvendor_stop_vowifi_nat_keep_alive(oal_wiphy_stru *pst
     if(OAL_TRUE == en_find_keepid_flag)
     {
         st_stop_info.en_type = VOWIFI_MKEEP_ALIVE_TYPE_STOP;
-    #if 1 /*待正式测试完成后，删除*/
+    #if 1 /*??????????????????????*/
         OAM_ERROR_LOG2(0, OAM_SF_ANY, "{wl_cfgvendor_stop_vowifi_nat_keep_alive::en_type=[%d],id=[%d].}",
                    st_stop_info.en_type,st_stop_info.uc_keep_alive_id);
     #endif
@@ -1059,7 +1059,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_lstats_get_station_info(oal_wiphy_stru *pst_w
         return -OAL_EINVAL;
     }
 
-    /* 固定时间内最多更新一次RSSI */
+    /* ??????????????????????RSSI */
     if(OAL_FALSE == wal_cfg80211_get_station_filter_etc(&pst_hmac_vap->st_vap_base_info, (oal_uint8 *)puc_mac))
     {
         pst_iface_stat->ac[0].ul_tx_mpdu = pst_hmac_vap->station_info.tx_packets;
@@ -1072,14 +1072,14 @@ OAL_STATIC oal_int32 wal_cfgvendor_lstats_get_station_info(oal_wiphy_stru *pst_w
     pst_hmac_vap->station_info_query_completed_flag = OAL_FALSE;
 
     /********************************************************************************
-        抛事件到wal层处理 ，对于低功耗需要做额外处理，不能像下层抛事件，直接起定时器
-        低功耗会在接收beacon帧的时候主动上报信息。
+        ????????wal?????? ??????????????????????????????????????????????????????????
+        ??????????????beacon??????????????????????
     ********************************************************************************/
-    /*3.1 填写 msg 消息头*/
+    /*3.1 ???? msg ??????*/
     st_write_msg.en_wid = WLAN_CFGID_QUERY_STATION_STATS;
     st_write_msg.us_len = OAL_SIZEOF(st_dmac_query_request_event);
 
-    /*3.2 填写 msg 消息体 */
+    /*3.2 ???? msg ?????? */
     if (EOK != memcpy_s(st_write_msg.auc_value, OAL_SIZEOF(dmac_query_station_info_request_event),
                         pst_query_station_info, OAL_SIZEOF(dmac_query_station_info_request_event))) {
         OAM_ERROR_LOG0(0, OAM_SF_ANY, "wal_cfgvendor_lstats_get_station_info::memcpy fail!");
@@ -1103,21 +1103,21 @@ OAL_STATIC oal_int32 wal_cfgvendor_lstats_get_station_info(oal_wiphy_stru *pst_w
     /*lint +e730*/
     if (0 == i_leftime)
     {
-        /* 超时还没有上报扫描结束 */
+        /* ?????????????????????? */
         OAM_WARNING_LOG1(uc_vap_id, OAM_SF_ANY, "{wal_cfgvendor_lstats_get_station_info::query info wait for %ld ms timeout!}",
                          ((QUERY_STATION_INFO_TIME_INTER * 1000)/OAL_TIME_HZ));
         return -OAL_EINVAL;
     }
     else if (i_leftime < 0)
     {
-        /* 定时器内部错误 */
+        /* ?????????????? */
         OAM_WARNING_LOG1(uc_vap_id, OAM_SF_ANY, "{wal_cfgvendor_lstats_get_station_info::query info wait for %ld ms error!}",
                          ((QUERY_STATION_INFO_TIME_INTER * 1000)/OAL_TIME_HZ));
         return -OAL_EINVAL;
     }
     else
     {
-        /* 正常结束  */
+        /* ????????  */
         pst_iface_stat->ac[0].ul_tx_mpdu = pst_hmac_vap->station_info.tx_packets;
         pst_iface_stat->ac[0].ul_rx_mpdu = pst_hmac_vap->station_info.rx_packets;
         pst_iface_stat->ac[0].ul_retries = pst_hmac_vap->station_info.tx_retries;
@@ -1263,7 +1263,7 @@ OAL_STATIC oal_int32 wal_cfgvendor_apf_set_filter(oal_wiphy_stru *wiphy,
                 st_apf_filter_cmd.en_cmd_type = APF_SET_FILTER_CMD;
 
                 /***************************************************************************
-                    抛事件到wal层处理
+                    ????????wal??????
                 ***************************************************************************/
                 WAL_WRITE_MSG_HDR_INIT(&st_write_msg, WLAN_CFGID_SET_APF_FILTER, OAL_SIZEOF(st_apf_filter_cmd));
                 if (EOK != memcpy_s(st_write_msg.auc_value, OAL_SIZEOF(st_apf_filter_cmd),
@@ -1272,8 +1272,8 @@ OAL_STATIC oal_int32 wal_cfgvendor_apf_set_filter(oal_wiphy_stru *wiphy,
                     return -OAL_EFAIL;
                 }
 
-                /* 发送消息 */
-                /* 需要将发送该函数设置为同步，否则hmac处理时会使用已释放的内存 */
+                /* ???????? */
+                /* ????????????????????????????????hmac???????????????????????? */
                 if (OAL_SUCC != wal_send_cfg_event_etc(wdev->netdev,
                                            WAL_MSG_TYPE_WRITE,
                                            WAL_MSG_WRITE_MSG_HDR_LENGTH + OAL_SIZEOF(st_apf_filter_cmd),

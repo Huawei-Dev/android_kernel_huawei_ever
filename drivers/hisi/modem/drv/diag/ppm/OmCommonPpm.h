@@ -51,7 +51,7 @@
 #define __OM_COMMON_PPM_H__
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 #include <mdrv.h>
 #include <mdrv_diag_system.h>
@@ -72,9 +72,9 @@ extern "C" {
 extern u32                          g_ulOmAcpuDbgFlag ;
 
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *****************************************************************************/
-#define USB_MAX_DATA_LEN            (60*1024)   /*USB发送的最大数据长度*/
+#define USB_MAX_DATA_LEN            (60*1024)   /*USB??????????????????*/
 
 #define PPM_PCDEV_ICC_MSG_LEN_MAX   (16)
 
@@ -117,7 +117,7 @@ extern u32                          g_ulOmAcpuDbgFlag ;
         }
 
 
-/*物理通道类型枚举*/
+/*????????????????*/
 enum
 {
     CPM_OM_PORT_TYPE_USB    = 0,
@@ -133,27 +133,27 @@ enum
 
 enum
 {
-    CP_AP_REQ_PORT_SWITCH       = 0x10, /* CP->AP 切端口请求 */
+    CP_AP_REQ_PORT_SWITCH       = 0x10, /* CP->AP ?????????? */
     CP_AP_REQ_CFG_PORT_STATE    = 0x11,
     CP_AP_REQ_IND_PORT_STATE    = 0x12,
-    AP_CP_CNF_PORT_SWTICH       = 0x20, /* AP->CP 切端口回复 */
+    AP_CP_CNF_PORT_SWTICH       = 0x20, /* AP->CP ?????????? */
     AP_CP_REQ_CFG_PORT_STATE    = 0x21,
     AP_CP_REQ_IND_PORT_STATE    = 0x22,
     AP_CP_MSG_BUTT
 };
 typedef u32 AP_CP_MSG_ENUM_UINT32;
 
-/* 设备事件类型 ，和AP侧CP_AGENT_DEV_STATE_E定义一致*/
+/* ???????????? ????AP??CP_AGENT_DEV_STATE_E????????*/
 typedef enum tagCPAGENT_DEV_STATE_E {
-    PPM_PCDEV_DEV_LINK_DOWN = 0,        /* 设备不可以进行读写(主要用于事件回调函数的状态) */
-    PPM_PCDEV_DEV_LINK_UP = 1,          /* 设备可以进行读写(主要用于事件回调函数的状态) */
+    PPM_PCDEV_DEV_LINK_DOWN = 0,        /* ??????????????????(??????????????????????????) */
+    PPM_PCDEV_DEV_LINK_UP = 1,          /* ????????????????(??????????????????????????) */
     PPM_PCDEV_DEV_BOTTOM
 } PPM_PCDEV_DEV_STATE_E;
 
 /*******************************************************************************
-  3 枚举定义
+  3 ????????
 *******************************************************************************/
-/* UDI设备句柄 */
+/* UDI???????? */
 enum OM_PROT_HANDLE_ENUM
 {
     OM_USB_IND_PORT_HANDLE      =   0,
@@ -163,7 +163,7 @@ enum OM_PROT_HANDLE_ENUM
     OM_HSIC_CFG_PORT_HANDLE     =   4,
     OM_PCDEV_IND_PORT_HANDLE    =   5,
     OM_PCDEV_CFG_PORT_HANDLE    =   6,
-    OM_PORT_HANDLE_BUTT             /*OM_PORT_HANDLE_NUM = OM_PORT_HANDLE_BUTT，如果更改此枚举注意更改OM_PORT_HANDLE_NUM*/
+    OM_PORT_HANDLE_BUTT             /*OM_PORT_HANDLE_NUM = OM_PORT_HANDLE_BUTT????????????????????????OM_PORT_HANDLE_NUM*/
 };
 
 typedef u32  OM_PROT_HANDLE_ENUM_UINT32;
@@ -180,19 +180,19 @@ typedef u32     OM_LOGIC_CHANNEL_ENUM_UINT32;
 
 
 /*****************************************************************************
-  4 结构体定义
+  4 ??????????
 *****************************************************************************/
 
 typedef struct
 {
-    u8                          *pucAsyncCBData;      /* DRV_UDI_IOCTL接口异步返回后传入的数据指针 */
-    u32                          ulLen;               /* DRV_UDI_IOCTL接口异步返回后返回的实际处理数据长度 */
+    u8                          *pucAsyncCBData;      /* DRV_UDI_IOCTL???????????????????????????? */
+    u32                          ulLen;               /* DRV_UDI_IOCTL???????????????????????????????????? */
     u32                          ulRsv;               /* Reserve */
 }OM_PSEUDO_SYNC_STRU;
 
 /*****************************************************************************
- 枚举名    : AT_PHY_PORT_ENUM
- 枚举说明  : 物理端口号枚举值 从omnvinterface.h拷贝来的
+ ??????    : AT_PHY_PORT_ENUM
+ ????????  : ???????????????? ??omnvinterface.h????????
 *****************************************************************************/
 enum AT_PHY_PORT_ENUM
 {
@@ -207,40 +207,40 @@ typedef u32  AT_PHY_PORT_ENUM_UINT32;
 
 enum
 {
-    CPM_IND_PORT = AT_PORT_BUTT,    /* OM数据上报端口 */
-    CPM_CFG_PORT,                   /* OM配置端口 */
+    CPM_IND_PORT = AT_PORT_BUTT,    /* OM???????????? */
+    CPM_CFG_PORT,                   /* OM???????? */
     CPM_SD_PORT,
-    CPM_WIFI_OM_IND_PORT,           /* WIFI下OM数据上报端口 */
-    CPM_WIFI_OM_CFG_PORT,           /* WIFI下OM配置下发端口 */
-    CPM_WIFI_AT_PORT,               /* WIFI下AT端口 */
+    CPM_WIFI_OM_IND_PORT,           /* WIFI??OM???????????? */
+    CPM_WIFI_OM_CFG_PORT,           /* WIFI??OM???????????? */
+    CPM_WIFI_AT_PORT,               /* WIFI??AT???? */
     CPM_HSIC_IND_PORT,
     CPM_HSIC_CFG_PORT,
-    CPM_VCOM_IND_PORT,              /* VCOM上OM数据上报接口 */
-    CPM_VCOM_CFG_PORT,              /* VCOM上OM配置接口 */
+    CPM_VCOM_IND_PORT,              /* VCOM??OM???????????? */
+    CPM_VCOM_CFG_PORT,              /* VCOM??OM???????? */
     CPM_FS_PORT,
     CPM_PCDEV_IND_PORT,
     CPM_PCDEV_CFG_PORT,
     CPM_PORT_BUTT
-};//物理端口枚举
+};//????????????
 typedef u32  CPM_PHY_PORT_ENUM_UINT32;
 
-/* AP CP通用消息结构 */
+/* AP CP???????????? */
 typedef struct
 {
-    u32 ulMsgId;    /* 消息ID */
-    u32 ulLen;      /* 消息长度 */
-    u8  pMsg[PPM_PCDEV_ICC_MSG_LEN_MAX];    /* 消息数据 */
+    u32 ulMsgId;    /* ????ID */
+    u32 ulLen;      /* ???????? */
+    u8  pMsg[PPM_PCDEV_ICC_MSG_LEN_MAX];    /* ???????? */
 }AP_CP_MSG_STRU;
 
 typedef struct
 {
-    u32 ulMsgId;    /* 消息ID */
-    u32 ulLen;      /* 消息长度 */
-    u32 ulState;    /* 状态 */
+    u32 ulMsgId;    /* ????ID */
+    u32 ulLen;      /* ???????? */
+    u32 ulState;    /* ???? */
 }AP_CP_STATE_MSG_STRU;
 
 /*****************************************************************************
-  4 函数声明
+  4 ????????
 *****************************************************************************/
 
 extern u32 PPM_ReadPortData(CPM_PHY_PORT_ENUM_UINT32 enPhyPort, UDI_HANDLE UdiHandle, OM_PROT_HANDLE_ENUM_UINT32 enHandle);
@@ -276,21 +276,21 @@ extern OM_PSEUDO_SYNC_STRU * PPM_ComPpmGetSyncInfo(void);
 extern OM_ACPU_DEBUG_INFO * PPM_ComPpmGetDebugInfo(void);
 
 /*****************************************************************************
-  5 全局变量声明
+  5 ????????????
 *****************************************************************************/
 #ifdef DIAG_SYSTEM_A_PLUS_B_AP
 extern void *       g_astOMPortUDIHandle[OM_PORT_HANDLE_BUTT];
 #else
 extern UDI_HANDLE   g_astOMPortUDIHandle[OM_PORT_HANDLE_BUTT];
 #endif
-/* USB承载的OM IND端口中，伪造为同步接口使用的数据结构体 */
+/* USB??????OM IND?????????????????????????????????????? */
 extern OM_PSEUDO_SYNC_STRU                     g_stUsbIndPseudoSync;
 
-/* USB承载的OM CNF端口中，伪造为同步接口使用的数据结构体 */
+/* USB??????OM CNF?????????????????????????????????????? */
 extern OM_PSEUDO_SYNC_STRU                     g_stUsbCfgPseudoSync;
 
 /*****************************************************************************
-  6 OTHERS定义
+  6 OTHERS????
 *****************************************************************************/
 
 

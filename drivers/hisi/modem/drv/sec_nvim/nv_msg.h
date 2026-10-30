@@ -64,66 +64,66 @@ extern "C" {
 
 typedef u32 (*nv_cb_func)(u32 ret, u32 sn);
 
-/*描述单个Nv信息*/
+/*????????Nv????*/
 typedef struct _nv_item_info_stru_
 {
     u16 itemid;        /* NV ID */
     u16 modem_id;      /* NV Length */
 }nv_item_info_t;
 
-/*AP Nv写任务节点结构*/
+/*AP Nv??????????????*/
 typedef struct _nv_cmd_req_
 {
     struct list_head    stList;
     u8                 reserved[2];
     u8                 priority;
     u8                 msg_type;                   /* msg type */
-    u32                 sn;                         /* 序列号 */
-    //nv_item_info_t      nv_item_info;               /* nv项信息 */
+    u32                 sn;                         /* ?????? */
+    //nv_item_info_t      nv_item_info;               /* nv?????? */
     nv_cb_func          nv_msg_callback;
 }nv_cmd_req;
 
-/* 队列元素 */
+/* ???????? */
 typedef struct _nv_cmd_reply_
 {
-    struct list_head    stList;     /* 链表节点 */
-    u32                 sn;         /*sn号唯一标识本次请求*/
-    osl_sem_id          sem_req;    /* 请求阻塞信号量 */
-    u32                 ret;        /* 处理结果*/
+    struct list_head    stList;     /* ???????? */
+    u32                 sn;         /*sn??????????????????*/
+    osl_sem_id          sem_req;    /* ?????????????? */
+    u32                 ret;        /* ????????*/
 }nv_cmd_reply;
 
 typedef struct _msg_queue_stru_
 {
     struct list_head list;
-    spinlock_t         lock;                     /*用于保护list的信号量*/
+    spinlock_t         lock;                     /*????????list????????*/
 }msg_queue_t;
 
-/*ICC请求NV_ICC_REQ_RESUME NV_ICC_REQ_RESUME消息结构*/
+/*ICC????NV_ICC_REQ_RESUME NV_ICC_REQ_RESUME????????*/
 typedef struct _nv_icc_msg_stru_
 {
-    u32 send_slice;         /*发送时间*/
-    u32 msg_type;           /*消息类型*/
-    u32 sn;                 /*序列号*/
-    u32 ret;                /*发送消息中存储要写入的NV数量,接收消息中存储处理结果*/
+    u32 send_slice;         /*????????*/
+    u32 msg_type;           /*????????*/
+    u32 sn;                 /*??????*/
+    u32 ret;                /*??????????????????????NV????,??????????????????????*/
 }nv_icc_msg_t;
 
-/*ICC请求NV_ICC_REQ_PRIORITY_HIGH_FLUSH NV_ICC_REQ_PRIORITY1_FLUSH消息结构*/
+/*ICC????NV_ICC_REQ_PRIORITY_HIGH_FLUSH NV_ICC_REQ_PRIORITY1_FLUSH????????*/
 typedef struct _nv_icc_msg_single_stru_
 {
-    u32 send_slice;         /*发送时间*/
-    u32 msg_type;           /*消息类型*/
-    u32 sn;                 /*序列号*/
-    u32 ret;                /*发送消息中存储要写入的NV数量,接收消息中存储处理结果*/
-    //nv_item_info_t data;    /*要写入的nv信息列表*/
+    u32 send_slice;         /*????????*/
+    u32 msg_type;           /*????????*/
+    u32 sn;                 /*??????*/
+    u32 ret;                /*??????????????????????NV????,??????????????????????*/
+    //nv_item_info_t data;    /*????????nv????????*/
 }nv_icc_msg_single_t;
 
 enum _task_msg_type_e_
 {
-    NV_TASK_MSG_WRITE2FILE = 0x1,       /*写NV请求*/
+    NV_TASK_MSG_WRITE2FILE = 0x1,       /*??NV????*/
     NV_TASK_MSG_FLUSH_RWFILE,
-    NV_TASK_MSG_LOAD_CARRIER,           /*加载运行商定制NV*/
-    NV_TASK_MSG_LOAD_CARRIER_COMM,      /*加载运行商定制恢复NV*/
-    NV_TASK_MSG_LOAD_BACKUP,            /*重加载镜像*/
+    NV_TASK_MSG_LOAD_CARRIER,           /*??????????????NV*/
+    NV_TASK_MSG_LOAD_CARRIER_COMM,      /*??????????????????NV*/
+    NV_TASK_MSG_LOAD_BACKUP,            /*??????????*/
     NV_TASK_MSG_UPDATE_DEFAULT,         /*at^inforbu*/
     NV_TASK_MSG_UPDATE_BACKUP,          /*at^nvbackup*/
     NV_TASK_MSG_FACTORY_RESET,         /*AT^FTYRESET*/
@@ -134,9 +134,9 @@ enum _task_msg_type_e_
 #define    LOW_PRIORITY_MSG_QUEUE        2
 
 struct nv_global_msg_info_stru {
-    msg_queue_t req_list;             /* 等待消息回复链表 */
-    msg_queue_t high_task_list;     /* 高优先级NV命令操作链表 */
-    msg_queue_t low_task_list;      /* 低优先级NV命令操作链表 */
+    msg_queue_t req_list;             /* ???????????????? */
+    msg_queue_t high_task_list;     /* ????????NV???????????? */
+    msg_queue_t low_task_list;      /* ????????NV???????????? */
     u32         req_sn;
 #ifdef UNUSE_CODE
     osl_sem_id           flush_sem;

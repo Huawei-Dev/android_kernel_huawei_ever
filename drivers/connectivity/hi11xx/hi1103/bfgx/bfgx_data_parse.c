@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include <linux/skbuff.h>
 #include <linux/sched.h>
 #include <linux/delay.h>
@@ -235,7 +235,7 @@ int32 ps_push_skb_queue_gnss_etc(struct ps_core_s *ps_core_d, uint8 *buf_ptr, ui
         copy_cnt += (seperate_len - 1);
     } while (copy_cnt < pkt_len);
 
-    /* 确保gnss缓存的skb不超过(RX_GNSS_QUE_MAX_NUM >> 1)个，防止一会删前面的，一会删后面的 */
+    /* ????gnss??????skb??????(RX_GNSS_QUE_MAX_NUM >> 1)?????????????????????????????????? */
     while (ps_core_d->bfgx_info[BFGX_GNSS].rx_queue.qlen > (RX_GNSS_QUE_MAX_NUM >> 1)) {
         delete_gnss_head_skb_msg_etc();
     }
@@ -475,7 +475,7 @@ static int32 ps_push_device_log_to_queue(struct ps_core_s *ps_core_d, const uint
     wake_up_interruptible(&ps_core_d->rx_dbg_wait);
     if (ps_core_d->rx_dbg_seq.qlen > RX_DBG_QUE_MAX_NUM) {
         PS_PRINT_INFO("rx dbg queue too large!");
-        /* if sdt data is large，remove the head skb data */
+        /* if sdt data is large??remove the head skb data */
         skb = ps_skb_dequeue_etc(ps_core_d, RX_DBG_QUEUE);
         kfree_skb(skb);
     }
@@ -675,7 +675,7 @@ int32 ps_recv_sepreated_data_etc(struct ps_core_s *ps_core_d, uint8 *buf_ptr, ui
         atomic_set(&pm_data->gnss_sleep_flag, GNSS_NOT_AGREE_SLEEP);
     }
 
-    /* 检查分包序列的正确性 */
+    /* ???????????????????? */
     switch (sepreted_type) {
         case RX_SEQ_START:
             if ((pst_sepreted_data->rx_prev_seq == RX_SEQ_NULL) || (pst_sepreted_data->rx_prev_seq == RX_SEQ_LAST)) {
@@ -701,11 +701,11 @@ int32 ps_recv_sepreated_data_etc(struct ps_core_s *ps_core_d, uint8 *buf_ptr, ui
     }
 
     if (seq_correct == SEPRETED_RX_PKT_SEQ_CORRECT) {
-        /* 接收到的分包数据都要先拷贝到组包buffer中 */
+        /* ????????????????????????????????buffer?? */
         ret = ps_store_rx_sepreated_data_etc(ps_core_d, buf_ptr, subsys);
         /*
-         * 当组包发生错误时，只有在收到LAST包的时候才重置组包buffer。
-         * 因为只有收到LAST包，才能确保接收到的下一包数据的正确性。
+         * ????????????????????????????LAST??????????????????buffer??
+         * ????????????LAST????????????????????????????????????????
          */
         if ((ret == RX_PACKET_ERR) && (sepreted_type == RX_SEQ_LAST)) {
             PS_PRINT_ERR("%s rx data lenth err! give up this total pkt\n", bfgx_subsys_name_etc[subsys]);
@@ -721,9 +721,9 @@ int32 ps_recv_sepreated_data_etc(struct ps_core_s *ps_core_d, uint8 *buf_ptr, ui
         return -EINVAL;
     }
 
-    /* 收到LAST包，说明组包完成，否则继续接收，直到收到完整的数据包，或者中途发生错误，丢弃该包。 */
+    /* ????LAST?????????????????????????????????????????????????????????????????????????????????? */
     if (sepreted_type == RX_SEQ_LAST) {
-        /* 如果已经缓存的数据到达了最大值，则新来的数据被丢弃 */
+        /* ?????????????????????????????????????????????????? */
         if (pst_bfgx_data->rx_queue.qlen >= bfgx_rx_queue_max_num_etc[subsys]) {
             PS_PRINT_WARNING("%s rx queue too large! qlen=%d\n",
                              bfgx_subsys_name_etc[subsys], pst_bfgx_data->rx_queue.qlen);
@@ -750,7 +750,7 @@ int32 ps_recv_sepreated_data_etc(struct ps_core_s *ps_core_d, uint8 *buf_ptr, ui
             return -EINVAL;
         }
 
-        /* 现在skb中已经有正确完整的数据，唤醒等待数据的进程 */
+        /* ????skb?????????????????????????????????????????? */
         PS_PRINT_DBG("%s rx done! qlen=%d\n", bfgx_subsys_name_etc[subsys], pst_bfgx_data->rx_queue.qlen);
         wake_up_interruptible(&pst_bfgx_data->rx_wait);
     }
@@ -789,7 +789,7 @@ int32 ps_recv_no_sepreated_data_etc(struct ps_core_s *ps_core_d, uint8 *buf_ptr,
 
     pst_bfgx_data = &ps_core_d->bfgx_info[subsys];
 
-    /* 如果已经缓存的数据到达了最大值，则新来的数据被丢弃 */
+    /* ?????????????????????????????????????????????????? */
     if (pst_bfgx_data->rx_queue.qlen >= bfgx_rx_queue_max_num_etc[subsys]) {
         PS_PRINT_WARNING("%s rx queue too large! qlen=%d\n",
                          bfgx_subsys_name_etc[subsys], pst_bfgx_data->rx_queue.qlen);
@@ -1114,7 +1114,7 @@ int32 ps_check_packet_head_etc(struct ps_core_s *ps_core_d, uint8 *buf_ptr, int3
                 case NFC_Last_MSG:
                 case OML_MSG:
                     if (ir_only_mode) {
-                        break;  // 单红外消息不分包，不需要分包检查
+                        break;  // ????????????????????????????????
                     }
                     if ((buf_ptr[PACKET_OFFSET_HEAD_INDEX] == PACKET_START_SIGNAL) &&
                         (buf_ptr[PACKET_OFFSET_HEAD_NEXT_INDEX] == PACKET_RX_FUNC_LAST_WORDS)) {
@@ -1173,7 +1173,7 @@ void dump_uart_rx_buf(void)
     uint32 ul_dump_len;
     ps_get_core_reference_etc(&ps_core_d);
 
-    /* uart在接收数据时，不能flaush buffer */
+    /* uart??????????????????flaush buffer */
     spin_lock(&ps_core_d->rx_lock);
 
     if (ps_core_d->rx_have_recv_pkt_len > 0) {
@@ -1200,7 +1200,7 @@ void reset_uart_rx_buf_etc(void)
     struct ps_core_s *ps_core_d = NULL;
     ps_get_core_reference_etc(&ps_core_d);
 
-    /* uart在接收数据时，不能flaush buffer */
+    /* uart??????????????????flaush buffer */
     spin_lock(&ps_core_d->rx_lock);
 
     if (ps_core_d->rx_have_recv_pkt_len > 0) {
@@ -1470,7 +1470,7 @@ struct sk_buff *ps_skb_dequeue_etc(struct ps_core_s *ps_core_d, uint8 type)
     return curr_skb;
 }
 
-/* ready状态遍历所有队列 */
+/* ready???????????????? */
 static struct sk_buff *ps_skb_dequeue_core(struct ps_core_s *ps_core_d, uint32 *dequeue_init_flag)
 {
     struct sk_buff *skb;
@@ -1535,7 +1535,7 @@ int32 ps_core_tx_attemper_etc(struct ps_core_s *ps_core_d)
         spin_lock_irqsave(&pm_data->uart_state_spinlock, flags);
         uart_state = ps_core_d->ps_pm->bfgx_uart_state_get();
         if (uart_state != UART_READY) {
-            /* 非ready状态仅从urgent队列发送 */
+            /* ??ready????????urgent???????? */
             skb = ps_skb_dequeue_etc(ps_core_d, TX_URGENT_QUEUE);
         } else {
             skb = ps_skb_dequeue_core(ps_core_d, &dequeue_init_flag);
@@ -1605,7 +1605,7 @@ void ps_core_tx_work_etc(struct work_struct *work)
  * Prototype    : ps_add_packet_head_etc
  * Description  : add packet head to recv buf from hal or bt driver.
  * input        : buf  -> ptr of buf
- *                type -> packet type，example bt,fm,or gnss
+ *                type -> packet type??example bt,fm,or gnss
  *                lenth-> packet length
  */
 int32 ps_add_packet_head_etc(uint8 *buf, uint8 type, uint16 lenth)
@@ -1646,7 +1646,7 @@ int32 ps_add_packet_head_etc(uint8 *buf, uint8 type, uint16 lenth)
  * Prototype    : ps_set_sys_packet_etc
  * Description  : set sys packet head to buf
  * input        : buf  -> ptr of buf
- *                type -> packet type，example bt,fm,or gnss
+ *                type -> packet type??example bt,fm,or gnss
  *                lenth-> packet length
  */
 static int32 ps_set_sys_packet_etc(uint8 *buf, uint8 type, uint8 content)
@@ -2094,17 +2094,17 @@ int32 ps_core_init_etc(struct ps_core_s **core_data)
     INIT_WORK(&ps_core_d->tx_skb_work, ps_core_tx_work_etc);
 
     for (i = 0; i < BFGX_BUTT; i++) {
-        /* 初始化接收队列头 */
+        /* ???????????????? */
         skb_queue_head_init(&ps_core_d->bfgx_info[i].rx_queue);
-        /* 初始化BFGX接收等待队列 */
+        /* ??????BFGX???????????? */
         init_waitqueue_head(&ps_core_d->bfgx_info[i].rx_wait);
-        /* 初始化分包接收数据结构，BT不使用分包接收 */
+        /* ????????????????????????BT?????????????? */
         spin_lock_init(&ps_core_d->bfgx_info[i].sepreted_rx.sepreted_rx_lock);
         ps_core_d->bfgx_info[i].sepreted_rx.rx_prev_seq = RX_SEQ_NULL;
         ps_core_d->bfgx_info[i].sepreted_rx.rx_buf_all_len = 0;
         ps_core_d->bfgx_info[i].sepreted_rx.rx_buf_ptr = NULL;
         ps_core_d->bfgx_info[i].sepreted_rx.rx_buf_org_ptr = NULL;
-        /* 初始化开关业务完成量 */
+        /* ???????????????????? */
         init_completion(&ps_core_d->bfgx_info[i].wait_closed);
         init_completion(&ps_core_d->bfgx_info[i].wait_opened);
         atomic_set(&ps_core_d->bfgx_info[i].subsys_state, POWER_STATE_SHUTDOWN);

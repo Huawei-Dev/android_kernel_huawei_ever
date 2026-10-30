@@ -3,14 +3,14 @@
 #ifndef __OAL_WINDOWS_THREAD_H__
 #define __OAL_WINDOWS_THREAD_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_schedule.h"
 
-/* STRUCT定义 */
+/* STRUCT???? */
 typedef struct task_struct oal_task_stru;
 
 
-/* 宏定义 */
+/* ?????? */
 #define oal_kthread_create(fn, arg, namefmt, cpu) ((oal_void *)0)
 #define oal_kthread_bind(task, cpu)
 #define oal_kthread_stop(task)

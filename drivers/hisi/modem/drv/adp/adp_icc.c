@@ -56,7 +56,7 @@ extern struct icc_control g_icc_ctrl;
 
 #define ICC_DEFAULT_SUB_CHANNEL   (0)
 
-#ifndef CONFIG_ICC   /* 打桩 */
+#ifndef CONFIG_ICC   /* ???? */
 
 s32 bsp_icc_send(u32 cpuid,u32 channel_id,u8 *buffer,u32 data_len)
 {
@@ -186,7 +186,7 @@ s32 icc_write_cb_wraper(u32 real_channel_id , void* context)
 	return ICC_OK;
 }
 
-/* 逻辑通道到物理通道的转换 */
+/* ???????????????????????? */
 int icc_channel_logic2phy(u32 u32ChanId, u32 *channel_id)
 {
     int i = 0;

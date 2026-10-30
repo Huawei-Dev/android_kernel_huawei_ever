@@ -1200,7 +1200,7 @@ void meson_venc_hdmi_mode_set(struct meson_drm *priv, int vic,
 
 		writel_relaxed(1, priv->io_base + _REG(ENCP_VIDEO_EN));
 
-		/* Set DE signal’s polarity is active high */
+		/* Set DE signal???s polarity is active high */
 		writel_bits_relaxed(BIT(14), BIT(14),
 				    priv->io_base + _REG(ENCP_VIDEO_MODE));
 

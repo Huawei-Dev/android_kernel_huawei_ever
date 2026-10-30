@@ -3,13 +3,13 @@
 #ifndef __OAL_LINUX_CFG80211_H__
 #define __OAL_LINUX_CFG80211_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <net/genetlink.h>
 #include <net/cfg80211.h>
 #include <linux/nl80211.h>
 
-/* 宏定义 */
-/* hostapd和supplicant事件上报需要用到宏 */
+/* ?????? */
+/* hostapd??supplicant?????????????????? */
 #define OAL_NLMSG_GOODSIZE            NLMSG_GOODSIZE
 #define OAL_ETH_ALEN_SIZE             ETH_ALEN
 #define OAL_NLMSG_DEFAULT_SIZE        NLMSG_DEFAULT_SIZE
@@ -41,7 +41,7 @@ struct cfg80211_external_auth_params {
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)) */
 typedef struct cfg80211_external_auth_params oal_cfg80211_external_auth_stru;
 
-/* 函数声明 */
+/* ???????? */
 extern void cfg80211_drv_mss_result(struct net_device *dev, gfp_t gfp, const u8 *buf, size_t len);
 #ifdef _PRE_WLAN_FEATURE_TAS_ANT_SWITCH
 extern void cfg80211_drv_tas_result(struct net_device *dev, gfp_t gfp, const u8 *buf, size_t len);

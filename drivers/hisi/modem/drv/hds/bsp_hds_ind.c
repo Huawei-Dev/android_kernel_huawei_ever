@@ -106,14 +106,14 @@ s32 bsp_transreport(TRANS_IND_STRU *pstData)
 #if (FEATURE_HDS_TRANSLOG == FEATURE_ON)
     s32 ret;
 
-    /*判断工具连接状态、开关状态*/
+    /*??????????????????????????*/
     if(0 == g_translog_conn)
     {
        hds_info("hids not conn(%d)!\n",g_translog_conn);
        return HDS_TRANS_SW_ERR;
     }
 
-    /*入参检查*/
+    /*????????*/
     if((NULL == pstData)||(NULL == pstData->pData)||(0 == pstData->ulLength) || ((pstData->ulLength) > (TRANSLOG_MAX_HIDS_BUFF_LEN - 1)))
     {
        hds_info("pstdata err!\n");
@@ -151,17 +151,17 @@ new start
 ******************************************************************************/
 
 /*****************************************************************************
-* 函 数 名  : bsp_trace
+* ?? ?? ??  : bsp_trace
 *
-* 功能描述  : 底软打印输出处理接口
+* ????????  : ????????????????????
 *
-* 输入参数  :  mod_id: 输出模块
-*              print_level: 打印级别
-*              fmt :打印输入参数
+* ????????  :  mod_id: ????????
+*              print_level: ????????
+*              fmt :????????????
 *
-* 输出参数  : 无
+* ????????  : ??
 *
-* 返 回 值  : 成功返回0
+* ?? ?? ??  : ????????0
 *****************************************************************************/
 /*lint -save -e530 -e830 -e64*/
 int bsp_trace_to_hids(u32 module_id, u32 level, u32 sel, char* print_buff)
@@ -178,7 +178,7 @@ int bsp_trace_to_hids(u32 module_id, u32 level, u32 sel, char* print_buff)
 
 	bsp_print_level_cfg(&level);
 
-    /*判断工具连接状态、开关状态*/
+    /*??????????????????????????*/
     if((1 == g_printlog_conn)&&(1 == g_printlog_enable))
     {
         ret = bsp_diag_report_drv_log(level, print_buff, arglist);

@@ -7,7 +7,7 @@ extern "C" {
 #endif
 
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "oal_profiling.h"
 #include "hmac_hcc_adapt.h"
 #include "mac_resource.h"
@@ -22,7 +22,7 @@ extern "C" {
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_HCC_ADAPT_C
 
-/* 2 全局变量定义 */
+/* 2 ???????????? */
 OAL_STATIC oal_uint8  g_hcc_sched_stat[FRW_EVENT_TYPE_BUTT];
 OAL_STATIC oal_uint8  g_hcc_flowctrl_stat[FRW_EVENT_TYPE_BUTT];
 OAL_STATIC oal_uint32 g_hcc_sched_event_pkts[FRW_EVENT_TYPE_BUTT] = {0};
@@ -36,7 +36,7 @@ oal_uint32 hmac_hcc_tx_netbuf_auto(frw_event_mem_stru *pst_hcc_event_mem,
                                    oal_netbuf_stru *pst_netbuf, oal_uint32 ul_hdr_len);
 extern oal_uint32 hmac_hcc_tx_data(frw_event_mem_stru *pst_hcc_event_mem, oal_netbuf_stru *pst_netbuf);
 
-/* 3 函数实现 */
+/* 3 ???????? */
 oal_void hmac_tx_net_queue_map_init(oal_void)
 {
     oal_memset(g_wlan_queue_to_dmac_queue, DATA_LO_QUEUE, OAL_SIZEOF(g_wlan_queue_to_dmac_queue));
@@ -111,8 +111,8 @@ oal_void hmac_tx_sched_info_init(oal_void)
 
     oal_memset(g_hcc_flowctrl_stat, HCC_FC_NONE, OAL_SIZEOF(g_hcc_flowctrl_stat));
 
-    /* 来自HOST的事件，如果从Kernel Net过来选择网络层流控+丢包的方式，
-     * 如果是Wlan To Wlan 的方式，直接丢包!
+    /* ????HOST??????????????Kernel Net??????????????????+????????????
+     * ??????Wlan To Wlan ????????????????!
 	 */
     g_hcc_flowctrl_stat[FRW_EVENT_TYPE_HOST_DRX] = HCC_FC_DROP | HCC_FC_NET;
 }
@@ -156,7 +156,7 @@ oal_void get_simple_mac_tx_ctl(mac_tx_ctl_cut_stru *pst_simple_mac_tx_ctl, mac_t
     pst_simple_mac_tx_ctl->bit_ether_head_including = pst_tx_ctrl->bit_ether_head_including;
     pst_simple_mac_tx_ctl->bit_is_large_skb_amsdu = pst_tx_ctrl->bit_is_large_skb_amsdu;
     pst_simple_mac_tx_ctl->bit_tid = (pst_tx_ctrl->uc_tid & 0x0F);
-    /* amsdu+ampdu聚合对齐用 */
+    /* amsdu+ampdu?????????? */
     pst_simple_mac_tx_ctl->bit_align_padding_offset = pst_tx_ctrl->bit_align_padding_offset;
     pst_simple_mac_tx_ctl->bit_data_frame_type = pst_tx_ctrl->bit_data_frame_type;
 }
@@ -189,7 +189,7 @@ oal_uint32 check_headroom_add_length(mac_tx_ctl_stru *pst_tx_ctrl, frw_event_typ
     if (1 == pst_tx_ctrl->bit_80211_mac_head_type) {
         /* case 1: data from net, mac head is maintence in netbuff */
         /* lint -e778 */
-        ul_headroom_add = OAL_SIZEOF(mac_tx_ctl_cut_stru) - (MAC_80211_QOS_HTC_4ADDR_FRAME_LEN - MAX_MAC_HEAD_LEN);  // 结构体肯定大于4
+        ul_headroom_add = OAL_SIZEOF(mac_tx_ctl_cut_stru) - (MAC_80211_QOS_HTC_4ADDR_FRAME_LEN - MAX_MAC_HEAD_LEN);  // ??????????????4
         /* lint +e778 */
     } else if ((FRW_EVENT_TYPE_WLAN_CTX == en_nest_type) &&
                ((DMAC_WLAN_CTX_EVENT_SUB_TYPE_MGMT == uc_nest_sub_type) || (DMAC_WLAN_CTX_EVENT_SUB_TYPE_ACTION == uc_nest_sub_type))) {
@@ -210,7 +210,7 @@ oal_void hmac_adjust_netbuf_data(oal_netbuf_stru *pst_netbuf, mac_tx_ctl_stru *p
     oal_uint8                       *puc_data_hdr;
     mac_tx_ctl_cut_stru             st_simple_mac_tx_ctl;
 
-    /* 在进入HCC之前，将CB字段和Mac头连续存放至payload之前 */
+    /* ??????HCC????????CB??????Mac????????????payload???? */
     puc_data_hdr = OAL_NETBUF_DATA(pst_netbuf);
 
     oal_memset(&st_simple_mac_tx_ctl, 0, OAL_SIZEOF(mac_tx_ctl_cut_stru));
@@ -230,7 +230,7 @@ oal_void hmac_adjust_netbuf_data(oal_netbuf_stru *pst_netbuf, mac_tx_ctl_stru *p
         oal_memmove(puc_data_hdr + OAL_SIZEOF(mac_tx_ctl_cut_stru), (oal_uint8 *)pst_tx_ctrl->pst_frame_header, MAX_MAC_HEAD_LEN);
         oal_memcopy(puc_data_hdr, (oal_uint8 *)&st_simple_mac_tx_ctl, OAL_SIZEOF(mac_tx_ctl_cut_stru));
 
-        /* 帧头和帧体不连续，帧头重新申请了事件内存，此处需要释放 */
+        /* ?????????????????????????????????????????????????????? */
         if (0 == pst_tx_ctrl->bit_80211_mac_head_type) {
             OAL_MEM_FREE((oal_uint8 *)pst_tx_ctrl->pst_frame_header, OAL_TRUE);
         }
@@ -258,7 +258,7 @@ oal_uint32 hmac_hcc_tx_netbuf_auto(frw_event_mem_stru *pst_hcc_event_mem,
     fc_type = g_hcc_flowctrl_stat[en_type];
 
 #ifdef _PRE_WLAN_FEATURE_OFFLOAD_FLOWCTL
-    /* 对于从以太网报文获取其队列号 */
+    /* ???????????????????????????? */
     if (FRW_EVENT_TYPE_HOST_DRX == en_type) {
         queue_id = oal_skb_get_queue_mapping(pst_netbuf);
         if (OAL_WARN_ON(queue_id >= WLAN_NET_QUEUE_BUTT)) {
@@ -315,13 +315,13 @@ oal_uint32 hmac_hcc_tx_netbuf(frw_event_mem_stru *pst_hcc_event_mem,
     oal_netbuf_push(pst_netbuf, OAL_SIZEOF(struct frw_hcc_extend_hdr));
     hmac_hcc_adapt_extend_hdr_init(pst_hcc_event_mem, pst_netbuf);
 
-    // expand 14B后性能下降40%,待确认!
+    // expand 14B??????????40%,??????!
 #ifdef CONFIG_PRINTK
     pst_event_hdr = frw_get_event_hdr(pst_hcc_event_mem);
 
     ret = (oal_uint32)hcc_tx(hcc_get_110x_handler(), pst_netbuf, &st_hcc_transfer_param);
     if (OAL_UNLIKELY(OAL_SUCC != ret)) {
-        /* hcc 关闭时下发了命令,报警需要清理 */
+        /* hcc ????????????????,???????????? */
         if (OAL_WARN_ON(-OAL_EBUSY == ret)) {
             OAL_IO_PRINT("[E]hmac_tx event[%u:%u] drop!\n", pst_event_hdr->en_type, pst_event_hdr->uc_sub_type);
             ret = OAL_SUCC;
@@ -362,7 +362,7 @@ oal_uint32 hmac_hcc_tx_data(frw_event_mem_stru *pst_hcc_event_mem, oal_netbuf_st
     oal_uint                         ul_addr_offset;
     oal_uint8                        auc_macheader[MAC_80211_QOS_HTC_4ADDR_FRAME_LEN] = {0};
 
-    /* 提取嵌套的业务事件类型 */
+    /* ?????????????????????? */
     pst_event_hdr           = frw_get_event_hdr(pst_hcc_event_mem);
 
     en_type                 = pst_event_hdr->en_type;
@@ -402,16 +402,16 @@ oal_uint32 hmac_hcc_tx_data(frw_event_mem_stru *pst_hcc_event_mem, oal_netbuf_st
         }
     }
 
-    /* 修改netbuff的data指针和len */
+    /* ????netbuff??data??????len */
     oal_netbuf_push(pst_netbuf, ul_headroom_add);
     hmac_adjust_netbuf_data(pst_netbuf, pst_tx_ctrl, en_type, uc_sub_type);
 
-    /* 使netbuf四字节对齐 */
+    /* ??netbuf?????????? */
     ul_netbuf_old_addr = (oal_uint)(uintptr_t)(OAL_NETBUF_DATA(pst_netbuf) + OAL_SIZEOF(mac_tx_ctl_cut_stru) + MAX_MAC_HEAD_LEN);
     ul_netbuf_new_addr = OAL_ROUND_DOWN(ul_netbuf_old_addr, 4);
     ul_addr_offset = ul_netbuf_old_addr - ul_netbuf_new_addr;
 
-    /* 未对齐时在host侧做数据搬移，此处牺牲host，解放device */
+    /* ??????????host??????????????????????host??????device */
     if (ul_addr_offset) {
         if (ul_addr_offset < oal_netbuf_headroom(pst_netbuf)) {
             oal_memmove((oal_uint8 *)OAL_NETBUF_DATA(pst_netbuf) - ul_addr_offset, (oal_uint8 *)OAL_NETBUF_DATA(pst_netbuf), OAL_NETBUF_LEN(pst_netbuf));
@@ -421,7 +421,7 @@ oal_uint32 hmac_hcc_tx_data(frw_event_mem_stru *pst_hcc_event_mem, oal_netbuf_st
     }
 
     OAL_MIPS_TX_STATISTIC(HOST_PROFILING_FUNC_HCC_TX_DATA);
-    /* netbuf不管成功与否都由发送函数释放! */
+    /* netbuf????????????????????????????! */
     hmac_hcc_tx_netbuf_auto(pst_hcc_event_mem, pst_netbuf,
                             OAL_SIZEOF(mac_tx_ctl_cut_stru) + MAX_MAC_HEAD_LEN);
     return OAL_SUCC;
@@ -438,14 +438,14 @@ oal_uint32 hmac_hcc_tx_event_buf_to_netbuf(frw_event_mem_stru *pst_event_mem,
                                            oal_uint32 payload_size)
 {
     oal_netbuf_stru *pst_netbuf;
-    /* 申请netbuf存放事件payload */
+    /* ????netbuf????????payload */
     pst_netbuf = hcc_netbuf_alloc(payload_size);
     if (OAL_WARN_ON(NULL == pst_netbuf)) {
         OAL_IO_PRINT("hmac_hcc_tx_event_buf_to_netbuf alloc netbuf failed!\n");
         return OAL_ERR_CODE_ALLOC_MEM_FAIL;
     }
 
-    /* 将结构体拷贝到netbuff数据区 */
+    /* ??????????????netbuff?????? */
 
     oal_netbuf_put(pst_netbuf, payload_size);
     oal_memcopy ((oal_uint8 *)(OAL_NETBUF_DATA(pst_netbuf)), (oal_uint8 *)pst_buf, payload_size);
@@ -464,7 +464,7 @@ oal_uint32 hmac_hcc_tx_event_payload_to_netbuf(frw_event_mem_stru *pst_event_mem
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 取业务事件信息 */
+    /* ?????????????? */
     pst_event_payload = frw_get_event_payload(pst_event_mem);
     return hmac_hcc_tx_event_buf_to_netbuf(pst_event_mem, pst_event_payload, payload_size);
 }
@@ -479,12 +479,12 @@ oal_uint32 hmac_hcc_rx_event_comm_adapt(frw_event_mem_stru *pst_hcc_event_mem)
     mac_rx_ctl_stru *pst_rx_ctrl;
     oal_uint8 *puc_hcc_extend_hdr;
 
-    /* step1 提取嵌套的业务事件类型 */
+    /* step1 ?????????????????????? */
     pst_event_hdr = frw_get_event_hdr(pst_hcc_event_mem);
     pst_hcc_event_payload = (hcc_event_stru *)frw_get_event_payload(pst_hcc_event_mem);
 
-    /* 完成从51Mac rx ctl 到02 Mac rx ctl的拷贝,
-     * 传到此处,pad_payload已经是0
+    /* ??????51Mac rx ctl ??02 Mac rx ctl??????,
+     * ????????,pad_payload??????0
      */
     /*
      * hcc protocol header
@@ -510,15 +510,15 @@ oal_uint32 hmac_hcc_rx_event_comm_adapt(frw_event_mem_stru *pst_hcc_event_mem)
         pst_rx_ctrl = (mac_rx_ctl_stru *)OAL_NETBUF_CB((oal_netbuf_stru *)pst_hcc_event_payload->pst_netbuf);
         get_mac_rx_ctl(pst_rx_ctrl, (mac_rx_ctl_cut_stru *)puc_hcc_extend_hdr);
 
-        /* 需要修改pst_rx_ctrl中所有指针 */
+        /* ????????pst_rx_ctrl?????????? */
         pst_rx_ctrl->pul_mac_hdr_start_addr = (oal_uint32 *)(puc_hcc_extend_hdr + OAL_MAX_CB_LEN + MAX_MAC_HEAD_LEN - pst_rx_ctrl->uc_mac_header_len);
 
-        /* 将mac header的内容向高地址偏移8个字节拷贝，使得mac header和payload的内容连续 */
+        /* ??mac header??????????????????8????????????????mac header??payload?????????? */
         oal_memmove((oal_uint8 *)pst_rx_ctrl->pul_mac_hdr_start_addr,
                     (oal_uint8 *)((oal_uint8 *)pst_rx_ctrl->pul_mac_hdr_start_addr - (MAX_MAC_HEAD_LEN - pst_rx_ctrl->uc_mac_header_len)),
                     pst_rx_ctrl->uc_mac_header_len);
 
-        /* 将netbuff data指针移到payload位置 */
+        /* ??netbuff data????????payload???? */
         oal_netbuf_pull(pst_hcc_event_payload->pst_netbuf, OAL_MAX_CB_LEN + (MAX_MAC_HEAD_LEN - pst_rx_ctrl->uc_mac_header_len));
 
     } else {
@@ -539,9 +539,9 @@ frw_event_mem_stru *hmac_hcc_expand_rx_adpat_event(frw_event_mem_stru *pst_hcc_e
     oal_uint8                       uc_chip_id;
     oal_uint8                       uc_device_id;
     oal_uint8                       uc_vap_id;
-    frw_event_mem_stru             *pst_event_mem;              /* 业务事件相关信息 */
+    frw_event_mem_stru             *pst_event_mem;              /* ???????????????? */
 
-   /* 提取HCC事件信息 */
+   /* ????HCC???????? */
     pst_hcc_event_hdr       = frw_get_event_hdr(pst_hcc_event_mem);
     pst_hcc_event_payload   = (hcc_event_stru *)frw_get_event_payload(pst_hcc_event_mem);
     pst_hcc_netbuf          = pst_hcc_event_payload->pst_netbuf;
@@ -551,16 +551,16 @@ frw_event_mem_stru *hmac_hcc_expand_rx_adpat_event(frw_event_mem_stru *pst_hcc_e
     uc_device_id            = pst_hcc_event_hdr->uc_device_id;
     uc_vap_id               = pst_hcc_event_hdr->uc_vap_id;
 
-    /* 申请业务事件 */
+    /* ???????????? */
     pst_event_mem = FRW_EVENT_ALLOC((oal_uint16)event_size);
     if (OAL_WARN_ON(OAL_PTR_NULL == pst_event_mem)) {
         OAM_WARNING_LOG1(0, OAM_SF_ANY, "hmac_hcc_rx_netbuf_convert_to_event  alloc event failed,event len:%d", event_size);
-        /* 释放hcc事件中申请的netbuf内存 */
+        /* ????hcc????????????netbuf???? */
         oal_netbuf_free(pst_hcc_netbuf);
         return OAL_PTR_NULL;
     }
 
-    /* 填业务事件头 */
+    /* ???????????? */
     FRW_EVENT_HDR_INIT(frw_get_event_hdr(pst_event_mem),
                        en_type,
                        uc_sub_type,
@@ -579,7 +579,7 @@ frw_event_mem_stru *hmac_hcc_rx_netbuf_convert_to_event(frw_event_mem_stru *pst_
     hcc_event_stru                 *pst_hcc_event_payload;
     oal_netbuf_stru                *pst_hcc_netbuf;
 
-    frw_event_mem_stru *pst_event_mem; /* 业务事件相关信息 */
+    frw_event_mem_stru *pst_event_mem; /* ???????????????? */
 
     if (OAL_WARN_ON(NULL == pst_hcc_event_mem)) {
         return NULL;
@@ -609,7 +609,7 @@ frw_event_mem_stru *hmac_hcc_rx_netbuf_convert_to_event(frw_event_mem_stru *pst_
         oal_memcopy((oal_uint8 *)frw_get_event_payload(pst_event_mem),
                     (oal_uint8 *)OAL_NETBUF_DATA(pst_hcc_netbuf), revert_size);
 
-    /* 释放hcc事件中申请的netbuf内存 */
+    /* ????hcc????????????netbuf???? */
     oal_netbuf_free(pst_hcc_netbuf);
 
     return pst_event_mem;
@@ -646,7 +646,7 @@ frw_event_mem_stru *hmac_hcc_test_rx_adapt(frw_event_mem_stru *pst_hcc_event_mem
         return NULL;
     }
 
-    /* 填业务事件信息 */
+    /* ?????????????? */
     pst_hcc_rx_event                 = (hcc_event_stru *)frw_get_event_payload(pst_event_mem);
     pst_hcc_rx_event->pst_netbuf     = pst_hcc_event_payload->pst_netbuf;
     pst_hcc_rx_event->ul_buf_len     = (oal_uint32)OAL_NETBUF_LEN((oal_netbuf_stru*)pst_hcc_event_payload->pst_netbuf);
@@ -701,10 +701,10 @@ frw_event_mem_stru *hmac_rx_process_data_sta_rx_adapt(frw_event_mem_stru *pst_hc
         return NULL;
     }
 
-    /* 填业务事件信息 */
+    /* ?????????????? */
     pst_wlan_rx_event                 = (dmac_wlan_drx_event_stru *)frw_get_event_payload(pst_event_mem);
     pst_wlan_rx_event->pst_netbuf     = pst_hcc_event_payload->pst_netbuf;
-    pst_wlan_rx_event->us_netbuf_num  = 1;//目前不支持通过SDIO后组链，默认都是单帧
+    pst_wlan_rx_event->us_netbuf_num  = 1;//??????????????SDIO????????????????????
 
     return pst_event_mem;
 }
@@ -716,7 +716,7 @@ frw_event_mem_stru *hmac_rx_process_mgmt_event_rx_adapt(frw_event_mem_stru *pst_
     frw_event_mem_stru              *pst_event_mem;
     dmac_wlan_crx_event_stru        *pst_crx_event;
 
-    /* 取HCC事件信息 */
+    /* ??HCC???????? */
     pst_hcc_event_payload = (hcc_event_stru *)frw_get_event_payload(pst_hcc_event_mem);
 
     /* filter the extend buf */
@@ -727,7 +727,7 @@ frw_event_mem_stru *hmac_rx_process_mgmt_event_rx_adapt(frw_event_mem_stru *pst_
         return NULL;
     }
 
-    /* 填业务事件信息 */
+    /* ?????????????? */
     pst_crx_event = (dmac_wlan_crx_event_stru *)frw_get_event_payload(pst_event_mem);
     pst_crx_event->pst_netbuf = pst_hcc_event_payload->pst_netbuf;
 
@@ -754,17 +754,17 @@ frw_event_mem_stru *hmac_alg_flowctl_backp_rx_adapt(frw_event_mem_stru *pst_hcc_
         return OAL_PTR_NULL;
     }
 
-    /* step1 取HCC事件头 */
+    /* step1 ??HCC?????? */
     pst_hcc_event           = (frw_event_stru *)pst_hcc_event_mem->puc_data;
     pst_hcc_event_hdr       = &(pst_hcc_event->st_event_hdr);
     uc_chip_id              = pst_hcc_event_hdr->uc_chip_id;
     uc_device_id            = pst_hcc_event_hdr->uc_device_id;
     uc_vap_id               = pst_hcc_event_hdr->uc_vap_id;
 
-    /* step2 取HCC事件信息 */
+    /* step2 ??HCC???????? */
     pst_hcc_event_payload = (hcc_event_stru *)pst_hcc_event->auc_event_data;
 
-    /* step3 申请业务事件 */
+    /* step3 ???????????? */
     pst_event_mem = FRW_EVENT_ALLOC((oal_uint16)pst_hcc_event_payload->ul_buf_len);
     if (OAL_PTR_NULL == pst_event_mem) {
         oal_netbuf_free(pst_hcc_event_payload->pst_netbuf);
@@ -773,7 +773,7 @@ frw_event_mem_stru *hmac_alg_flowctl_backp_rx_adapt(frw_event_mem_stru *pst_hcc_
 
     pst_event = (frw_event_stru *)pst_event_mem->puc_data;
 
-    /* step4 填业务事件头 */
+    /* step4 ???????????? */
     FRW_EVENT_HDR_INIT(&(pst_event->st_event_hdr),
                        pst_hcc_event_payload->en_nest_type,
                        pst_hcc_event_payload->uc_nest_sub_type,
@@ -783,7 +783,7 @@ frw_event_mem_stru *hmac_alg_flowctl_backp_rx_adapt(frw_event_mem_stru *pst_hcc_
                        uc_device_id,
                        uc_vap_id);
 
-    /* step5 填HCC事件信息 */
+    /* step5 ??HCC???????? */
     oal_memcopy (pst_event->auc_event_data, (oal_uint8 *)(OAL_NETBUF_DATA((oal_netbuf_stru *)pst_hcc_event_payload->pst_netbuf)), pst_hcc_event_payload->ul_buf_len);
 
     oal_netbuf_free(pst_hcc_event_payload->pst_netbuf);
@@ -813,10 +813,10 @@ frw_event_mem_stru *hmac_cali2hmac_misc_event_rx_adapt(frw_event_mem_stru *pst_h
         return NULL;
     }
 
-    /* 填业务事件信息 */
+    /* ?????????????? */
     pst_cali_save_event                 = (hal_cali_hal2hmac_event_stru *)frw_get_event_payload(pst_event_mem);
     pst_cali_save_event->pst_netbuf     = pst_hcc_event_payload->pst_netbuf;
-    pst_cali_save_event->us_netbuf_num  = 1;//目前不支持通过SDIO后组链，默认都是单帧
+    pst_cali_save_event->us_netbuf_num  = 1;//??????????????SDIO????????????????????
 
     return pst_event_mem;
 }
@@ -839,7 +839,7 @@ frw_event_mem_stru *hmac_apf_program_report_rx_adapt(frw_event_mem_stru *pst_hcc
         return NULL;
     }
 
-    /* 填业务事件信息 */
+    /* ?????????????? */
     pst_report_event               = (mac_apf_report_event_stru *)frw_get_event_payload(pst_event_mem);
     pst_report_event->p_program    = pst_hcc_event_payload->pst_netbuf;
 
@@ -897,16 +897,16 @@ oal_uint32 hmac_proc_tx_host_tx_adapt(frw_event_mem_stru *pst_event_mem)
     oal_netbuf_stru                 *pst_current_netbuf_tmp = NULL;
     dmac_tx_event_stru              *pst_dmac_tx_event_payload;
 
-    /* 取业务事件信息 */
+    /* ?????????????? */
     pst_dmac_tx_event_payload = (dmac_tx_event_stru *)frw_get_event_payload(pst_event_mem);
     pst_current_netbuf = pst_dmac_tx_event_payload->pst_netbuf;
 
     while (OAL_PTR_NULL != pst_current_netbuf) {
-        /* 必须在netbuf抛出之前指向下一个netbuf，防止frw_event_dispatch_event 中重置 netbuf->next */
+        /* ??????netbuf??????????????????netbuf??????frw_event_dispatch_event ?????? netbuf->next */
         pst_current_netbuf_tmp = pst_current_netbuf;
         pst_current_netbuf = OAL_NETBUF_NEXT(pst_current_netbuf);
 
-        /* netbuf 失败由被调函数释放! */
+        /* netbuf ??????????????????! */
         OAL_MIPS_TX_STATISTIC(HOST_PROFILING_FUNC_HCC_TX_ADAPT);
         hmac_hcc_tx_data(pst_event_mem, pst_current_netbuf_tmp);
     }
@@ -934,7 +934,7 @@ oal_uint32 hmac_proc_set_edca_param_tx_adapt(frw_event_mem_stru *pst_event_mem)
 
 oal_uint32 hmac_scan_proc_scan_req_event_tx_adapt(frw_event_mem_stru *pst_event_mem)
 {
-    mac_scan_req_stru *pst_h2d_scan_req_params; /* 下发的扫描参数 */
+    mac_scan_req_stru *pst_h2d_scan_req_params; /* ?????????????? */
 
     if (OAL_UNLIKELY(OAL_PTR_NULL == pst_event_mem)) {
         return OAL_ERR_CODE_PTR_NULL;
@@ -996,7 +996,7 @@ oal_uint32 hmac_config_update_ip_filter_tx_adapt(frw_event_mem_stru *pst_event_m
 
 oal_uint32 hmac_scan_proc_sched_scan_req_event_tx_adapt(frw_event_mem_stru *pst_event_mem)
 {
-    mac_pno_scan_stru *pst_h2d_pno_scan_req_params; /* 下发PNO调度扫描请求 */
+    mac_pno_scan_stru *pst_h2d_pno_scan_req_params; /* ????PNO???????????? */
 
     if (OAL_UNLIKELY(OAL_PTR_NULL == pst_event_mem)) {
         return OAL_ERR_CODE_PTR_NULL;
@@ -1131,7 +1131,7 @@ oal_int32 hmac_rx_wifi_post_action_function(oal_uint8 stype,
 
     if (OAL_UNLIKELY(MAC_VAP_VAILD != pst_hmac_vap->st_vap_base_info.uc_init_flag)) {
         if (0 == pst_extend_hdr->vap_id) {
-            /* 配置VAP不过滤 */
+            /* ????VAP?????? */
         } else {
             OAM_WARNING_LOG2(pst_extend_hdr->vap_id, OAM_SF_ANY, "hmac rx adapt ignored,main:%u,sub:%u", pst_extend_hdr->en_nest_type, pst_extend_hdr->uc_nest_sub_type);
             frw_event_task_unlock();
@@ -1172,14 +1172,14 @@ oal_int32 hmac_rx_wifi_post_action_function(oal_uint8 stype,
     pst_rx_ctl = (mac_rx_ctl_cut_stru *)puc_hcc_extend_hdr;
 
     if (!(pst_rx_ctl->bit_is_beacon)) {
-        pm_wifi_rxtx_count++;  // 收包统计 for pm
+        pm_wifi_rxtx_count++;  // ???????? for pm
     }
 
 #ifdef _PRE_WLAN_WAKEUP_SRC_PARSE
     if ((OAL_TRUE == wlan_pm_wkup_src_debug_get()) && ((FRW_EVENT_TYPE_WLAN_DRX != pst_extend_hdr->en_nest_type))) {
         OAL_IO_PRINT("wifi_wake_src:event[%d],subtype[%d]!\n", pst_extend_hdr->en_nest_type, pst_extend_hdr->uc_nest_sub_type);
 
-        /* 管理帧事件，开关在管理帧处理流程中打印具体的管理帧类型后关闭 */
+        /* ???????????????????????????????????????????????????????????? */
         if (!((FRW_EVENT_TYPE_WLAN_CRX == pst_extend_hdr->en_nest_type) && (DMAC_WLAN_CRX_EVENT_SUB_TYPE_RX == pst_extend_hdr->uc_nest_sub_type))) {
             wlan_pm_wkup_src_debug_set(OAL_FALSE);
         }
@@ -1189,7 +1189,7 @@ oal_int32 hmac_rx_wifi_post_action_function(oal_uint8 stype,
     ret = (oal_int32)frw_event_dispatch_event(pst_event_mem);
     frw_event_task_unlock();
     if (OAL_WARN_ON(OAL_SUCC != ret)) {
-        /* 如果事件入队失败，内存失败由该函数释放，直接调用的由rx adapt函数释放! */
+        /* ????????????????????????????????????????????????????rx adapt????????! */
         OAL_IO_PRINT("[WARN]hcc rx post event failed!!!ret=%u,main:%d,sub:%d\n",
                      ret,
                      pst_extend_hdr->en_nest_type,
@@ -1213,7 +1213,7 @@ oal_int32 hmac_hcc_adapt_init(oal_void)
 }
 oal_int32 hmac_hcc_adapt_deinit(oal_void)
 {
-    // TODO:  1102A host共平台适配
+    // TODO:  1102A host??????????
     hcc_rx_unregister(hcc_get_110x_handler(), HCC_ACTION_TYPE_WIFI);
 #ifdef _PRE_CONFIG_HISI_PANIC_DUMP_SUPPORT
     hwifi_panic_log_unregister(&hmac_panic_hcc_adapt);

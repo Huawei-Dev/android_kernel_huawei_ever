@@ -3,11 +3,11 @@
 #ifndef __PLATFORM_ONEIMAGE_DEFINE_H__
 #define __PLATFORM_ONEIMAGE_DEFINE_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_PLATFORM_ONEIMAGE_DEFINE_H
 
-/* 宏定义 */
+/* ?????? */
 #define oam_report_80211_frame                       oam_report_80211_frame_etc2
 #define uart_wifi_open                               uart_wifi_open_etc2
 #define oal_cfg80211_sched_scan_result               oal_cfg80211_sched_scan_result_etc2

@@ -49,7 +49,7 @@
 #define  MN_CALL_API_H
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "vos.h"
 #include "TafTypeDef.h"
@@ -68,9 +68,9 @@ extern "C" {
 #pragma pack(4)
 
 /*****************************************************************************
-  2 常量定义
+  2 ????????
 *****************************************************************************/
-/* 可选项是否存在的标志 */
+/* ???????????????????? */
 #define MN_CALL_OPTION_EXIST            (1)
 #define MN_CALL_OPTION_NOT_EXIST        (0)
 
@@ -80,26 +80,26 @@ extern "C" {
 #define MN_CALL_ECC_NUM_INVALID_CATEGORY  (0)
 
 #define MN_CALL_RPT_CFG_MAX_SIZE        (8)
-#define     MN_CALL_NET_RAT_TYPE_WCDMA      (0)           /* 当前驻留为W */
-#define     MN_CALL_NET_RAT_TYPE_GSM        (1)           /* 当前驻留为G */
-#define     MN_CALL_NET_RAT_TYPE_LTE        (2)           /* 当前驻留模为L */
+#define     MN_CALL_NET_RAT_TYPE_WCDMA      (0)           /* ??????????W */
+#define     MN_CALL_NET_RAT_TYPE_GSM        (1)           /* ??????????G */
+#define     MN_CALL_NET_RAT_TYPE_LTE        (2)           /* ????????????L */
 
-#define TAF_CALL_DTMF_MIN_ONLENGTH              (65)                            /* DTMF音最小时长 */
-#define TAF_CALL_DTMF_DEFAULT_ONLENGTH          (60000)                         /* 默认DTMF音时长60s */
+#define TAF_CALL_DTMF_MIN_ONLENGTH              (65)                            /* DTMF?????????? */
+#define TAF_CALL_DTMF_DEFAULT_ONLENGTH          (60000)                         /* ????DTMF??????60s */
 
-#define TAF_CALL_DTMF_DEFAULT_OFFLENGTH          (75)                           /* stop dtmf ack和start dtmf req之间时间间隔大于70毫秒小于600毫秒,默认75毫秒 */
+#define TAF_CALL_DTMF_DEFAULT_OFFLENGTH          (75)                           /* stop dtmf ack??start dtmf req????????????????70????????600????,????75???? */
 
-#define TAF_CALL_MAX_BC_NUM                             (2)                     /* 最大BC个数 */
-#define TAF_CALL_MIN_BC_NUM                             (1)                     /* 最小BC个数 */
+#define TAF_CALL_MAX_BC_NUM                             (2)                     /* ????BC???? */
+#define TAF_CALL_MIN_BC_NUM                             (1)                     /* ????BC???? */
 
 #if (FEATURE_ON == FEATURE_ECALL)
 #define  TAF_ECALL_REDIAL_PERIOD_TIMER_LENGTH           (120000)                /* 120s */
 #define  TAF_ECALL_REDIAL_INTERVAL_TIMER_LENGTH         (5000)                  /* 5s */
-#define  TAF_CALL_T2_TIMER_LENGTH                       (3600000)               /* 时长为1小时 */
-/* T9定时器时长可配置，默认配置为1小时，可配置时长范围: 1 hour<= T9 <= 12 hours */
+#define  TAF_CALL_T2_TIMER_LENGTH                       (3600000)               /* ??????1???? */
+/* T9????????????????????????????1????????????????????: 1 hour<= T9 <= 12 hours */
 #define  TAF_CALL_ONE_HOUR_TIMER_LENGTH                 (3600000)
-#define  TAF_CALL_T9_MIN_TIMER_LENGTH                   (1)                     /* T9最小时长为1小时 */
-#define  TAF_CALL_T9_MAX_TIMER_LENGTH                   (12)                    /* T9最大时长为12消息 */
+#define  TAF_CALL_T9_MIN_TIMER_LENGTH                   (1)                     /* T9??????????1???? */
+#define  TAF_CALL_T9_MAX_TIMER_LENGTH                   (12)                    /* T9??????????12???? */
 #endif
 
 #define TAF_CALL_MAX_NUM_DIGIT_LEN                          (64)
@@ -148,18 +148,18 @@ extern "C" {
         (pSendMsg)->ulReceiverCpuId = VOS_LOCAL_CPUID; \
         (pSendMsg)->ulReceiverPid   = RecvPid;
 
-#define TAF_CALL_CNAP_NAME_STR_MAX_LENGTH                   (161)               /* CNAP主叫名称字段最大长度 */
+#define TAF_CALL_CNAP_NAME_STR_MAX_LENGTH                   (161)               /* CNAP???????????????????? */
 
 #define TAF_APDS_CALL_PULL_DIALOG_ID                        (255)
 
 /*****************************************************************************
-  3类型定义
+  3????????
 *****************************************************************************/
 
 
 /*****************************************************************************
- 枚举名    : NAS_CC_STATE_INFO_STRU
- 结构说明  : CC内部状态结构
+ ??????    : NAS_CC_STATE_INFO_STRU
+ ????????  : CC????????????
 *****************************************************************************/
 enum NAS_CC_CALL_STATE_ENUM                                                     /* Call state value (octet 2)               */
 {                                                                               /* Bits 6 5 4 3 2 1                         */
@@ -242,9 +242,9 @@ typedef VOS_UINT8   NAS_CC_MPTY_AUX_STATE_ENUM_U8;
 
 enum NAS_CC_CALL_TYPE
 {
-    NAS_CC_CALL_TYPE_MO_NORMAL_CALL,                    /* 主叫正常呼 */
-    NAS_CC_CALL_TYPE_EMERGENCY_CALL,                    /* 主叫紧急呼 */
-    NAS_CC_CALL_TYPE_MT_NORMAL_CALL,                    /* 被叫普通呼 */
+    NAS_CC_CALL_TYPE_MO_NORMAL_CALL,                    /* ?????????? */
+    NAS_CC_CALL_TYPE_EMERGENCY_CALL,                    /* ?????????? */
+    NAS_CC_CALL_TYPE_MT_NORMAL_CALL,                    /* ?????????? */
     NAS_CC_CALL_TYPE_BUTT
 };
 typedef VOS_UINT8  NAS_CC_CALL_TYPE_ENUM_U8;
@@ -256,26 +256,26 @@ typedef VOS_UINT8  NAS_CC_CALL_TYPE_ENUM_U8;
 
 typedef struct
 {
-    VOS_UINT8                           ucCallId;           /* 呼叫ID */
-    VOS_UINT8                           ucTi;               /* 事务ID */
-    NAS_CC_CALL_STATE_ENUM_U8           enCallState;        /* 呼叫协议状态 */
-    NAS_CC_HOLD_AUX_STATE_ENUM_U8       enHoldAuxState;     /* 呼叫保持辅助状态 */
-    NAS_CC_MPTY_AUX_STATE_ENUM_U8       enMptyAuxState;     /* 多方呼叫辅助状态 */
+    VOS_UINT8                           ucCallId;           /* ????ID */
+    VOS_UINT8                           ucTi;               /* ????ID */
+    NAS_CC_CALL_STATE_ENUM_U8           enCallState;        /* ???????????? */
+    NAS_CC_HOLD_AUX_STATE_ENUM_U8       enHoldAuxState;     /* ???????????????? */
+    NAS_CC_MPTY_AUX_STATE_ENUM_U8       enMptyAuxState;     /* ???????????????? */
     VOS_UINT8                           aucReserve1[3];
 } NAS_CC_STATE_INFO_STRU;
 
 /*****************************************************************************
- 枚举名    : AT_CC_STATE_QRY_CNF_STRU
- 结构说明  : CC回复AT状态查询回复接口
+ ??????    : AT_CC_STATE_QRY_CNF_STRU
+ ????????  : CC????AT????????????????
 *****************************************************************************/
 typedef struct
 {
     VOS_MSG_HEADER
-    VOS_UINT32                          ulMsgName;                              /* 消息名 */
+    VOS_UINT32                          ulMsgName;                              /* ?????? */
     AT_APPCTRL_STRU                     stAtAppCtrl;
-    VOS_UINT8                           ucCallNum;                              /* 呼叫个数 */
+    VOS_UINT8                           ucCallNum;                              /* ???????? */
     VOS_UINT8                           aucCallExist[MN_CALL_MAX_NUM];
-    NAS_CC_STATE_INFO_STRU              astCcStateInfoList[MN_CALL_MAX_NUM];                          /* 消息内容 */
+    NAS_CC_STATE_INFO_STRU              astCcStateInfoList[MN_CALL_MAX_NUM];                          /* ???????? */
 } AT_CC_STATE_QRY_CNF_MSG_STRU;
 
 
@@ -284,7 +284,7 @@ typedef struct
 enum TAF_CALL_SUB_STATE_ENUM
 {
     TAF_CALL_SUB_STATE_NULL,
-    TAF_CALL_SUB_STATE_INCOMING_WAIT_CONNECT_ACK,                                    /* ata接听后上报ok，等网络connect ack子状态*/
+    TAF_CALL_SUB_STATE_INCOMING_WAIT_CONNECT_ACK,                                    /* ata??????????ok????????connect ack??????*/
     TAF_CALL_SUB_STATE_DISCONNECT_WAIT_EVT_REL,
     TAF_CALL_SUB_STATE_BUTT
 };
@@ -359,7 +359,7 @@ typedef struct
 } TAF_ECC_CALL_BCD_NUM_STRU;
 
 
-/* 设置CSSN的类型,激活或去激活 */
+/* ????CSSN??????,???????????? */
 enum MN_CALL_SET_CSSN_TYPE_ENUM
 {
     MN_CALL_SET_CSSN_DEACT,
@@ -377,7 +377,7 @@ enum MN_CALL_CUUS1_FLG_ENUM
 typedef VOS_UINT32 MN_CALL_CUUS1_FLG_ENUM_U32;
 
 
-/* 设置UUS1的类型,激活或去激活 */
+/* ????UUS1??????,???????????? */
 enum MN_CALL_SET_UUS1_TYPE_ENUM
 {
     MN_CALL_SET_UUS1_ACT,
@@ -386,8 +386,8 @@ enum MN_CALL_SET_UUS1_TYPE_ENUM
 };
 typedef VOS_UINT32 MN_CALL_SET_UUS1_TYPE_ENUM_U32;
 
-/* 设置或上报UUS1的消息类型,包含下列几种消息,如果设置ANY,则默认为
-设置SETUP,PROGRESS消息只能上报,不能设置 */
+/* ??????????UUS1??????????,????????????????,????????ANY,????????
+????SETUP,PROGRESS????????????,???????? */
 enum MN_CALL_UUS1_MSG_TYPE_ENUM
 {
     MN_CALL_UUS1_MSG_ANY,
@@ -419,7 +419,7 @@ element has a maximum size of 131 octets in a GSM PLMN.*/
 #define MN_CALL_MIN_UUIE_CONTEND_LEN            (1)
 #define MN_CALL_UUIE_HEADER_LEN                 (2)
 
-/* 此处的UUIE内容是协议中规定的UUIE内容,具体内容如下 */
+/* ??????UUIE??????????????????UUIE????,???????????? */
 /********************************************************
   |  8 |  7  | 6 |  5 |  4 |  3 |  2 |  1   |
   |    |     User-user IEI                  | octet 1
@@ -457,21 +457,21 @@ enum MN_CALL_EVENT_ENUM
     MN_CALL_EVT_SS_NOTIFY           = 0x08,                                     /* SS Notify */
     MN_CALL_EVT_START_DTMF_CNF      = 0x09,                                     /* Start DTMF tempooralily response */
     MN_CALL_EVT_STOP_DTMF_CNF       = 0x0b,                                     /* Stop DTMF tempooralily response */
-    MN_CALL_EVT_CCBS_POSSIBLE       = 0x0d,                                     /* 可以激活CCBS*/
-    MN_CALL_EVT_TIME_EXPIRED        = 0x0e,                                     /*超时*/
-    MN_CALL_EVT_UUS1_INFO           = 0x0f,                                     /* UUS1信息上报 */
-    MN_CALL_EVT_GET_CDUR_CNF        = 0x10,                                     /* 通话时长 */
-    MN_CALL_EVT_CLCC_INFO           = 0x11,                                     /* 当前所有呼叫的信息 */
+    MN_CALL_EVT_CCBS_POSSIBLE       = 0x0d,                                     /* ????????CCBS*/
+    MN_CALL_EVT_TIME_EXPIRED        = 0x0e,                                     /*????*/
+    MN_CALL_EVT_UUS1_INFO           = 0x0f,                                     /* UUS1???????? */
+    MN_CALL_EVT_GET_CDUR_CNF        = 0x10,                                     /* ???????? */
+    MN_CALL_EVT_CLCC_INFO           = 0x11,                                     /* ?????????????????? */
     MN_CALL_EVT_ALL_RELEASED        = 0x12,                                     /* Call All Released */
-    MN_CALL_EVT_SET_UUS1_INFO_CNF   = 0x13,                                     /* 设置用户服务信令1信息 */
-    MN_CALL_EVT_QRY_UUS1_INFO_CNF   = 0x14,                                     /* 查询用户服务信令1信息 */
-    MN_CALL_EVT_SET_ALS_CNF         = 0x15,                                     /* 设置当前线路号 */
-    MN_CALL_EVT_QRY_ALS_CNF         = 0x16,                                     /* 查询当前线路号 */
+    MN_CALL_EVT_SET_UUS1_INFO_CNF   = 0x13,                                     /* ????????????????1???? */
+    MN_CALL_EVT_QRY_UUS1_INFO_CNF   = 0x14,                                     /* ????????????????1???? */
+    MN_CALL_EVT_SET_ALS_CNF         = 0x15,                                     /* ?????????????? */
+    MN_CALL_EVT_QRY_ALS_CNF         = 0x16,                                     /* ?????????????? */
 
     MN_CALL_EVT_ECC_NUM_IND         = 0x17,
 
-    MN_CALL_EVT_HOLD                = 0x18,                                     /* Call Hold 呼叫保持 */
-    MN_CALL_EVT_RETRIEVE            = 0x19,                                     /* Call Retrieve 呼叫恢复 */
+    MN_CALL_EVT_HOLD                = 0x18,                                     /* Call Hold ???????? */
+    MN_CALL_EVT_RETRIEVE            = 0x19,                                     /* Call Retrieve ???????? */
 
     MN_CALL_EVT_CLPR_SET_CNF        = 0x1a,
 
@@ -503,7 +503,7 @@ enum MN_CALL_EVENT_ENUM
     TAF_CALL_EVT_LINE_CTRL_INFO_IND,                        /* _H2ASN_MsgChoice TAF_CALL_EVT_LINE_CTRL_INFO_IND_STRU */
     TAF_CALL_EVT_CALL_WAITING_IND,                          /* _H2ASN_MsgChoice TAF_CALL_EVT_CALL_WAITING_IND_STRU */
     TAF_CALL_EVT_ECONF_DIAL_CNF,
-    TAF_CALL_EVT_ECONF_NOTIFY_IND,                               /* imsa通知SPM模块增强型多方通话参与者的状态发送变化  */
+    TAF_CALL_EVT_ECONF_NOTIFY_IND,                               /* imsa????SPM??????????????????????????????????????  */
     TAF_CALL_EVT_CLCCECONF_INFO,
 
     TAF_CALL_EVT_SEND_BURST_DTMF_CNF,                            /* _H2ASN_MsgChoice TAF_CALL_EVT_SEND_BURST_DTMF_CNF_STRU */
@@ -536,7 +536,7 @@ enum MN_CALL_TYPE_OF_SUBADDR_ENUM                                               
 };                                                  /* All other values are reserved     */
 typedef VOS_UINT8   MN_CALL_TYPE_OF_SUBADDR_ENUM_UINT8;
 
-/* 移枚举定义到tafAppCall.h文件中 */
+/* ????????????tafAppCall.h?????? */
 
 enum TAF_CALL_DIGIT_MODE_ENUM
 {
@@ -612,9 +612,9 @@ typedef VOS_UINT8 TAF_CALL_DCS_ENUM_UINT8;
 
 enum TAF_CS_CALL_DIR_ENUM
 {
-    TAF_CS_CALL_DIR_NON           = 0,        /* 从CS域存在呼叫到CS域不存在呼叫时，呼叫方向使用该标志 */
-    TAF_CS_CALL_DIR_MO            = 1,        /* 从CS域不存在呼叫到CS域存在呼叫时，且第一通呼叫属于主叫时，使用该标志  */
-    TAF_CS_CALL_DIR_MT            = 2,        /* 从CS域不存在呼叫到CS域存在呼叫时，且第一通呼叫属于被叫时，使用该标志  */
+    TAF_CS_CALL_DIR_NON           = 0,        /* ??CS????????????CS?????????????????????????????????? */
+    TAF_CS_CALL_DIR_MO            = 1,        /* ??CS??????????????CS????????????????????????????????????????????????  */
+    TAF_CS_CALL_DIR_MT            = 2,        /* ??CS??????????????CS????????????????????????????????????????????????  */
     TAF_CS_CALL_DIR_BUTT
 };
 typedef VOS_UINT8  TAF_CS_CALL_DIR_ENUM_UINT8;
@@ -622,9 +622,9 @@ typedef VOS_UINT8  TAF_CS_CALL_DIR_ENUM_UINT8;
 
 typedef struct
 {
-    VOS_UINT8                           ucExistFlag;                            /* 网络是否携带CNAP信息标志 */
-    TAF_CALL_CNI_VALIDITY_ENUM_UINT8    enCniValidity;                          /* <CNI_Validity>参数 */
-    TAF_CALL_DCS_ENUM_UINT8             enDcs;                                  /* <name>参数的Data Coding Scheme */
+    VOS_UINT8                           ucExistFlag;                            /* ????????????CNAP???????? */
+    TAF_CALL_CNI_VALIDITY_ENUM_UINT8    enCniValidity;                          /* <CNI_Validity>???? */
+    TAF_CALL_DCS_ENUM_UINT8             enDcs;                                  /* <name>??????Data Coding Scheme */
     VOS_UINT8                           ucLength;
     VOS_UINT8                           aucNameStr[TAF_CALL_CNAP_NAME_STR_MAX_LENGTH];
     VOS_UINT8                           aucReserved[3];
@@ -678,8 +678,8 @@ typedef struct
     MN_CALL_NO_CLI_CAUSE_ENUM_U8        enNoCliCause;                           /* Cause of the NO CLI */
     MN_CALL_ALS_LINE_NO_ENUM_U8         enAlsLineNo;                            /* ALS Line number: 1 or 2,default is 1*/
 
-    VOS_UINT8                           ucAtaReportOkAsyncFlag;                 /* VOS_TRUE:ata异步上报ok，发送connect后即上报ok，不等网络connect ack；
-                                                                                   VOS_FALSE:ata同步上报，发送connect后等收到网络connect ack后再上报ok */
+    VOS_UINT8                           ucAtaReportOkAsyncFlag;                 /* VOS_TRUE:ata????????ok??????connect????????ok??????????connect ack??
+                                                                                   VOS_FALSE:ata??????????????connect????????????connect ack????????ok */
 
     TAF_CALL_VOICE_DOMAIN_ENUM_UINT8    enVoiceDomain;                          /* VOICE DOMAIN */
     MN_CALL_SS_NOTIFY_STRU              stSsNotify;                             /* SS Notify */
@@ -687,13 +687,13 @@ typedef struct
     TAF_SS_CCBS_FEATURE_STRU            stCcbsFeature;                          /* CCBS feature info*/
     MN_CALL_UUS1_INFO_STRU              stUusInfo;
     VOS_UINT32                          ulCurCallTime;
-    VOS_UINT32                          ulTotalCallTime;                        /*累计通话时间*/
-    VOS_UINT32                          ulPreCallTime;                          /*上次通话时间*/
-    MN_CALL_DISC_DIR                    stDiscDir;                              /* 挂断电话的方向 */
-    VOS_UINT8                           aucCurcRptCfg[MN_CALL_RPT_CFG_MAX_SIZE];        /* CURC设置的主动上报标识 */
-    VOS_UINT8                           aucUnsolicitedRptCfg[MN_CALL_RPT_CFG_MAX_SIZE]; /* 单个命令设置的主动上报标识 */
-    VOS_UINT8                           ucEncryptFlag;                          /* 加密标记 */
-    VOS_UINT8                           ucSrvccSuccFlg;                         /* 记录本次通话是否是通过SRVCC过来的 */
+    VOS_UINT32                          ulTotalCallTime;                        /*????????????*/
+    VOS_UINT32                          ulPreCallTime;                          /*????????????*/
+    MN_CALL_DISC_DIR                    stDiscDir;                              /* ?????????????? */
+    VOS_UINT8                           aucCurcRptCfg[MN_CALL_RPT_CFG_MAX_SIZE];        /* CURC?????????????????? */
+    VOS_UINT8                           aucUnsolicitedRptCfg[MN_CALL_RPT_CFG_MAX_SIZE]; /* ?????????????????????????? */
+    VOS_UINT8                           ucEncryptFlag;                          /* ???????? */
+    VOS_UINT8                           ucSrvccSuccFlg;                         /* ??????????????????????SRVCC?????? */
     MN_CALL_CF_CAUSE_ENUM_UINT8         enCallForwardCause;
     MN_CALL_HOLD_TONE_ENUM_UINT8        enHoldToneType;
 
@@ -706,8 +706,8 @@ typedef struct
 
     TAF_CALL_CNAP_STRU                  stNameIndicator;                        /* Name Indicator */
 
-    TAF_CALL_ERROR_INFO_TEXT_STRU       stErrInfoText;                          /* 异常信息文本 */
-    VOS_UINT8                           ucStartHifiFlag;                        /* IMSA指示是否开启HIFI的标识 */
+    TAF_CALL_ERROR_INFO_TEXT_STRU       stErrInfoText;                          /* ???????????? */
+    VOS_UINT8                           ucStartHifiFlag;                        /* IMSA????????????HIFI?????? */
     TAF_CALL_SERVICE_TYPE_ENUM_UINT8    enServiceType;
     VOS_UINT8                           ucEconfFlag;
     VOS_UINT8                           aucReserved[1];
@@ -721,7 +721,7 @@ typedef struct
     MN_CALL_TYPE_ENUM_U8                enCallType;                             /* Call Type */
     MN_CALL_CLIR_CFG_ENUM_U8            enClirCfg;                              /* CLIR Configuration */
     MN_CALL_MODE_ENUM_U8                enCallMode;                             /* Call Mode */
-    VOS_UINT8                           ucCsCallRetryFlg;                       /* false: 紧急呼cs域尝试过或者cs域不可用 true: CS域没尝试过，且cs域可用*/
+    VOS_UINT8                           ucCsCallRetryFlg;                       /* false: ??????cs????????????cs???????? true: CS??????????????cs??????*/
     MN_CALL_CALLED_NUM_STRU             stDialNumber;                           /* Call Number */
     MN_CALL_CUG_CFG_STRU                stCugCfg;                               /* CUG Configuration */
     MN_CALL_CS_DATA_CFG_STRU            stDataCfg;                              /* Data Configuration */
@@ -729,22 +729,22 @@ typedef struct
 
     MN_CALL_EMERGENCY_CAT_STRU          stEmergencyCat;                         /* Emergency Catory */
 
-    VOS_UINT8                           ucImsInvitePtptFlag;                    /* IMS 邀请第三方通话标记 */
+    VOS_UINT8                           ucImsInvitePtptFlag;                    /* IMS ?????????????????? */
 
     TAF_CALL_VOICE_DOMAIN_ENUM_UINT8    enVoiceDomain;                          /* VOICE DOMAIN */
 
-    VOS_UINT8                           ucEncryptFlag;                          /* 加密标记 */
+    VOS_UINT8                           ucEncryptFlag;                          /* ???????? */
 
-    VOS_UINT8                           ucDomainRedialFlag;                     /* 当前域呼叫失败后到其他域尝试标记 */
-    VOS_UINT8                           ucHangupImsCallInCsRedialFlg;                   /* ucDomainRedialFlag为true，IMS普通呼叫收到380时，是否要挂断当前域的其他普通呼叫标志 */
+    VOS_UINT8                           ucDomainRedialFlag;                     /* ???????????????????????????????? */
+    VOS_UINT8                           ucHangupImsCallInCsRedialFlg;                   /* ucDomainRedialFlag??true??IMS????????????380?????????????????????????????????????? */
 
     TAF_CALL_EMC_DOMAIN_ENUM_UINT8      enEmcDomain;
 
-    TAF_CALL_SERVICE_TYPE_ENUM_UINT8    enServiceType;                          /* 业务类型 */
+    TAF_CALL_SERVICE_TYPE_ENUM_UINT8    enServiceType;                          /* ???????? */
 
-    VOS_UINT8                           ucRttFlg;                               /*是否发起RTT呼叫，0:非RTT呼叫 */
-    VOS_UINT8                           ucCallPullFlg;                          /*1:拉取另一路呼叫，0:非拉取另一路呼叫 */
-    VOS_UINT8                           ucCallPullDialogId;                     /* 0-254:拉取另一路呼叫,ucCallPullFlg=1; 255:非拉取另一路呼叫,ucCallPullFlg=0  */
+    VOS_UINT8                           ucRttFlg;                               /*????????RTT??????0:??RTT???? */
+    VOS_UINT8                           ucCallPullFlg;                          /*1:????????????????0:???????????????? */
+    VOS_UINT8                           ucCallPullDialogId;                     /* 0-254:??????????????,ucCallPullFlg=1; 255:????????????????,ucCallPullFlg=0  */
     VOS_UINT8                           aucReserved[2];
 } MN_CALL_ORIG_PARAM_STRU;
 
@@ -765,27 +765,27 @@ typedef struct
 {
     MN_CALL_SUPS_CMD_ENUM_U8            enCallSupsCmd;                          /* Call Management Command */
     MN_CALL_ID_T                        callId;                                 /* Call ID */
-    MN_CALL_TYPE_ENUM_U8                enCallType;                             /* 仅针对接听的那路呼叫才有意义 */
-    TAF_CALL_REJ_CAUSE_ENUM_UINT8       enCallRejCause;                         /* 命令类型为MN_CALL_SUPS_CMD_REL_INCOMING_OR_WAITING时，此IE项有效 */
+    MN_CALL_TYPE_ENUM_U8                enCallType;                             /* ???????????????????????????? */
+    TAF_CALL_REJ_CAUSE_ENUM_UINT8       enCallRejCause;                         /* ??????????MN_CALL_SUPS_CMD_REL_INCOMING_OR_WAITING??????IE?????? */
     MN_CALL_BCD_NUM_STRU                stRedirectNum;                          /* Redirect Number */
-    MN_CALL_CALLED_NUM_STRU             stRemoveNum;                            /* 增强型会议中需要移除的与会者号码 */
-    VOS_UINT8                           ucRttFlg;                               /* 0: 非RTT通话, 1: RTT通话 */
-    VOS_UINT8                           aucReserved[3];                         /* 保留位 */
+    MN_CALL_CALLED_NUM_STRU             stRemoveNum;                            /* ???????????????????????????????? */
+    VOS_UINT8                           ucRttFlg;                               /* 0: ??RTT????, 1: RTT???? */
+    VOS_UINT8                           aucReserved[3];                         /* ?????? */
 } MN_CALL_SUPS_PARAM_STRU;
 
 
 typedef struct
 {
-    VOS_UINT32                          ulActNum;                               /* 需要设置的CSSN的个数 */
-    MN_CALL_SET_CSSN_TYPE_ENUM_U32      aenSetType[MN_CALL_MAX_CSSN_MSG_NUM];   /* aenSetType[0]:CSSI是否需要激活，enSetType[1]:CSSU是否需要激活 */
+    VOS_UINT32                          ulActNum;                               /* ??????????CSSN?????? */
+    MN_CALL_SET_CSSN_TYPE_ENUM_U32      aenSetType[MN_CALL_MAX_CSSN_MSG_NUM];   /* aenSetType[0]:CSSI??????????????enSetType[1]:CSSU???????????? */
 }MN_CALL_SET_CSSN_REQ_STRU;
 
 
 
 typedef struct
 {
-    MN_CALL_TYPE_ENUM_U8                enCurrCallType;                         /* 当前呼叫类型 */
-    MN_CALL_TYPE_ENUM_U8                enExpectCallType;                       /* 期望呼叫类型 */
+    MN_CALL_TYPE_ENUM_U8                enCurrCallType;                         /* ???????????? */
+    MN_CALL_TYPE_ENUM_U8                enExpectCallType;                       /* ???????????? */
     VOS_UINT8                           aucReserved[2];
 }MN_CALL_MODIFY_REQ_STRU;
 
@@ -794,74 +794,74 @@ typedef struct
 
 typedef struct
 {
-    MN_CALL_CUUS1_FLG_ENUM_U32          enCuus1IFlg;                            /* CUUS1I标志 */
-    MN_CALL_CUUS1_FLG_ENUM_U32          enCuus1UFlg;                            /* CUUS1U标志 */
-    VOS_UINT32                          ulActNum;                             /*需要设置的UUS1的个数*/
-    MN_CALL_SET_UUS1_TYPE_ENUM_U32      enSetType[MN_CALL_MAX_UUS1_MSG_NUM];  /*要设置的用户服务信令1类型*/
-    MN_CALL_UUS1_INFO_STRU              stUus1Info[MN_CALL_MAX_UUS1_MSG_NUM]; /*设置的用户服务信令信息*/
+    MN_CALL_CUUS1_FLG_ENUM_U32          enCuus1IFlg;                            /* CUUS1I???? */
+    MN_CALL_CUUS1_FLG_ENUM_U32          enCuus1UFlg;                            /* CUUS1U???? */
+    VOS_UINT32                          ulActNum;                             /*??????????UUS1??????*/
+    MN_CALL_SET_UUS1_TYPE_ENUM_U32      enSetType[MN_CALL_MAX_UUS1_MSG_NUM];  /*????????????????????1????*/
+    MN_CALL_UUS1_INFO_STRU              stUus1Info[MN_CALL_MAX_UUS1_MSG_NUM]; /*??????????????????????*/
 }MN_CALL_UUS1_PARAM_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32  enEvent;    /*回复的事件类型*/
-    MN_CLIENT_ID_T          ClientId;   /*端口号*/
-    MN_OPERATION_ID_T       OpId;       /*操作ID*/
-    VOS_UINT8               ucReserved; /* 保留字段 */
-    VOS_UINT32              ulRet;      /*回复结果*/
+    MN_CALL_EVENT_ENUM_U32  enEvent;    /*??????????????*/
+    MN_CLIENT_ID_T          ClientId;   /*??????*/
+    MN_OPERATION_ID_T       OpId;       /*????ID*/
+    VOS_UINT8               ucReserved; /* ???????? */
+    VOS_UINT32              ulRet;      /*????????*/
 }TAF_PH_SET_UUS1_INFO_CNF_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32  enEvent;                                /*回复的事件类型*/
-    MN_CLIENT_ID_T          ClientId;                               /*端口号*/
-    MN_OPERATION_ID_T       OpId;                                   /*操作ID*/
-    VOS_UINT8               ucReserved;                             /* 保留字段 */
-    VOS_UINT32              ulRet;                                  /*回复结果*/
-    VOS_UINT32              ulActNum;                               /*用户服务信令1的个数*/
-    MN_CALL_UUS1_INFO_STRU  stUus1Info[MN_CALL_MAX_UUS1_MSG_NUM];   /*用户服务信令1的信息*/
-    MN_CALL_SET_UUS1_TYPE_ENUM_U32      aenSetType[MN_CALL_MAX_UUS1_MSG_NUM];  /*要设置的用户服务信令1类型 */
+    MN_CALL_EVENT_ENUM_U32  enEvent;                                /*??????????????*/
+    MN_CLIENT_ID_T          ClientId;                               /*??????*/
+    MN_OPERATION_ID_T       OpId;                                   /*????ID*/
+    VOS_UINT8               ucReserved;                             /* ???????? */
+    VOS_UINT32              ulRet;                                  /*????????*/
+    VOS_UINT32              ulActNum;                               /*????????????1??????*/
+    MN_CALL_UUS1_INFO_STRU  stUus1Info[MN_CALL_MAX_UUS1_MSG_NUM];   /*????????????1??????*/
+    MN_CALL_SET_UUS1_TYPE_ENUM_U32      aenSetType[MN_CALL_MAX_UUS1_MSG_NUM];  /*????????????????????1???? */
 }TAF_PH_QRY_UUS1_INFO_CNF_STRU;
 
 
 typedef struct
 {
-    MN_CALL_ALS_LINE_NO_ENUM_U8         enAlsLine;          /*要使用的线路号*/
-    VOS_UINT8                           aucReserved[3];     /*保留字段*/
+    MN_CALL_ALS_LINE_NO_ENUM_U8         enAlsLine;          /*??????????????*/
+    VOS_UINT8                           aucReserved[3];     /*????????*/
 }MN_CALL_SET_ALS_PARAM_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32  enEvent;    /*回复的事件类型*/
-    MN_CLIENT_ID_T          ClientId;   /*端口号*/
-    MN_OPERATION_ID_T       OpId;       /*操作ID*/
-    VOS_UINT8               ucReserved; /* 保留字段 */
-    VOS_UINT32              ulRet;      /*回复结果*/
+    MN_CALL_EVENT_ENUM_U32  enEvent;    /*??????????????*/
+    MN_CLIENT_ID_T          ClientId;   /*??????*/
+    MN_OPERATION_ID_T       OpId;       /*????ID*/
+    VOS_UINT8               ucReserved; /* ???????? */
+    VOS_UINT32              ulRet;      /*????????*/
 }MN_CALL_SET_ALS_CNF_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32          enEvent;                                    /*回复的事件类型*/
-    MN_CLIENT_ID_T                  ClientId;                                   /*端口号*/
-    MN_OPERATION_ID_T               OpId;                                       /*操作ID*/
-    VOS_UINT8                       ucReserved1;                                /* 保留字段 */
-    VOS_UINT32                      ulRet;                                      /*回复结果*/
-    MN_CALL_ALS_LINE_NO_ENUM_U8     enAlsLine;                                  /*当前使用的线路号*/
-    VOS_UINT8                       aucReserved2[3];                            /* 保留字段 */
+    MN_CALL_EVENT_ENUM_U32          enEvent;                                    /*??????????????*/
+    MN_CLIENT_ID_T                  ClientId;                                   /*??????*/
+    MN_OPERATION_ID_T               OpId;                                       /*????ID*/
+    VOS_UINT8                       ucReserved1;                                /* ???????? */
+    VOS_UINT32                      ulRet;                                      /*????????*/
+    MN_CALL_ALS_LINE_NO_ENUM_U8     enAlsLine;                                  /*????????????????*/
+    VOS_UINT8                       aucReserved2[3];                            /* ???????? */
 }MN_CALL_QRY_ALS_CNF_STRU;
 
 
 
 typedef struct
 {
-    VOS_UINT8                           ucIndex;                                /* 定制紧急呼号码索引 */
-    VOS_UINT8                           ucTotal;                                /* 定制紧急呼号码总数 */
-    VOS_UINT8                           ucCategory;                             /* 紧急呼号码类型 */
-    VOS_UINT8                           ucSimPresent;                           /* 紧急呼号码是有卡时有效还是无卡时有效，1有卡时有效，0无卡时有效 */
-    MN_CALL_BCD_NUM_STRU                stEccNum;                               /* 紧急呼号码 */
+    VOS_UINT8                           ucIndex;                                /* ?????????????????? */
+    VOS_UINT8                           ucTotal;                                /* ?????????????????? */
+    VOS_UINT8                           ucCategory;                             /* ?????????????? */
+    VOS_UINT8                           ucSimPresent;                           /* ??????????????????????????????????????1????????????0?????????? */
+    MN_CALL_BCD_NUM_STRU                stEccNum;                               /* ?????????? */
     VOS_UINT32                          ulMcc;                                  /* MCC,3 bytes */
 } MN_CALL_ECC_LIST_INFO_STRU;
 
@@ -889,68 +889,68 @@ typedef struct
     TAF_CALL_PEER_VIDEO_SUPPORT_ENUM_UINT8  enPeerVideoSupport;
     TAF_CALL_IMS_DOMAIN_ENUM_UINT8      enImsDomain;
     VOS_UINT8                           ucReserved;
-    TAF_CALL_RTT_IND_ENUM_UINT8         enRtt;                                  /* 0:非RTT通话；1:RTT通话; 2:远端为TTY通话; 3: 远端不支持RTT  */
-    VOS_INT32                           lRttChannelId;                          /* 通话使用的channel ID，-1为无效值 */
-    VOS_UINT32                          ulCps;                                  /* RTT通话协商的cps值  */
+    TAF_CALL_RTT_IND_ENUM_UINT8         enRtt;                                  /* 0:??RTT??????1:RTT????; 2:??????TTY????; 3: ??????????RTT  */
+    VOS_INT32                           lRttChannelId;                          /* ??????????channel ID??-1???????? */
+    VOS_UINT32                          ulCps;                                  /* RTT??????????cps??  */
 }MN_CALL_INFO_PARAM_STRU;
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* 回复的事件类型 */
-    MN_CLIENT_ID_T                      usClientId;                             /* 端口号 */
-    MN_OPERATION_ID_T                   ucOpId;                                 /* 操作ID */
+    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* ?????????????? */
+    MN_CLIENT_ID_T                      usClientId;                             /* ?????? */
+    MN_OPERATION_ID_T                   ucOpId;                                 /* ????ID */
     MN_CALL_ID_T                        ucCallId;                               /* Call ID */
-    TAF_CS_CAUSE_ENUM_UINT32            enCause;                                /* 错误码 */
+    TAF_CS_CAUSE_ENUM_UINT32            enCause;                                /* ?????? */
 }TAF_CALL_ECONF_DIAL_CNF_STRU;
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32                                  enEvent;            /* 事件名 */
-    MN_CLIENT_ID_T                                          usClientId;         /* 用户ID */
+    MN_CALL_EVENT_ENUM_U32                                  enEvent;            /* ?????? */
+    MN_CLIENT_ID_T                                          usClientId;         /* ????ID */
     VOS_UINT8                                               ucNumOfMaxCalls;
-    VOS_UINT8                                               ucNumOfCalls;       /* 多方通话与会者个数 */
-    TAF_CALL_ECONF_INFO_PARAM_STRU                          astCallInfo[TAF_CALL_MAX_ECONF_CALLED_NUM];     /* 所用正在通话的信息 */
+    VOS_UINT8                                               ucNumOfCalls;       /* ?????????????????? */
+    TAF_CALL_ECONF_INFO_PARAM_STRU                          astCallInfo[TAF_CALL_MAX_ECONF_CALLED_NUM];     /* ?????????????????? */
 }TAF_CALL_ECONF_INFO_QRY_CNF_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32                          enEvent;                    /* 事件名 */
+    MN_CALL_EVENT_ENUM_U32                          enEvent;                    /* ?????? */
     MN_CLIENT_ID_T                                  usClientId;
-    MN_OPERATION_ID_T                               ucOpId;                     /* 操作ID */
-    VOS_UINT8                                       ucNumOfCalls;               /* 所有正在通话的个数 */
-    TAF_CALL_ECONF_INFO_PARAM_STRU                  astCallInfo[TAF_CALL_MAX_ECONF_CALLED_NUM];     /* 所用正在通话的信息 */
+    MN_OPERATION_ID_T                               ucOpId;                     /* ????ID */
+    VOS_UINT8                                       ucNumOfCalls;               /* ?????????????????? */
+    TAF_CALL_ECONF_INFO_PARAM_STRU                  astCallInfo[TAF_CALL_MAX_ECONF_CALLED_NUM];     /* ?????????????????? */
 } TAF_CALL_EVT_ECONF_NOTIFY_IND_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* 事件名 */
-    MN_CLIENT_ID_T                      clientId;                               /* 用户ID */
-    VOS_UINT8                           ucNumOfCalls;                           /* 所有正在通话的个数 */
-    VOS_CHAR                            ucReserved;                             /* 保留字段 */
-    MN_CALL_INFO_PARAM_STRU             astCallInfos[MN_CALL_MAX_NUM];           /* 所用正在通话的信息 */
+    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* ?????? */
+    MN_CLIENT_ID_T                      clientId;                               /* ????ID */
+    VOS_UINT8                           ucNumOfCalls;                           /* ?????????????????? */
+    VOS_CHAR                            ucReserved;                             /* ???????? */
+    MN_CALL_INFO_PARAM_STRU             astCallInfos[MN_CALL_MAX_NUM];           /* ?????????????????? */
 } MN_CALL_INFO_QRY_CNF_STRU;
 
 
 typedef struct
 {
-    VOS_UINT8                           ucIndex;                                /* 定制紧急呼号码索引 */
-    VOS_UINT8                           ucTotal;                                /* 定制紧急呼号码总数 */
-    VOS_UINT8                           ucCategory;                             /* 紧急呼号码类型 */
-    VOS_UINT8                           ucSimPresent;                           /* 紧急呼号码是有卡时有效还是无卡时有效，1有卡时有效，0无卡时有效 */
+    VOS_UINT8                           ucIndex;                                /* ?????????????????? */
+    VOS_UINT8                           ucTotal;                                /* ?????????????????? */
+    VOS_UINT8                           ucCategory;                             /* ?????????????? */
+    VOS_UINT8                           ucSimPresent;                           /* ??????????????????????????????????????1????????????0?????????? */
     VOS_UINT32                          ulMcc;                                  /* MCC,3 bytes */
-    MN_CALL_BCD_NUM_STRU                stEccNum;                               /* 紧急呼号码 */
-    VOS_UINT8                           ucAbnormalServiceFlg;                   /* 紧急呼号码有卡时是否仅在非正常服务时有效，0:任何服务时均有效，1:仅非正常服务时有效 */
+    MN_CALL_BCD_NUM_STRU                stEccNum;                               /* ?????????? */
+    VOS_UINT8                           ucAbnormalServiceFlg;                   /* ??????????????????????????????????????????0:??????????????????1:?????????????????? */
     VOS_UINT8                           aucReserved[3];
 }MN_CALL_APP_CUSTOM_ECC_NUM_REQ_STRU;
 
 
 typedef struct
 {
-    VOS_UINT8                           ucCategory;                             /* 紧急呼号码类型 */
-    VOS_UINT8                           ucValidSimPresent;                      /* 紧急呼号码是有卡时有效还是无卡时有效，1有卡时有效，0无卡时有效 */
-    VOS_UINT8                           ucAbnormalServiceFlg;                   /* 紧急呼号码有卡时是否仅在非正常服务时有效，0:任何服务时均有效，1:仅非正常服务时有效 */
+    VOS_UINT8                           ucCategory;                             /* ?????????????? */
+    VOS_UINT8                           ucValidSimPresent;                      /* ??????????????????????????????????????1????????????0?????????? */
+    VOS_UINT8                           ucAbnormalServiceFlg;                   /* ??????????????????????????????????????????0:??????????????????1:?????????????????? */
     VOS_UINT8                           ucEccNumLen;
     VOS_UINT8                           aucEccNum[MN_CALL_MAX_BCD_NUM_LEN];
     VOS_UINT32                          ulMcc;                                  /* MCC,3 bytes */
@@ -959,7 +959,7 @@ typedef struct
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* 事件名 */
+    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* ?????? */
     MN_CLIENT_ID_T                      usClientId;
     VOS_UINT8                           aucReserve[2];
     VOS_UINT32                          ulEccNumCount;
@@ -1055,8 +1055,8 @@ typedef union
     MN_CALL_ANS_PARAM_STRU              stAns;
     TAF_CALL_DTMF_PARAM_STRU            stDtmf;
     MN_CALL_SUPS_PARAM_STRU             stCallMgmtCmd;
-    MN_CALL_UUS1_PARAM_STRU             stUus1Info;   /* 设置UUS1信息结构 */
-    MN_CALL_SET_ALS_PARAM_STRU          stSetAls;     /* 设置ALS NO结构   */
+    MN_CALL_UUS1_PARAM_STRU             stUus1Info;   /* ????UUS1???????? */
+    MN_CALL_SET_ALS_PARAM_STRU          stSetAls;     /* ????ALS NO????   */
 
     MN_CALL_APP_CUSTOM_ECC_NUM_REQ_STRU stEccNumReq;
 
@@ -1070,7 +1070,7 @@ typedef union
 
 } MN_CALL_APP_REQ_PARM_UNION;
 
-/* 应用请求消息的结构 */
+/* ?????????????????? */
 typedef struct
 {
     VOS_MSG_HEADER
@@ -1084,34 +1084,34 @@ typedef struct
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* 事件名 */
+    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* ?????? */
     MN_CLIENT_ID_T                      usClientId;
     TAF_CALL_VOICE_DOMAIN_ENUM_UINT8    enVoiceDomain;                          /* VOICE DOMAIN */
     VOS_UINT8                           aucReserve[1];
     VOS_UINT8                           ucCallNum;
     VOS_UINT8                           aucCallId[MN_CALL_MAX_NUM];
-    VOS_UINT8                           aucCurcRptCfg[MN_CALL_RPT_CFG_MAX_SIZE];        /* CURC设置的主动上报标识 */
-    VOS_UINT8                           aucUnsolicitedRptCfg[MN_CALL_RPT_CFG_MAX_SIZE]; /* 单个命令设置的主动上报标识 */
+    VOS_UINT8                           aucCurcRptCfg[MN_CALL_RPT_CFG_MAX_SIZE];        /* CURC?????????????????? */
+    VOS_UINT8                           aucUnsolicitedRptCfg[MN_CALL_RPT_CFG_MAX_SIZE]; /* ?????????????????????????? */
 } MN_CALL_EVT_HOLD_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* 事件名 */
+    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* ?????? */
     MN_CLIENT_ID_T                      usClientId;
     TAF_CALL_VOICE_DOMAIN_ENUM_UINT8    enVoiceDomain;                          /* VOICE DOMAIN */
     VOS_UINT8                           aucReserve[1];
     VOS_UINT8                           ucCallNum;
     VOS_UINT8                           aucCallId[MN_CALL_MAX_NUM];
-    VOS_UINT8                           aucCurcRptCfg[MN_CALL_RPT_CFG_MAX_SIZE];        /* CURC设置的主动上报标识 */
-    VOS_UINT8                           aucUnsolicitedRptCfg[MN_CALL_RPT_CFG_MAX_SIZE]; /* 单个命令设置的主动上报标识 */
+    VOS_UINT8                           aucCurcRptCfg[MN_CALL_RPT_CFG_MAX_SIZE];        /* CURC?????????????????? */
+    VOS_UINT8                           aucUnsolicitedRptCfg[MN_CALL_RPT_CFG_MAX_SIZE]; /* ?????????????????????????? */
 } MN_CALL_EVT_RETRIEVE_STRU;
 
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;                                /*回复的事件类型*/
+    MN_CALL_EVENT_ENUM_U32              enEvent;                                /*??????????????*/
     VOS_UINT32                          ulRet;
     AT_APPCTRL_STRU                     stAppCtrl;
     MN_CALL_CLPR_INFO_STRU              stClprInfo;
@@ -1121,28 +1121,28 @@ typedef struct
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEventId;          /* 事件类型   */
+    MN_CALL_EVENT_ENUM_U32              enEventId;          /* ????????   */
 
-    AT_APPCTRL_STRU                     stAppCtrl;          /* 应用控制头 */
-    TAF_CS_CAUSE_ENUM_UINT32            enCause;            /* 错误码     */
+    AT_APPCTRL_STRU                     stAppCtrl;          /* ?????????? */
+    TAF_CS_CAUSE_ENUM_UINT32            enCause;            /* ??????     */
 } MN_CALL_EVT_ERR_IND_STRU;
 
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;        /*回复的事件类型*/
-    TAF_ERROR_CODE_ENUM_UINT32          ulRet;          /*回复结果*/
-    MN_CLIENT_ID_T                      ClientId;       /*端口号*/
-    MN_OPERATION_ID_T                   OpId;           /*操作ID*/
-    VOS_UINT8                           ucReserved;     /* 保留字段 */
+    MN_CALL_EVENT_ENUM_U32              enEvent;        /*??????????????*/
+    TAF_ERROR_CODE_ENUM_UINT32          ulRet;          /*????????*/
+    MN_CLIENT_ID_T                      ClientId;       /*??????*/
+    MN_OPERATION_ID_T                   OpId;           /*????ID*/
+    VOS_UINT8                           ucReserved;     /* ???????? */
 } MN_CALL_SET_CSSN_CNF_STRU;
 
 typedef struct
 {
-    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* 事件名 */
+    MN_CALL_EVENT_ENUM_U32              enEvent;                                /* ?????? */
     MN_CLIENT_ID_T                      usClientId;
 
-    VOS_UINT8                           ucIsLocalAlertingFlag;                  /* 是否为本地播放回铃音标识1:本地播放回铃音；0:网络放音*/
+    VOS_UINT8                           ucIsLocalAlertingFlag;                  /* ????????????????????????1:????????????????0:????????*/
     MN_CALL_CODEC_TYPE_ENUM_U8          enCodecType;                            /* codec type */
 
     TAF_CALL_VOICE_DOMAIN_ENUM_UINT8    enVoiceDomain;                          /* VOICE DOMAIN */
@@ -1159,7 +1159,7 @@ typedef struct
     MN_CLIENT_ID_T                      usClientId;
     MN_OPERATION_ID_T                   opId;
     VOS_UINT8                           aucReserved1[1];
-    TAF_CS_CAUSE_ENUM_UINT32            enCause;                                /* 错误码 */
+    TAF_CS_CAUSE_ENUM_UINT32            enCause;                                /* ?????? */
 
     MN_CALL_ID_T                        callId;
     TAF_CALL_DTMF_STATE_ENUM_UINT8      enDtmfState;
@@ -1181,29 +1181,29 @@ typedef struct
 typedef struct
 {
     VOS_MSG_HEADER
-    VOS_UINT16                          usMsgName;                              /* 消息名 */
-    VOS_UINT8                           aucReserve1[2];                         /* 保留 */
+    VOS_UINT16                          usMsgName;                              /* ?????? */
+    VOS_UINT8                           aucReserve1[2];                         /* ???? */
     VOS_UINT16                          usClientId;                             /* Client ID */
     VOS_UINT8                           ucOpId;                                 /* Operation ID */
-    VOS_UINT8                           aucReserve2[1];                         /* 保留 */
+    VOS_UINT8                           aucReserve2[1];                         /* ???? */
 }MN_CALL_QRY_ECALL_INFO_REQ_STRU;
 
 
 typedef struct
 {
-    MN_CALL_ID_T                        ucCallId;                               /* 当前的call ID */
-    MN_CALL_TYPE_ENUM_U8                enEcallType;                            /* eCall呼叫类型 */
-    MN_CALL_STATE_ENUM_U8               enCallState;                            /* 呼叫状态 */
-    VOS_UINT8                           aucReserved[1];                         /* 保留 */
-    MN_CALL_CALLED_NUM_STRU             stDialNumber;                           /* 呼叫号码 */
+    MN_CALL_ID_T                        ucCallId;                               /* ??????call ID */
+    MN_CALL_TYPE_ENUM_U8                enEcallType;                            /* eCall???????? */
+    MN_CALL_STATE_ENUM_U8               enCallState;                            /* ???????? */
+    VOS_UINT8                           aucReserved[1];                         /* ???? */
+    MN_CALL_CALLED_NUM_STRU             stDialNumber;                           /* ???????? */
 }MN_CALL_ECALL_INFO_PARA_STRU;
 
 
 typedef struct
 {
-    VOS_UINT8                           ucNumOfEcall;                           /* 当前eCall呼叫个数 */
-    VOS_UINT8                           aucReserved[3];                         /* 保留 */
-    MN_CALL_ECALL_INFO_PARA_STRU        astEcallInfos[MN_CALL_MAX_NUM];         /* eCall信息参数 */
+    VOS_UINT8                           ucNumOfEcall;                           /* ????eCall???????? */
+    VOS_UINT8                           aucReserved[3];                         /* ???? */
+    MN_CALL_ECALL_INFO_PARA_STRU        astEcallInfos[MN_CALL_MAX_NUM];         /* eCall???????? */
 }MN_CALL_ECALL_INFO_STRU;
 
 
@@ -1220,8 +1220,8 @@ typedef struct
 typedef struct
 {
     VOS_UINT8                           ucDigitNum;
-    /* ASCII 字符，合法的字符仅包括：'0' - '9', '*', '#', '+'。'+'只能出现在号码的最前面，
-       号码的最大长度不能超过32（不包括"+"） */
+    /* ASCII ????????????????????????'0' - '9', '*', '#', '+'??'+'????????????????????????
+       ??????????????????????32????????"+"?? */
     VOS_UINT8                           aucDigit[TAF_CALL_MAX_FLASH_DIGIT_LEN + 1];
     VOS_UINT8                           aucReserved[2];
 }TAF_CALL_FLASH_PARA_STRU;
@@ -1230,8 +1230,8 @@ typedef struct
 typedef struct
 {
     VOS_MSG_HEADER                                                  /*_H2ASN_Skip*/
-    VOS_UINT16                          usMsgId;                    /*_H2ASN_Skip*//* 消息名 */
-    VOS_UINT8                           aucReserved1[2];            /*_H2ASN_Skip*//* 保留 */
+    VOS_UINT16                          usMsgId;                    /*_H2ASN_Skip*//* ?????? */
+    VOS_UINT8                           aucReserved1[2];            /*_H2ASN_Skip*//* ???? */
     MN_CLIENT_ID_T                      usClientId;                 /*_H2ASN_Skip*/
     MN_OPERATION_ID_T                   ucOpId;                     /*_H2ASN_Skip*/
     VOS_UINT8                           aucReserved2[1];            /*_H2ASN_Skip*/
@@ -1243,18 +1243,18 @@ typedef struct
 {
     MN_CLIENT_ID_T                      usClientId;
     MN_OPERATION_ID_T                   ucOpId;
-    VOS_UINT8                           ucResult;                               /* VOS_OK:成功; VOS_ERR:失败 */
+    VOS_UINT8                           ucResult;                               /* VOS_OK:????; VOS_ERR:???? */
 }TAF_CALL_EVT_SEND_FLASH_RSLT_STRU;
 
 
 typedef struct
 {
-    MN_CALL_ID_T                        ucCallId;                                   /* 呼叫ID，如果携带该参数，必须是当前呼叫的呼叫ID */
+    MN_CALL_ID_T                        ucCallId;                                   /* ????ID??????????????????????????????????????ID */
     VOS_UINT8                           aucReserved[3];
     VOS_UINT8                           ucDigitNum;
-    VOS_UINT8                           aucDigit[TAF_CALL_MAX_BURST_DTMF_NUM];      /* DTMF Keys: 按键对应的字符  */
-    VOS_UINT32                          ulOnLength;                                 /* DTMF音播放时长持续时间(单位ms) */
-    VOS_UINT32                          ulOffLength;                                /* DTMF音发送的最小时间间隔(单位ms)  */
+    VOS_UINT8                           aucDigit[TAF_CALL_MAX_BURST_DTMF_NUM];      /* DTMF Keys: ??????????????  */
+    VOS_UINT32                          ulOnLength;                                 /* DTMF??????????????????(????ms) */
+    VOS_UINT32                          ulOffLength;                                /* DTMF????????????????????(????ms)  */
 }TAF_CALL_BURST_DTMF_PARA_STRU;
 
 
@@ -1448,8 +1448,8 @@ typedef struct
 typedef struct
 {
     VOS_MSG_HEADER                                                  /*_H2ASN_Skip*/
-    VOS_UINT16                          usMsgId;                    /*_H2ASN_Skip*//* 消息名 */
-    VOS_UINT8                           aucReserved1[2];            /*_H2ASN_Skip*//* 保留 */
+    VOS_UINT16                          usMsgId;                    /*_H2ASN_Skip*//* ?????? */
+    VOS_UINT8                           aucReserved1[2];            /*_H2ASN_Skip*//* ???? */
     MN_CLIENT_ID_T                      usClientId;                 /*_H2ASN_Skip*/
     MN_OPERATION_ID_T                   ucOpId;                     /*_H2ASN_Skip*/
     VOS_UINT8                           aucReserved2[1];            /*_H2ASN_Skip*/
@@ -1470,9 +1470,9 @@ typedef VOS_UINT8   TAF_CALL_CONT_DTMF_SWITCH_ENUM_U8;
 
 typedef struct
 {
-    MN_CALL_ID_T                        ucCallId;                                   /* 呼叫ID, 当前呼叫的呼叫ID */
+    MN_CALL_ID_T                        ucCallId;                                   /* ????ID, ??????????????ID */
     TAF_CALL_CONT_DTMF_SWITCH_ENUM_U8   enSwitch;                                   /* enSwitch: TAF_CALL_CONT_DTMF_START,TAF_CALL_CONT_DTMF_STOP  */
-    VOS_UINT8                           ucDigit;                                    /* DTMF Keys: 按键对应的字符，1-9、*、#  */
+    VOS_UINT8                           ucDigit;                                    /* DTMF Keys: ????????????????1-9??*??#  */
     VOS_UINT8                           ucReserved;
 }TAF_CALL_CONT_DTMF_PARA_STRU;
 
@@ -1506,8 +1506,8 @@ typedef struct
 {
     MN_CLIENT_ID_T                              usClientId;
     MN_OPERATION_ID_T                           ucOpId;
-    MN_CALL_ID_T                                ucCallId;           /* 呼叫ID, 当前呼叫的呼叫ID */
-    TAF_CALL_SEND_CONT_DTMF_CNF_RESULT_ENUM_U8  enResult;           /* 复用BURST DTMF CNF的结果 */
+    MN_CALL_ID_T                                ucCallId;           /* ????ID, ??????????????ID */
+    TAF_CALL_SEND_CONT_DTMF_CNF_RESULT_ENUM_U8  enResult;           /* ????BURST DTMF CNF?????? */
     VOS_UINT8                                   aucReserved[3];
 }TAF_CALL_EVT_SEND_CONT_DTMF_CNF_STRU;
 
@@ -1516,7 +1516,7 @@ typedef struct
 {
     MN_CLIENT_ID_T                      usClientId;
     MN_OPERATION_ID_T                   ucOpId;
-    VOS_UINT8                           ucResult;       /* 可能取值:VOS_OK, VOS_ERR*/
+    VOS_UINT8                           ucResult;       /* ????????:VOS_OK, VOS_ERR*/
 }TAF_CALL_EVT_SEND_CONT_DTMF_RSLT_STRU;
 
 
@@ -1525,7 +1525,7 @@ typedef struct
 {
     MN_CLIENT_ID_T                      usClientId;
     MN_OPERATION_ID_T                   ucOpId;
-    MN_CALL_ID_T                        ucCallId;       /* 呼叫ID, 当前呼叫的呼叫ID */
+    MN_CALL_ID_T                        ucCallId;       /* ????ID, ??????????????ID */
     TAF_CALL_CONT_DTMF_SWITCH_ENUM_U8   enSwitch;       /* ucSwitch: TAF_CALL_CONT_DTMF_STOP,TAF_CALL_CONT_DTMF_START  */
     VOS_UINT8                           ucDigit;        /* 1-9,0,*,# */
     VOS_UINT8                           aucReserved[2];
@@ -1536,7 +1536,7 @@ typedef struct
 {
     MN_CLIENT_ID_T                      usClientId;
     MN_OPERATION_ID_T                   ucOpId;
-    MN_CALL_ID_T                        ucCallId;                                   /* 呼叫ID, 当前呼叫的呼叫ID */
+    MN_CALL_ID_T                        ucCallId;                                   /* ????ID, ??????????????ID */
     VOS_UINT8                           ucDigitNum;                                 /**<  Digit number */
     VOS_UINT8                           aucDigit[TAF_CALL_MAX_BURST_DTMF_NUM];      /**<  DTMF digits */
     VOS_UINT32                          ulOnLength;                                 /**<  refers to S.0005 3.7.3.3.2.9 */
@@ -1556,17 +1556,17 @@ typedef struct
 
 
 /*****************************************************************************
-  4 宏定义
+  4 ??????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  5 全局变量声明
+  5 ????????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  6 接口函数声明
+  6 ????????????
 *****************************************************************************/
 
 

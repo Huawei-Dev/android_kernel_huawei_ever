@@ -3,7 +3,7 @@
 #ifndef __OAL_PCI_IF_H__
 #define __OAL_PCI_IF_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_types.h"
 #include "oal_util.h"
 #include "oal_hardware.h"
@@ -13,8 +13,8 @@
 #define THIS_FILE_ID OAM_FILE_ID_OAL_PCI_IF_H
 
 /*
- * 枚举名  : oal_pci_bar_idx_enum_uint8
- * 枚举说明:
+ * ??????  : oal_pci_bar_idx_enum_uint8
+ * ????????:
  */
 typedef enum {
     OAL_PCI_BAR_0 = 0,
@@ -38,10 +38,10 @@ typedef enum {
 typedef oal_uint8 oal_pci_gen_enum_uint8;
 
 #if (_PRE_PRODUCT_ID == _PRE_PRODUCT_ID_HI1151)
-/* 全局变量声明 */
+/* ???????????? */
 extern oal_pci_bar_idx_enum_uint8 en_bar_table[1];
 
-/* 宏定义 */
+/* ?????? */
 #define OAL_WITP_MAX_BARS OAL_ARRAY_SIZE(en_bar_table)
 
 /*
@@ -57,7 +57,7 @@ extern oal_pci_bar_idx_enum_uint8 en_bar_table[1];
 #else
 #define OAL_DBI_BASE_ADDR_0 0x40000000
 #endif
-// pcie1暂时不使用，定义为750平台形式，不考虑区分平台
+// pcie1??????????????????750????????????????????????
 #define OAL_DBI_BASE_ADDR_1 0xA8010000
 
 #define OAL_PERI_W_PCIE0 0xC28
@@ -76,7 +76,7 @@ extern oal_pci_bar_idx_enum_uint8 en_bar_table[1];
 #ifdef _PRE_CPE_722_PLATFORM
 #define OAL_PCIE_SYS_BASE_PHYS 0x90100000 /* SYSCTRL */
 #define OAL_DBI_BASE_ADDR_0    0x40000000
-// pcie1暂时不使用，定义为750平台形式，不考虑区分平台
+// pcie1??????????????????750????????????????????????
 #define OAL_DBI_BASE_ADDR_1    0xA8010000
 
 #define OAL_PERI_W_PCIE0 0xC28
@@ -102,26 +102,26 @@ extern oal_pci_bar_idx_enum_uint8 en_bar_table[1];
 #define OAL_PCIE_TARGET_ADDR 0x55E00000
 #endif
 
-#else /* 主要用作5610平台使用 */
+#else /* ????????5610???????? */
 
 #define OAL_PCIE_CRG_BASE 0x14880000 /* cfg_base */
 
-#ifdef _PRE_WLAN_FEATURE_PCIE_ADAPT_5116 /* v200 5116平台 */
+#ifdef _PRE_WLAN_FEATURE_PCIE_ADAPT_5116 /* v200 5116???? */
 
 #define OAL_PCIE_PORT_OFFSET        0x4000
 #define OAL_PCIE_SYS_BASE_PHYS      0x10161000 /* SYSCTRL */
-#define OAL_DBI_BASE_ADDR_0         0x10160000 /* IO空间 64k */
-#define OAL_DBI_BASE_ADDR_1         0x10164000 /* IO空间 64k */
+#define OAL_DBI_BASE_ADDR_0         0x10160000 /* IO???? 64k */
+#define OAL_DBI_BASE_ADDR_1         0x10164000 /* IO???? 64k */
 #define OAL_PERI_R_PCIE0            0x1C
 #define OAL_PERI_R_PCIE1            0x1C
 #define OAL_PERI_W_PCIE0            0x1C
 #define OAL_PERI_W_PCIE1            0x1C
 #define OAL_PCIE_LINK_STATUS_OFFSET 0x100
 
-#else                                     /* 5610平台 */
+#else                                     /* 5610???? */
 #define OAL_PCIE_SYS_BASE_PHYS 0x10100000 /* SYSCTRL */
-#define OAL_DBI_BASE_ADDR_0    0x10A00000 /* IO空间 64k */
-#define OAL_DBI_BASE_ADDR_1    0x10A02000 /* IO空间 64k */
+#define OAL_DBI_BASE_ADDR_0    0x10A00000 /* IO???? 64k */
+#define OAL_DBI_BASE_ADDR_1    0x10A02000 /* IO???? 64k */
 #define OAL_PERI_W_PCIE0       0xBC
 #define OAL_PERI_R_PCIE0       0xC0
 #define OAL_PERI_W_PCIE1       0xEC
@@ -133,13 +133,13 @@ extern oal_pci_bar_idx_enum_uint8 en_bar_table[1];
 #define OAL_PCIE_TARGET_ADDR 0x80000000
 #endif
 
-#define OAL_PCIE_NONFATAL_ERR_CNT        200  /* pcie err_nonfatal周期错误次数阈值 */
-#define OAL_PCIE_NONFATAL_ERR_TIMEOUT_MS 1000 /* pcie err_nonfatal每1000ms到期 */
+#define OAL_PCIE_NONFATAL_ERR_CNT        200  /* pcie err_nonfatal???????????????? */
+#define OAL_PCIE_NONFATAL_ERR_TIMEOUT_MS 1000 /* pcie err_nonfatal??1000ms???? */
 
-/* STRUCT定义 */
+/* STRUCT???? */
 /*
- * 结构名  : oal_pcie_iatu_stru
- * 结构说明: Internal Address Translation Unit(iATU)结构体
+ * ??????  : oal_pcie_iatu_stru
+ * ????????: Internal Address Translation Unit(iATU)??????
  */
 typedef struct {
     oal_uint32 ul_viewport;      /* iATU Viewport Register                    */
@@ -152,7 +152,7 @@ typedef struct {
     oal_uint32 ul_utar;          /* iATU Region Upper Target Address Register */
 } oal_pcie_iatu_stru;
 
-/* 函数声明 */
+/* ???????? */
 #if (_PRE_PRODUCT_ID == _PRE_PRODUCT_ID_HI1151)
 #ifdef _PRE_WLAN_PRODUCT_1151V200
 extern oal_void oal_pcie_set_inbound_iatu_slip_window_fpga(oal_pci_dev_stru *pst_pci_dev);

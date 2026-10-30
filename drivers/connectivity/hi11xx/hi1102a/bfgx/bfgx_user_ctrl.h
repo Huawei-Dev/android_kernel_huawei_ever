@@ -2,7 +2,7 @@
 
 #ifndef __BFGX_USER_CTRL_H__
 #define __BFGX_USER_CTRL_H__
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "plat_type.h"
 #include "hisi_customize_wifi.h"
 

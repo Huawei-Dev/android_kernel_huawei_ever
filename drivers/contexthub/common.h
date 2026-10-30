@@ -33,7 +33,7 @@ static inline void clr_bits(unsigned int mask, volatile void __iomem *addr)
 }
 
 /*
- * 从DTS获取contexthub开关状态
+ * ???DTS??????contexthub????????????
  */
 int get_contexthub_dts_status(void);
 

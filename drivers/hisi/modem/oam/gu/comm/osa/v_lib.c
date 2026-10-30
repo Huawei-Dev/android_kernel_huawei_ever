@@ -84,7 +84,7 @@
 #include "pam_tag.h"
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID        PS_FILE_ID_V_LIB_C
 #define    THIS_MODU           mod_pam_osa
@@ -168,7 +168,7 @@ typedef enum _bit64CompareResult
 /* the seed of radom */
 static VOS_UINT32 g_ulVosRadomSeed = 0;
 
-VOS_UINT32        g_ulErrorNo = 0;                  /* 存放错误码 */
+VOS_UINT32        g_ulErrorNo = 0;                  /* ?????????? */
 
 #if (VOS_VXWORKS == VOS_OS_VER)
 extern int errnoSet(int errorValue);
@@ -790,7 +790,7 @@ VOS_VOID * V_MemSet( VOS_VOID * ToSet, VOS_CHAR Char, VOS_SIZE_T Count,
     return ToSet;
 #else
 
-    return memset( ToSet, (VOS_UCHAR)Char, Count );/* [false alarm]:前边已有严谨的判断  */ /* unsafe_function_ignore: memset */
+    return memset( ToSet, (VOS_UCHAR)Char, Count );/* [false alarm]:??????????????????  */ /* unsafe_function_ignore: memset */
 #endif
 }
 #endif
@@ -916,7 +916,7 @@ VOS_VOID * V_MemCpy( VOS_VOID * Dest, const VOS_VOID * Src, VOS_SIZE_T Count,
 
     return Dest;
 #else
-    return memcpy_s (Dest, Count, Src, Count);/* [false alarm]:前边已有严谨的判断  */
+    return memcpy_s (Dest, Count, Src, Count);/* [false alarm]:??????????????????  */
 #endif
 }
 #endif
@@ -968,7 +968,7 @@ MODULE_EXPORTED VOS_VOID * V_MemCpy_s( VOS_VOID * Dest, VOS_SIZE_T ulDestSize, c
         return(VOS_NULL_PTR);
     }
 
-    if ( EOK != memcpy_s(Dest, ulDestSize, Src, Count) )/* [false alarm]:前边已有严谨的判断  */
+    if ( EOK != memcpy_s(Dest, ulDestSize, Src, Count) )/* [false alarm]:??????????????????  */
     {
         return(VOS_NULL_PTR);
     }
@@ -1018,7 +1018,7 @@ VOS_VOID * V_MemMove( VOS_VOID * Dest, const VOS_VOID * Src, VOS_SIZE_T Count,
         return VOS_NULL_PTR;
     }
 
-    /* 如果目的为空，直接返回NULL */
+    /* ??????????????????????NULL */
     if (VOS_NULL_PTR == Src)
     {
         return VOS_NULL_PTR;
@@ -1045,7 +1045,7 @@ VOS_VOID * V_MemMove( VOS_VOID * Dest, const VOS_VOID * Src, VOS_SIZE_T Count,
         return(VOS_NULL_PTR);
     }
 
-    return memmove (Dest,Src,Count);/* [false alarm]:前边已有严谨的判断  */ /* unsafe_function_ignore: memmove */
+    return memmove (Dest,Src,Count);/* [false alarm]:??????????????????  */ /* unsafe_function_ignore: memmove */
 }
 #endif
 
@@ -1068,7 +1068,7 @@ MODULE_EXPORTED  VOS_VOID * V_MemMove_s( VOS_VOID * Dest, VOS_SIZE_T ulDestSize,
         return VOS_NULL_PTR;
     }
 
-    /* 如果目的为空，直接返回NULL */
+    /* ??????????????????????NULL */
     if (VOS_NULL_PTR == Src)
     {
         return VOS_NULL_PTR;
@@ -1095,7 +1095,7 @@ MODULE_EXPORTED  VOS_VOID * V_MemMove_s( VOS_VOID * Dest, VOS_SIZE_T ulDestSize,
         return(VOS_NULL_PTR);
     }
 
-    if ( EOK !=  memmove_s(Dest, ulDestSize, Src, Count) )/* [false alarm]:前边已有严谨的判断  */
+    if ( EOK !=  memmove_s(Dest, ulDestSize, Src, Count) )/* [false alarm]:??????????????????  */
     {
         return(VOS_NULL_PTR);
     }
@@ -1467,17 +1467,17 @@ MODULE_EXPORTED VOS_VOID VOS_SetSeed(VOS_UINT32 ulSeed)
     VOS_UINT8                           aucSeed[VOS_RAND_SEED_AND_ENTROPY_LEN];
     VOS_UINT8                           aucEntropy[VOS_RAND_SEED_AND_ENTROPY_LEN];
 
-    /* 低16bit用作seed 高16bit用作entropy */
+    /* ??16bit????seed ??16bit????entropy */
     for (i = 0; i < VOS_RAND_SEED_AND_ENTROPY_LEN; i++)
     {
         aucSeed[i]      = (VOS_UINT8)((ulSeed >> i) & 0x01);
         aucEntropy[i]   = (VOS_UINT8)((ulSeed >> (i + 16)) & 0x01);
     }
 
-    /* 设置seed */
+    /* ????seed */
     (VOS_VOID)CRYPT_randSeed(aucSeed, VOS_RAND_SEED_AND_ENTROPY_LEN);
 
-    /* 设置entropy */
+    /* ????entropy */
     (VOS_VOID)CRYPT_addEntropy(aucEntropy, VOS_RAND_SEED_AND_ENTROPY_LEN);
 
     return;
@@ -1500,10 +1500,10 @@ MODULE_EXPORTED VOS_UINT32 VOS_Rand(VOS_UINT32 ulRange)
     VOS_UINT8                           aucRand[VOS_RAND_NUM_LEN]   = {0};
     VOS_UINT32                          i;
 
-    /* 获取4个随机数 */
+    /* ????4???????? */
     if (VOS_OK == CRYPT_random(aucRand, VOS_RAND_NUM_LEN))
     {
-        /* 组成1个U32的随机数 */
+        /* ????1??U32???????? */
         ulGenTemp       = 0;
         for (i = 0; i < VOS_RAND_NUM_LEN; i++)
         {
@@ -1512,7 +1512,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_Rand(VOS_UINT32 ulRange)
     }
     else
     {
-        /* 网络搜索算法生成伪随机数 */
+        /* ???????????????????????? */
         if (0 == g_ulVosRadomSeed )
         {
             ulGenTemp = VOS_GetSlice();
@@ -1526,7 +1526,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_Rand(VOS_UINT32 ulRange)
         g_ulVosRadomSeed = ulGenTemp;
     }
 
-    /* 将随机数匹配到范围内 */
+    /* ???????????????????? */
     ulGenTempHigh   = ulGenTemp >> 16;
     ulGenTemp      &= 0xffff;
 
@@ -1587,7 +1587,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_Rand( VOS_UINT32 ulRange )
     register VOS_UINT32 ulGenTempHigh, ulRangeHigh, ulRangeLow;
     register VOS_UINT32 ulRandomNumber;
 
-    /* 设置了种子用设置的种子，否则用系统时间做种子 */
+    /* ???????????????????????????????????????????? */
     if (0 == g_ulVosRadomSeed )
     {
         ulGenTemp = VOS_GetSlice();
@@ -1597,12 +1597,12 @@ MODULE_EXPORTED VOS_UINT32 VOS_Rand( VOS_UINT32 ulRange )
         ulGenTemp = g_ulVosRadomSeed;
     }
 
-    /* 网络搜索算法生成伪随机数 */
+    /* ???????????????????????? */
     ulGenTemp = (ulGenTemp * 1664525L + 1013904223L) ;
 
     g_ulVosRadomSeed = ulGenTemp;
 
-    /* 将伪随机匹配到范围内 */
+    /* ???????????????????? */
     ulGenTempHigh = ulGenTemp >> 16;
     ulGenTemp &= 0xffff;
 

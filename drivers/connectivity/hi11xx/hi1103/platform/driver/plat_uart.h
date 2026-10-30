@@ -3,11 +3,11 @@
 #ifndef __PLAT_UART_H__
 #define __PLAT_UART_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <linux/serial_core.h>
 #include "plat_type.h"
 
-/* 宏定义 */
+/* ?????? */
 typedef enum {
     STATE_TTY_TX = 0,
     STATE_TTY_RX = 1,
@@ -15,12 +15,12 @@ typedef enum {
     STATE_UART_RX = 3,
 } UART_STATE_INDEX;
 
-/* STRUCT 定义 */
+/* STRUCT ???? */
 struct ps_uart_state_s {
     uint32 tty_tx_cnt;
     uint32 tty_rx_cnt;
-    uint32 tty_stopped;    /* tty 软件流控标志位 */
-    uint32 tty_hw_stopped; /* tty 硬件流控标志位 */
+    uint32 tty_stopped;    /* tty ?????????????? */
+    uint32 tty_hw_stopped; /* tty ?????????????? */
     struct uart_icount uart_cnt;
 };
 
@@ -28,7 +28,7 @@ struct ps_uart_state_s {
 extern uint32 default_baud_rate;
 extern struct mutex tty_mutex_etc;
 
-/* 函数声明 */
+/* ???????? */
 extern int32 plat_uart_init_etc(void);
 extern int32 plat_uart_exit_etc(void);
 extern int32 open_tty_drv_etc(void *pm_data);

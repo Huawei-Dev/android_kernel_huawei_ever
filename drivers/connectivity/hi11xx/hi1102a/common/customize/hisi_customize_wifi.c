@@ -13,7 +13,7 @@
 #include "wlan_spec_1102.h"
 #include "oal_sdio_comm.h"
 
-/* 终端头文件 */
+/* ?????????? */
 #include <linux/mtd/hisi_nve_interface.h>
 #include <linux/etherdevice.h>
 #include "plat_firmware.h"
@@ -22,10 +22,10 @@
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_CUSTOMIZE
 
 /* Global Variable Definition */
-int32 al_host_init_params[WLAN_CFG_INIT_BUTT] = {0}; /* ini定制化参数数组 */
-int32 al_dts_params[WLAN_CFG_DTS_BUTT] = {0};        /* dts定制化参数数组 */
-uint8 auc_nv_params[NUM_OF_NV_MAX_TXPOWER] = {0};    /* nv定制化参数数组 */
-int32 al_nvram_init_params[NVRAM_PARAMS_INDEX_BUTT] = {0}; /* ini文件中NV参数数组 */
+int32 al_host_init_params[WLAN_CFG_INIT_BUTT] = {0}; /* ini?????????????? */
+int32 al_dts_params[WLAN_CFG_DTS_BUTT] = {0};        /* dts?????????????? */
+uint8 auc_nv_params[NUM_OF_NV_MAX_TXPOWER] = {0};    /* nv?????????????? */
+int32 al_nvram_init_params[NVRAM_PARAMS_INDEX_BUTT] = {0}; /* ini??????NV???????? */
 
 oal_uint32 al_priv_cust_init_params[WLAN_CFG_PRIV_BUTT] = {
     0x1fff,         // cali_mask
@@ -45,21 +45,21 @@ oal_uint32 al_priv_cust_init_params[WLAN_CFG_PRIV_BUTT] = {
 
 int8 ac_country_code[COUNTRY_CODE_LEN] = "00";
 uint8 auc_wifimac[MAC_LEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-wlan_cus_pwr_fit_para_stru as_pro_line_params[DY_CALI_PARAMS_NUM] = {{0}};      /* 产测定制化参数数组 */
-uint8 auc_cust_nvram_info[WLAN_CFG_DTS_NVRAM_END][DY_CALI_PARAMS_LEN] = {{0}};  /* NVRAM数组 */
-oal_bool_enum_uint8 en_nv_dp_init_is_null = OAL_TRUE;                               /* NVRAM中dp init置空标志 */
-wlan_customize_private_stru al_priv_cust_params[WLAN_CFG_PRIV_BUTT] = {{ 0, 0 }}; /* 私有定制化参数数组 */
+wlan_cus_pwr_fit_para_stru as_pro_line_params[DY_CALI_PARAMS_NUM] = {{0}};      /* ?????????????????? */
+uint8 auc_cust_nvram_info[WLAN_CFG_DTS_NVRAM_END][DY_CALI_PARAMS_LEN] = {{0}};  /* NVRAM???? */
+oal_bool_enum_uint8 en_nv_dp_init_is_null = OAL_TRUE;                               /* NVRAM??dp init???????? */
+wlan_customize_private_stru al_priv_cust_params[WLAN_CFG_PRIV_BUTT] = {{ 0, 0 }}; /* ?????????????????? */
 oal_int16 gs_extre_point_vals[DY_CALI_NUM_5G_BAND] = {0};
 
-wlan_customize_power_params_stru cust_nv_params = {{0}}; /* 最大发送功率定制化数组 */
+wlan_customize_power_params_stru cust_nv_params = {{0}}; /* ?????????????????????? */
 #ifdef _PRE_PLAT_FEATURE_CUSTOMIZE
 oal_uint8 auc_sar_params[CUS_NUM_OF_SAR_LVL][CUS_SAR_NUM];
 #endif
-oal_bool_enum_uint8 en_fact_cali_completed = OAL_FALSE;                           /* 是否有产线校准 */
-wlan_cust_country_code_ingore_flag_stru g_st_cust_country_code_ignore_flag = {0}; /* 定制化国家码配置 */
+oal_bool_enum_uint8 en_fact_cali_completed = OAL_FALSE;                           /* ?????????????? */
+wlan_cust_country_code_ingore_flag_stru g_st_cust_country_code_ignore_flag = {0}; /* ???????????????? */
 
 /*
- * 定制化结构体
+ * ????????????
  * default values as follows:
  * ampdu_tx_max_num:            WLAN_AMPDU_TX_MAX_NUM               = 64
  * switch:                      ON                                  = 1
@@ -264,12 +264,12 @@ OAL_STATIC regdomain_plat_tag_map_stru plat_tag_mapping_table[] = {
 };
 
 OAL_STATIC wlan_cfg_cmd wifi_config_dts[] = {
-    /* 5g开关 */
+    /* 5g???? */
     { "band_5g_enable", WLAN_CFG_DTS_BAND_5G_ENABLE },
-    /* 功率校准单音幅值 */
+    /* ???????????????? */
     { "cali_tone_amp_grade",    WLAN_CFG_DTS_CALI_TONE_AMP_GRADE },
 
-    /* bt 校准 */
+    /* bt ???? */
     { "cali_txpwr_dpn_band1",   WLAN_CFG_DTS_BT_CALI_TXPWR_DPN_BAND1 },
     { "cali_txpwr_dpn_band2",   WLAN_CFG_DTS_BT_CALI_TXPWR_DPN_BAND2 },
     { "cali_txpwr_dpn_band3",   WLAN_CFG_DTS_BT_CALI_TXPWR_DPN_BAND3 },
@@ -293,7 +293,7 @@ OAL_STATIC wlan_cfg_cmd wifi_config_dts[] = {
     { "cali_bt_base_power",     WLAN_CFG_DTS_BT_CALI_BASE_POWER },
     { "cali_bt_is_dpn_calc",    WLAN_CFG_DTS_BT_CALI_IS_DPN_CALC },
 #ifdef _PRE_WLAN_FIT_BASED_REALTIME_CALI
-    /* 动态校准 */
+    /* ???????? */
     { "dyn_cali_dscr_interval", WLAN_CFG_DTS_DYN_CALI_DSCR_ITERVL },
     /* DPN 40M 20M 11b */
     { "dpn24g_ch1_core0",    WLAN_CFG_DTS_2G_CORE0_DPN_CH1 },
@@ -321,7 +321,7 @@ OAL_STATIC wlan_cfg_cmd wifi_config_dts[] = {
     { "5g_iq_backoff_power", WLAN_CFG_DTS_5G_IQ_BACKOFF_POWER },
     { "5g_iq_cali_power",    WLAN_CFG_DTS_5G_IQ_CALI_POWER },
 
-        /* 校准 */
+        /* ???? */
     { "cali_txpwr_pa_dc_ref_2g_val_chan1",  WLAN_CFG_DTS_CALI_TXPWR_PA_DC_REF_2G_VAL_CHAN1 },
     { "cali_txpwr_pa_dc_ref_2g_val_chan2",  WLAN_CFG_DTS_CALI_TXPWR_PA_DC_REF_2G_VAL_CHAN2 },
     { "cali_txpwr_pa_dc_ref_2g_val_chan3",  WLAN_CFG_DTS_CALI_TXPWR_PA_DC_REF_2G_VAL_CHAN3 },
@@ -361,7 +361,7 @@ OAL_STATIC wlan_cfg_cmd wifi_config_cmds[] = {
     { "delta_b",         WLAN_CFG_INIT_DELTA_B },
     { "delta_a",         WLAN_CFG_INIT_DELTA_A },
 
-    /* 性能 */
+    /* ???? */
     { "ampdu_tx_max_num",        WLAN_CFG_INIT_AMPDU_TX_MAX_NUM },
     { "used_mem_for_start",      WLAN_CFG_INIT_USED_MEM_FOR_START },
     { "used_mem_for_stop",       WLAN_CFG_INIT_USED_MEM_FOR_STOP },
@@ -372,7 +372,7 @@ OAL_STATIC wlan_cfg_cmd wifi_config_cmds[] = {
     { "link_loss_threshold_wlan_bt",     WLAN_CFG_INIT_LINK_LOSS_THRESHOLD_WLAN_BT },
     { "link_loss_threshold_wlan_dbac",   WLAN_CFG_INIT_LINK_LOSS_THRESHOLD_WLAN_DBAC },
     { "link_loss_threshold_wlan_normal", WLAN_CFG_INIT_LINK_LOSS_THRESHOLD_WLAN_NORMAL },
-    /* 自动调频 */
+    /* ???????? */
     { "pps_threshold_level_0", WLAN_CFG_INIT_PPS_THRESHOLD_LEVEL_0 },
     { "pps_threshold_level_1", WLAN_CFG_INIT_PPS_THRESHOLD_LEVEL_1 },
     { "pps_threshold_level_2", WLAN_CFG_INIT_PPS_THRESHOLD_LEVEL_2 },
@@ -381,20 +381,20 @@ OAL_STATIC wlan_cfg_cmd wifi_config_cmds[] = {
     { "device_type_level_1",   WLAN_CFG_INIT_DEVICE_TYPE_LEVEL_1 },
     { "device_type_level_2",   WLAN_CFG_INIT_DEVICE_TYPE_LEVEL_2 },
     { "device_type_level_3",   WLAN_CFG_INIT_DEVICE_TYPE_LEVEL_3 },
-    /* 低功耗 */
+    /* ?????? */
     { "powermgmt_switch", WLAN_CFG_INIT_POWERMGMT_SWITCH },
     { "ps_mode", WLAN_CFG_INIT_PS_MODE },
 
-    /* 可维可测 */
+    /* ???????? */
     { "loglevel", WLAN_CFG_INIT_LOGLEVEL },
-    /* 2G RF前端 */
+    /* 2G RF???? */
     { "rf_line_txrx_gain_db_2g_band1_mult4",  WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND1_MULT4 },
     { "rf_line_txrx_gain_db_2g_band1_mult10", WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND1_MULT10 },
     { "rf_line_txrx_gain_db_2g_band2_mult4",  WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND2_MULT4 },
     { "rf_line_txrx_gain_db_2g_band2_mult10", WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND2_MULT10 },
     { "rf_line_txrx_gain_db_2g_band3_mult4",  WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND3_MULT4 },
     { "rf_line_txrx_gain_db_2g_band3_mult10", WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND3_MULT10 },
-    /* 5G RF前端 */
+    /* 5G RF???? */
     { "rf_line_txrx_gain_db_5g_band1_mult4",  WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_5G_BAND1_MULT4 },
     { "rf_line_txrx_gain_db_5g_band1_mult10", WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_5G_BAND1_MULT10 },
     { "rf_line_txrx_gain_db_5g_band2_mult4",  WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_5G_BAND2_MULT4 },
@@ -422,9 +422,9 @@ OAL_STATIC wlan_cfg_cmd wifi_config_cmds[] = {
     /* 11AC2G */
     { "11ac2g_enable",                      WLAN_CFG_INIT_11AC2G_ENABLE },
     { "disable_capab_2ght40",               WLAN_CFG_INIT_DISABLE_CAPAB_2GHT40 },
-    { "dual_antenna_enable",                WLAN_CFG_INIT_DUAL_ANTENNA_ENABLE }, /* 双天线开关 */
+    { "dual_antenna_enable",                WLAN_CFG_INIT_DUAL_ANTENNA_ENABLE }, /* ?????????? */
     { "far_dist_pow_gain_switch",           WLAN_CFG_INIT_FAR_DIST_POW_GAIN_SWITCH },
-    { "lte_gpio_check_switch",              WLAN_CFG_LTE_GPIO_CHECK_SWITCH }, /* lte管脚检测开关 */
+    { "lte_gpio_check_switch",              WLAN_CFG_LTE_GPIO_CHECK_SWITCH }, /* lte???????????? */
     { "lte_ism_priority",                   WLAN_ATCMDSRV_LTE_ISM_PRIORITY },
     { "lte_rx_act",                         WLAN_ATCMDSRV_LTE_RX_ACT },
     { "lte_tx_act",                         WLAN_ATCMDSRV_LTE_TX_ACT },
@@ -482,7 +482,7 @@ OAL_STATIC wlan_cfg_cmd wifi_config_cmds[] = {
     { "delta_pwr_ref_5g_40m",           WLAN_CFG_INIT_DELTA_PWR_REF_5G_40M },
     { "delta_pwr_ref_5g_80m",           WLAN_CFG_INIT_DELTA_PWR_REF_5G_80M },
 
-    /* 跳频参数设置 */
+    /* ???????????? */
     { "nbfh_tbtt_offset",    WLAN_CFG_INIT_NBFH_TBTT_OFFSET },
     { "nbfh_tbtt_sync_time", WLAN_CFG_INIT_NBFH_TBTT_SYNC_TIME },
     { "nbfh_dwell_time",     WLAN_CFG_INIT_NBFH_DWELL_TIME },
@@ -510,10 +510,10 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
     { "nvram_params10", NVRAM_PARAMS_INDEX_10 },
     { "nvram_params11", NVRAM_PARAMS_INDEX_11 },
 
-    /* 窄带2.4G基础功率 */
+    /* ????2.4G???????? */
     {"nvram_max_txpwr_base_2p4g_nb", NVRAM_PARAMS_TX_BASE_POWER_2P4G_NB},
 
-    /* 基准功率 */
+    /* ???????? */
     { "nvram_max_txpwr_base_2p4g", NVRAM_PARAMS_TX_BASE_POWER_2P4G },
     { "nvram_max_txpwr_base_5g_1", NVRAM_PARAMS_TX_BASE_POWER_5G_BAND1 },
     { "nvram_max_txpwr_base_5g_2", NVRAM_PARAMS_TX_BASE_POWER_5G_BAND2 },
@@ -523,11 +523,11 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
     { "nvram_max_txpwr_base_5g_6", NVRAM_PARAMS_TX_BASE_POWER_5G_BAND6 },
     { "nvram_max_txpwr_base_5g_7", NVRAM_PARAMS_TX_BASE_POWER_5G_BAND7 },
 
-    /* 5G高band最大发射功率 */
+    /* 5G??band???????????? */
     { "5g_max_pow_high_band_ce", NVRAM_PARAMS_5G_HIGH_BAND_MAX_POW },
 
-    /* SAR参数 */
-    /* 0~3档 */
+    /* SAR???? */
+    /* 0~3?? */
     { "sar_txpwr_ctrl_5g_band1_0", NVRAM_PARAMS_SAR_5G_BANK1_0 },
     { "sar_txpwr_ctrl_5g_band2_0", NVRAM_PARAMS_SAR_5G_BANK2_0 },
     { "sar_txpwr_ctrl_5g_band3_0", NVRAM_PARAMS_SAR_5G_BANK3_0 },
@@ -536,7 +536,7 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
     { "sar_txpwr_ctrl_5g_band6_0", NVRAM_PARAMS_SAR_5G_BANK6_0 },
     { "sar_txpwr_ctrl_5g_band7_0", NVRAM_PARAMS_SAR_5G_BANK7_0 },
     { "sar_txpwr_ctrl_2g_0",       NVRAM_PARAMS_SAR_2G_0 },
-    /* 4~7档 */
+    /* 4~7?? */
     { "sar_txpwr_ctrl_5g_band1_1", NVRAM_PARAMS_SAR_5G_BANK1_1 },
     { "sar_txpwr_ctrl_5g_band2_1", NVRAM_PARAMS_SAR_5G_BANK2_1 },
     { "sar_txpwr_ctrl_5g_band3_1", NVRAM_PARAMS_SAR_5G_BANK3_1 },
@@ -545,7 +545,7 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
     { "sar_txpwr_ctrl_5g_band6_1", NVRAM_PARAMS_SAR_5G_BANK6_1 },
     { "sar_txpwr_ctrl_5g_band7_1", NVRAM_PARAMS_SAR_5G_BANK7_1 },
     { "sar_txpwr_ctrl_2g_1",       NVRAM_PARAMS_SAR_2G_1 },
-    /* 8~11档 */
+    /* 8~11?? */
     { "sar_txpwr_ctrl_5g_band1_2", NVRAM_PARAMS_SAR_5G_BANK1_2 },
     { "sar_txpwr_ctrl_5g_band2_2", NVRAM_PARAMS_SAR_5G_BANK2_2 },
     { "sar_txpwr_ctrl_5g_band3_2", NVRAM_PARAMS_SAR_5G_BANK3_2 },
@@ -554,7 +554,7 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
     { "sar_txpwr_ctrl_5g_band6_2", NVRAM_PARAMS_SAR_5G_BANK6_2 },
     { "sar_txpwr_ctrl_5g_band7_2", NVRAM_PARAMS_SAR_5G_BANK7_2 },
     { "sar_txpwr_ctrl_2g_2",       NVRAM_PARAMS_SAR_2G_2 },
-    /* 12~15档 */
+    /* 12~15?? */
     { "sar_txpwr_ctrl_5g_band1_3", NVRAM_PARAMS_SAR_5G_BANK1_3 },
     { "sar_txpwr_ctrl_5g_band2_3", NVRAM_PARAMS_SAR_5G_BANK2_3 },
     { "sar_txpwr_ctrl_5g_band3_3", NVRAM_PARAMS_SAR_5G_BANK3_3 },
@@ -563,7 +563,7 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
     { "sar_txpwr_ctrl_5g_band6_3", NVRAM_PARAMS_SAR_5G_BANK6_3 },
     { "sar_txpwr_ctrl_5g_band7_3", NVRAM_PARAMS_SAR_5G_BANK7_3 },
     { "sar_txpwr_ctrl_2g_3",       NVRAM_PARAMS_SAR_2G_3 },
-    /* 16~19档 */
+    /* 16~19?? */
     { "sar_txpwr_ctrl_5g_band1_4", NVRAM_PARAMS_SAR_5G_BANK1_4 },
     { "sar_txpwr_ctrl_5g_band2_4", NVRAM_PARAMS_SAR_5G_BANK2_4 },
     { "sar_txpwr_ctrl_5g_band3_4", NVRAM_PARAMS_SAR_5G_BANK3_4 },
@@ -573,7 +573,7 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
     { "sar_txpwr_ctrl_5g_band7_4", NVRAM_PARAMS_SAR_5G_BANK7_4 },
     { "sar_txpwr_ctrl_2g_4",       NVRAM_PARAMS_SAR_2G_4 },
 
-    /* 边带信道最大功率 */
+    /* ???????????????? */
     { "side_band_txpwr_limit_5g_20m_0", NVRAM_PARAMS_SIDE_BAND_TXPWR_5G_20M_0 },
     { "side_band_txpwr_limit_5g_20m_1", NVRAM_PARAMS_SIDE_BAND_TXPWR_5G_20M_1 },
     { "side_band_txpwr_limit_5g_20m_2", NVRAM_PARAMS_SIDE_BAND_TXPWR_5G_20M_2 },
@@ -598,9 +598,9 @@ OAL_STATIC wlan_cfg_cmd nvram_config_ini[] = {
 };
 
 OAL_STATIC wlan_cfg_cmd wifi_config_priv[] = {
-    /* 校准开关 */
+    /* ???????? */
     { "cali_mask", WLAN_CFG_PRIV_CALI_MASK },
-    /* bit4:不读取NV区域的数据(1:不读取 0：读取) */
+    /* bit4:??????NV??????????(1:?????? 0??????) */
     { "cali_data_mask", WLAN_CFG_PRIV_CALI_DATA_MASK },
     { "temp_pro_en",              WLAN_CFG_PRIV_TEMP_PRO_EN },
     { "temp_pro_reduce_pwr_en",   WLAN_CFG_PRIV_TEMP_PRO_REDUCE_PWR_EN },
@@ -626,9 +626,9 @@ OAL_STATIC wlan_cfg_nv_map_handler wifi_nvram_cfg_handler[] = {
 };
 
 OAL_STATIC wlan_cfg_cmd nvram_pro_line_config_ini[] = {
-    /* OAL_PTR_NULL表示不从ini里面读 */
+    /* OAL_PTR_NULL????????ini?????? */
     { OAL_PTR_NULL, WLAN_CFG_NVRAM_DP2G_INIT0 },
-    /* 产侧nvram参数 */
+    /* ????nvram???? */
     { "nvram_pa2gccka0",        WLAN_CFG_DTS_NVRAM_RATIO_PA2GCCKA0 },
     { "nvram_pa2ga0",           WLAN_CFG_NVRAM_RATIO_PA2GA0 },
     { "nvram_pa2g40a0",         WLAN_CFG_DTS_NVRAM_RATIO_PA2G40A0 },
@@ -646,14 +646,14 @@ OAL_STATIC wlan_cfg_cmd nvram_pro_line_config_ini[] = {
 };
 
 /*
- * 函 数 名  : original_value_for_dts_params
- * 功能描述  : dts定制化参数初值处理
+ * ?? ?? ??  : original_value_for_dts_params
+ * ????????  : dts??????????????????
  */
 OAL_STATIC oal_void original_value_for_dts_params(oal_void)
 {
     al_dts_params[WLAN_CFG_DTS_BAND_5G_ENABLE] = 1;
 
-    /* 校准 */
+    /* ???? */
     al_dts_params[WLAN_CFG_DTS_CALI_TXPWR_PA_DC_REF_2G_VAL_CHAN1]  = WLAN_CALI_TXPWR_REF_2G_CH1_VAL;
     al_dts_params[WLAN_CFG_DTS_CALI_TXPWR_PA_DC_REF_2G_VAL_CHAN2]  = WLAN_CALI_TXPWR_REF_2G_CH2_VAL;
     al_dts_params[WLAN_CFG_DTS_CALI_TXPWR_PA_DC_REF_2G_VAL_CHAN3]  = WLAN_CALI_TXPWR_REF_2G_CH3_VAL;
@@ -707,7 +707,7 @@ OAL_STATIC oal_void original_value_for_dts_params(oal_void)
     al_dts_params[WLAN_CFG_DTS_BT_CALI_IS_DPN_CALC] = WLAN_BT_CALI_IS_DPN_VAL;
 
 #ifdef _PRE_WLAN_FIT_BASED_REALTIME_CALI
-    /* 动态校准 */
+    /* ???????? */
     al_dts_params[WLAN_CFG_DTS_DYN_CALI_DSCR_ITERVL] = WLAN_DYN_CALI_DSCR_ITERVL_VAL;
     /* DPN 40M 20M 11b */
     al_dts_params[WLAN_CFG_DTS_2G_CORE0_DPN_CH1] = WLAN_2G_CORE0_CH1_DPN;
@@ -737,20 +737,20 @@ OAL_STATIC oal_void original_value_for_dts_params(oal_void)
 }
 
 /*
- * 函 数 名  : host_params_init_first_of_rf
- * 功能描述  : 给RF前端定制化参数全局数组 al_host_init_params 附初值
- *             ini文件读取失败时用初值(降函数行数)
+ * ?? ?? ??  : host_params_init_first_of_rf
+ * ????????  : ??RF?????????????????????? al_host_init_params ??????
+ *             ini????????????????????(??????????)
  */
  OAL_STATIC oal_void host_params_init_first_of_rf(oal_void)
 {
-    /* 2G RF前端 */
+    /* 2G RF???? */
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND1_MULT4] = WLAN_DB_2G_BAND1_MULT4;
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND1_MULT10] = WLAN_DB_2G_BAND1_MULT10;
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND2_MULT4] = WLAN_DB_2G_BAND2_MULT4;
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND2_MULT10] = WLAN_DB_2G_BAND2_MULT10;
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND3_MULT4] = WLAN_DB_2G_BAND3_MULT4;
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_2G_BAND3_MULT10] = WLAN_DB_2G_BAND3_MULT10;
-    /* 5G RF前端 */
+    /* 5G RF???? */
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_5G_BAND1_MULT4] = WLAN_DB_5G_BAND1_MULT4;
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_5G_BAND1_MULT10] = WLAN_DB_5G_BAND1_MULT10;
     al_host_init_params[WLAN_CFG_INIT_RF_LINE_TXRX_GAIN_DB_5G_BAND2_MULT4] = WLAN_DB_5G_BAND2_MULT4;
@@ -776,10 +776,10 @@ OAL_STATIC oal_void original_value_for_dts_params(oal_void)
 
 }
 /*
- * 函 数 名  : host_params_init_first
- * 功能描述  : 给定制化参数全局数组 al_host_init_params 附初值
- *             ini文件读取失败时用初值
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : host_params_init_first
+ * ????????  : ???????????????????? al_host_init_params ??????
+ *             ini????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_void host_params_init_first(oal_void)
 {
@@ -791,7 +791,7 @@ OAL_STATIC oal_void host_params_init_first(oal_void)
     al_host_init_params[WLAN_CFG_INIT_DELTA_B] = WLAN_DELTA_B_VAL;
     al_host_init_params[WLAN_CFG_INIT_DELTA_A] = WLAN_DELTA_A_VAL;
 
-    /* 性能 */
+    /* ???? */
     al_host_init_params[WLAN_CFG_INIT_AMPDU_TX_MAX_NUM] = WLAN_AMPDU_TX_MAX_BUF_SIZE;
     al_host_init_params[WLAN_CFG_INIT_USED_MEM_FOR_START] = WLAN_MEM_FOR_START;
     al_host_init_params[WLAN_CFG_INIT_USED_MEM_FOR_STOP] = WLAN_MEM_FOR_STOP;
@@ -803,7 +803,7 @@ OAL_STATIC oal_void host_params_init_first(oal_void)
     al_host_init_params[WLAN_CFG_INIT_LINK_LOSS_THRESHOLD_WLAN_DBAC] = WLAN_LOSS_THRESHOLD_WLAN_DBAC;
     al_host_init_params[WLAN_CFG_INIT_LINK_LOSS_THRESHOLD_WLAN_NORMAL] = WLAN_LOSS_THRESHOLD_WLAN_NORMAL;
 
-    /* 自动调频 */
+    /* ???????? */
     al_host_init_params[WLAN_CFG_INIT_PPS_THRESHOLD_LEVEL_0] = PPS_VALUE_0;
     al_host_init_params[WLAN_CFG_INIT_PPS_THRESHOLD_LEVEL_1] = PPS_VALUE_1;
     al_host_init_params[WLAN_CFG_INIT_PPS_THRESHOLD_LEVEL_2] = PPS_VALUE_2;
@@ -812,10 +812,10 @@ OAL_STATIC oal_void host_params_init_first(oal_void)
     al_host_init_params[WLAN_CFG_INIT_DEVICE_TYPE_LEVEL_1] = FREQ_MIDIUM;
     al_host_init_params[WLAN_CFG_INIT_DEVICE_TYPE_LEVEL_2] = FREQ_HIGHER;
     al_host_init_params[WLAN_CFG_INIT_DEVICE_TYPE_LEVEL_3] = FREQ_HIGHEST;
-    /* 低功耗 */
+    /* ?????? */
     al_host_init_params[WLAN_CFG_INIT_POWERMGMT_SWITCH] = 1;
     al_host_init_params[WLAN_CFG_INIT_PS_MODE] = 1;
-    /* 可维可测 日志级别 */
+    /* ???????? ???????? */
     al_host_init_params[WLAN_CFG_INIT_LOGLEVEL] = OAM_LOG_LEVEL_WARNING;
 
     host_params_init_first_of_rf();
@@ -874,17 +874,17 @@ OAL_STATIC oal_void host_params_init_first(oal_void)
     al_host_init_params[WLAN_CFG_INIT_TCP_ACK_BUF_LOW_40M] = WLAN_TCP_ACK_BUF_THROUGHPUT_THRESHOLD_LOW_40M;
     al_host_init_params[WLAN_CFG_INIT_TCP_ACK_BUF_HIGH_80M] = WLAN_TCP_ACK_BUF_THROUGHPUT_THRESHOLD_HIGH_80M;
     al_host_init_params[WLAN_CFG_INIT_TCP_ACK_BUF_LOW_80M] = WLAN_TCP_ACK_BUF_THROUGHPUT_THRESHOLD_LOW_80M;
-    /* RX DYN BYPASS EXTLNA 定制化参数 */
+    /* RX DYN BYPASS EXTLNA ?????????? */
     al_host_init_params[WLAN_CFG_INIT_RX_DYN_BYPASS_EXTLNA] = OAL_FALSE;
     al_host_init_params[WLAN_CFG_INIT_RX_DYN_BYPASS_EXTLNA_HIGH] = WLAN_DYN_BYPASS_EXTLNA_THROUGHPUT_THRESHOLD_HIGH;
     al_host_init_params[WLAN_CFG_INIT_RX_DYN_BYPASS_EXTLNA_LOW] = WLAN_DYN_BYPASS_EXTLNA_THROUGHPUT_THRESHOLD_LOW;
-    /* SMALL AMSDU 定制化参数 */
+    /* SMALL AMSDU ?????????? */
     al_host_init_params[WLAN_CFG_INIT_TX_SMALL_AMSDU] = OAL_TRUE;
     al_host_init_params[WLAN_CFG_INIT_SMALL_AMSDU_HIGH] = WLAN_SMALL_AMSDU_THROUGHPUT_THRESHOLD_HIGH;
     al_host_init_params[WLAN_CFG_INIT_SMALL_AMSDU_LOW] = WLAN_SMALL_AMSDU_THROUGHPUT_THRESHOLD_LOW;
     al_host_init_params[WLAN_CFG_INIT_SMALL_AMSDU_PPS_HIGH] = WLAN_SMALL_AMSDU_PPS_THRESHOLD_HIGH;
     al_host_init_params[WLAN_CFG_INIT_SMALL_AMSDU_PPS_LOW] = WLAN_SMALL_AMSDU_PPS_THRESHOLD_LOW;
-    /* 跳频参数设置 */
+    /* ???????????? */
     al_host_init_params[WLAN_CFG_INIT_NBFH_TBTT_OFFSET] = WLAN_NBFH_TBTT_OFFSET;
     al_host_init_params[WLAN_CFG_INIT_NBFH_TBTT_SYNC_TIME] = WLAN_NBFH_TBTT_SYNC_TIME;
     al_host_init_params[WLAN_CFG_INIT_NBFH_DWELL_TIME] = WLAN_NBFH_DWELL_TIME;
@@ -895,14 +895,14 @@ OAL_STATIC oal_void host_params_init_first(oal_void)
 }
 
 /*
- * 函 数 名  : host_nvram_params_init
- * 功能描述  : 给定制化参数全局数组 al_nvram_init_params中功率相关参数赋初值
- *             ini文件读取失败时用初值
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : host_nvram_params_init
+ * ????????  : ???????????????????? al_nvram_init_params????????????????????
+ *             ini????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_void host_nvram_params_init(oal_void)
 {
-    /* delt power 初始化 */
+    /* delt power ?????? */
     al_nvram_init_params[NVRAM_PARAMS_INDEX_0]                 = 0x14141414;
     al_nvram_init_params[NVRAM_PARAMS_INDEX_1]                 = 0x050F1414;
     al_nvram_init_params[NVRAM_PARAMS_INDEX_2]                 = 0x05050505;
@@ -916,10 +916,10 @@ OAL_STATIC oal_void host_nvram_params_init(oal_void)
     al_nvram_init_params[NVRAM_PARAMS_INDEX_10]                = 0xE7F1F1F1;
     al_nvram_init_params[NVRAM_PARAMS_INDEX_11]                = 0x0000DDDD;
 
-    /* 2.4G窄带基础功率初始化 */
+    /* 2.4G?????????????????? */
     al_nvram_init_params[NVRAM_PARAMS_TX_BASE_POWER_2P4G_NB]  = INIT_NVM_BASE_TXPWR_2G_NB;
 
-    /* 基准功率 */
+    /* ???????? */
     al_nvram_init_params[NVRAM_PARAMS_TX_BASE_POWER_2P4G]     = INIT_NVM_BASE_TXPWR_2G;
     al_nvram_init_params[NVRAM_PARAMS_TX_BASE_POWER_5G_BAND1] = INIT_NVM_BASE_TXPWR_5G;
     al_nvram_init_params[NVRAM_PARAMS_TX_BASE_POWER_5G_BAND2] = INIT_NVM_BASE_TXPWR_5G;
@@ -929,10 +929,10 @@ OAL_STATIC oal_void host_nvram_params_init(oal_void)
     al_nvram_init_params[NVRAM_PARAMS_TX_BASE_POWER_5G_BAND6] = INIT_NVM_BASE_TXPWR_5G;
     al_nvram_init_params[NVRAM_PARAMS_TX_BASE_POWER_5G_BAND7] = INIT_NVM_BASE_TXPWR_5G;
 
-    /* 5G 高band最大发射功率 */
+    /* 5G ??band???????????? */
     al_nvram_init_params[NVRAM_PARAMS_5G_HIGH_BAND_MAX_POW] = 0xFF;
 
-    /* SAR值 */
+    /* SAR?? */
     al_nvram_init_params[NVRAM_PARAMS_SAR_5G_BANK1_0] = 0xFFFFFFFF;
     al_nvram_init_params[NVRAM_PARAMS_SAR_5G_BANK2_0] = 0xFFFFFFFF;
     al_nvram_init_params[NVRAM_PARAMS_SAR_5G_BANK3_0] = 0xFFFFFFFF;
@@ -974,7 +974,7 @@ OAL_STATIC oal_void host_nvram_params_init(oal_void)
     al_nvram_init_params[NVRAM_PARAMS_SAR_5G_BANK7_4] = 0xFFFFFFFF;
     al_nvram_init_params[NVRAM_PARAMS_SAR_2G_4]       = 0xFFFFFFFF;
 
-    /* 边带信道最大功率 */
+    /* ???????????????? */
     al_nvram_init_params[NVRAM_PARAMS_SIDE_BAND_TXPWR_5G_20M_0] = 0xFFFFFFFF;
     al_nvram_init_params[NVRAM_PARAMS_SIDE_BAND_TXPWR_5G_20M_1] = 0xFFFFFFFF;
     al_nvram_init_params[NVRAM_PARAMS_SIDE_BAND_TXPWR_5G_20M_2] = 0xFFFFFFFF;
@@ -999,9 +999,9 @@ OAL_STATIC oal_void host_nvram_params_init(oal_void)
 }
 
 /*
- * 函 数 名  : hwifi_get_init_priv_value
- * 功能描述  : 获取私有定制化变量值
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_get_init_priv_value
+ * ????????  : ????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 int32 hwifi_get_init_priv_value(oal_int32 l_cfg_id, oal_int32 *pl_priv_value)
 {
@@ -1017,10 +1017,10 @@ int32 hwifi_get_init_priv_value(oal_int32 l_cfg_id, oal_int32 *pl_priv_value)
 }
 
 /*
- * 函 数 名  : hwifi_get_regdomain_from_country_code
- * 功能描述  : 根据国家码找到对应的regdomain
- * 输入参数  : country_code 国家码
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_get_regdomain_from_country_code
+ * ????????  : ????????????????????regdomain
+ * ????????  : country_code ??????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 regdomain_enum hwifi_get_regdomain_from_country_code(const countrycode_t country_code)
 {
@@ -1039,8 +1039,8 @@ regdomain_enum hwifi_get_regdomain_from_country_code(const countrycode_t country
 }
 
 /*
- * 函 数 名  : hwifi_is_regdomain_changed
- * 功能描述  : 国家码改变后，对应的regdomain是否有变化
+ * ?? ?? ??  : hwifi_is_regdomain_changed
+ * ????????  : ????????????????????regdomain??????????
  */
 int32 hwifi_is_regdomain_changed(const countrycode_t country_code_old, const countrycode_t country_code_new)
 {
@@ -1049,8 +1049,8 @@ int32 hwifi_is_regdomain_changed(const countrycode_t country_code_old, const cou
 }
 
 /*
- * 函 数 名  : hwifi_get_plat_tag_from_country_code
- * 功能描述  : 根据国家码找到平台对应的tag
+ * ?? ?? ??  : hwifi_get_plat_tag_from_country_code
+ * ????????  : ????????????????????????tag
  */
 int32 hwifi_get_plat_tag_from_country_code(const countrycode_t country_code)
 {
@@ -1074,8 +1074,8 @@ int32 hwifi_get_plat_tag_from_country_code(const countrycode_t country_code)
 }
 
 /*
- * 函 数 名  : hwifi_custom_host_read_dyn_cali_nvram
- * 功能描述  : 包括读取nvram中的dpint和校准系数值
+ * ?? ?? ??  : hwifi_custom_host_read_dyn_cali_nvram
+ * ????????  : ????????nvram????dpint????????????
  */
 oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
 {
@@ -1093,7 +1093,7 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
     oal_bool_enum_uint8 tmp_en_fact_cali_completed = OAL_FALSE;
     oal_uint8 *puc_buffer_cust_nvram_tmp = OAL_PTR_NULL;
     oal_int32 *pl_params = OAL_PTR_NULL;
-    oal_uint8 *puc_cust_nvram_info = OAL_PTR_NULL; /* NVRAM数组 */
+    oal_uint8 *puc_cust_nvram_info = OAL_PTR_NULL; /* NVRAM???? */
 
     puc_buffer_cust_nvram_tmp = (oal_uint8 *)OS_KZALLOC_GFP(DY_CALI_PARAMS_LEN);
     pl_params = (oal_int32 *)OS_KZALLOC_GFP(DY_CALI_PARAMS_NUM * DY_CALI_PARAMS_TIMES * OAL_SIZEOF(oal_int32));
@@ -1116,7 +1116,7 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
         if (puc_cust_nvram_info != OAL_PTR_NULL) {
             OS_MEM_KFREE(puc_cust_nvram_info);
         }
-        /* 防止上一次失败的结果影响这一次的结果，故清空 */
+        /* ???????????????????????????????????????????? */
         memset_s(auc_cust_nvram_info, OAL_SIZEOF(auc_cust_nvram_info), 0, OAL_SIZEOF(auc_cust_nvram_info));
         return INI_FILE_TIMESPEC_UNRECONFIG;
     }
@@ -1127,7 +1127,7 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
     memset_s(puc_cust_nvram_info, WLAN_CFG_DTS_NVRAM_END * DY_CALI_PARAMS_LEN,
              0, WLAN_CFG_DTS_NVRAM_END * DY_CALI_PARAMS_LEN);
 
-    /* 判断定制化中是否使用nvram中的动态校准参数 */
+    /* ????????????????????nvram???????????????? */
     l_ret = hwifi_get_init_priv_value(WLAN_CFG_PRIV_CALI_DATA_MASK, &l_priv_value);
     if (l_ret == OAL_SUCC) {
         en_get_nvram_data_flag = !!(HI1102A_CUST_READ_NVRAM_MASK & (oal_uint32)l_priv_value);
@@ -1142,7 +1142,7 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
         }
     }
 
-    /* 拟合系数 */
+    /* ???????? */
     for (uc_idx = WLAN_CFG_DTS_NVRAM_RATIO_PA2GCCKA0; uc_idx < WLAN_CFG_DTS_NVRAM_END; uc_idx++) {
         l_ret = read_conf_from_nvram(puc_buffer_cust_nvram_tmp, DY_CALI_PARAMS_LEN,
                                      wifi_nvram_cfg_handler[uc_idx].ul_nv_map_idx,
@@ -1168,7 +1168,7 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
             continue;
         }
 
-        /* 获取等号后面的实际参数 */
+        /* ?????????????????????? */
         puc_str += (OAL_STRLEN(wifi_nvram_cfg_handler[uc_idx].puc_param_name) + 1);
         pc_token = oal_strtok(puc_str, pc_end, &pc_ctx);
         if (pc_token == OAL_PTR_NULL) {
@@ -1197,15 +1197,15 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
 
         *(puc_cust_nvram_info + (uc_idx * DY_CALI_PARAMS_LEN * OAL_SIZEOF(oal_uint8)) + OAL_STRLEN(pc_token)) = *pc_end;
 
-        /* 拟合系数获取检查 */
+        /* ???????????????? */
         if (uc_idx <= WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0_LOW) {
-            /* 二次参数合理性检查 */
+            /* ?????????????????? */
             pc_token = oal_strtok(pc_token, pc_sep, &pc_ctx);
             uc_param_idx = 0;
-            /* 获取定制化系数 */
+            /* ?????????????? */
             while (pc_token != OAL_PTR_NULL) {
                 OAL_IO_PRINT("hwifi_custom_host_read_dyn_cali_nvram::get [%s]\n!", pc_token);
-                /* 将字符串转换成10进制数 */
+                /* ??????????????10?????? */
                 *(pl_params + uc_param_idx) = (oal_int32)oal_strtol(pc_token, OAL_PTR_NULL, 10);
                 pc_token = oal_strtok(OAL_PTR_NULL, pc_sep, &pc_ctx);
                 uc_param_idx++;
@@ -1218,7 +1218,7 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
                 continue;
             }
             uc_times_idx = uc_param_idx / DY_CALI_PARAMS_TIMES;
-            /* 二次项系数非0检查 */
+            /* ????????????0???? */
             while (uc_times_idx--) {
                 if (pl_params[(uc_times_idx)*DY_CALI_PARAMS_TIMES] == 0) {
                     OAM_ERROR_LOG1(0, OAM_SF_CUSTOM, "hwifi_custom_host_read_dyn_cali_nvram::check NV id[%d]!",
@@ -1239,7 +1239,7 @@ oal_int32 hwifi_custom_host_read_dyn_cali_nvram(oal_void)
     OS_MEM_KFREE(puc_buffer_cust_nvram_tmp);
     OS_MEM_KFREE(pl_params);
 
-    /* 检查NVRAM是否修改 */
+    /* ????NVRAM???????? */
     if (oal_memcmp(puc_cust_nvram_info, auc_cust_nvram_info, OAL_SIZEOF(auc_cust_nvram_info)) == 0) {
         OS_MEM_KFREE(puc_cust_nvram_info);
         return INI_FILE_TIMESPEC_UNRECONFIG;
@@ -1263,20 +1263,20 @@ oal_uint8 *hwifi_get_nvram_param(oal_uint32 ul_nvram_param_idx)
 }
 
 /*
- * 函 数 名  : hwifi_custom_host_force_read_cfg_init
- * 功能描述  : 首次读取定制化配置文件总入口
+ * ?? ?? ??  : hwifi_custom_host_force_read_cfg_init
+ * ????????  : ????????????????????????????
  */
 int32 hwifi_custom_host_force_read_cfg_init(void)
 {
     oal_int32 l_nv_read_ret;
     oal_int32 l_ini_read_ret;
 
-    /* 先获取私有定制化项 */
+    /* ?????????????????? */
     hwifi_config_init(CUS_TAG_PRIV_INI);
 
-    /* 读取nvram参数是否修改 */
+    /* ????nvram???????????? */
     l_nv_read_ret = hwifi_custom_host_read_dyn_cali_nvram();
-    /* 检查定制化文件中的产线配置是否修改 */
+    /* ?????????????????????????????????? */
     l_ini_read_ret = ini_file_check_conf_update();
     if (l_ini_read_ret || l_nv_read_ret) {
         OAM_WARNING_LOG0(0, OAM_SF_CFG, "hwifi_custom_host_force_read_cfg_init file is updated");
@@ -1296,27 +1296,27 @@ int32 hwifi_custom_host_force_read_cfg_init(void)
 
     hwifi_config_init(CUS_TAG_INI);
 
-    /* 启动完成后，输出打印 */
+    /* ???????????????????? */
     OAL_IO_PRINT("hwifi_custom_host_force_read_cfg_init finish!\r\n");
 
     return OAL_SUCC;
 }
 
 /*
- * 函 数 名  : hwifi_custom_host_read_cfg_init
- * 功能描述  : 首次读取定制化配置文件总入口
+ * ?? ?? ??  : hwifi_custom_host_read_cfg_init
+ * ????????  : ????????????????????????????
  */
 int32 hwifi_custom_host_read_cfg_init(void)
 {
     oal_int32 l_nv_read_ret;
     oal_int32 l_ini_read_ret;
 
-    /* 先获取私有定制化项 */
+    /* ?????????????????? */
     hwifi_config_init(CUS_TAG_PRIV_INI);
 
-    /* 读取nvram参数是否修改 */
+    /* ????nvram???????????? */
     l_nv_read_ret = hwifi_custom_host_read_dyn_cali_nvram();
-    /* 检查定制化文件中的产线配置是否修改 */
+    /* ?????????????????????????????????? */
     l_ini_read_ret = ini_file_check_conf_update();
     if (l_ini_read_ret || l_nv_read_ret) {
         OAM_WARNING_LOG0(0, OAM_SF_CFG, "hwifi_custom_host_read_cfg_init file is updated");
@@ -1337,16 +1337,16 @@ int32 hwifi_custom_host_read_cfg_init(void)
 
     hwifi_config_init(CUS_TAG_INI);
 
-    /* 启动完成后，输出打印 */
+    /* ???????????????????? */
     OAL_IO_PRINT("hwifi_custom_host_read_cfg_init finish!\r\n");
 
     return OAL_SUCC;
 }
 
 /*
- * 函 数 名  : hwifi_config_init_delt_txpower_nvram
- * 功能描述  : 降SAR
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_delt_txpower_nvram
+ * ????????  : ??SAR
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_int32 hwifi_config_init_delt_txpower_nvram(void)
 {
@@ -1366,7 +1366,7 @@ OAL_STATIC oal_int32 hwifi_config_init_delt_txpower_nvram(void)
         l_ret = get_cust_conf_int32(l_plat_tag, nvram_config_ini[l_cfg_id].name, &aul_nvram_params[l_cfg_id]);
         if (l_ret == INI_FAILED) {
             OAM_WARNING_LOG1(0, OAM_SF_ANY, "hwifi_config_init_delt_txpower_nvram read %d from ini failed!", l_cfg_id);
-            /* 读取失败就使用系统默认值 */
+            /* ???????????????????????? */
             aul_nvram_params[l_cfg_id] = al_nvram_init_params[l_cfg_id];
         }
     }
@@ -1382,9 +1382,9 @@ OAL_STATIC oal_int32 hwifi_config_init_delt_txpower_nvram(void)
 }
 
 /*
- * 函 数 名  : hwifi_config_init_sar_ctrl_nvram
- * 功能描述  : 降SAR
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_sar_ctrl_nvram
+ * ????????  : ??SAR
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_int32 hwifi_config_init_sar_ctrl_nvram(void)
 {
@@ -1407,7 +1407,7 @@ OAL_STATIC oal_int32 hwifi_config_init_sar_ctrl_nvram(void)
             if (l_ret != INI_SUCC) {
                 OAM_WARNING_LOG1(0, OAM_SF_CFG, "hwifi_config_init_sar_ctrl_nvram read id[%d] from ini failed!",
                                  ul_cus_id);
-                /* 读取失败时,使用初始值 */
+                /* ??????????,?????????? */
                 ul_nvram_params = al_nvram_init_params[ul_cus_id];
             }
 
@@ -1419,7 +1419,7 @@ OAL_STATIC oal_int32 hwifi_config_init_sar_ctrl_nvram(void)
             }
 
             for (uc_sar_lvl_idx = 0; uc_sar_lvl_idx < CUS_NUM_OF_SAR_ONE_PARAM_NUM; uc_sar_lvl_idx++) {
-                /* 定制项检查 */
+                /* ?????????? */
                 if (auc_nvram_params[uc_sar_lvl_idx] <= CUS_MIN_OF_SAR_VAL) {
                     OAM_ERROR_LOG4(0, OAM_SF_CUSTOM,
                                    "hwifi_config_init_sar_ctrl_nvram::uc_cfg_id[%d]:0x%x got[%d] out of the normal[%d] check ini file!",
@@ -1438,9 +1438,9 @@ OAL_STATIC oal_int32 hwifi_config_init_sar_ctrl_nvram(void)
 }
 
 /*
- * 函 数 名  : hwifi_config_init_5g_high_band_max_pow_nvram
- * 功能描述  : 读出定制化中的5G高band最大发送功率
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_5g_high_band_max_pow_nvram
+ * ????????  : ??????????????5G??band????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 oal_void hwifi_config_init_5g_high_band_max_pow_nvram(oal_void)
 {
@@ -1456,7 +1456,7 @@ oal_void hwifi_config_init_5g_high_band_max_pow_nvram(oal_void)
     l_ret = get_cust_conf_int32(l_plat_tag, nvram_config_ini[l_cfg_id].name, &l_val);
 
     if ((l_ret == INI_FAILED) || (l_val < CUS_MIN_BASE_TXPOWER_VAL)) {
-        /* 读取失败就使用系统默认值 */
+        /* ???????????????????????? */
         uc_5g_high_band_max_pow = (oal_uint8)al_nvram_init_params[l_cfg_id];
     } else {
         uc_5g_high_band_max_pow = (oal_uint8)l_val;
@@ -1466,9 +1466,9 @@ oal_void hwifi_config_init_5g_high_band_max_pow_nvram(oal_void)
 }
 
 /*
- * 函 数 名  : hwifi_config_hitalk_base_power
- * 功能描述  : 窄带模式下替换2.4G基础功率
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_hitalk_base_power
+ * ????????  : ??????????????2.4G????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 oal_void hwifi_config_hitalk_base_power(oal_int32 l_plat_tag)
 {
@@ -1479,7 +1479,7 @@ oal_void hwifi_config_hitalk_base_power(oal_int32 l_plat_tag)
                                 &l_base_power_tmp);
 
     if ((l_ret == INI_FAILED) || (l_base_power_tmp > MAX_TXPOWER_MAX) || (l_base_power_tmp < MAX_TXPOWER_MIN)) {
-        /* 读取失败就使用系统默认值 */
+        /* ???????????????????????? */
         cust_nv_params.uc_nb_base_power = al_nvram_init_params[NVRAM_PARAMS_TX_BASE_POWER_2P4G_NB];
     } else {
         cust_nv_params.uc_nb_base_power = l_base_power_tmp;
@@ -1488,9 +1488,9 @@ oal_void hwifi_config_hitalk_base_power(oal_int32 l_plat_tag)
 
 
 /*
- * 函 数 名  : hwifi_config_init_base_power
- * 功能描述  : 读出定制化中的base power
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_base_power
+ * ????????  : ??????????????base power
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 oal_int32 hwifi_config_init_base_power(oal_void)
 {
@@ -1507,7 +1507,7 @@ oal_int32 hwifi_config_init_base_power(oal_void)
         l_ret = get_cust_conf_int32(l_plat_tag, nvram_config_ini[l_cfg_id].name, &l_base_power_tmp);
 
         if ((l_ret == INI_FAILED) || (l_base_power_tmp > MAX_TXPOWER_MAX) || (l_base_power_tmp < MAX_TXPOWER_MIN)) {
-            /* 读取失败就使用系统默认值 */
+            /* ???????????????????????? */
             auc_base_power[l_base_power_idx] = al_nvram_init_params[l_cfg_id];
         } else {
             auc_base_power[l_base_power_idx] = l_base_power_tmp;
@@ -1523,15 +1523,15 @@ oal_int32 hwifi_config_init_base_power(oal_void)
         return INI_FAILED;
     }
 
-    /* 窄带模式下替换2.4G基础功率 */
+    /* ??????????????2.4G???????? */
     hwifi_config_hitalk_base_power(l_plat_tag);
     return INI_SUCC;
 }
 
 /*
- * 函 数 名  : hwifi_config_init_fcc_ce_txpwr_nvram
- * 功能描述  : 读出定制化中FCC或CE的功率限制值
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_fcc_ce_txpwr_nvram
+ * ????????  : ????????????FCC??CE????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 oal_int32 hwifi_config_init_fcc_ce_txpwr_nvram(oal_void)
 {
@@ -1562,7 +1562,7 @@ oal_int32 hwifi_config_init_fcc_ce_txpwr_nvram(oal_void)
         if (l_ret != INI_SUCC) {
             OAM_WARNING_LOG1(0, OAM_SF_CFG, "hwifi_config_init_fcc_ce_txpwr_nvram read id[%d] from ini failed!",
                              ul_cfg_id);
-            /* 读取失败时,使用初始值 */
+            /* ??????????,?????????? */
             pl_nvram_params[uc_param_idx] = al_nvram_init_params[ul_cfg_id];
         }
         uc_param_idx++;
@@ -1581,7 +1581,7 @@ oal_int32 hwifi_config_init_fcc_ce_txpwr_nvram(oal_void)
                       pl_nvram_params, OAL_SIZEOF(int32));
     pl_nvram_params++;
 
-    /* CH165 */ /* 偏移已经拷贝过数据的2*4字节，剩余长度是buff总长度减去已拷贝过数据的2*4字节 */
+    /* CH165 */ /* ????????????????????2*4????????????????buff????????????????????????2*4???? */
     l_ret += memcpy_s(cust_nv_params.st_fcc_ce_txpwer_limit.auc_5g_txpwr_20M + 2 * OAL_SIZEOF(int32),
                       FCC_CE_CH_NUM_5G_20M - 2 * OAL_SIZEOF(int32),
                       pl_nvram_params, OAL_SIZEOF(oal_uint8));
@@ -1591,7 +1591,7 @@ oal_int32 hwifi_config_init_fcc_ce_txpwr_nvram(oal_void)
                       pl_nvram_params, OAL_SIZEOF(int32));
     pl_nvram_params++;
 
-    /* CH159/CH151 */ /* 只拷贝2字节数据，因为之前已经拷贝4字节，buff大小只剩6-4=2个字节 */
+    /* CH159/CH151 */ /* ??????2??????????????????????????4??????buff????????6-4=2?????? */
     l_ret += memcpy_s(cust_nv_params.st_fcc_ce_txpwer_limit.auc_5g_txpwr_40M + OAL_SIZEOF(int32),
 
                       FCC_CE_CH_NUM_5G_40M - OAL_SIZEOF(int32),
@@ -1632,8 +1632,8 @@ oal_int32 hwifi_config_init_fcc_ce_txpwr_nvram(oal_void)
 }
 
 /*
- * 函 数 名  : hwifi_get_gnss_scan_by_i3c
- * 功能描述  : 读取plat ini文件中的i3c_switch这个变量，用控制wifi侧gnss scan的开关
+ * ?? ?? ??  : hwifi_get_gnss_scan_by_i3c
+ * ????????  : ????plat ini????????i3c_switch????????????????wifi??gnss scan??????
  */
 oal_uint8 hwifi_get_gnss_scan_by_i3c(void)
 {
@@ -1645,13 +1645,13 @@ oal_uint8 hwifi_get_gnss_scan_by_i3c(void)
 }
 
 /*
- * 函 数 名  : hwifi_config_init_nvram
- * 功能描述  : handle nvram customize params
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_nvram
+ * ????????  : handle nvram customize params
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC int32 hwifi_config_init_nvram(void)
 {
-    /* 是否为第一次初始化，如果是国家码更新调用的本接口，则不再去nvm读取参数 */
+    /* ??????????????????????????????????????????????????????????nvm???????? */
     OAL_STATIC oal_bool_enum en_nvm_initialed = OAL_FALSE;
     int32                    l_cfg_id;
     int32                    l_ret = INI_FAILED;
@@ -1663,7 +1663,7 @@ OAL_STATIC int32 hwifi_config_init_nvram(void)
             l_ret = get_cust_conf_string(CUST_MODU_NVRAM, OAL_PTR_NULL, auc_nv_params, sizeof(auc_nv_params));
 
             if (l_ret == INI_SUCC && auc_nv_params[0] != 0) {
-                /* 读取成功，将标志位置TRUE */
+                /* ????????????????????TRUE */
                 en_nvm_initialed = OAL_TRUE;
                 return INI_SUCC;
             }
@@ -1671,14 +1671,14 @@ OAL_STATIC int32 hwifi_config_init_nvram(void)
             OAM_WARNING_LOG3 (0, OAM_SF_ANY,
                               "hwifi_config_init_nvram read nvram failed[ret:%d] or wrong values[first eight values:0x%x %x], read dts instead!",
                               l_ret, *((oal_uint32 *)auc_nv_params),
-                              *((oal_uint32 *)(auc_nv_params + sizeof(uint32)))); /* 打印前8字节的值 */
+                              *((oal_uint32 *)(auc_nv_params + sizeof(uint32)))); /* ??????8???????? */
 
         } else {
             en_nvm_initialed = OAL_TRUE;
         }
     }
 
-    /* 检查cfg_id是否正确排列 */
+    /* ????cfg_id???????????? */
     for (l_cfg_id = NVRAM_PARAMS_INDEX_0; l_cfg_id < NVRAM_PARAMS_INDEX_BUTT; l_cfg_id++) {
         if (nvram_config_ini[l_cfg_id].case_entry != l_cfg_id) {
             OAM_ERROR_LOG2(0, OAM_SF_ANY, "hwifi_config_init_nvram:nvram_config_ini case_entry[%d]!=l_cfg_id[%d]",
@@ -1697,15 +1697,15 @@ OAL_STATIC int32 hwifi_config_init_nvram(void)
         OAM_ERROR_LOG1(0, OAM_SF_ANY, "hwifi_config_init_nvram:read sar fail,l_ret=%d", l_ret);
         return l_ret;
     }
-    /* 基准功率 */
+    /* ???????? */
     l_ret = hwifi_config_init_base_power();
     if (l_ret != INI_SUCC) {
         OAM_ERROR_LOG1(0, OAM_SF_ANY, "hwifi_config_init_nvram:read base power fail,l_ret=%d", l_ret);
         return l_ret;
     }
-    /* 5G 高band最大发射功率 */
+    /* 5G ??band???????????? */
     hwifi_config_init_5g_high_band_max_pow_nvram();
-    /* FCC/CE 边带信道最大功率 */
+    /* FCC/CE ???????????????? */
     l_ret = hwifi_config_init_fcc_ce_txpwr_nvram();
     if (l_ret != INI_SUCC) {
         OAM_ERROR_LOG1(0, OAM_SF_ANY, "hwifi_config_init_nvram:read fcc or ce txpower fail,l_ret=%d", l_ret);
@@ -1715,9 +1715,9 @@ OAL_STATIC int32 hwifi_config_init_nvram(void)
 }
 
 /*
- * 函 数 名  : hwifi_config_init_private_custom
- * 功能描述  : 初始化私有定制全局变量数组
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_private_custom
+ * ????????  : ??????????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC int32 hwifi_config_init_private_custom(void)
 {
@@ -1729,7 +1729,7 @@ OAL_STATIC int32 hwifi_config_init_private_custom(void)
             OAM_ERROR_LOG2(0, OAM_SF_CFG, "hwifi_config_init_private_custom:l_cfg_id[%d]!=case_entry[%d]",
                            l_cfg_id, wifi_config_priv[l_cfg_id].case_entry);
         }
-        /* 获取 private 的配置值 */
+        /* ???? private ???????? */
         l_ret = get_cust_conf_int32(INI_MODU_WIFI, wifi_config_priv[l_cfg_id].name,
                                     &(al_priv_cust_params[l_cfg_id].l_val));
 
@@ -1749,9 +1749,9 @@ OAL_STATIC int32 hwifi_config_init_private_custom(void)
 }
 
 /*
- * 函 数 名  : hwifi_config_sepa_coefficient_from_param
- * 功能描述  : 从字符串中分割二次系数项
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_sepa_coefficient_from_param
+ * ????????  : ????????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_uint32 hwifi_config_sepa_coefficient_from_param(const char *puc_cust_param_info,
                                                                oal_int32 *pl_coe_params,
@@ -1778,7 +1778,7 @@ OAL_STATIC oal_uint32 hwifi_config_sepa_coefficient_from_param(const char *puc_c
         return OAL_ERR_CODE_PTR_NULL;
     }
     pc_token = oal_strtok(pc_token, pc_sep, &pc_ctx);
-    /* 获取定制化系数 */
+    /* ?????????????? */
     while (pc_token) {
         if (us_param_num == us_max_idx) {
             OAM_ERROR_LOG2(0, OAM_SF_CUSTOM,
@@ -1787,7 +1787,7 @@ OAL_STATIC oal_uint32 hwifi_config_sepa_coefficient_from_param(const char *puc_c
             return OAL_FAIL;
         }
         OAL_IO_PRINT("hwifi_config_sepa_coefficient_from_param get [%s]\n!", pc_token);
-        /* 将字符串转换成10进制数 */
+        /* ??????????????10?????? */
         *(pl_coe_params + us_param_num) = (oal_int32)oal_strtol(pc_token, OAL_PTR_NULL, 10);
         pc_token = oal_strtok(OAL_PTR_NULL, pc_sep, &pc_ctx);
         us_param_num++;
@@ -1804,9 +1804,9 @@ OAL_STATIC oal_uint32 hwifi_config_sepa_coefficient_from_param(const char *puc_c
 }
 
 /*
- * 函 数 名  : hwifi_config_get_5g_curv_switch_point
- * 功能描述  : 根据ini文件获取5G二次曲线功率切换点
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_get_5g_curv_switch_point
+ * ????????  : ????ini????????5G??????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_void hwifi_config_get_5g_curv_switch_point(const char *puc_ini_pa_params, oal_uint32 ul_cfg_id)
 {
@@ -1819,7 +1819,7 @@ OAL_STATIC oal_void hwifi_config_get_5g_curv_switch_point(const char *puc_ini_pa
     if ((ul_cfg_id != WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0) && (ul_cfg_id != WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0_BAND1)) {
         return;
     }
-    /* 获取拟合系数项 */
+    /* ?????????????? */
     if (hwifi_config_sepa_coefficient_from_param(puc_ini_pa_params, l_ini_params, &us_ini_param_num,
                                                  OAL_SIZEOF(l_ini_params) / OAL_SIZEOF(oal_int32)) != OAL_SUCC) {
         OAM_ERROR_LOG2(0, OAM_SF_CUSTOM,
@@ -1837,7 +1837,7 @@ OAL_STATIC oal_void hwifi_config_get_5g_curv_switch_point(const char *puc_ini_pa
                            ul_cfg_id, us_ini_param_num);
             return;
         }
-        /* 第一个数据留给band1 */
+        /* ??????????????band1 */
         ps_extre_point_val++;
     } else {
         if (us_ini_param_num != 1) {
@@ -1848,7 +1848,7 @@ OAL_STATIC oal_void hwifi_config_get_5g_curv_switch_point(const char *puc_ini_pa
         }
     }
 
-    /* 计算5g曲线switch point */
+    /* ????5g????switch point */
     for (uc_param_idx = 0; uc_param_idx < us_ini_param_num; uc_param_idx++) {
         *(ps_extre_point_val + uc_param_idx) = (oal_int16)HWIFI_DYN_CALI_GET_EXTRE_POINT(l_ini_params +
                                                                                          uc_secon_ratio_idx);
@@ -1864,9 +1864,9 @@ OAL_STATIC oal_void hwifi_config_get_5g_curv_switch_point(const char *puc_ini_pa
 }
 
 /*
- * 函 数 名  : hwifi_config_nvram_second_coefficient_check
- * 功能描述  : 检查修正nvram中的二次系数是否合理
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_nvram_second_coefficient_check
+ * ????????  : ????????nvram????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_uint32 hwifi_config_nvram_second_coefficient_check(oal_uint8 *puc_cust_nvram_info,
                                                                   oal_uint8 *puc_ini_pa_params,
@@ -1880,7 +1880,7 @@ OAL_STATIC oal_uint32 hwifi_config_nvram_second_coefficient_check(oal_uint8 *puc
     oal_uint8 uc_secon_ratio_idx = 0;
     oal_uint8 uc_param_idx;
 
-    /* 获取拟合系数项 */
+    /* ?????????????? */
     if (hwifi_config_sepa_coefficient_from_param(puc_cust_nvram_info, l_nv_params, &us_nv_param_num,
                                                  OAL_SIZEOF(l_nv_params)) != OAL_SUCC ||
         hwifi_config_sepa_coefficient_from_param(puc_ini_pa_params, l_ini_params,
@@ -1893,7 +1893,7 @@ OAL_STATIC oal_uint32 hwifi_config_nvram_second_coefficient_check(oal_uint8 *puc
     }
 
     us_nv_param_num /= DY_CALI_PARAMS_TIMES;
-    /* 检查nv和ini中二次系数是否匹配 */
+    /* ????nv??ini?????????????????? */
     for (uc_param_idx = 0; uc_param_idx < us_nv_param_num; uc_param_idx++) {
         if (l_ini_params[uc_secon_ratio_idx] != l_nv_params[uc_secon_ratio_idx]) {
             OAM_WARNING_LOG4(0, OAM_SF_CUSTOM,
@@ -1902,14 +1902,14 @@ OAL_STATIC oal_uint32 hwifi_config_nvram_second_coefficient_check(oal_uint8 *puc
                              uc_secon_ratio_idx,
                              l_ini_params[uc_secon_ratio_idx],
                              l_nv_params[uc_secon_ratio_idx]);
-            /* 量产后二次系数以nvram中为准，刷新NV中的二次拟合曲线切换点 */
+            /* ????????????????nvram????????????NV?????????????????????? */
             hwifi_config_get_5g_curv_switch_point(puc_cust_nvram_info, ul_cfg_id);
             uc_secon_ratio_idx += DY_CALI_PARAMS_TIMES;
             continue;
         }
 
         if (ul_cfg_id == WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0) {
-            /* 计算产线上的delt power */
+            /* ????????????delt power */
             *(ps_5g_delt_power + uc_param_idx) = HWIFI_GET_5G_PRO_LINE_DELT_POW_PER_BAND(l_nv_params +
                                                                                          uc_secon_ratio_idx,
                                                                                          l_ini_params +
@@ -1923,9 +1923,9 @@ OAL_STATIC oal_uint32 hwifi_config_nvram_second_coefficient_check(oal_uint8 *puc
 }
 
 /*
- * 函 数 名  : hwifi_config_init_dy_cali_custom
- * 功能描述  : 获取定制化文件和产测系数
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_config_init_dy_cali_custom
+ * ????????  : ????????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC oal_uint32 hwifi_config_init_dy_cali_custom(oal_void)
 {
@@ -1944,7 +1944,7 @@ OAL_STATIC oal_uint32 hwifi_config_init_dy_cali_custom(oal_void)
     oal_int32 l_ret;
 
     for (ul_cfg_id = WLAN_CFG_DTS_NVRAM_RATIO_PA2GCCKA0; ul_cfg_id < WLAN_CFG_DTS_NVRAM_PARAMS_BUTT; ul_cfg_id++) {
-        /* 二次拟合系数 */
+        /* ???????????? */
         if (get_cust_conf_string(INI_MODU_WIFI, nvram_pro_line_config_ini[ul_cfg_id].name,
                                  auc_ini_pa_params, DY_CALI_PARAMS_LEN) == INI_FAILED) {
             if (OAL_VALUE_EQ_ANY2(ul_cfg_id, WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0_BAND1_LOW,
@@ -1964,15 +1964,15 @@ OAL_STATIC oal_uint32 hwifi_config_init_dy_cali_custom(oal_void)
         }
 
         if (OAL_VALUE_EQ_ANY2(ul_cfg_id, WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0, WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0_BAND1)) {
-            /* 获取ini中的二次拟合曲线切换点 */
+            /* ????ini?????????????????????? */
             hwifi_config_get_5g_curv_switch_point(auc_ini_pa_params, ul_cfg_id);
         }
 
         if (ul_cfg_id <= WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0_LOW) {
             puc_cust_nvram_info = hwifi_get_nvram_param(ul_cfg_id);
-            /* 先取nv中的参数值,为空则从ini文件中读取 */
+            /* ????nv??????????,????????ini?????????? */
             if (OAL_STRLEN(puc_cust_nvram_info)) {
-                /* NVRAM二次系数异常保护 */
+                /* NVRAM???????????????? */
                 if (hwifi_config_nvram_second_coefficient_check(puc_cust_nvram_info, auc_ini_pa_params,
                                                                 ul_cfg_id, s_5g_delt_power) == OAL_SUCC) {
                     if ((ul_cfg_id == WLAN_CFG_DTS_NVRAM_RATIO_PA5GA0_LOW) &&
@@ -1991,7 +1991,7 @@ OAL_STATIC oal_uint32 hwifi_config_init_dy_cali_custom(oal_void)
                     break;
                 }
             } else {
-                /* 提供产线第一次上电校准初始值 */
+                /* ???????????????????????????? */
                 l_ret = memcpy_s(puc_cust_nvram_info, DY_CALI_PARAMS_LEN,
                                  auc_ini_pa_params, OAL_STRLEN(auc_ini_pa_params));
                 if (l_ret != EOK) {
@@ -2015,7 +2015,7 @@ OAL_STATIC oal_uint32 hwifi_config_init_dy_cali_custom(oal_void)
     }
 
     if (ul_ret == OAL_FAIL) {
-        /* 置零防止下发到device */
+        /* ??????????????device */
         memset_s(as_pro_line_params, OAL_SIZEOF(as_pro_line_params), 0, OAL_SIZEOF(as_pro_line_params));
 
     } else {
@@ -2027,7 +2027,7 @@ OAL_STATIC oal_uint32 hwifi_config_init_dy_cali_custom(oal_void)
 
             return OAL_FAIL;
         }
-        /* l_params 是按照cfg id的顺序取的数据，as_pro_line_params是按照 device解析的顺序排列 */
+        /* l_params ??????cfg id????????????????as_pro_line_params?????? device?????????????? */
         for (uc_cali_param_idx = 0; uc_cali_param_idx < DY_CALI_PARAMS_BASE_NUM; uc_cali_param_idx++) {
             if (uc_cali_param_idx == DY_2G_CALI_PARAMS_NUM - 1) {
                 /* 5g band1 & 2g CW */
@@ -2086,8 +2086,8 @@ OAL_STATIC oal_uint32 hwifi_config_init_dy_cali_custom(oal_void)
 }
 
 /*
- * 函 数 名  : hwifi_config_sepa_dpn_from_param
- * 功能描述  : Separate DPN values from INI item.
+ * ?? ?? ??  : hwifi_config_sepa_dpn_from_param
+ * ????????  : Separate DPN values from INI item.
  */
 OAL_STATIC oal_uint32 hwifi_config_sepa_dpn_from_param(oal_uint8 *puc_cust_param_info, oal_int32 *pl_dpn_params,
                                                        oal_uint16 *pus_param_num, oal_uint16 us_max_idx)
@@ -2112,7 +2112,7 @@ OAL_STATIC oal_uint32 hwifi_config_sepa_dpn_from_param(oal_uint8 *puc_cust_param
         return OAL_ERR_CODE_PTR_NULL;
     }
     pc_token = strtok_s(pc_token, pc_sep, &pc_ctx);
-    /* 获取定制化系数 */
+    /* ?????????????? */
     while (pc_token != NULL) {
         if (us_param_num == us_max_idx) {
             OAM_ERROR_LOG2(0, OAM_SF_CUSTOM,
@@ -2121,7 +2121,7 @@ OAL_STATIC oal_uint32 hwifi_config_sepa_dpn_from_param(oal_uint8 *puc_cust_param
             return OAL_FAIL;
         }
         OAL_IO_PRINT("hwifi_config_sepa_dpn_from_param get [%s]\n!", pc_token);
-        /* 将字符串转换成10进制数 */
+        /* ??????????????10?????? */
         *(pl_dpn_params + us_param_num) = (oal_int32)oal_strtol(pc_token, OAL_PTR_NULL, 10);
         pc_token = strtok_s(OAL_PTR_NULL, pc_sep, &pc_ctx);
         us_param_num++;
@@ -2132,8 +2132,8 @@ OAL_STATIC oal_uint32 hwifi_config_sepa_dpn_from_param(oal_uint8 *puc_cust_param
 }
 
 /*
- * 函 数 名  : hwifi_config_get_bt_dpn
- * 功能描述  : Get BT DPN values.
+ * ?? ?? ??  : hwifi_config_get_bt_dpn
+ * ????????  : Get BT DPN values.
  */
 oal_uint32 hwifi_config_get_bt_dpn(oal_int32 *pl_params, oal_uint16 size)
 {
@@ -2166,9 +2166,9 @@ oal_uint32 hwifi_config_get_bt_dpn(oal_int32 *pl_params, oal_uint16 size)
 }
 
 /*
- * 函 数 名  : hwifi_config_init
- * 功能描述  : netdev open 调用的定制化总入口
- *             读取ini文件，更新 al_host_init_params 全局数组?
+ * ?? ?? ??  : hwifi_config_init
+ * ????????  : netdev open ??????????????????
+ *             ????ini?????????? al_host_init_params ?????????
  */
 int32 hwifi_config_init(int32 cus_tag)
 {
@@ -2210,7 +2210,7 @@ int32 hwifi_config_init(int32 cus_tag)
             OAM_ERROR_LOG2(0, OAM_SF_ANY, "hwifi_config_init:l_cfg_id[%d]!=case_entry[%d]!!!!",
                            l_cfg_id, pgast_wifi_config[l_cfg_id].case_entry);
         }
-        /* 获取ini的配置值 */
+        /* ????ini???????? */
         l_ret = get_cust_conf_int32(INI_MODU_WIFI, pgast_wifi_config[l_cfg_id].name, &l_cfg_value);
 
         if (l_ret == INI_FAILED) {
@@ -2229,16 +2229,16 @@ int32 hwifi_config_init(int32 cus_tag)
 }
 
 /*
- * 函 数 名  : char2byte
- * 功能描述  : 统计值，判断有无读取到mac地址
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : char2byte
+ * ????????  : ??????????????????????mac????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 OAL_STATIC int char2byte(const char *strori, char *outbuf)
 {
     int i = 0;
     int temp = 0;
     int sum = 0;
-    const int l_loop_times = 12; /* 单字节遍历是不是正确的mac地址:xx:xx:xx:xx:xx:xx */
+    const int l_loop_times = 12; /* ??????????????????????mac????:xx:xx:xx:xx:xx:xx */
 
     for (i = 0; i < l_loop_times; i++) {
         switch (strori[i]) {
@@ -2247,16 +2247,16 @@ OAL_STATIC int char2byte(const char *strori, char *outbuf)
                 break;
 
             case 'a' ... 'f':
-                temp = strori[i] - 'a' + 10; /* 加10为了保证'a'~'f'分别对应10~15 */
+                temp = strori[i] - 'a' + 10; /* ??10????????'a'~'f'????????10~15 */
                 break;
 
             case 'A' ... 'F':
-                temp = strori[i] - 'A' + 10; /* 加10为了保证'A'~'F'分别对应10~15 */
+                temp = strori[i] - 'A' + 10; /* ??10????????'A'~'F'????????10~15 */
                 break;
         }
 
         sum += temp;
-        /* 为了组成正确的mac地址:xx:xx:xx:xx:xx:xx */
+        /* ??????????????mac????:xx:xx:xx:xx:xx:xx */
         if (i % 2 == 0) {
             outbuf[i / 2] |= temp << 4;
         } else {
@@ -2268,11 +2268,11 @@ OAL_STATIC int char2byte(const char *strori, char *outbuf)
 }
 
 /*
- * 函 数 名  : hwifi_get_mac_addr
- * 功能描述  : 从nvram中获取mac地址
- *             如果获取失败，则随机一个mac地址
- * 输入参数  : puc_buf ptr
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_get_mac_addr
+ * ????????  : ??nvram??????mac????
+ *             ????????????????????????mac????
+ * ????????  : puc_buf ptr
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 int32 hwifi_get_mac_addr(uint8 *puc_buf)
 {
@@ -2361,9 +2361,9 @@ int32 hwifi_get_init_value(int32 cus_tag, int32 cfg_id)
 }
 
 /*
- * 函 数 名  : hwifi_get_country_code
- * 功能描述  : 获取国家码
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_get_country_code
+ * ????????  : ??????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 int8 *hwifi_get_country_code(void)
 {
@@ -2373,11 +2373,11 @@ int8 *hwifi_get_country_code(void)
         return ac_country_code;
     }
 
-    /* 获取cust国家码 */
+    /* ????cust?????? */
     l_ret = get_cust_conf_string(INI_MODU_WIFI, STR_COUNTRY_CODE, ac_country_code, sizeof(ac_country_code));
 
     if (l_ret == INI_FAILED) {
-        /* 长度去掉结束符 */
+        /* ?????????????? */
         OAM_WARNING_LOG0(0, OAM_SF_ANY, "hisi_customize_wifi read country code failed, check if it exists!");
         l_ret = strncpy_s(ac_country_code, OAL_SIZEOF(ac_country_code), "99", sizeof("99") - 1);
 
@@ -2388,22 +2388,22 @@ int8 *hwifi_get_country_code(void)
     }
     else {
 
-        if (!OAL_MEMCMP(ac_country_code, "99", sizeof("99") - 1)) { /* 长度去掉结束符 */
+        if (!OAL_MEMCMP(ac_country_code, "99", sizeof("99") - 1)) { /* ?????????????? */
 
             OAM_WARNING_LOG0(0, OAM_SF_ANY, "hwifi_get_country_code is set 99!");
             g_st_cust_country_code_ignore_flag.en_country_code_ingore_ini_flag = OAL_TRUE;
         }
     }
 
-    ac_country_code[COUNTRY_CODE_LEN - 1] = '\0'; /* 以'\0'结尾 */
+    ac_country_code[COUNTRY_CODE_LEN - 1] = '\0'; /* ??'\0'???? */
 
     return ac_country_code;
 }
 
 /*
- * 函 数 名  : hwifi_set_country_code
- * 功能描述  : 配置国家码
- * 输入参数  : country_code ptr, country_code len
+ * ?? ?? ??  : hwifi_set_country_code
+ * ????????  : ??????????
+ * ????????  : country_code ptr, country_code len
  */
 void hwifi_set_country_code(int8 *country_code, const uint32 len)
 {
@@ -2420,7 +2420,7 @@ void hwifi_set_country_code(int8 *country_code, const uint32 len)
         return;
     }
 
-    ac_country_code[COUNTRY_CODE_LEN - 1] = '\0'; /* 以'\0'结尾 */
+    ac_country_code[COUNTRY_CODE_LEN - 1] = '\0'; /* ??'\0'???? */
 
     return;
 }
@@ -2431,10 +2431,10 @@ wlan_customize_power_params_stru *hwifi_get_nvram_params(void)
 }
 
 /*
- * 函 数 名  : hwifi_atcmd_update_host_nv_params
- * 功能描述  : 本函数只被产线AT命令:AT^WICALDATA=0,,,,,,调用，其他情况请不要调用本接口
- *             本函数只被产线AT命令:AT^WICALDATA=0,,,,,,调用，其他情况请不要调用本接口
- * 返 回 值  : OAL_SUCC 或 失败错误码
+ * ?? ?? ??  : hwifi_atcmd_update_host_nv_params
+ * ????????  : ??????????????AT????:AT^WICALDATA=0,,,,,,??????????????????????????????
+ *             ??????????????AT????:AT^WICALDATA=0,,,,,,??????????????????????????????
+ * ?? ?? ??  : OAL_SUCC ?? ??????????
  */
 int32 hwifi_atcmd_update_host_nv_params(void)
 {
@@ -2445,8 +2445,8 @@ int32 hwifi_atcmd_update_host_nv_params(void)
     l_ret = get_cust_conf_string(CUST_MODU_NVRAM, OAL_PTR_NULL, auc_nv_params, sizeof(auc_nv_params));
 
     if (l_ret == INI_FAILED || !auc_nv_params[0]) {
-        /* 正常流程必须返回成功，失败则本次校准失败，不应该再按正常流程走，直接返回失败 */
-        /* 失败原因最大可能是在调用产校命令之前写入NV的操作就已经失败导致NV区域为空 */
+        /* ???????????????????????????????????????????????????????????????????????????? */
+        /* ????????????????????????????????????????NV????????????????????NV???????? */
         OAM_ERROR_LOG2(0, OAM_SF_ANY,
             "hwifi_atcmd_update_host_nv_params::read nvram params failed or nv is empty, ret=[%d], nv_param[%u]!!",
             l_ret, auc_nv_params[0]);
@@ -2459,7 +2459,7 @@ int32 hwifi_atcmd_update_host_nv_params(void)
     return INI_SUCC;
 }
 
-/* 导出符号 */
+/* ???????? */
 EXPORT_SYMBOL_GPL(hwifi_get_gnss_scan_by_i3c);
 EXPORT_SYMBOL_GPL(g_st_cust_country_code_ignore_flag);
 EXPORT_SYMBOL_GPL(wlan_customize);

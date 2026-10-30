@@ -21,7 +21,7 @@
 /* 64bit bar, bar1 reference to  bar 2 */
 #define PCIE_IATU_BAR_INDEX OAL_PCI_BAR_2
 
-#define PCIE_MEM_MSG_SIZE 2 /* 存放每段mem的开始和结束地址信息 */
+#define PCIE_MEM_MSG_SIZE 2 /* ????????mem???????????????????? */
 
 #define PCIE_DEBUG_MSG_LEN 100
 typedef enum _PCI_LOG_TYPE_ {
@@ -43,10 +43,10 @@ typedef enum _PCI_LOG_TYPE_ {
 typedef enum _PCI_WLAN_LINK_STATE_ {
     PCI_WLAN_LINK_DOWN = 0,  /* default state, PCIe not ready */
     PCI_WLAN_LINK_DEEPSLEEP, /* pcie linkdown, but soc sleep mode */
-    PCI_WLAN_LINK_UP,        /* 物理链路已使能 */
-    PCI_WLAN_LINK_MEM_UP,    /* IATU已经配置OK，可以访问AXI */
+    PCI_WLAN_LINK_UP,        /* ?????????????? */
+    PCI_WLAN_LINK_MEM_UP,    /* IATU????????OK??????????AXI */
     PCI_WLAN_LINK_RES_UP,    /* RINGBUF OK */
-    PCI_WLAN_LINK_WORK_UP,   /* 业务层可以访问PCIE */
+    PCI_WLAN_LINK_WORK_UP,   /* ??????????????PCIE */
     PCI_WLAN_LINK_BUTT
 } PCI_WLAN_LINK_STATE;
 
@@ -103,7 +103,7 @@ OAL_STATIC OAL_INLINE oal_void oal_pcie_print_config_reg(oal_pci_dev_stru *dev, 
         oal_pcie_print_config_reg(dev, reg_name, #reg_name); \
     } while (0)
 
-typedef oal_uint32 pcie_dev_ptr; /* Device CPU 指针大小，目前都是32bits */
+typedef oal_uint32 pcie_dev_ptr; /* Device CPU ??????????????????32bits */
 
 typedef struct _oal_reg_bits_stru_ {
     oal_uint32 flag;
@@ -141,9 +141,9 @@ typedef struct _oal_pcie_trans_stat_ {
 } oal_pcie_trans_stat;
 
 typedef struct _pci_addr_map__ {
-    /* unsigned long 指针长度和CPU位宽等长 */
-    uintptr_t va; /* 虚拟地址 */
-    uintptr_t pa; /* 物理地址 */
+    /* unsigned long ??????????CPU???????? */
+    uintptr_t va; /* ???????? */
+    uintptr_t pa; /* ???????? */
 } pci_addr_map;
 
 typedef struct _pcie_cb_dma_res_ {
@@ -152,33 +152,33 @@ typedef struct _pcie_cb_dma_res_ {
 } pcie_cb_dma_res;
 
 typedef struct _pcie_h2d_res_ {
-    /* device ringbuf 虚拟地址(数据) */
-    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf地址 */
-    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf 控制结构体地址 */
-    oal_netbuf_head_stru txq;           /* 正在发送中的netbuf队列 */
+    /* device ringbuf ????????(????) */
+    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf???? */
+    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf ?????????????? */
+    oal_netbuf_head_stru txq;           /* ????????????netbuf???? */
     oal_atomic tx_ringbuf_sync_cond;
     oal_spin_lock_stru lock;
     oal_pcie_h2d_stat stat;
 } pcie_h2d_res;
 
 typedef struct _pcie_d2h_res_ {
-    /* device ringbuf 虚拟地址(数据) */
-    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf地址 */
-    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf 控制结构体地址 */
-    oal_netbuf_head_stru rxq;           /* 正在接收中的netbuf队列 */
+    /* device ringbuf ????????(????) */
+    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf???? */
+    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf ?????????????? */
+    oal_netbuf_head_stru rxq;           /* ????????????netbuf???? */
     oal_spin_lock_stru lock;
     oal_pcie_d2h_stat stat;
 } pcie_d2h_res;
 
 typedef struct _pcie_h2d_message_res_ {
-    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf地址 */
-    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf 控制结构体地址 */
+    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf???? */
+    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf ?????????????? */
     oal_spin_lock_stru lock;
 } pcie_h2d_message_res;
 
 typedef struct _pcie_d2h_message_res_ {
-    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf地址 */
-    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf 控制结构体地址 */
+    pci_addr_map ringbuf_data_dma_addr; /* ringbuf buf???? */
+    pci_addr_map ringbuf_ctrl_dma_addr; /* ringbuf ?????????????? */
     oal_spin_lock_stru lock;
 } pcie_d2h_message_res;
 
@@ -188,8 +188,8 @@ typedef struct _pcie_message_res_ {
 } pcie_message_res;
 
 typedef struct _pcie_comm_rb_ctrl_res_ {
-    pci_addr_map data_daddr; /* ringbuf buf地址 */
-    pci_addr_map ctrl_daddr; /* ringbuf 控制结构体地址 */
+    pci_addr_map data_daddr; /* ringbuf buf???? */
+    pci_addr_map ctrl_daddr; /* ringbuf ?????????????? */
     oal_spin_lock_stru lock;
 } pcie_comm_rb_ctrl_res;
 
@@ -199,11 +199,11 @@ typedef struct _pcie_comm_ringbuf_res_ {
 
 typedef struct _oal_pcie_bar_info_ {
     oal_uint8 bar_idx;
-    oal_uint64 start; /* PCIe在Host分配到的总物理地址大小 */
+    oal_uint64 start; /* PCIe??Host?????????????????????? */
     oal_uint64 end;
 
-    /* PCIe 发出的总线地址空间， 和start 有可能一样，
-      有可能不一样，这个值是配置到BAR 和iatu 的 SRC 地址 */
+    /* PCIe ???????????????????? ??start ????????????
+      ????????????????????????????BAR ??iatu ?? SRC ???? */
     oal_uint64 bus_start;
 
     oal_uint32 size;
@@ -212,25 +212,25 @@ typedef struct _oal_pcie_bar_info_ {
 #define OAL_PCIE_TO_NAME(name) #name
 typedef struct _oal_pcie_region_ {
     oal_void *vaddr;  /* virtual address after remap */
-    oal_uint64 paddr; /* PCIe在Host侧分配到的物理地址 */
+    oal_uint64 paddr; /* PCIe??Host?????????????????? */
 
-    oal_uint64 bus_addr; /* PCIe RC 发出的总线地址 */
+    oal_uint64 bus_addr; /* PCIe RC ?????????????? */
 
-    /* pci为PCI看到的地址和CPU看到的地址 每个SOC 大小和地址可能有差异 */
+    /* pci??PCI????????????CPU?????????? ????SOC ???????????????????? */
     /* device pci address */
     oal_uint64 pci_start;
     oal_uint64 pci_end;
-    /* Device侧CPU看到的地址 */
+    /* Device??CPU?????????? */
     oal_uint64 cpu_start;
     oal_uint64 cpu_end;
     oal_uint32 size;
 
-    oal_uint32 flag; /* I/O type,是否需要刷Cache */
+    oal_uint32 flag; /* I/O type,??????????Cache */
 
     oal_resource *res;
     char *name; /* resource name */
 
-    oal_pcie_bar_info *bar_info; /* iatu 对应的bar信息 */
+    oal_pcie_bar_info *bar_info; /* iatu ??????bar???? */
 } oal_pcie_region;
 
 /* IATU BAR by PCIe mem package */
@@ -246,7 +246,7 @@ typedef struct _oal_pcie_regions_ {
     oal_pcie_bar_info *pst_bars;
     oal_int32 bar_nums;
 
-    oal_int32 inited; /* 非0表示初始化过 */
+    oal_int32 inited; /* ??0???????????? */
 } oal_pcie_regions;
 
 typedef struct _oal_pcie_res__ {
@@ -255,18 +255,18 @@ typedef struct _oal_pcie_res__ {
 
     PCI_WLAN_LINK_STATE link_state;
 
-    pci_addr_map dev_share_mem; /* Device share mem 管理结构体地址 */
+    pci_addr_map dev_share_mem; /* Device share mem ?????????????? */
 
-    /* ringbuf 管理结构体,Host存放一份是因为PCIE访问效率没有DDR直接访问高 */
+    /* ringbuf ??????????,Host??????????????PCIE????????????DDR?????????? */
     pcie_ringbuf_res st_ringbuf;
-    pci_addr_map st_ringbuf_map; /* device ringbuf在host侧的地址映射 */
+    pci_addr_map st_ringbuf_map; /* device ringbuf??host???????????? */
 
     pci_addr_map st_device_stat_map;
     pcie_stats st_device_stat;
 
     pci_addr_map st_device_shared_addr_map[PCIE_SHARED_ADDR_BUTT];
 
-    /* RINGBUFF在Host侧对应的资源 */
+    /* RINGBUFF??Host???????????? */
     pcie_h2d_res st_tx_res[PCIE_H2D_QTYPE_BUTT];
     pcie_d2h_res st_rx_res;
     pcie_message_res st_message_res; /* Message Ringbuf */
@@ -274,18 +274,18 @@ typedef struct _oal_pcie_res__ {
 
     oal_pcie_trans_stat stat;
 
-    /* 根据Soc设计信息表刷新，不同的产品划分不一样, iATU必须对每个region分别映射 */
-    oal_pcie_regions regions; /* Device地址划分 */
+    /* ????Soc????????????????????????????????????, iATU??????????region???????? */
+    oal_pcie_regions regions; /* Device???????? */
 
     /* Bar1 for iatu by mem package */
     oal_pcie_iatu_bar st_iatu_bar;
 
-    /* PCIe Device 寄存器基地址,Host Virtual Address */
+    /* PCIe Device ????????????,Host Virtual Address */
     oal_void *pst_pci_dma_ctrl_base;
     oal_void *pst_pci_ctrl_base;
     oal_void *pst_pci_dbi_base;
 
-    /* Rx 补充内存线程 2级线程 高优先级线程实时补充+低优先级补充 */
+    /* Rx ???????????? 2?????? ????????????????????+???????????? */
     struct task_struct *pst_rx_hi_task;
     struct task_struct *pst_rx_normal_task;
 
@@ -412,8 +412,8 @@ OAL_STATIC OAL_INLINE oal_void oal_pci_cache_flush(oal_pci_dev_stru *hwdev, oal_
 }
 
 /*
- * 函 数 名  : oal_pci_cache_flush
- * 功能描述  : 无效化cache
+ * ?? ?? ??  : oal_pci_cache_flush
+ * ????????  : ??????cache
  */
 OAL_STATIC OAL_INLINE oal_void oal_pci_cache_inv(oal_pci_dev_stru *hwdev, oal_void *pa, oal_int32 size)
 {
@@ -486,11 +486,11 @@ OAL_STATIC OAL_INLINE oal_uint64 oal_pcie_read_mem64(uintptr_t va)
 extern oal_void oal_pcie_io_trans64(oal_void *dst, oal_void *src, oal_int32 size);
 extern oal_void oal_pcie_io_trans32(oal_uint32 *dst, oal_uint32 *src, oal_int32 size);
 extern oal_int32 pcie_memcopy_type;
-/* dst/src 有一端地址在PCIE EP侧，PCIE按burst方式传输 */
+/* dst/src ????????????PCIE EP????PCIE??burst???????? */
 OAL_STATIC OAL_INLINE oal_void oal_pcie_io_trans(uintptr_t dst, uintptr_t src, oal_uint32 size)
 {
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION)
-    /* 网络安全函数整改 */
+    /* ???????????????? */
     if ((pcie_memcopy_type == 0) || (pcie_memcopy_type == 1)) {
         if (WARN((dst & 0x3), "invalid dst address 0x%lx", dst) ||
             WARN((src & 0x3), "invalid src address 0x%lx", dst) ||
@@ -502,21 +502,21 @@ OAL_STATIC OAL_INLINE oal_void oal_pcie_io_trans(uintptr_t dst, uintptr_t src, o
 #else
         oal_pcie_io_trans32((oal_uint32 *)dst, (oal_uint32 *)src, (oal_int32)size);
 #endif
-    } else if (pcie_memcopy_type == 2) { /* 可以根据用户输入执行不同操作 */
+    } else if (pcie_memcopy_type == 2) { /* ???????????????????????????? */
         oal_uint32 i;
         oal_uint32 value;
-        /* 最长4字节对齐访问, Test Code 暂时不考虑 单字节 ，双字节 */
+        /* ????4????????????, Test Code ?????????? ?????? ???????? */
         if (WARN((dst & 0x3), "invalid dst address 0x%lx", dst) ||
             WARN((src & 0x3), "invalid src address 0x%lx", dst) ||
             WARN((size & 0x3), "invalid size address 0x%lx", dst)) {
             return;
         }
 
-        for (i = 0; i < size; i += sizeof(oal_uint32)) { /* 每次偏移4字节 */
+        for (i = 0; i < size; i += sizeof(oal_uint32)) { /* ????????4???? */
             value = oal_readl((void *)(src + i));
             oal_writel (value, (void *)(dst + i));
         }
-    } else if (pcie_memcopy_type == 3) { /* 可以根据用户输入执行不同操作 */
+    } else if (pcie_memcopy_type == 3) { /* ???????????????????????????? */
         if (WARN((dst & 0x3), "invalid dst address 0x%lx", dst) ||
             WARN((src & 0x3), "invalid src address 0x%lx", dst) ||
             WARN((size & 0x3), "invalid size address 0x%lx", dst)) {
@@ -530,7 +530,7 @@ OAL_STATIC OAL_INLINE oal_void oal_pcie_io_trans(uintptr_t dst, uintptr_t src, o
 
 OAL_STATIC OAL_INLINE oal_uint32 pcie_ringbuf_len(pcie_ringbuf *pst_ringbuf)
 {
-    /* 无符号，已经考虑了翻转 */
+    /* ?????????????????????? */
     oal_uint32 len = (pst_ringbuf->wr - pst_ringbuf->rd);
     if (len == 0) {
         return 0;
@@ -544,7 +544,7 @@ OAL_STATIC OAL_INLINE oal_uint32 pcie_ringbuf_len(pcie_ringbuf *pst_ringbuf)
     }
 #endif
     if (pst_ringbuf->item_mask) {
-        /* item len 如果是2的N次幂，则移位 */
+        /* item len ??????2??N???????????? */
         len = len >> pst_ringbuf->item_mask;
     } else {
         len /= pst_ringbuf->item_len;
@@ -552,35 +552,35 @@ OAL_STATIC OAL_INLINE oal_uint32 pcie_ringbuf_len(pcie_ringbuf *pst_ringbuf)
     return len;
 }
 
-/* 打印 */
+/* ???? */
 OAL_STATIC OAL_INLINE oal_void oal_pcie_print_bits(oal_void *data, oal_uint32 size)
 {
 #ifdef CONFIG_PRINTK
     oal_int32 ret = 0;
-    const oal_uint32 buf_len = 32 * 3 + 1; /* 按bit打印，最多打印32bit，每个bit3个字符 */
+    const oal_uint32 buf_len = 32 * 3 + 1; /* ??bit??????????????32bit??????bit3?????? */
     oal_uint32 value;
     char buf[buf_len];
     oal_int32 i;
     oal_int32 count = 0;
 
-    if (size == 1) { /* 1表示要打印长度为1字节 */
+    if (size == 1) { /* 1????????????????1???? */
         value = (oal_uint32) * (oal_uint8 *)data;
         OAL_IO_PRINT("value= 0x%2x, =%u (dec) \n", value, value);
         OAL_IO_PRINT("07 06 05 04 03 02 01 00\n");
-    } else if (size == 2) { /* 2表示要打印长度为2字节 */
+    } else if (size == 2) { /* 2????????????????2???? */
         value = (oal_uint32) * (oal_uint16 *)data;
         OAL_IO_PRINT("value= 0x%4x, =%u (dec) \n", value, value);
         OAL_IO_PRINT("15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00\n");
-    } else if (size == 4) { /* 4表示要打印长度为4字节 */
+    } else if (size == 4) { /* 4????????????????4???? */
         value = (oal_uint32) * (oal_uint32 *)data;
         OAL_IO_PRINT("value= 0x%8x, =%u (dec) \n", value, value);
         OAL_IO_PRINT("31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00\n");
     } else {
-        /* 传入了错误的参数，不处理返回 */
+        /* ???????????????????????????? */
         return;
     }
 
-    /* 按比特打印 */
+    /* ?????????? */
     for (i = size * 8 - 1; i >= 0; i--) {
         ret = snprintf_s(buf + count, sizeof(buf) - count, sizeof(buf) - count - 1, "%s",
                          (1u << (oal_uint32)i) & value ? " 1 " : " 0 ");

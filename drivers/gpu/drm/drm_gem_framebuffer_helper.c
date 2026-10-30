@@ -1,7 +1,7 @@
 /*
  * drm gem framebuffer helper functions
  *
- * Copyright (C) 2017 Noralf Trønnes
+ * Copyright (C) 2017 Noralf Tr??nnes
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "oam_ext_if.h"
 #include "frw_ext_if.h"
 #include "hal_ext_if.h"
@@ -13,13 +13,13 @@
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_MAC_DEVICE_ROM_C
 
-/* 2 全局变量定义 */
+/* 2 ???????????? */
 #ifdef _PRE_WLAN_FEATURE_WMMAC
 oal_bool_enum_uint8 g_en_wmmac_switch_etc = OAL_TRUE;
 #endif
 
-/* 动态/静态DBDC */
-/* 这里指的是每个chip上mac device的频道能力 */
+/* ????/????DBDC */
+/* ??????????????chip??mac device?????????? */
 oal_uint8 g_auc_mac_device_radio_cap[WLAN_SERVICE_DEVICE_MAX_NUM_PER_CHIP] = {
     MAC_DEVICE_2G_5G,
 #if (WLAN_SERVICE_DEVICE_MAX_NUM_PER_CHIP > 1)
@@ -30,7 +30,7 @@ oal_uint8 g_auc_mac_device_radio_cap[WLAN_SERVICE_DEVICE_MAX_NUM_PER_CHIP] = {
 mac_board_stru *g_pst_mac_board = &g_st_mac_board;
 mac_device_capability_stru *g_pst_mac_device_capability = &g_st_mac_device_capability[0];
 
-/* 3 函数实现 */
+/* 3 ???????? */
 
 wlan_mib_vht_supp_width_enum_uint8 mac_device_trans_bandwith_to_vht_capinfo(wlan_bw_cap_enum_uint8 en_max_op_bd)
 {
@@ -64,7 +64,7 @@ oal_uint32 mac_device_check_5g_enable(oal_uint8 uc_device_id)
         return OAL_FALSE;
     }
 
-    /* 03两个业务device,00 01,取不同定制化,51双芯片00 11,取同一个定制化 */
+    /* 03????????device,00 01,????????????,51??????00 11,?????????????? */
     uc_device_id_per_chip = uc_device_id - pst_mac_device->uc_chip_id;
 
     return !!(g_auc_mac_device_radio_cap[uc_device_id_per_chip] & MAC_DEVICE_5G);
@@ -82,10 +82,10 @@ oal_uint32 mac_chip_init_etc(mac_chip_stru *pst_chip, oal_uint8 uc_device_max)
     }
 #endif
 
-    /* 保存device数量 */
+    /* ????device???? */
     pst_chip->uc_device_nums = uc_device_max;
 
-    /* 初始化最后再将state置为TRUE */
+    /* ??????????????state????TRUE */
     pst_chip->en_chip_state = OAL_TRUE;
 
     return OAL_SUCC;
@@ -159,7 +159,7 @@ oal_void mac_dfs_set_dfs_enable(mac_device_stru *pst_mac_device, oal_bool_enum_u
 {
     pst_mac_device->st_dfs.st_dfs_info.en_dfs_switch = en_val;
 
-    /* 如果 软件雷达检测使能 关闭，则关闭CAC检测 */
+    /* ???? ???????????????? ????????????CAC???? */
     if (en_val == OAL_FALSE) {
         pst_mac_device->st_dfs.st_dfs_info.en_cac_switch = OAL_FALSE;
     }

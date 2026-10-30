@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include <linux/sched.h>
 
 #include "hw_bfg_ps.h"
@@ -13,7 +13,7 @@
 #include "chr_user.h"
 #endif
 
-/* 全局变量定义 */
+/* ???????????? */
 typedef void (*platform_msg_handler)(uint8 *buf_ptr);
 
 void platform_unused_msg(uint8 *buf_ptr);
@@ -30,39 +30,39 @@ void bfgx_recv_baud_change_cmd(uint8 *buf_ptr);
 void gnss_trickle_request_sleep(uint8 *buf_ptr);
 
 platform_msg_handler apf_sys_msg_handle[SYS_INF_BUTT] = {
-    platform_unused_msg,         // SYS_INF_PF_INIT = 0x00,                /* 平台软件初始化完成 */
-    bfgx_thread_msg_handle,      // SYS_INF_BT_INIT = 0x01,                /* BT软件初始化完成 */
-    bfgx_thread_msg_handle,      // SYS_INF_GNSS_INIT = 0x02,              /* GNSS软件初始化完成 */
-    bfgx_thread_msg_handle,      // SYS_INF_FM_INIT = 0x03,                /* FM软件初始化完成 */
-    platform_unused_msg,         // SYS_INF_BT_DISABLE = 0x04,             /* BT禁能 */
-    platform_unused_msg,         // SYS_INF_GNSS_DISABLE = 0x05,           /* GNSS禁能 */
-    platform_unused_msg,         // SYS_INF_FM_DISABLE = 0x06,             /* FM禁能 */
-    bfgx_thread_msg_handle,      // SYS_INF_BT_EXIT = 0x07,                /* BT退出 */
-    bfgx_thread_msg_handle,      // SYS_INF_GNSS_EXIT = 0x08,              /* GNSS退出 */
-    bfgx_thread_msg_handle,      // SYS_INF_FM_EXIT = 0x09,                /* FM退出 */
-    platform_unused_msg,         // SYS_INF_GNSS_WAIT_DOWNLOAD = 0x0A,     /* 等待GNSS代码下载 */
-    platform_unused_msg,         // SYS_INF_GNSS_DOWNLOAD_COMPLETE = 0x0B, /* GNSS代码下载完毕 */
-    platform_unused_msg,         // SYS_INF_BFG_HEART_BEAT = 0x0C,         /* 心跳信号 */
-    bfgx_agree_host_sleep,       // SYS_INF_DEV_AGREE_HOST_SLP = 0x0D,     /* device回复host可睡 */
-    bfgx_not_agree_host_sleep,   // SYS_INF_DEV_NOAGREE_HOST_SLP = 0x0E,   /* device回复host不可睡 */
-    wifi_thread_msg_handle,      // SYS_INF_WIFI_OPEN = 0x0F,              /* WCPU上电完成 */
-    bfgx_thread_msg_handle,      // SYS_INF_IR_INIT = 0x10,                /* IR软件初始化完成 */
-    bfgx_thread_msg_handle,      // SYS_INF_IR_EXIT = 0x11,                /* IR退出 */
-    bfgx_thread_msg_handle,      // SYS_INF_NFC_INIT = 0x12,               /* NFC软件初始化完成 */
-    bfgx_thread_msg_handle,      // SYS_INF_NFC_EXIT = 0x13,               /* NFC退出 */
-    wifi_thread_msg_handle,      // SYS_INF_WIFI_CLOSE = 0x14,             /* WCPU下电完成 */
-    platform_unused_msg,         // SYS_INF_RF_TEMP_NORMAL = 0x15,         /* RF温度正常 */
-    platform_unused_msg,         // SYS_INF_RF_TEMP_OVERHEAT = 0x16,       /* RF温度过热 */
-    bfgx_read_mem_complete,      // SYS_INF_MEM_DUMP_COMPLETE = 0x17,      /* bfgx异常时，MEM DUMP已完成 */
-    bfgx_read_wifi_mem_complete, // SYS_INF_WIFI_MEM_DUMP_COMPLETE = 0X18, /* bfgx异常时，MEM DUMP已完成 */
+    platform_unused_msg,         // SYS_INF_PF_INIT = 0x00,                /* ?????????????????? */
+    bfgx_thread_msg_handle,      // SYS_INF_BT_INIT = 0x01,                /* BT?????????????? */
+    bfgx_thread_msg_handle,      // SYS_INF_GNSS_INIT = 0x02,              /* GNSS?????????????? */
+    bfgx_thread_msg_handle,      // SYS_INF_FM_INIT = 0x03,                /* FM?????????????? */
+    platform_unused_msg,         // SYS_INF_BT_DISABLE = 0x04,             /* BT???? */
+    platform_unused_msg,         // SYS_INF_GNSS_DISABLE = 0x05,           /* GNSS???? */
+    platform_unused_msg,         // SYS_INF_FM_DISABLE = 0x06,             /* FM???? */
+    bfgx_thread_msg_handle,      // SYS_INF_BT_EXIT = 0x07,                /* BT???? */
+    bfgx_thread_msg_handle,      // SYS_INF_GNSS_EXIT = 0x08,              /* GNSS???? */
+    bfgx_thread_msg_handle,      // SYS_INF_FM_EXIT = 0x09,                /* FM???? */
+    platform_unused_msg,         // SYS_INF_GNSS_WAIT_DOWNLOAD = 0x0A,     /* ????GNSS???????? */
+    platform_unused_msg,         // SYS_INF_GNSS_DOWNLOAD_COMPLETE = 0x0B, /* GNSS???????????? */
+    platform_unused_msg,         // SYS_INF_BFG_HEART_BEAT = 0x0C,         /* ???????? */
+    bfgx_agree_host_sleep,       // SYS_INF_DEV_AGREE_HOST_SLP = 0x0D,     /* device????host???? */
+    bfgx_not_agree_host_sleep,   // SYS_INF_DEV_NOAGREE_HOST_SLP = 0x0E,   /* device????host?????? */
+    wifi_thread_msg_handle,      // SYS_INF_WIFI_OPEN = 0x0F,              /* WCPU???????? */
+    bfgx_thread_msg_handle,      // SYS_INF_IR_INIT = 0x10,                /* IR?????????????? */
+    bfgx_thread_msg_handle,      // SYS_INF_IR_EXIT = 0x11,                /* IR???? */
+    bfgx_thread_msg_handle,      // SYS_INF_NFC_INIT = 0x12,               /* NFC?????????????? */
+    bfgx_thread_msg_handle,      // SYS_INF_NFC_EXIT = 0x13,               /* NFC???? */
+    wifi_thread_msg_handle,      // SYS_INF_WIFI_CLOSE = 0x14,             /* WCPU???????? */
+    platform_unused_msg,         // SYS_INF_RF_TEMP_NORMAL = 0x15,         /* RF???????? */
+    platform_unused_msg,         // SYS_INF_RF_TEMP_OVERHEAT = 0x16,       /* RF???????? */
+    bfgx_read_mem_complete,      // SYS_INF_MEM_DUMP_COMPLETE = 0x17,      /* bfgx????????MEM DUMP?????? */
+    bfgx_read_wifi_mem_complete, // SYS_INF_WIFI_MEM_DUMP_COMPLETE = 0X18, /* bfgx????????MEM DUMP?????? */
     bfgx_halt_wcpu_complete,     // SYS_INF_UART_HALT_WCPU = 0x19,         /* uart halt wcpu ok */
-    bfgx_set_uart_loop_complete, // SYS_INF_UART_LOOP_SET_DONE = 0x1a,     /* device 设置uart环回ok */
-    bfgx_recv_device_chr,        // SYS_INF_CHR_ERRNO_REPORT = 0x1b,       /* device向host上报CHR异常码 */
-    bfgx_recv_baud_change_cmd,   // SYS_INF_BAUD_CHG_2M_REQ = 0x1c,        /* device向host请求切换2M波特率 */
-    bfgx_recv_baud_change_cmd,   // SYS_INF_BAUD_CHG_6M_REQ = 0x1D,        /* device向host请求切换6M波特率 */
-    bfgx_recv_baud_change_cmd,   // SYS_INF_BAUD_CHG_COMP_ACK = 0x1E,      /* device对host的波特率切换完成通知消息的ACK */
-    bfgx_thread_msg_handle,      // SYS_INF_GNSS_LPPE_INIT = 0x1F,         /* 1103 GNSS 新增的线程初始化完成 */
-    bfgx_thread_msg_handle,      // SYS_INF_GNSS_LPPE_EXIT = 0x20,         /* 1103 GNSS 新增的线程退出 */
+    bfgx_set_uart_loop_complete, // SYS_INF_UART_LOOP_SET_DONE = 0x1a,     /* device ????uart????ok */
+    bfgx_recv_device_chr,        // SYS_INF_CHR_ERRNO_REPORT = 0x1b,       /* device??host????CHR?????? */
+    bfgx_recv_baud_change_cmd,   // SYS_INF_BAUD_CHG_2M_REQ = 0x1c,        /* device??host????????2M?????? */
+    bfgx_recv_baud_change_cmd,   // SYS_INF_BAUD_CHG_6M_REQ = 0x1D,        /* device??host????????6M?????? */
+    bfgx_recv_baud_change_cmd,   // SYS_INF_BAUD_CHG_COMP_ACK = 0x1E,      /* device??host??????????????????????????ACK */
+    bfgx_thread_msg_handle,      // SYS_INF_GNSS_LPPE_INIT = 0x1F,         /* 1103 GNSS ???????????????????? */
+    bfgx_thread_msg_handle,      // SYS_INF_GNSS_LPPE_EXIT = 0x20,         /* 1103 GNSS ?????????????? */
     gnss_trickle_request_sleep,  // SYS_INF_GNSS_TRICKLE_SlEEP = 0x21,     /* 1103 GNSS TRICKLE Sleep */
 };
 

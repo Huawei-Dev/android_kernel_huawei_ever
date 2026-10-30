@@ -48,13 +48,13 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID                 PS_FILE_ID_ADS_DEBUG_C
 
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "AdsDebug.h"
 #include "AdsCtx.h"
@@ -62,17 +62,17 @@
 
 
 /*****************************************************************************
-  2 外部函数声明
+  2 ????????????
 *****************************************************************************/
 
 
 /******************************************************************************
-   3 私有定义
+   3 ????????
 ******************************************************************************/
 
 
 /******************************************************************************
-   4 全局变量定义
+   4 ????????????
 ******************************************************************************/
 
 ADS_STATS_INFO_STRU                     g_stAdsStats;
@@ -80,7 +80,7 @@ ADS_LOG_LEVEL_ENUM_UINT32               g_enAdsLogLevel = ADS_LOG_LEVEL_ERROR;
 
 
 /******************************************************************************
-   5 函数实现
+   5 ????????
 ******************************************************************************/
 
 
@@ -424,10 +424,10 @@ VOS_VOID ADS_DLFlowAdd(VOS_UINT32 ulSduLen)
 {
     if (PS_TRUE == g_stAdsStats.stDlComStatsInfo.ulDLFlowDebugFlag)
     {
-        /* 流量统计 */
+        /* ???????? */
         g_stAdsStats.stDlComStatsInfo.ulDLFlowInfo += ulSduLen;
 
-        /* 流量统计上报 */
+        /* ???????????? */
         if (g_stAdsStats.stDlComStatsInfo.ulDLFlowInfo >= g_stAdsStats.stDlComStatsInfo.ulDLFlowRptThreshold)
         {
             g_stAdsStats.stDlComStatsInfo.ulDLEndSlice   = VOS_GetSlice();
@@ -450,10 +450,10 @@ VOS_VOID ADS_ULFlowAdd(VOS_UINT32 ulSduLen)
 {
     if (PS_TRUE == g_stAdsStats.stUlComStatsInfo.ulULFlowDebugFlag)
     {
-        /* 流量统计 */
+        /* ???????? */
         g_stAdsStats.stUlComStatsInfo.ulULFlowInfo += ulSduLen;
 
-        /* 流量统计上报 */
+        /* ???????????? */
         if (g_stAdsStats.stUlComStatsInfo.ulULFlowInfo >= g_stAdsStats.stUlComStatsInfo.ulULFlowRptThreshold)
         {
             g_stAdsStats.stUlComStatsInfo.ulULEndSlice   = VOS_GetSlice();
@@ -478,7 +478,7 @@ VOS_VOID ADS_LogPrintf(ADS_LOG_LEVEL_ENUM_UINT32 enLevel, VOS_CHAR *pcFmt, ...)
     va_list                             pArgList;
     VOS_UINT32                          ulPrintLength = 0;
 
-    /* 打印级别过滤 */
+    /* ???????????? */
     if (enLevel < g_enAdsLogLevel)
     {
         return;
@@ -497,7 +497,7 @@ VOS_VOID ADS_LogPrintf(ADS_LOG_LEVEL_ENUM_UINT32 enLevel, VOS_CHAR *pcFmt, ...)
 
     acBuff[ulPrintLength] = '\0';
 
-    /* 目前只有ERR打印的调用，以后可以再进行扩展 */
+    /* ????????ERR?????????????????????????????? */
     ADS_PR_LOGI("%s", acBuff);
 
     return;

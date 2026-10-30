@@ -50,7 +50,7 @@
 #define __ADS_MNTN_H__
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 #include "vos.h"
 #include "TafDiagComm.h"
@@ -68,50 +68,50 @@ extern "C" {
 #pragma pack(4)
 
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *****************************************************************************/
 
 #define ADS_MNTN_HOOK_PKT_MAX_SIZE      (52)
 
 #define ADS_MNTN_COMM_MOUDLE_ID         (DIAG_GEN_MODULE(MODEM_ID_0, DIAG_MODE_COMM))
 
-#define ADS_MNTN_REC_UL_PKT_MAX_NUM     (IPF_ULBD_DESC_SIZE)                    /* 上行IP报文记录最大个数 */
-#define ADS_MNTN_REC_DL_PKT_MAX_NUM     (IPF_DLRD_DESC_SIZE)                    /* 下行IP报文记录最大个数 */
-#define ADS_MNTN_UL_RKT_REC_INFO_ARRAY  (&(g_stAdsUlPktRecInfo))                /* 记录上行IP报文的数组   */
-#define ADS_MNTN_DL_RKT_REC_INFO_ARRAY  (&(g_stAdsDlPktRecInfo))                /* 记录下行IP报文的数组   */
+#define ADS_MNTN_REC_UL_PKT_MAX_NUM     (IPF_ULBD_DESC_SIZE)                    /* ????IP???????????????? */
+#define ADS_MNTN_REC_DL_PKT_MAX_NUM     (IPF_DLRD_DESC_SIZE)                    /* ????IP???????????????? */
+#define ADS_MNTN_UL_RKT_REC_INFO_ARRAY  (&(g_stAdsUlPktRecInfo))                /* ????????IP??????????   */
+#define ADS_MNTN_DL_RKT_REC_INFO_ARRAY  (&(g_stAdsDlPktRecInfo))                /* ????????IP??????????   */
 
 #if (FEATURE_ON == FEATURE_PC5_DATA_CHANNEL)
-#define ADS_MNTN_UL_PC5_RKT_REC_INFO_ARRAY  (&(g_stAdsUlPc5PktRecInfo))         /* 记录上行PC5报文的数组 */
-#define ADS_MNTN_DL_PC5_RKT_REC_INFO_ARRAY  (&(g_stAdsDlPc5PktRecInfo))         /* 记录下行PC5报文的数组 */
+#define ADS_MNTN_UL_PC5_RKT_REC_INFO_ARRAY  (&(g_stAdsUlPc5PktRecInfo))         /* ????????PC5?????????? */
+#define ADS_MNTN_DL_PC5_RKT_REC_INFO_ARRAY  (&(g_stAdsDlPc5PktRecInfo))         /* ????????PC5?????????? */
 #endif
 
 /*****************************************************************************
-  3 枚举定义
+  3 ????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  4 全局变量声明
+  4 ????????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  5 消息头定义
+  5 ??????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  6 消息定义
+  6 ????????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  7 STRUCT定义
+  7 STRUCT????
 *****************************************************************************/
 
 /*****************************************************************************
- 结构名称  : ADS_MNTN_COMM_HEADER_STRU
- 结构说明  : ADS可维可测公共头结构
+ ????????  : ADS_MNTN_COMM_HEADER_STRU
+ ????????  : ADS??????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -126,8 +126,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : ADS_MNTN_UL_IPF_PROC_STATS_STRU
- 结构说明  : 下行行IPF统计信息上报结构
+ ????????  : ADS_MNTN_UL_IPF_PROC_STATS_STRU
+ ????????  : ??????IPF????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -166,8 +166,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : ADS_MNTN_DL_IPF_PROC_STATS_STRU
- 结构说明  : 下行IPF统计信息上报结构
+ ????????  : ADS_MNTN_DL_IPF_PROC_STATS_STRU
+ ????????  : ????IPF????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -211,8 +211,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : ADS_MNTN_UL_PKT_PROC_STATS_STRU
- 结构说明  : 上行数据统计信息上报结构
+ ????????  : ADS_MNTN_UL_PKT_PROC_STATS_STRU
+ ????????  : ????????????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -230,8 +230,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : ADS_MNTN_DL_PKT_PROC_STATS_STRU
- 结构说明  : 下行数据统计信息上报结构
+ ????????  : ADS_MNTN_DL_PKT_PROC_STATS_STRU
+ ????????  : ????????????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -245,8 +245,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : ADS_MNTN_THROUGHPUT_STATS_STRU
- 结构说明  : 流量统计信息上报结构
+ ????????  : ADS_MNTN_THROUGHPUT_STATS_STRU
+ ????????  : ????????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -259,8 +259,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : SPE_MNTN_COMM_HEADER_STRU
- 结构说明  : SPE可维可测公共头结构
+ ????????  : SPE_MNTN_COMM_HEADER_STRU
+ ????????  : SPE??????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -275,8 +275,8 @@ typedef struct
 
 
 /*****************************************************************************
- 结构名称  : SPE_MNTN_PORT_PROC_STATS_STRU
- 结构说明  : SPE端口统计信息上报结构
+ ????????  : SPE_MNTN_PORT_PROC_STATS_STRU
+ ????????  : SPE????????????????????
 *****************************************************************************/
 typedef struct
 {
@@ -300,36 +300,36 @@ typedef struct
 } SPE_MNTN_PORT_PROC_STATS_STRU;
 
 /*****************************************************************************
- 结构名    : ADS_MNTN_IP_PKT_INFO_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  : 保存IP关键信息
+ ??????    : ADS_MNTN_IP_PKT_INFO_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  : ????IP????????
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT8                           ucIpVer;                                /* IP 协议版本 */
-    VOS_UINT8                           ucL4Proto;                              /* 协议类型ICMP,TCP,UDP */
-    VOS_UINT8                           ucIcmpType;                             /* ICMP报文类型*/
+    VOS_UINT8                           ucIpVer;                                /* IP ???????? */
+    VOS_UINT8                           ucL4Proto;                              /* ????????ICMP,TCP,UDP */
+    VOS_UINT8                           ucIcmpType;                             /* ICMP????????*/
     VOS_UINT8                           aucRsv[1];
 
-    VOS_UINT16                          usDataLen;                              /* IP 数据包长度*/
-    VOS_UINT16                          usIp4Id;                                /* IPv4 IDENTIFY字段 */
-    VOS_UINT16                          usSrcPort;                              /* IP 源端口号*/
-    VOS_UINT16                          usDstPort;                              /* IP 目的端口号 */
+    VOS_UINT16                          usDataLen;                              /* IP ??????????*/
+    VOS_UINT16                          usIp4Id;                                /* IPv4 IDENTIFY???? */
+    VOS_UINT16                          usSrcPort;                              /* IP ????????*/
+    VOS_UINT16                          usDstPort;                              /* IP ?????????? */
 
-    VOS_UINT32                          ulL4Id;                                 /* 层4的IDENTIFY,ICMP IDENTIFY+SN,TCP SEQ */
+    VOS_UINT32                          ulL4Id;                                 /* ??4??IDENTIFY,ICMP IDENTIFY+SN,TCP SEQ */
     VOS_UINT32                          ulTcpAckSeq;                            /* TCP ACK SEQ */
-    VOS_UINT32                          ulParam1;                               /* 自定义参数 */
-    VOS_UINT32                          ulParam2;                               /* 自定义参数 */
-    VOS_UINT32                          ulParam3;                               /* 自定义参数 */
-    VOS_UINT32                          ulParam4;                               /* 自定义参数 */
+    VOS_UINT32                          ulParam1;                               /* ?????????? */
+    VOS_UINT32                          ulParam2;                               /* ?????????? */
+    VOS_UINT32                          ulParam3;                               /* ?????????? */
+    VOS_UINT32                          ulParam4;                               /* ?????????? */
 } ADS_MNTN_IP_PKT_INFO_STRU;
 
 /*****************************************************************************
- 结构名    : ADS_MNTN_UL_IP_PKT_REC_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  : ADS上行IP报文记录结构
+ ??????    : ADS_MNTN_UL_IP_PKT_REC_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  : ADS????IP????????????
 *****************************************************************************/
 typedef struct
 {
@@ -341,10 +341,10 @@ typedef struct
 } ADS_MNTN_UL_IP_PKT_REC_STRU;
 
 /*****************************************************************************
- 结构名    : ADS_MNTN_DL_IP_PKT_REC_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  : ADS下行IP报文记录结构
+ ??????    : ADS_MNTN_DL_IP_PKT_REC_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  : ADS????IP????????????
 *****************************************************************************/
 typedef struct
 {
@@ -358,47 +358,47 @@ typedef struct
 
 #if (FEATURE_ON == FEATURE_PC5_DATA_CHANNEL)
 /*****************************************************************************
- 结构名    : ADS_MNTN_DL_PC5_PKT_INFO_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  : 下行PC5接入层和适配层头信息;
+ ??????    : ADS_MNTN_DL_PC5_PKT_INFO_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  : ????PC5????????????????????;
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT8  aucSrcAddr[3];           /* 源MAC地址 */
-    VOS_UINT8  aucDstAddr[3];           /* 目的MAC地址 */
-    VOS_UINT8  ucPriority;              /* 8个优先级描述，取值范围1~8 */
-    VOS_UINT8  ucUsrId;                 /* 物理层上送的USER ID */
-    VOS_UINT16 usFrmNo;                 /* 接收空口帧号 */
-    VOS_UINT8  ucSubFrmNo;              /* 接收空口子帧号 */
-    VOS_UINT8  ucResv;                  /* 接入层头部预留字段 */
-    VOS_UINT8  ucProtoType;             /* 适配层头结构，Protocal Type类型 */
-    VOS_UINT8  aucResv[3];              /* 结构体预留字段 */
+    VOS_UINT8  aucSrcAddr[3];           /* ??MAC???? */
+    VOS_UINT8  aucDstAddr[3];           /* ????MAC???? */
+    VOS_UINT8  ucPriority;              /* 8??????????????????????1~8 */
+    VOS_UINT8  ucUsrId;                 /* ????????????USER ID */
+    VOS_UINT16 usFrmNo;                 /* ???????????? */
+    VOS_UINT8  ucSubFrmNo;              /* ?????????????? */
+    VOS_UINT8  ucResv;                  /* ?????????????????? */
+    VOS_UINT8  ucProtoType;             /* ??????????????Protocal Type???? */
+    VOS_UINT8  aucResv[3];              /* ?????????????? */
 } ADS_MNTN_DL_PC5_PKT_HEAD_STRU;
 
 /*****************************************************************************
- 结构名    : ADS_MNTN_UL_PC5_PKT_INFO_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  : 保存上行PC5接入层和适配层头信息;
+ ??????    : ADS_MNTN_UL_PC5_PKT_INFO_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  : ????????PC5????????????????????;
 *****************************************************************************/
 typedef struct
 {
-    VOS_UINT16 usAid;                   /* AID应用服务商的应用表示号，用以区别不同的应用 */
-    VOS_UINT8  aucSrcAddr[3];           /* 源MAC地址 */
-    VOS_UINT8  aucDstAddr[3];           /* 目的MAC地址 */
-    VOS_UINT8  ucPriority;              /* 8个优先级描述，取值范围1~8 */
-    VOS_UINT8  ucPduType;               /* 当上层数据包为IP数据包时，该值设置为IP(值为0);当上层数据包为DSMP数据包或DME数据包时，该值设置为Non-IP(值为1)*/
-    VOS_UINT8  aucResv[2];              /* 接入层头部预留字段 */
-    VOS_UINT8  ucProtoType;             /* 适配层头结构，Protocal Type类型 */
-    VOS_UINT8  aucResv1[3];             /* 结构体预留字段 */
+    VOS_UINT16 usAid;                   /* AID?????????????????????????????????????????? */
+    VOS_UINT8  aucSrcAddr[3];           /* ??MAC???? */
+    VOS_UINT8  aucDstAddr[3];           /* ????MAC???? */
+    VOS_UINT8  ucPriority;              /* 8??????????????????????1~8 */
+    VOS_UINT8  ucPduType;               /* ??????????????IP????????????????????IP(????0);??????????????DSMP????????DME????????????????????Non-IP(????1)*/
+    VOS_UINT8  aucResv[2];              /* ?????????????????? */
+    VOS_UINT8  ucProtoType;             /* ??????????????Protocal Type???? */
+    VOS_UINT8  aucResv1[3];             /* ?????????????? */
 } ADS_MNTN_UL_PC5_PKT_HEAD_STRU;
 
 /*****************************************************************************
- 结构名    : ADS_MNTN_UL_PC5_PKT_REC_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  : ADS上行PC5报文记录结构
+ ??????    : ADS_MNTN_UL_PC5_PKT_REC_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  : ADS????PC5????????????
 *****************************************************************************/
 typedef struct
 {
@@ -410,10 +410,10 @@ typedef struct
 } ADS_MNTN_UL_PC5_PKT_REC_STRU;
 
 /*****************************************************************************
- 结构名    : ADS_MNTN_DL_PC5_PKT_REC_STRU
- 协议表格  :
- ASN.1描述 :
- 结构说明  : ADS下行PC5报文记录结构
+ ??????    : ADS_MNTN_DL_PC5_PKT_REC_STRU
+ ????????  :
+ ASN.1???? :
+ ????????  : ADS????PC5????????????
 *****************************************************************************/
 typedef struct
 {
@@ -426,17 +426,17 @@ typedef struct
 #endif
 
 /*****************************************************************************
-  8 UNION定义
+  8 UNION????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  9 OTHERS定义
+  9 OTHERS????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  10 函数声明
+  10 ????????
 *****************************************************************************/
 
 VOS_VOID ADS_MNTN_ReportAllStatsInfo(VOS_VOID);

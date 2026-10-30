@@ -33,9 +33,9 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
-/*lint -e767  原因简述: 打点日志文件宏ID定义 */
+/*lint -e767  ????????: ??????????????ID???? */
 #define    THIS_FILE_ID        PS_FILE_ID_PPP_ATCMD_C
 /*lint +e767  */
 
@@ -43,7 +43,7 @@
 #if(FEATURE_ON == FEATURE_PPP)
 
 /******************************************************************************
-   1 头文件包含
+   1 ??????????
 ******************************************************************************/
 #include "PPP/Inc/ppp_public.h"
 #include "PPP/Inc/layer.h"
@@ -73,7 +73,7 @@
 #endif
 
 /******************************************************************************
-   2 外部函数变量声明
+   2 ????????????????
 ******************************************************************************/
 extern VOS_VOID PPP_ClearDataQ(VOS_VOID);
 
@@ -89,18 +89,18 @@ extern VOS_VOID PPP_GetReqConfigInfo
     AT_PPP_REQ_CONFIG_INFO_STRU *pstPppAtReqConfigInfo
 );
 /******************************************************************************
-   3 私有定义
+   3 ????????
 ******************************************************************************/
 
 
 /******************************************************************************
-   4 全局变量定义
+   4 ????????????
 ******************************************************************************/
-/* 保存从NV项中读取的WINS特性开关值*/
+/* ??????NV??????????WINS??????????*/
 extern VOS_UINT8                        g_ucPppConfigWins;
 
 /******************************************************************************
-   5 函数实现
+   5 ????????
 ******************************************************************************/
 
 
@@ -145,10 +145,10 @@ VOS_UINT32 PPP_InitHdlcConfig(PPP_ID usPppId)
 
 /*****************************************************************************
  Prototype      : Ppp_CreatePppReq
- Description    : 为AT模块"创建PPP链路"提供对应的API函数。
+ Description    : ??AT????"????PPP????"??????????API??????
 
  Input          : ---
- Output         : ---创建成功后返回的PPP ID
+ Output         : ---????????????????PPP ID
  Return Value   : ---VOS_UINT32
  Calls          : ---
  Called By      : ---
@@ -167,21 +167,21 @@ VOS_UINT32 Ppp_CreatePppReq ( PPP_ID *pusPppId)
         return VOS_ERR;
     }
 
-    /*从PPP ID数组中得到一个空闲的PPP ID*/
+    /*??PPP ID????????????????????PPP ID*/
     pppid_get = PppGetId();
 
     PPP_MNTN_LOG1(PS_PID_APP_PPP, DIAG_MODE_COMM, PS_PRINT_NORMAL, "Ppp_CreatePppReq\r\n", pppid_get);
 
-    /*如果没有空闲的PPP ID*/
+    /*??????????????PPP ID*/
     if(pppid_get == 0)
     {
         return VOS_ERR;
     }
 
-    /*如果有空闲的PPP ID，首先将申请得到的PPP ID赋值给AT_CMD*/
+    /*????????????PPP ID??????????????????PPP ID??????AT_CMD*/
     *pusPppId = pppid_get;
 
-    /*然后调用PPP模块对应的函数*/
+    /*????????PPP??????????????*/
     link_Init(PPP_LINK(pppid_get));
 
     PPP_LINK(pppid_get)->phase = PHASE_ESTABLISH;
@@ -189,26 +189,26 @@ VOS_UINT32 Ppp_CreatePppReq ( PPP_ID *pusPppId)
     fsm_Up(&(PPP_LINK(pppid_get)->lcp.fsm));
     fsm_Open(&(PPP_LINK(pppid_get)->lcp.fsm));
 
-    /*释放PPP数据队列*/
+    /*????PPP????????*/
     PPP_ClearDataQ();
 
-    /* 初始化HDLC相关配置 */
+    /* ??????HDLC???????? */
     PPP_InitHdlcConfig(pppid_get);
 
-    /* 可维可测信息上报*/
+    /* ????????????????*/
     Ppp_EventMntnInfo(pppid_get, AT_PPP_CREATE_PPP_REQ);
 
-    /*返回正确*/
+    /*????????*/
     return VOS_OK;
 }
 
 
 /*****************************************************************************
  Prototype      : Ppp_CreateRawDataPppReq
- Description    : 创建PDP类型为PPP的PPP实体，但不做链路管理，只作数据的封装和解封装
+ Description    : ????PDP??????PPP??PPP????????????????????????????????????????????
 
  Input          : ---
- Output         : ---创建成功后返回的PPP ID
+ Output         : ---????????????????PPP ID
  Return Value   : ---VOS_UINT32
  Calls          : ---
  Called By      : ---
@@ -228,36 +228,36 @@ VOS_UINT32 Ppp_CreateRawDataPppReq ( PPP_ID *pusPppId)
         return VOS_ERR;
     }
 
-    /*从PPP ID数组中得到一个空闲的PPP ID*/
+    /*??PPP ID????????????????????PPP ID*/
     pppid_get = PppGetId();
 
-    /*如果没有空闲的PPP ID*/
+    /*??????????????PPP ID*/
     if (0 == pppid_get)
     {
         return VOS_ERR;
     }
 
-    /* PPP类型PDP激活时，无法得知TE和网络端的协商结果，强制赋值 */
+    /* PPP????PDP????????????????TE???????????????????????????? */
     PPP_LINK(pppid_get)->lcp.his_accmap = 0xffffffff;
 
-    /*如果有空闲的PPP ID，首先将申请得到的PPP ID赋值给AT_CMD*/
+    /*????????????PPP ID??????????????????PPP ID??????AT_CMD*/
     *pusPppId = pppid_get;
 
-    /* 初始化HDLC相关配置 */
+    /* ??????HDLC???????? */
     PPP_InitHdlcConfig(pppid_get);
 
-    /* 可维可测信息上报*/
+    /* ????????????????*/
     Ppp_EventMntnInfo(pppid_get, AT_PPP_CREATE_RAW_PPP_REQ);
 
-    /*返回正确*/
+    /*????????*/
     return VOS_OK;
 } /* Ppp_CreateRawDataPppReq */
 
 /*****************************************************************************
  Prototype      : Ppp_ReleasePpp
- Description    : 要释放的PPP链路
+ Description    : ????????PPP????
 
- Input          : ---要释放的PPP链路对应的PPP ID
+ Input          : ---????????PPP??????????PPP ID
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -272,8 +272,8 @@ VOS_VOID Ppp_ReleasePpp(PPP_ID usPppId)
 {
     VOS_UINT32                          ulRet;
 
-    /* 如果当前PPP在PHASE_NETWORK阶段,属于网侧主动去激活
-       此时PPP等待和PC间PPP协议结束后通知AT拉管脚信号,并起定时器保护*/
+    /* ????????PPP??PHASE_NETWORK????,??????????????????
+       ????PPP??????PC??PPP??????????????AT??????????,??????????????*/
     if (PHASE_NETWORK == (PPP_LINK(usPppId)->phase))
     {
         if (VOS_NULL_PTR != (PPP_LINK(usPppId)->lcp.hLcpCloseTimer))
@@ -282,7 +282,7 @@ VOS_VOID Ppp_ReleasePpp(PPP_ID usPppId)
             PPP_LINK(usPppId)->lcp.hLcpCloseTimer= VOS_NULL_PTR;
         }
 
-        /*起定时器,确保通知拉AT管脚信号*/
+        /*????????,??????????AT????????*/
         ulRet = VOS_StartRelTimer(&(PPP_LINK(usPppId)->lcp.hLcpCloseTimer),  PS_PID_APP_PPP,
             1000,  TIMER_TERMINATE_PENDING,  (VOS_UINT32)usPppId,  VOS_RELTIMER_NOLOOP,  VOS_TIMER_PRECISION_5 );
 
@@ -293,31 +293,31 @@ VOS_VOID Ppp_ReleasePpp(PPP_ID usPppId)
         }
     }
 
-    /*首先调用PPP模块对应的函数*/
+    /*????????PPP??????????????*/
     fsm_Close(&(PPP_LINK(usPppId)->lcp.fsm));
 
-    /*停止IPCP状态机定时器:*/
+    /*????IPCP????????????:*/
     if( VOS_NULL_PTR !=((PPP_LINK(usPppId))->ipcp.fsm.timer) )
     {
         VOS_StopRelTimer(&((PPP_LINK(usPppId))->ipcp.fsm.timer));
         (PPP_LINK(usPppId))->ipcp.fsm.timer = VOS_NULL_PTR;
     }
 
-    /*停止CHAP状态机定时器:*/
+    /*????CHAP????????????:*/
     if( VOS_NULL_PTR !=((PPP_LINK(usPppId))->chap.auth.hAuthTimer) )
     {
         VOS_StopRelTimer(&((PPP_LINK(usPppId))->chap.auth.hAuthTimer));
         (PPP_LINK(usPppId))->chap.auth.hAuthTimer = VOS_NULL_PTR;
     }
 
-    /*停止LCP状态机定时器:*/
+    /*????LCP????????????:*/
     if( VOS_NULL_PTR !=((PPP_LINK(usPppId))->lcp.fsm.timer) )
     {
         VOS_StopRelTimer(&((PPP_LINK(usPppId))->lcp.fsm.timer));
         (PPP_LINK(usPppId))->lcp.fsm.timer = VOS_NULL_PTR;
     }
 
-    /*停止LCP ECHO状态机定时器:*/
+    /*????LCP ECHO????????????:*/
     if (VOS_NULL_PTR != (PPP_LINK(usPppId))->hdlc.hTimerHandle)
     {
         if (VOS_OK != VOS_StopRelTimer(&((PPP_LINK(usPppId))->hdlc.hTimerHandle)))
@@ -326,14 +326,14 @@ VOS_VOID Ppp_ReleasePpp(PPP_ID usPppId)
         }
     }
 
-    /*释放待PDP激活定时器*/
+    /*??????PDP??????????*/
     if (VOS_NULL_PTR != (PPP_LINK(usPppId)->ipcp.hIpcpPendTimer))
     {
         PS_STOP_REL_TIMER(&(PPP_LINK(usPppId)->ipcp.hIpcpPendTimer));
         PPP_LINK(usPppId)->ipcp.hIpcpPendTimer = VOS_NULL_PTR;
     }
 
-    /*释放待处理IPCP帧*/
+    /*??????????IPCP??*/
     if (VOS_NULL_PTR != (PPP_LINK(usPppId)->ipcp.pstIpcpPendFrame))
     {
         ppp_m_freem(PPP_LINK(usPppId)->ipcp.pstIpcpPendFrame);
@@ -342,9 +342,9 @@ VOS_VOID Ppp_ReleasePpp(PPP_ID usPppId)
 
     PppFreeId(usPppId);
 
-    /* 不用释放PPP数据队列，因为只要队列里面有数据，PPP任务就会被调度起来处理，
-       如果HDLC处理完成而PPP实体已经释放，那么封装或解封装出来的数据自然会被丢弃。
-       这个API会在AT任务里被调用，如果这里把数据放掉，PPP任务有可能正在使用 */
+    /* ????????PPP??????????????????????????????????PPP????????????????????????
+       ????HDLC??????????PPP??????????????????????????????????????????????????????
+       ????API????AT??????????????????????????????????PPP?????????????????? */
     PPP_ClearDataQ();
 
     return;
@@ -352,9 +352,9 @@ VOS_VOID Ppp_ReleasePpp(PPP_ID usPppId)
 
 /*****************************************************************************
  Prototype      : Ppp_ReleasePppReq
- Description    : 为AT模块"释放PPP链路"提供对应的API函数。
+ Description    : ??AT????"????PPP????"??????????API??????
 
- Input          : ---要释放的PPP链路对应的PPP ID
+ Input          : ---????????PPP??????????PPP ID
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -367,7 +367,7 @@ VOS_VOID Ppp_ReleasePpp(PPP_ID usPppId)
 *****************************************************************************/
 VOS_UINT32 Ppp_ReleasePppReq ( PPP_ID usPppId)
 {
-    /* 可维可测信息上报*/
+    /* ????????????????*/
     Ppp_EventMntnInfo(usPppId, AT_PPP_RELEASE_PPP_REQ);
 
     if(VOS_OK != PppIsIdValid(usPppId))
@@ -377,15 +377,15 @@ VOS_UINT32 Ppp_ReleasePppReq ( PPP_ID usPppId)
 
     Ppp_ReleasePpp(usPppId);
 
-    /*返回正确*/
+    /*????????*/
     return VOS_OK;
 }
 
 /*****************************************************************************
  Prototype      : Ppp_ReleaseRawDataPppReq
- Description    : 为AT模块"释放PDP类型为PPP的PPP链路"提供对应的API函数。
+ Description    : ??AT????"????PDP??????PPP??PPP????"??????????API??????
 
- Input          : ---要释放的PPP链路对应的PPP ID
+ Input          : ---????????PPP??????????PPP ID
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -398,7 +398,7 @@ VOS_UINT32 Ppp_ReleasePppReq ( PPP_ID usPppId)
 *****************************************************************************/
 VOS_UINT32 Ppp_ReleaseRawDataPppReq ( PPP_ID usPppId)
 {
-    /* 可维可测信息上报*/
+    /* ????????????????*/
     Ppp_EventMntnInfo(usPppId, AT_PPP_RELEASE_RAW_PPP_REQ);
 
     if(VOS_OK != PppIsIdValid(usPppId))
@@ -408,7 +408,7 @@ VOS_UINT32 Ppp_ReleaseRawDataPppReq ( PPP_ID usPppId)
 
     PppFreeId(usPppId);
 
-    /*返回正确*/
+    /*????????*/
     return VOS_OK;
 }
 
@@ -423,7 +423,7 @@ VOS_UINT32 PPP_ProcTeConfigInfo (VOS_UINT16 usPppId, PPP_REQ_CONFIG_INFO_STRU *p
 
     ulRet = At_RcvTeConfigInfoReq(usPppId,&stPppAtReqConfigInfo);
 
-    /* 安全风险扫描，需要将栈上残留的敏感信息清除 */
+    /* ?????????????????????????????????????????? */
     PSACORE_MEM_SET(&(stPppAtReqConfigInfo.stAuth), sizeof(stPppAtReqConfigInfo.stAuth),
         0x00, sizeof(stPppAtReqConfigInfo.stAuth));
 
@@ -473,7 +473,7 @@ VOS_UINT32 PPP_RcvAtCtrlOperEvent(VOS_UINT16 usPppId, PPP_AT_CTRL_OPER_TYPE_ENUM
     pSndMsg->usPppId            = usPppId;
     pSndMsg->ulCtrlOpType       = ulCtrlOperType;
 
-    /*发送该消息:*/
+    /*??????????:*/
     if ( VOS_OK != PS_SEND_MSG(PS_PID_APP_PPP, pSndMsg) )
     {
         PPP_MNTN_LOG(PS_PID_APP_PPP, 0, PS_PRINT_WARNING,
@@ -492,7 +492,7 @@ VOS_UINT32 Ppp_SndPPPDisconnIndtoAT(VOS_UINT16 usPppId)
     VOS_UINT32                           ulLength;
 
 
-    /* 可维可测信息上报*/
+    /* ????????????????*/
     Ppp_EventMntnInfo(usPppId, PPP_PROTOCOL_RELEASED_IND);
 
     if(PPP_MAX_ID_NUM < usPppId)
@@ -501,17 +501,17 @@ VOS_UINT32 Ppp_SndPPPDisconnIndtoAT(VOS_UINT16 usPppId)
         return VOS_ERR;
     }
 
-    /*向AT模块发送AT_PPP_RELEASE_IND_MSG*/
+    /*??AT????????AT_PPP_RELEASE_IND_MSG*/
     ulLength    = sizeof(AT_PPP_PROTOCOL_REL_IND_MSG_STRU) - VOS_MSG_HEAD_LENGTH;
     /*lint -e{516}*/
     pstMsg      = (AT_PPP_PROTOCOL_REL_IND_MSG_STRU *)PS_ALLOC_MSG(PS_PID_APP_PPP, ulLength);
     if (VOS_NULL_PTR == pstMsg)
     {
-        /*打印出错信息---申请消息包失败:*/
+        /*????????????---??????????????:*/
         PPP_MNTN_LOG(PS_PID_APP_PPP, 0, PS_PRINT_ERROR,"Ppp_SndPPPDisconnIndtoAT : PS_ALLOC_MSG Failed!\r\n");
         return VOS_ERR;
     }
-    /*填写消息头:*/
+    /*??????????:*/
     pstMsg->MsgHeader.ulSenderCpuId   = VOS_LOCAL_CPUID;
     pstMsg->MsgHeader.ulSenderPid     = PS_PID_APP_PPP;
     pstMsg->MsgHeader.ulReceiverCpuId = VOS_LOCAL_CPUID;
@@ -519,13 +519,13 @@ VOS_UINT32 Ppp_SndPPPDisconnIndtoAT(VOS_UINT16 usPppId)
     pstMsg->MsgHeader.ulLength        = ulLength;
 
     pstMsg->MsgHeader.ulMsgName       = AT_PPP_PROTOCOL_REL_IND_MSG;
-    /*填写消息体:*/
+    /*??????????:*/
     pstMsg->usPppId                   = usPppId;
 
-    /*发送该消息*/
+    /*??????????*/
     if (VOS_OK != PS_SEND_MSG(PS_PID_APP_PPP, pstMsg))
     {
-        /*打印警告信息---发送消息失败:*/
+        /*????????????---????????????:*/
         PPP_MNTN_LOG(PS_PID_APP_PPP, 0, PS_PRINT_ERROR,"Ppp_SndPPPDisconnIndtoAT : PS_SEND_MSG Failed!");
         return VOS_ERR;
     }
@@ -571,21 +571,21 @@ VOS_UINT32 PPP_SavePcoInfo
                   "PPP_SavePcoInfo, bitOpSecNbns %d, aucSecNbns %x\r\n",
                   (VOS_INT)pstPcoIpv4Item->bitOpSecNbns, ucIpv4Address);
 
-    /* 保存主DNS服务器地址 */
+    /* ??????DNS?????????? */
     if ( pstPcoIpv4Item->bitOpPriDns )
     {
         PSACORE_MEM_CPY(&(pstIpcp->PriDnsAddr.s_addr), IPV4_ADDR_LEN, pstPcoIpv4Item->aucPriDns, IPV4_ADDR_LEN);
         pstIpcp->PriDns_neg |= NEG_ACCEPTED;
     }
 
-    /* 保存辅DNS服务器地址 */
+    /* ??????DNS?????????? */
     if ( pstPcoIpv4Item->bitOpSecDns )
     {
         PSACORE_MEM_CPY(&(pstIpcp->SecDnsAddr.s_addr), IPV4_ADDR_LEN, pstPcoIpv4Item->aucSecDns, IPV4_ADDR_LEN);
         pstIpcp->SecDns_neg |= NEG_ACCEPTED;
     }
 
-    /* 保存主NBNS服务器地址 */
+    /* ??????NBNS?????????? */
     if ( (pstPcoIpv4Item->bitOpPriNbns)
          && (WINS_CONFIG_ENABLE == g_ucPppConfigWins))
     {
@@ -593,7 +593,7 @@ VOS_UINT32 PPP_SavePcoInfo
         pstIpcp->PriNbns_neg |= NEG_ACCEPTED;
     }
 
-    /* 保存辅NBNS服务器地址 */
+    /* ??????NBNS?????????? */
     if ( (pstPcoIpv4Item->bitOpSecNbns)
          && (WINS_CONFIG_ENABLE == g_ucPppConfigWins))
     {
@@ -601,11 +601,11 @@ VOS_UINT32 PPP_SavePcoInfo
         pstIpcp->SecNbns_neg |= NEG_ACCEPTED;
     }
 
-    /* 参考Ppp_RcvConfigInfoInd实现，peer_ip填主机地址aucIpAddr */
+    /* ????Ppp_RcvConfigInfoInd??????peer_ip??????????aucIpAddr */
     PSACORE_MEM_CPY(&(pstIpcp->peer_ip.s_addr), IPV4_ADDR_LEN, pstAtPppIndConfigInfo->aucIpAddr, IPV4_ADDR_LEN);
     pstIpcp->IpAddr_neg |= NEG_ACCEPTED;
 
-    /* 切换IPCP协商状态 */
+    /* ????IPCP???????? */
     if(pstIpcp->stage == IPCP_REQ_RECEIVED)
     {
         pstIpcp->stage = IPCP_SUCCESS_FROM_GGSN;
@@ -629,7 +629,7 @@ VOS_VOID PPP_GetReqConfigInfo
 
     pstPppAtReqConfigInfo->stAuth.ucAuthType = pstPppReqConfigInfo->stAuth.ucAuthType;
 
-    /* 获取PPP_AT_AUTH_CHAP_CONTENT_STRU */
+    /* ????PPP_AT_AUTH_CHAP_CONTENT_STRU */
     if ( PPP_CHAP_AUTH_TYPE == pstPppReqConfigInfo->stAuth.ucAuthType )
     {
         pstDestChapContent = &(pstPppAtReqConfigInfo->stAuth.AuthContent.ChapContent);
@@ -644,7 +644,7 @@ VOS_VOID PPP_GetReqConfigInfo
         PSACORE_MEM_CPY(pstDestChapContent->aucChapResponseBuf, PPP_CHAP_RESPONSE_BUF_MAX_LEN,
             pstSrcChapContent->pChapResponse, pstDestChapContent->usChapResponseLen);
     }
-    /* 获取PPP_AT_AUTH_PAP_CONTENT_STRU */
+    /* ????PPP_AT_AUTH_PAP_CONTENT_STRU */
     else if ( PPP_PAP_AUTH_TYPE == pstPppReqConfigInfo->stAuth.ucAuthType )
     {
         pstDestPapContent = &(pstPppAtReqConfigInfo->stAuth.AuthContent.PapContent);
@@ -660,7 +660,7 @@ VOS_VOID PPP_GetReqConfigInfo
         /* PPP_NO_AUTH_TYPE */
     }
 
-    /* 获取PPP_AT_REQ_IPCP_CONFIG_INFO_STRU */
+    /* ????PPP_AT_REQ_IPCP_CONFIG_INFO_STRU */
     pstPppAtReqConfigInfo->stIPCP.usIpcpLen = pstPppReqConfigInfo->stIPCP.usIpcpLen;
 
     PSACORE_MEM_CPY(pstPppAtReqConfigInfo->stIPCP.aucIpcp,
@@ -674,11 +674,11 @@ VOS_VOID PPP_GetReqConfigInfo
 #if (FEATURE_ON == FEATURE_DATA_SERVICE_NEW_PLATFORM)
 /*****************************************************************************
  Prototype      : Ppp_RcvConfigInfoInd
- Description    : 为AT模块"PPP模块接收网侧指示的配置信息"提供对应的API函数。
-                  当AT向GGSN认证成功后，调用此函数向PPP发指示。
+ Description    : ??AT????"PPP??????????????????????????"??????????API??????
+                  ??AT??GGSN????????????????????????PPP????????
 
- Input          : usPppId---要发指示的PPP链路所在的PPP ID
-                  pPppIndConfigInfo---从GGSN发来的该PPP链路的IP地址等信息
+ Input          : usPppId---??????????PPP??????????PPP ID
+                  pPppIndConfigInfo---??GGSN????????PPP??????IP??????????
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -707,14 +707,14 @@ VOS_UINT32 Ppp_RcvConfigInfoInd
         return VOS_ERR;
     }
 
-    /* 通过usPppId，寻找到ucIfaceId */
+    /* ????usPppId????????ucIfaceId */
     if (VOS_OK != At_PppId2IfaceId(usPppId, &ucIfaceId))
     {
         PPP_MNTN_LOG2(PS_PID_APP_PPP, 0, PS_PRINT_NORMAL, "Can not get Iface Id ", usPppId, ucIfaceId);
         return VOS_ERR;
     }
 
-    /* 这个时候PDP已经激活，注册上行数据接收接口 */
+    /* ????????PDP?????????????????????????????? */
     stRxHandler.user_data       = usPppId;
     stRxHandler.rx_func         = (ads_iface_rx_func_t)PPP_PushPacketEvent;
     stRxHandler.rx_cmplt_func   = VOS_NULL_PTR;
@@ -728,22 +728,22 @@ VOS_UINT32 Ppp_RcvConfigInfoInd
         return VOS_ERR;
     }
 
-    /* 保存PCO信息 */
+    /* ????PCO???? */
     PPP_SavePcoInfo(usPppId, pstAtPppIndConfigInfo);
 
     Ppp_RcvConfigInfoIndMntnInfo(usPppId, pstAtPppIndConfigInfo);
 
     PPP_RcvAtCtrlOperEvent(usPppId, PPP_AT_CTRL_CONFIG_INFO_IND);
 
-    /*返回正确*/
+    /*????????*/
     return VOS_OK;
 }
 
 /*****************************************************************************
  Prototype      : Ppp_RegDlDataCallback
- Description    : 为AT模块提供注册下行发送数据的API
+ Description    : ??AT??????????????????????????API
 
- Input          : usPppId---要发指示的PPP链路所在的PPP ID
+ Input          : usPppId---??????????PPP??????????PPP ID
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -770,14 +770,14 @@ VOS_UINT32 Ppp_RegDlDataCallback(PPP_ID usPppId)
     }
 
 
-    /* 通过usPppId，寻找到ucIfaceId */
+    /* ????usPppId????????ucIfaceId */
     if (VOS_OK != At_PppId2IfaceId(usPppId, &ucIfaceId))
     {
         PPP_MNTN_LOG2(PS_PID_APP_PPP, 0, PS_PRINT_NORMAL, "Can not get Iface Id ", usPppId, ucIfaceId);
         return VOS_ERR;
     }
 
-    /* 这个时候PDP已经激活，注册上行数据接收接口 */
+    /* ????????PDP?????????????????????????????? */
     stRxHandler.user_data       = usPppId;
     stRxHandler.rx_func         = (ads_iface_rx_func_t)PPP_PushRawDataEvent;
     stRxHandler.rx_cmplt_func   = VOS_NULL_PTR;
@@ -797,11 +797,11 @@ VOS_UINT32 Ppp_RegDlDataCallback(PPP_ID usPppId)
 #else
 /*****************************************************************************
  Prototype      : Ppp_RcvConfigInfoInd
- Description    : 为AT模块"PPP模块接收网侧指示的配置信息"提供对应的API函数。
-                  当AT向GGSN认证成功后，调用此函数向PPP发指示。
+ Description    : ??AT????"PPP??????????????????????????"??????????API??????
+                  ??AT??GGSN????????????????????????PPP????????
 
- Input          : usPppId---要发指示的PPP链路所在的PPP ID
-                  pPppIndConfigInfo---从GGSN发来的该PPP链路的IP地址等信息
+ Input          : usPppId---??????????PPP??????????PPP ID
+                  pPppIndConfigInfo---??GGSN????????PPP??????IP??????????
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -832,7 +832,7 @@ VOS_UINT32 Ppp_RcvConfigInfoInd
     }
 
 
-    /* 通过usPppId，寻找到usRabId */
+    /* ????usPppId????????usRabId */
     if ( !PPP_PPPID_TO_RAB(usPppId, &ucRabId) )
     {
         PPP_MNTN_LOG2(PS_PID_APP_PPP, 0, PS_PRINT_NORMAL,
@@ -842,7 +842,7 @@ VOS_UINT32 Ppp_RcvConfigInfoInd
         return VOS_ERR;
     }
 
-    /* 这个时候PDP已经激活，注册上行数据接收接口。另外当前不支持PPP类型拨号。 */
+    /* ????????PDP??????????????????????????????????????????????PPP?????????? */
     ulResult= ADS_DL_RegDlDataCallback(ucRabId, (RCV_DL_DATA_FUNC)PPP_PushPacketEvent, 0);
 
     if ( VOS_OK != ulResult )
@@ -854,22 +854,22 @@ VOS_UINT32 Ppp_RcvConfigInfoInd
         return VOS_ERR;
     }
 
-    /* 保存PCO信息 */
+    /* ????PCO???? */
     PPP_SavePcoInfo(usPppId, pstAtPppIndConfigInfo);
 
     Ppp_RcvConfigInfoIndMntnInfo(usPppId, pstAtPppIndConfigInfo);
 
     PPP_RcvAtCtrlOperEvent(usPppId, PPP_AT_CTRL_CONFIG_INFO_IND);
 
-    /*返回正确*/
+    /*????????*/
     return VOS_OK;
 }
 
 /*****************************************************************************
  Prototype      : Ppp_RegDlDataCallback
- Description    : 为AT模块提供注册下行发送数据的API
+ Description    : ??AT??????????????????????????API
 
- Input          : usPppId---要发指示的PPP链路所在的PPP ID
+ Input          : usPppId---??????????PPP??????????PPP ID
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -896,7 +896,7 @@ VOS_UINT32 Ppp_RegDlDataCallback(PPP_ID usPppId)
     }
 
 
-    /* 通过usPppId，寻找到usRabId */
+    /* ????usPppId????????usRabId */
     if (!PPP_PPPID_TO_RAB(usPppId, &ucRabId))
     {
         PPP_MNTN_LOG2(PS_PID_APP_PPP, 0, PS_PRINT_NORMAL,
@@ -906,7 +906,7 @@ VOS_UINT32 Ppp_RegDlDataCallback(PPP_ID usPppId)
         return VOS_ERR;
     }
 
-    /* 这个时候PDP已经激活，注册上行数据接收接口 */
+    /* ????????PDP?????????????????????????????? */
     ulResult= ADS_DL_RegDlDataCallback(ucRabId, (RCV_DL_DATA_FUNC)PPP_PushRawDataEvent, 0);
 
     if ( VOS_OK != ulResult )
@@ -925,20 +925,20 @@ VOS_UINT32 Ppp_RegDlDataCallback(PPP_ID usPppId)
 #else    /* for feature */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "AtPppInterface.h"
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 /*****************************************************************************
  Prototype      : Ppp_CreatePppReq
- Description    : 为AT模块"创建PPP链路"提供对应的API函数。
+ Description    : ??AT????"????PPP????"??????????API??????
 
  Input          : ---
- Output         : ---创建成功后返回的PPP ID
+ Output         : ---????????????????PPP ID
  Return Value   : ---VOS_UINT32
  Calls          : ---
  Called By      : ---
@@ -956,10 +956,10 @@ VOS_UINT32 Ppp_CreatePppReq ( VOS_UINT16 *pusPppId)
 
 /*****************************************************************************
  Prototype      : Ppp_CreateRawDataPppReq
- Description    : 创建PDP类型为PPP的PPP实体，但不做链路管理，只作数据的封装和解封装
+ Description    : ????PDP??????PPP??PPP????????????????????????????????????????????
 
  Input          : ---
- Output         : ---创建成功后返回的PPP ID
+ Output         : ---????????????????PPP ID
  Return Value   : ---VOS_UINT32
  Calls          : ---
  Called By      : ---
@@ -977,11 +977,11 @@ VOS_UINT32 Ppp_CreateRawDataPppReq ( VOS_UINT16 *pusPppId)
 
 /*****************************************************************************
  Prototype      : Ppp_RcvConfigInfoInd
- Description    : 为AT模块"PPP模块接收网侧指示的配置信息"提供对应的API函数。
-                  当AT向GGSN认证成功后，调用此函数向PPP发指示。
+ Description    : ??AT????"PPP??????????????????????????"??????????API??????
+                  ??AT??GGSN????????????????????????PPP????????
 
- Input          : usPppId---要发指示的PPP链路所在的PPP ID
-                  pPppIndConfigInfo---从GGSN发来的该PPP链路的IP地址等信息
+ Input          : usPppId---??????????PPP??????????PPP ID
+                  pPppIndConfigInfo---??GGSN????????PPP??????IP??????????
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---
@@ -1010,9 +1010,9 @@ VOS_UINT32 PPP_RcvAtCtrlOperEvent(VOS_UINT16 usPppId, VOS_UINT32 ulCtrlOperType)
 
 /*****************************************************************************
  Prototype      : Ppp_RegDlDataCallback
- Description    : 为AT模块提供注册下行发送数据的API
+ Description    : ??AT??????????????????????????API
 
- Input          : usPppId---要发指示的PPP链路所在的PPP ID
+ Input          : usPppId---??????????PPP??????????PPP ID
  Output         : ---
  Return Value   : ---VOS_UINT32
  Calls          : ---

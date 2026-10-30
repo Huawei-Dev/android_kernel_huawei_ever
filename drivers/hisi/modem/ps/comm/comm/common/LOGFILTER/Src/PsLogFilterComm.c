@@ -47,7 +47,7 @@
  */
 
 /******************************************************************************
-   1 头文件包含
+   1 ??????????
 ******************************************************************************/
 #include "PsLogFilterInterface.h"
 #include "PsLib.h"
@@ -62,22 +62,22 @@
 #define    THIS_MODU           mod_logfilter
 
 /******************************************************************************
-   2 外部函数变量声明
+   2 ????????????????
 ******************************************************************************/
 
 /******************************************************************************
-   3 私有定义
+   3 ????????
 ******************************************************************************/
 
 
 /******************************************************************************
-   4 全局变量定义
+   4 ????????????
 ******************************************************************************/
 PS_OM_LAYER_MSG_REPLACE_STATISTIC_STRU  g_stLayerMsgFilterStatistic = {0,0,0,0}; 
 
 
 /******************************************************************************
-   5 函数实现
+   5 ????????
 ******************************************************************************/
 
 
@@ -98,7 +98,7 @@ VOS_VOID* PS_OM_LocalCpuLayerMsgCommReplace
         return pResult;
     }
 
-    /*依次循环该sendPid下注册的过滤函数*/
+    /*??????????sendPid????????????????*/
     for (ulLoop = 0; ulLoop < pstLocalCpuPerPidCtrl->usUseCnt; ulLoop++)
     {
         pFilterFun = pstLocalCpuPerPidCtrl->pafuncFilterEntry[ulLoop];
@@ -106,7 +106,7 @@ VOS_VOID* PS_OM_LocalCpuLayerMsgCommReplace
         {
             pResult = pFilterFun((MsgBlock*)pMsg);
 
-            /*消息已被过滤，直接退出*/
+            /*??????????????????????*/
             if (pMsg != pResult)
             {
                 g_stLayerMsgFilterStatistic.ulLocalCpuFilterCnt++;
@@ -140,12 +140,12 @@ VOS_VOID* PS_OM_DiffCpuLayerMsgCommReplace
         return pResult;
     }
 
-    /*外循环是注册的sendPid的个数，内循环是每个sendPid下注册的过滤函数的个数*/
+    /*??????????????sendPid????????????????????sendPid??????????????????????*/
     for (ulLoop = 0; ulLoop < pstDiffCpuLayerMsgFilter->usUseCnt; ulLoop++)
     {
         pstDiffCpuPerPidCtrl = &(pstDiffCpuLayerMsgFilter->pastPerPidMsgFilter[ulLoop]);
 
-        /*先匹配sendPid, 找到sendpid后循环其下注册的过滤函数*/
+        /*??????sendPid, ????sendpid????????????????????????*/
         if (pRevMsg->ulSenderPid == pstDiffCpuPerPidCtrl->ulSendPid)
         {
             for (ulLoop2 = 0; ulLoop2 < pstDiffCpuPerPidCtrl->usUseCnt; ulLoop2++)
@@ -190,7 +190,7 @@ VOS_VOID* PS_OM_CpuLayerMsgCommReplace
     }
 
     pRevMsg = (MsgBlock *)pMsg;
-    /*非跨核层间消息过滤*/
+    /*??????????????????*/
     if (pstLayerMsgReplaceCtrl->ucLocalCpuId == VOS_GET_CPU_ID(pRevMsg->ulSenderPid))
     {
         usSendPid = (VOS_UINT16)(pRevMsg->ulSenderPid);
@@ -198,7 +198,7 @@ VOS_VOID* PS_OM_CpuLayerMsgCommReplace
         pResult = PS_OM_LocalCpuLayerMsgCommReplace(pstLocalCpuPerPidCtrl, pMsg);
     }
 
-    /*跨核层间消息过滤*/
+    /*????????????????*/
     else
     {
         pstDiffCpuLayerMsgFilter = &(pstLayerMsgReplaceCtrl->stDiffCpuLayerMsgFilter);
@@ -268,7 +268,7 @@ VOS_UINT32 PS_OM_OnePidFilterFuncCommReg
         return VOS_ERR;
     }
 
-    /* 该Pid下保存注册的过滤回调接口内存不足，先进行内存扩展，初次申请和装满都是一个逻辑 */
+    /* ??Pid???????????????????????????????????????????????????????????????????????????? */
     if (pstPidFilter->usUseCnt == pstPidFilter->usMaxCnt)
     {
         ulResult = PS_OM_LayerMsgReplaceMemExpand(ulSendPid,
@@ -282,7 +282,7 @@ VOS_UINT32 PS_OM_OnePidFilterFuncCommReg
         }
     }
 
-    /* 执行到这里时一切OK, 注册相应指针并修改增加计数字段 */
+    /* ????????????????OK, ?????????????????????????????? */
     if (0 == pstPidFilter->usUseCnt)
     {
         pstPidFilter->ulSendPid = ulSendPid;
@@ -309,7 +309,7 @@ VOS_UINT32 PS_OM_LocalLayerMsgReplaceFuncCommReg
 
     pstLocalCpuFilter = &(pstLayerMsgReplaceCtrl->stLocalCpuLayerMsgFilter);
 
-    /* 核内层间消息过滤数组只申请一次，按Pid最大个数申请，不再扩展 */
+    /* ??????????????????????????????????Pid?????????????????????? */
     if (0 == pstLocalCpuFilter->usUseCnt)
     {
         ulResult = PS_OM_LayerMsgReplaceMemExpand(ulSendPid,
@@ -324,7 +324,7 @@ VOS_UINT32 PS_OM_LocalLayerMsgReplaceFuncCommReg
     }
 
     usPidIdx    = (VOS_UINT16)ulSendPid;
-    /* 下标保护 */
+    /* ???????? */
     if (usPidIdx >= pstLocalCpuFilter->usMaxCnt)
     {
         return VOS_ERR;
@@ -354,7 +354,7 @@ VOS_UINT32 PS_OM_DiffCpuLayerMsgReplaceFuncCommReg
 
     pstDiffCpuFilter = &(pstLayerMsgReplaceCtrl->stDiffCpuLayerMsgFilter);
 
-    /* 跨核消息交互的Pid较少，可以先用循环查找方法 */
+    /* ??????????????Pid?????????????????????????? */
     for (ulLoop = 0; ulLoop < pstDiffCpuFilter->usUseCnt; ulLoop++)
     {
         if (ulSendPid == pstDiffCpuFilter->pastPerPidMsgFilter[ulLoop].ulSendPid)
@@ -364,7 +364,7 @@ VOS_UINT32 PS_OM_DiffCpuLayerMsgReplaceFuncCommReg
         }
     }
 
-    /* 先进行内存扩展，初次申请和装满都是一个逻辑 */
+    /* ?????????????????????????????????????????? */
     if ((VOS_NULL_PTR == pstDiffPidFilter))
     {
         if (pstDiffCpuFilter->usMaxCnt == pstDiffCpuFilter->usUseCnt)
@@ -398,20 +398,20 @@ VOS_UINT32 PS_OM_LayerMsgReplaceCBCommReg
 {
     VOS_UINT32                      ulResult;
 
-    /*入参合法性检查、PID范围检查*/
+    /*????????????????PID????????*/
     if ((VOS_NULL_PTR == pstLayerMsgCtrl) || (VOS_NULL_PTR == pFunc))
     {
         g_stLayerMsgFilterStatistic.ulRegFailCnt++;
         return VOS_ERR;
     }
 
-    /* 核内层间消息过滤回调注册处理 */
+    /* ???????????????????????????? */
     if (pstLayerMsgCtrl->ucLocalCpuId == VOS_GET_CPU_ID(ulSendPid))
     {
         ulResult = PS_OM_LocalLayerMsgReplaceFuncCommReg(pFunc, pstLayerMsgCtrl, ulSendPid);
     }
 
-    else/* 跨核层间消息过滤回调注册处理 */
+    else/* ???????????????????????????? */
     {
         ulResult = PS_OM_DiffCpuLayerMsgReplaceFuncCommReg(pFunc, pstLayerMsgCtrl, ulSendPid);
     }

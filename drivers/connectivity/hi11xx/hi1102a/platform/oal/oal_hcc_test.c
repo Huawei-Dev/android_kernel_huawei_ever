@@ -811,7 +811,7 @@ oal_void hcc_test_throughput_cac(oal_uint64 trans_bytes, ktime_t start_time, kti
 
     temp = temp * 1000u;
 
-    /* 推算出的值 */
+    /* ?????????? */
     temp = (temp >> 17);
 
     temp = div_u64(temp, trans_us);
@@ -844,7 +844,7 @@ OAL_STATIC oal_void hcc_test_throughput_gen(oal_void)
 OAL_STATIC oal_uint64 hcc_test_utilization_ratio_gen(oal_uint64 payload_size, oal_uint64 transfer_size)
 {
     oal_uint64 ret;
-    payload_size = payload_size * 1000;  /* 统计占有率 */
+    payload_size = payload_size * 1000;  /* ?????????? */
     if (transfer_size) {
         ret = div_u64(payload_size, transfer_size);
     } else {
@@ -853,7 +853,7 @@ OAL_STATIC oal_uint64 hcc_test_utilization_ratio_gen(oal_uint64 payload_size, oa
     return ret;
 }
 
-/* 统计发送方向的丢包率，接收方向默认不丢包 */
+/* ???????????????????????????????????????? */
 OAL_STATIC oal_uint32 hcc_test_tx_pkt_loss_gen(oal_uint32 tx_pkts, oal_uint32 actual_tx_pkts)
 {
     oal_uint32 ul_loss;
@@ -866,7 +866,7 @@ OAL_STATIC oal_uint32 hcc_test_tx_pkt_loss_gen(oal_uint32 tx_pkts, oal_uint32 ac
     }
 
     ul_loss = tx_pkts - actual_tx_pkts;
-    return ul_loss * 1000 / tx_pkts;  /* 统计占有率 */
+    return ul_loss * 1000 / tx_pkts;  /* ?????????? */
 }
 
 OAL_STATIC void hcc_test_rcvd_data(oal_netbuf_stru *pst_netbuf)
@@ -874,7 +874,7 @@ OAL_STATIC void hcc_test_rcvd_data(oal_netbuf_stru *pst_netbuf)
     oal_int32 ret;
     oal_int32 filter_flag = 0;
 
-    /* 计算总共数据包长度 */
+    /* ?????????????????? */
     if (OAL_UNLIKELY(hcc_test_event->test_data.pkt_len != OAL_NETBUF_LEN(pst_netbuf))) {
         if (printk_ratelimit()) {
             OAL_IO_PRINT("[E]recvd netbuf pkt len:%d,but request len:%d\n",
@@ -904,7 +904,7 @@ OAL_STATIC void hcc_test_rcvd_data(oal_netbuf_stru *pst_netbuf)
     }
 
     if (!filter_flag) {
-        /* filter_flag=1 时接收的数据包不符合要求，则过滤掉 */
+        /* filter_flag=1 ?????????????????????????????????? */
         hcc_test_event->test_data.pkt_rcvd++;
         hcc_test_event->test_data.total_rcvd_bytes += OAL_NETBUF_LEN(pst_netbuf);
         hcc_test_event->last_time = ktime_get();
@@ -1106,7 +1106,7 @@ OAL_STATIC oal_int32 hcc_test_rx_start(oal_uint16 start_cmd)
 
     hcc_test_event->last_time = ktime_get();
 
-    /* 等待回来的CMD命令 */
+    /* ??????????CMD???? */
     ret = wait_for_completion_interruptible(&hcc_test_event->test_trans_done);
     if (ret < 0) {
         OAL_IO_PRINT("Test Event  terminated ret=%d\n", ret);
@@ -1227,7 +1227,7 @@ OAL_STATIC oal_int32 hcc_test_normal_start(oal_uint16 start_cmd)
     hcc_test_event->last_time = ktime_get();
 
 retry:
-    /* 等待回来的CMD命令 */
+    /* ??????????CMD???? */
     ret = wait_for_completion_interruptible_timeout(&hcc_test_event->test_trans_done, OAL_MSECS_TO_JIFFIES(5000));
     if (ret < 0) {
         OAL_IO_PRINT("Test Event  terminated ret=%d\n", ret);
@@ -1355,7 +1355,7 @@ ssize_t hcc_test_print_thoughput(char *buf, oal_uint32 buf_len)
     }
     count += ret;
 
-    /* SDIO通道利用率 */
+    /* SDIO?????????? */
     ret = snprintf_s(buf + count, buf_len - count, buf_len - count - 1, "Hcc Utilization Ratio %llu\n",
                      hcc_test_utilization_ratio_gen(hcc_test_event->test_data.total_sent_bytes +
                                                     hcc_test_event->test_data.total_rcvd_bytes,
@@ -1366,7 +1366,7 @@ ssize_t hcc_test_print_thoughput(char *buf, oal_uint32 buf_len)
     }
     count += ret;
 
-    /* 发送方向的丢包率 */
+    /* ???????????????? */
     ret = snprintf_s(buf + count, buf_len - count, buf_len - count - 1,
                      "TxPackageLoss %u, pkt_sent: %d actual_tx_pkts: %u\n",
                      hcc_test_tx_pkt_loss_gen(hcc_test_event->test_data.pkt_sent,
@@ -2211,7 +2211,7 @@ oal_int32 hcc_test_current_bus_chan(oal_int32 pkt_len,
         return ret;
     }
 
-    /* 下发固定频率的命令 */
+    /* ?????????????????? */
     ret = hcc_test_fix_wcpu_freq();
     if (ret) {
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "set  wcpu fix freq failed! ret=%d", ret);
@@ -2219,7 +2219,7 @@ oal_int32 hcc_test_current_bus_chan(oal_int32 pkt_len,
         return ret;
     }
 
-    /* 电压拉偏 */
+    /* ???????? */
     hcc_bus_voltage_bias_init(hcc_get_current_110x_bus());
 
 retry:
@@ -2242,7 +2242,7 @@ retry:
     }
 
     if (min_throught > 0) {
-        /* 吞吐率门限，当小于最小值时，认为性能失败 */
+        /* ???????????????????????????????????????? */
         if (hcc_test_event->test_data.throughput < (oal_uint64)min_throught) {
             retry_times++;
             if (retry_times <= retry_cnt) {
@@ -2279,7 +2279,7 @@ retry:
     return OAL_SUCC;
 }
 
-/* 测试WIFI通道是否连通 */
+/* ????WIFI???????????? */
 oal_int32 conn_test_wifi_chan_loop(const char *param)
 {
     oal_int32 ret;
@@ -2312,7 +2312,7 @@ oal_int32 conn_test_wifi_chan_loop(const char *param)
         }
 
         if (pst_bus->bus_type != HCC_BUS_PCIE) {
-            /* 尝试切换到PCIE */
+            /* ??????????PCIE */
             ret = hcc_switch_bus(HCC_CHIP_110X_DEV, HCC_BUS_PCIE);
             if (ret) {
                 oal_print_hi11xx_log(HI11XX_LOG_ERR, "switch to PCIe failed, ret=%d", ret);
@@ -2366,7 +2366,7 @@ oal_int32 conn_test_wifi_chan_loop(const char *param)
         }
 
         if (pst_bus->bus_type != HCC_BUS_SDIO) {
-            /* 尝试切换到SDIO */
+            /* ??????????SDIO */
             ret = hcc_switch_bus(HCC_CHIP_110X_DEV, HCC_BUS_SDIO);
             if (ret) {
                 oal_print_hi11xx_log(HI11XX_LOG_ERR, "switch to PCIe failed, ret=%d", ret);

@@ -3,7 +3,7 @@
 #ifndef __OAL_THREAD_H__
 #define __OAL_THREAD_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_types.h"
 #include "oal_hardware.h"
 #include "oal_mm.h"

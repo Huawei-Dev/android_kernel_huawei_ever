@@ -14,16 +14,16 @@
 
 
 #if (FEATURE_ON == FEATURE_CHR_OM)
-/*保存黑名单的全局变量*/
+/*????????????????????*/
 CHR_ACPU_BLACK_SAVE_STRU g_stChrBlack;
 
-/*保存优先级列表的全局变量*/
-CHR_ACPU_PRIORITY_SAVE_STRU    *g_pstChrPriorityCfg;  //保存优先级0的配置表
-OM_PRIORITY_LIST_STRU           g_stChrPrioritylist;    //临时记录AP下发的优先级多包数据
+/*????????????????????????*/
+CHR_ACPU_PRIORITY_SAVE_STRU    *g_pstChrPriorityCfg;  //??????????0????????
+OM_PRIORITY_LIST_STRU           g_stChrPrioritylist;    //????????AP????????????????????
 
-/*保存上报周期的全局变量*/
-CHR_ACPU_PERIOD_SAVE_STRU      *g_pstChrPeriodCfg;     //保存上报周期的配置表
-OM_PERIOD_LIST_STRU             g_stChrPeriodList;     //临时记录AP下发的周期多包数据
+/*??????????????????????*/
+CHR_ACPU_PERIOD_SAVE_STRU      *g_pstChrPeriodCfg;     //????????????????????
+OM_PERIOD_LIST_STRU             g_stChrPeriodList;     //????????AP??????????????????
 OM_VCOM_DEBUG_INFO              g_stCfgVcomDebugInfo   = {0};
 #define CHR_LogCfgReport(fmt, ...)  \
     DIAG_LogReport(DIAG_GEN_LOG_MODULE(0, 0, 1), MSP_PID_CHR, "chr_cfg", __LINE__, "%s:"fmt, __FUNCTION__, ##__VA_ARGS__)
@@ -36,7 +36,7 @@ VOS_UINT32 OM_AcpuBlackListSend(VOS_VOID)
     VOS_UINT32 ulBlackListLen;
     OM_ACPU_BLACK_LIST_STRU   *pstOmAcpuBlackList;
 
-    /*A核申请黑名单列表消息发送给c核*/
+    /*A??????????????????????????c??*/
     ulBlackListLen = g_stChrBlack.ulBlackListPacketLen 
                      + sizeof(OM_ACPU_BLACK_LIST_STRU) 
                      - VOS_MSG_HEAD_LENGTH;
@@ -56,7 +56,7 @@ VOS_UINT32 OM_AcpuBlackListSend(VOS_VOID)
                  g_stChrBlack.pstChrBlackList,
                  g_stChrBlack.ulBlackListPacketLen);
     
-    /*a核发送黑名单给c核*/
+    /*a??????????????c??*/
     if(VOS_OK != VOS_SendMsg(MSP_PID_CHR, pstOmAcpuBlackList))
     {
         chr_print("send black list Msg failed!\n");
@@ -81,7 +81,7 @@ VOS_UINT32 OM_AcpuBlackListProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         return OM_APP_MSG_LENGTH_ERR;
         
     }
-    /*判断实际的消息长度和代码传入的是否一致*/
+    /*??????????????????????????????????????*/
     pstChrBlackList =(OM_APP_BLACK_LIST_STRU *)pucData ;
     
     ulLength = pstChrBlackList->stOmHeader.ulMsgLen;
@@ -93,14 +93,14 @@ VOS_UINT32 OM_AcpuBlackListProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
     }
   
    
-    /*检查黑名单的有效性*/
+    /*??????????????????*/
     for(i=0 ;i<(ulLength/sizeof(CHR_LIST_INFO_S)); i++)
     {
         if(pstChrBlackList->stBlackList[i].ulMsgModuleID > OM_ERR_LOG_MOUDLE_ID_BUTT ||
             pstChrBlackList->stBlackList[i].ulMsgModuleID < OM_ERR_LOG_MOUDLE_ID_GUNAS)
         {
             chr_print("param invalid !\n");
-            /*返回错误结果*/
+            /*????????????*/
             return OM_APP_PARAM_INAVALID;          
         }
         CHR_LogCfgReport("blacklist moduleid:0x%x, alarmid:0x%x, AlarmType:%d!\n",
@@ -109,7 +109,7 @@ VOS_UINT32 OM_AcpuBlackListProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         pstChrBlackList->stBlackList[i].usAlmType);
     }
    
-    /*a核黑名单保存*/
+    /*a????????????*/
     pstTemp = (CHR_LIST_INFO_S *)VOS_MemAlloc(MSP_PID_CHR, DYNAMIC_MEM_PT,ulLength);
     if(NULL == pstTemp)
     {
@@ -118,7 +118,7 @@ VOS_UINT32 OM_AcpuBlackListProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
     }
     VOS_MemCpy_s(pstTemp, ulLength, pstChrBlackList->stBlackList, ulLength);
 
-    /*黑名单是否已经保存过*/
+    /*????????????????????*/
     if(NULL != g_stChrBlack.pstChrBlackList)
     {
         (VOS_VOID)VOS_MemFree(MSP_PID_CHR, g_stChrBlack.pstChrBlackList);
@@ -189,7 +189,7 @@ VOS_UINT32 OM_AcpuCheckPriorityList(VOS_UINT8 *pucData)
  
     
     pstAppCheckPriorityCfg =(OM_APP_PRIORITY_CFG_STRU *)pucData;
-    /*判断传入长度和传入个数是否匹配*/
+    /*??????????????????????????????*/
     if(pstAppCheckPriorityCfg->ucCount != (pstAppCheckPriorityCfg->stOmHeader.ulMsgLen-sizeof(VOS_UINT32))/(sizeof(CHR_PRIORITY_INFO_S)))
     {
         chr_print("input length not match count !\n");
@@ -197,7 +197,7 @@ VOS_UINT32 OM_AcpuCheckPriorityList(VOS_UINT8 *pucData)
     }
    
     
-    /*检查序列号是否完整*/
+    /*??????????????????*/
     if((pstAppCheckPriorityCfg->ucPacketSN  != g_stChrPrioritylist.ulSN)&&
         (PRIORITY_PACKET_END   != pstAppCheckPriorityCfg->ucPacketSN) &&
         (PRIORITY_PACKET_START != pstAppCheckPriorityCfg->ucPacketSN))
@@ -273,7 +273,7 @@ VOS_UINT32 OM_AcpuPriorityCfgSend(VOS_VOID)
 {
     OM_ACPU_PRIORITY_CFG_STRU *pstOmAcpuPriorityCfg;
     
-    /*A核申请优先级0列表消息发送给c核*/
+    /*A????????????0??????????????c??*/
     pstOmAcpuPriorityCfg  = (OM_ACPU_PRIORITY_CFG_STRU*)VOS_AllocMsg(MSP_PID_CHR,
                (g_pstChrPriorityCfg->ulPiorityLen +sizeof(OM_ACPU_PRIORITY_CFG_STRU) - VOS_MSG_HEAD_LENGTH));
     if (VOS_NULL_PTR == pstOmAcpuPriorityCfg)
@@ -290,7 +290,7 @@ VOS_UINT32 OM_AcpuPriorityCfgSend(VOS_VOID)
                   g_pstChrPriorityCfg->PriorityCfg,
                   g_pstChrPriorityCfg->ulPiorityLen);
         
-    /*a核发送黑名单给c核*/
+    /*a??????????????c??*/
     if(VOS_OK != VOS_SendMsg(MSP_PID_CHR, pstOmAcpuPriorityCfg))
     {
         chr_print("send priority to ccpu failed!\n");
@@ -316,7 +316,7 @@ VOS_UINT32 OM_AcpuPriorityCfgSend(VOS_VOID)
         return OM_APP_MSG_LENGTH_ERR;
         
     }
-    /*判断传入长度和实际的长度是否一致*/
+    /*????????????????????????????????*/
     pstAppOmPriorityCfg =(OM_APP_PRIORITY_CFG_STRU *)pucData ;
     CHR_LogCfgReport("OM_AcpuPriorityCfgProc:MsgLen:0x%x,totallen:0x%x!\n",pstAppOmPriorityCfg->stOmHeader.ulMsgLen,ulLen);
     
@@ -325,7 +325,7 @@ VOS_UINT32 OM_AcpuPriorityCfgSend(VOS_VOID)
          chr_print("input length not match !\n");
          return OM_APP_MSG_LENGTH_ERR;
     } 
-    /*打印优先级*/
+    /*??????????*/
     for(i=0 ;i< pstAppOmPriorityCfg->ucCount; i++)
     {
        
@@ -335,7 +335,7 @@ VOS_UINT32 OM_AcpuPriorityCfgSend(VOS_VOID)
         pstAppOmPriorityCfg->alarmMap[i].usAlmType,
         pstAppOmPriorityCfg->alarmMap[i].priority );
     }
-    /*检查优先级列表*/
+    /*??????????????*/
     ulRet =OM_AcpuCheckPriorityList(pucData);
     if(PERIOD_CHK_FAIL == ulRet)
     {
@@ -349,7 +349,7 @@ VOS_UINT32 OM_AcpuPriorityCfgSend(VOS_VOID)
         OM_AcpuPriorityListFree();
     }
     
-    /* 创建节点，申请内存 */
+    /* ?????????????????? */
     ulLength = pstAppOmPriorityCfg->stOmHeader.ulMsgLen-sizeof(VOS_UINT32);
     pstPriorityNode = (OM_PRIORITY_NODE_STRU *)VOS_MemAlloc(MSP_PID_CHR, DYNAMIC_MEM_PT,(ulLength +sizeof(OM_PRIORITY_NODE_STRU)));
     if(VOS_NULL_PTR == pstPriorityNode)
@@ -440,14 +440,14 @@ VOS_UINT32 OM_AcpuCheckPeriodList(VOS_UINT8 *pucData)
     pstPeriodCfg =(OM_APP_PERIOD_CFG_STRU *)pucData;
     
    
-    /*判断传入长度和传入个数是否匹配*/
+    /*??????????????????????????????*/
     if(pstPeriodCfg->ucCount != (pstPeriodCfg->stOmHeader.ulMsgLen-sizeof(VOS_UINT32))/(sizeof(CHR_PERIOD_CFG_STRU)))
     {
         chr_print("input length not match count !\n");
         return PERIOD_CHK_FAIL;
     }
     
-    /*检查序列号是否完整*/
+    /*??????????????????*/
     if((pstPeriodCfg->ucMsgSN != g_stChrPeriodList.ulSN)&&
         (PERIOD_PACKET_END   != pstPeriodCfg->ucMsgSN) &&
         (PERIOD_PACKET_START != pstPeriodCfg->ucMsgSN))
@@ -523,7 +523,7 @@ VOS_UINT32 OM_AcpuPeriodCfgSend(VOS_VOID)
 {
     OM_ACPU_PERIOD_CFG_STRU *pstPeriodCfg;
     
-    /*A核消息发送给c核*/
+    /*A????????????c??*/
     pstPeriodCfg  = (OM_ACPU_PERIOD_CFG_STRU*)VOS_AllocMsg(MSP_PID_CHR,
                (g_pstChrPeriodCfg->ulPacketLen+sizeof(OM_ACPU_PERIOD_CFG_STRU) - VOS_MSG_HEAD_LENGTH));
     if (VOS_NULL_PTR == pstPeriodCfg)
@@ -541,7 +541,7 @@ VOS_UINT32 OM_AcpuPeriodCfgSend(VOS_VOID)
                   g_pstChrPeriodCfg->PeriodCfg,
                   g_pstChrPeriodCfg->ulPacketLen);
         
-    /*a核发送黑名单给c核*/
+    /*a??????????????c??*/
     if(VOS_OK != VOS_SendMsg(MSP_PID_CHR, pstPeriodCfg))
     {
         chr_print("send Period to ccpu failed !\n");
@@ -567,7 +567,7 @@ VOS_UINT32 OM_AcpuPeriodCfgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         return OM_APP_MSG_LENGTH_ERR;
         
     }
-    /*判断传入长度和实际的长度是否一致*/
+    /*????????????????????????????????*/
     pstAppPeriodCfg =(OM_APP_PERIOD_CFG_STRU *)pucData ;  
     
     CHR_LogCfgReport("OM_AcpuPeriodCfgProc:MsgLen:0x%x,totallen:0x%x!\n",pstAppPeriodCfg->stOmHeader.ulMsgLen,ulLen);
@@ -577,7 +577,7 @@ VOS_UINT32 OM_AcpuPeriodCfgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
          return OM_APP_MSG_LENGTH_ERR;
     }
    
-    /*打印优先级*/
+    /*??????????*/
     for(i=0 ;i< pstAppPeriodCfg->ucCount; i++)
     {
        
@@ -586,7 +586,7 @@ VOS_UINT32 OM_AcpuPeriodCfgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         pstAppPeriodCfg->alarmMap[i].ulCount);
        
     }
-    /*上报周期配置检查*/
+    /*????????????????*/
     ulRet =OM_AcpuCheckPeriodList(pucData);
     if(PERIOD_CHK_FAIL == ulRet)
     {
@@ -600,7 +600,7 @@ VOS_UINT32 OM_AcpuPeriodCfgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
         OM_AcpuPeriodListFree();
     }
 
-    /* 创建节点，申请内存 */
+    /* ?????????????????? */
     ulLength = pstAppPeriodCfg->stOmHeader.ulMsgLen-4*sizeof(VOS_UINT8);
     pstPeriodNode = (OM_PERIOD_NODE_STRU *)VOS_MemAlloc(MSP_PID_CHR, DYNAMIC_MEM_PT,(ulLength +sizeof(OM_PERIOD_NODE_STRU)));
     if(VOS_NULL_PTR == pstPeriodNode)
@@ -611,7 +611,7 @@ VOS_UINT32 OM_AcpuPeriodCfgProc(VOS_UINT8 *pucData, VOS_UINT32 ulLen)
     VOS_MemCpy_s(pstPeriodNode->pstPeriodCfg, ulLength, pstAppPeriodCfg->alarmMap,ulLength);
     pstPeriodNode->ulPacketLen = ulLength;   
     pstPeriodNode->ulperiod    = (VOS_UINT32)pstAppPeriodCfg->ucperiod;
-     /*先回复一个结果给apk，释放vcom口*/
+     /*????????????????apk??????vcom??*/
    // OM_AcpuSendAppcfgResult(OM_APP_MSG_OK);
     OM_AcpuPeriodListAdd(pstPeriodNode);
 
@@ -657,7 +657,7 @@ VOS_VOID OM_AcpuSendAppcfgResult(VOS_UINT32 ulRest)
 }
 /*****************************************************************************
  Function Name   : Chr_ResetCcoreCB
- Description     : 诊断modem单独复位回调函数
+ Description     : ????modem????????????????
  Input           : enParam
  Output          : None
  Return          : VOS_VOID
@@ -690,7 +690,7 @@ VOS_INT chr_ResetCcoreCB(DRV_RESET_CB_MOMENT_E enParam, int userdata)
 }
 /*****************************************************************************
  Function Name   : OM_AcpuResetProc
- Description     : 单独复位后a核处理函数
+ Description     : ??????????a??????????
  Input           : enParam
  Output          : None
  Return          : VOS_VOID
@@ -725,10 +725,10 @@ VOS_UINT32 OM_AcpuResetProc(VOS_VOID)
 VOS_UINT32 CHR_Cfg_Init(VOS_VOID)
 {  
     VOS_UINT32 ulRest;
-    VOS_CHAR * resetName = "CHR";  /*C核单独复位的名字*/
+    VOS_CHAR * resetName = "CHR";  /*C????????????????*/
  
 
-    /*初始化优先级/上报周期节点*/
+    /*????????????/????????????*/
     OM_AcpuPriorityListInit();
     OM_AcpuPeriodListInit();
     

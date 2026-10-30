@@ -1,7 +1,7 @@
 /*
  * DRM driver for Multi-Inno MI0283QT panels
  *
- * Copyright 2016 Noralf Trønnes
+ * Copyright 2016 Noralf Tr??nnes
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -282,5 +282,5 @@ static struct spi_driver mi0283qt_spi_driver = {
 module_spi_driver(mi0283qt_spi_driver);
 
 MODULE_DESCRIPTION("Multi-Inno MI0283QT DRM driver");
-MODULE_AUTHOR("Noralf Trønnes");
+MODULE_AUTHOR("Noralf Tr??nnes");
 MODULE_LICENSE("GPL");

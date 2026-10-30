@@ -3,7 +3,7 @@
 #ifndef __PLAT_MAIN_H__
 #define __PLAT_MAIN_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_ext_if.h"
 #include "oam_ext_if.h"
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION)

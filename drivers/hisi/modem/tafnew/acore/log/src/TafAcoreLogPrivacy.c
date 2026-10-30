@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "TafAcoreLogPrivacy.h"
 #include "TafLogPrivacyMatch.h"
@@ -70,7 +70,7 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 
 #define THIS_FILE_ID                    PS_FILE_ID_TAF_ACORE_LOG_PRIVACY_C
@@ -81,7 +81,7 @@
 
 #define    AT_XML_MODE         (2)
 
-#define LOG_PRIVACY_AT_CMD_MAX_LEN         (50)                                 /* AT脱敏,命令最大长度 */
+#define LOG_PRIVACY_AT_CMD_MAX_LEN         (50)                                 /* AT????,???????????? */
 
 LOCAL VOS_UINT32 TAF_LogPrivacyGetModem0Pid(
     VOS_UINT32                          ulSrcPid
@@ -119,7 +119,7 @@ LOCAL VOS_VOID* AT_PrivacyMatchNdisIfaceUpConfigReq(
 );
 
 /*****************************************************************************
-  3 全局变量定义
+  3 ????????????
 *****************************************************************************/
 
 TAF_LOG_PRIVACY_MATCH_MODEM_PID_MAP_TBL_STRU                g_astTafPrivacyMatchModemPidMapTbl[] =
@@ -142,7 +142,7 @@ TAF_LOG_PRIVACY_MATCH_MODEM_PID_MAP_TBL_STRU                g_astTafPrivacyMatch
 #endif
 };
 
-/* 不包含敏感信息的at内部消息白名单 */
+/* ????????????????at?????????????? */
 AT_INTER_MSG_ID_ENUM_UINT32                                 g_aenAtCmdWhiteListTbl[] =
 {
     ID_AT_MNTN_INPUT_MSC,
@@ -166,7 +166,7 @@ AT_INTER_MSG_ID_ENUM_UINT32                                 g_aenAtCmdWhiteListT
 AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtCmdMapTbl[] =
 {
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
-    /* 呼叫相关AT命令 */
+    /* ????????AT???? */
     {"AT^CFSH"                  ,   "AT^CFSH"},
     {"AT^CBURSTDTMF"            ,   "AT^CBURSTDTMF"},
     {"AT^CCONTDTMF"             ,   "AT^CCONTDTMF"},
@@ -187,7 +187,7 @@ AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtC
     {"\r\n^ECRANDOM"            ,   "\r\n^ECRANDOM\r\n"},
     {"\r\n^ECKMC"               ,   "\r\n^ECKMC\r\n"},
 
-    /* 短信与写卡操作相关AT命令 */
+    /* ??????????????????AT???? */
     {"AT^CCMGS"                 ,   "AT^CCMGS"},
     {"AT^CCMGW"                 ,   "AT^CCMGW"},
     {"AT^CCMGD"                 ,   "AT^CCMGD"},
@@ -199,7 +199,7 @@ AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtC
     {"\r\n^GETMEID"             ,   "\r\n^GETMEID\r\n"},
     {"AT^CIMEI"                 ,   "AT^CIMEI"},
 
-    /* XPDS相关 */
+    /* XPDS???? */
     {"AT^CAGPSPRMINFO"          ,   "AT^CAGPSPRMINFO"},
     {"AT^CAGPSPOSINFO"          ,   "AT^CAGPSPOSINFO"},
     {"AT^CAGPSFORWARDDATA"      ,   "AT^CAGPSFORWARDDATA"},
@@ -217,7 +217,7 @@ AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtC
     {"\r\n^UTSGPSPOSINFO"       ,   "\r\n^UTSGPSPOSINFO\r\n"},
 #endif
 
-    /* 参数中存在tmsi/ptmsi */
+    /* ??????????tmsi/ptmsi */
     { "AT^EFLOCIINFO", "AT^EFLOCIINFO" },
     { "AT^EFPSLOCIINFO", "AT^EFPSLOCIINFO" },
     { "\r\n^EFLOCIINFO", "\r\n^EFLOCIINFO\r\n" },
@@ -233,11 +233,11 @@ AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtC
     {"AT^EPDU"                  ,   "AT^EPDU"},
     {"\r\n^EPDUR"               ,   "\r\n^EPDUR\r\n"},
 
-    /* 电话管理命令 */
+    /* ???????????? */
     {"AT^NVM"                   ,   "AT^NVM"},
     {"\r\n^XLEMA"               ,   "\r\n^XLEMA\r\n"},
 
-    /* 电路域业务命令 */
+    /* ?????????????? */
     {"ATD"                      ,   "ATD"},
     {"AT^APDS"                  ,   "AT^APDS"},
     {"AT+VTS"                   ,   "AT+VTS"},
@@ -262,7 +262,7 @@ AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtC
     {"\r\n^CLCC"                ,   "\r\n^CLCC\r\n"},
     {"\r\n^CLPR"                ,   "\r\n^CLPR\r\n"},
 
-    /* 补充业务命令 */
+    /* ???????????? */
     {"AT+CCFC"                  ,   "AT+CCFC"},
     {"AT+CTFR"                  ,   "AT+CTFR"},
     {"AT^CHLD"                  ,   "AT^CHLD"},
@@ -283,7 +283,7 @@ AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtC
     {"\r\n+CMOLRN"              ,   "\r\n+CMOLRN\r\n"},
     {"\r\n+CMOLRG"              ,   "\r\n+CMOLRG\r\n"},
 
-    /* SMS短信业务命令 */
+    /* SMS???????????? */
     {"AT+CMGS"                  ,   "AT+CMGS"},
     {"AT+CMGW"                  ,   "AT+CMGW"},
     {"AT+CMGC"                  ,   "AT+CMGC"},
@@ -295,7 +295,7 @@ AT_LOG_PRIVACY_MATCH_AT_CMD_MAP_TBL_STRU                    g_astPrivacyMatchAtC
     {"\r\n+CMGL"                ,   "\r\n+CMGL\r\n"},
     {"\r\n^RSTRIGGER"           ,   "\r\n^RSTRIGGER\r\n"},
 
-    /* 与AP对接命令 */
+    /* ??AP???????? */
     {"AT+CPOS"                  ,   "AT+CPOS"},
     {"\r\n+CPOSR"               ,   "\r\n+CPOSR\r\n"},
     {"\r\n^DIALOGNTF"           ,   "\r\n^DIALOGNTF\r\n"},
@@ -352,8 +352,8 @@ AT_LOG_PRIVACY_MAP_CMD_TO_FUNC_STRU                         g_astPrivacyMapCmdTo
 };
 
 /**********************************************************************************************/
-/***************************** WUEPS_PID_AT发送消息脱敏函数处理表 *****************************/
-/* AT发送给GUC TAF模块消息脱敏处理函数表 */
+/***************************** WUEPS_PID_AT?????????????????????? *****************************/
+/* AT??????GUC TAF?????????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToTafMsgListTbl[] =
 {
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
@@ -390,7 +390,7 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyM
 
 };
 
-/* AT发给XSMS模块消息的脱敏处理函数表 */
+/* AT????XSMS???????????????????????? */
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToXsmsMsgListTbl[] =
 {
@@ -400,7 +400,7 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyM
 };
 #endif
 
-/* AT发给MTA模块消息的脱敏处理函数表 */
+/* AT????MTA???????????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToMtaMsgListTbl[] =
 {
     {ID_AT_MTA_CPOS_SET_REQ,                                AT_PrivacyMatchCposSetReq},
@@ -408,26 +408,26 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyM
     {ID_AT_MTA_PSEUCELL_INFO_SET_REQ,                       AT_PrivacyMatchPseucellInfoSetReq},
 };
 
-/* AT发给DRV_AGENT模块消息的脱敏处理函数表 */
+/* AT????DRV_AGENT???????????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToDrvAgentMsgListTbl[] =
 {
     {DRV_AGENT_SIMLOCKWRITEEX_SET_REQ,                      AT_PrivacyMatchSimLockWriteExSetReq},
 };
 
-/* AT发给RNIC模块消息的脱敏处理函数表 */
+/* AT????RNIC???????????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToRnicMsgListTbl[] =
 {
     {ID_AT_RNIC_PDN_INFO_CFG_IND,                           AT_PrivacyMatchRnicPdnInfoCfgInd},
 };
 
-/* AT发给NDIS模块消息的脱敏处理函数表 */
+/* AT????NDIS???????????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToNdisMsgListTbl[] =
 {
     {ID_AT_NDIS_PDNINFO_CFG_REQ,                            AT_PrivacyMatchNdisPdnInfoCfgReq},
     {ID_AT_NDIS_IFACE_UP_CONFIG_IND,                        AT_PrivacyMatchNdisIfaceUpConfigReq},
 };
 
-/* AT发给IMSA模块消息的脱敏处理函数表 */
+/* AT????IMSA???????????????????????? */
 #if (FEATURE_ON == FEATURE_IMS)
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToImsaMsgListTbl[] =
 {
@@ -437,8 +437,8 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyM
 #endif
 
 /**********************************************************************************************/
-/***************************** WUEPS_PID_TAF发送消息脱敏函数处理表 *****************************/
-/* TAF(WUEPS_PID_TAF)发给AT消息的脱敏处理函数表, A核C核使用同一份代码， */
+/***************************** WUEPS_PID_TAF?????????????????????? *****************************/
+/* TAF(WUEPS_PID_TAF)????AT????????????????????, A??C?????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafAcorePrivacyMatchToAtMsgListTbl[] =
 {
 #if ((FEATURE_ON == FEATURE_UE_MODE_CDMA)                                      \
@@ -448,7 +448,7 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafAcorePrivacy
     {ID_TAF_CALL_APP_GET_EC_KMC_CNF,                        TAF_XCALL_PrivacyMatchAppGetEcKmcCnf},
 #endif
 
-    /* GUC A核C核都有调用，放最外层处理 */
+    /* GUC A??C???????????????????????? */
     {MN_CALLBACK_CS_CALL,                                   TAF_PrivacyMatchAppMnCallBackCsCall},
     {MN_CALLBACK_SS,                                        TAF_PrivacyMatchAppMnCallBackSs},
     {ID_TAF_CALL_APP_CNAP_QRY_CNF,                          TAF_CALL_PrivacyMatchAppCnapQryCnf},
@@ -460,7 +460,7 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafAcorePrivacy
 };
 
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
-/* AT发送给XPDS模块消息脱敏处理函数表 */
+/* AT??????XPDS?????????????????????? */
 #if ((FEATURE_ON == FEATURE_AGPS) && (FEATURE_ON == FEATURE_XPDS))
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyMatchToXpdsMsgListTbl[] =
 {
@@ -473,9 +473,9 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astAtAcorePrivacyM
 #endif
 
 /**********************************************************************************************/
-/***************************** UEPS_PID_XSMS发送消息脱敏函数处理表 ****************************/
+/***************************** UEPS_PID_XSMS?????????????????????? ****************************/
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
-/* XSMS发给AT消息的脱敏处理函数表 */
+/* XSMS????AT???????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafXsmsAcorePrivacyMatchToAtMsgListTbl[] =
 {
     {TAF_XSMS_APP_MSG_TYPE_RCV_IND,                         TAF_XSMS_PrivacyMatchAppMsgTypeRcvInd},
@@ -483,9 +483,9 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafXsmsAcorePri
 };
 
 /**********************************************************************************************/
-/***************************** UEPS_PID_XPDS发送消息脱敏函数处理表 *****************************/
+/***************************** UEPS_PID_XPDS?????????????????????? *****************************/
 #if ((FEATURE_ON == FEATURE_AGPS) && (FEATURE_ON == FEATURE_XPDS))
-/* XPDS发给AT模块消息的脱敏处理函数表 */
+/* XPDS????AT???????????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafXpdsAcorePrivacyMatchToAtMsgListTbl[] =
 {
     {ID_XPDS_AT_GPS_REFLOC_INFO_CNF,                        TAF_XPDS_PrivacyMatchAtGpsRefLocInfoCnf},
@@ -501,23 +501,23 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafXpdsAcorePri
 #endif
 #endif
 
-/* TAF发给TAF消息的脱敏处理函数表 */
-/* (由于hi6932无x模，导致该数组定义大小为0，会有pclint告警，gu添加处理后，删除该cdma宏) */
+/* TAF????TAF???????????????????? */
+/* (????hi6932??x????????????????????????0??????pclint??????gu??????????????????cdma??) */
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
 #if (FEATURE_ON == FEATURE_CHINA_TELECOM_VOICE_ENCRYPT)
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafAcorePrivacyMatchToTafMsgListTbl[] =
 {
-    /*实际发送PID是TAF*/
+    /*????????PID??TAF*/
     {ID_TAF_CALL_APP_ENCRYPT_VOICE_REQ,                     TAF_PrivacyMatchCallAppEncryptVoiceReq},
 #if (FEATURE_ON == FEATURE_CHINA_TELECOM_VOICE_ENCRYPT_TEST_MODE)
-    /*实际发送PID是TAF*/
+    /*????????PID??TAF*/
     {ID_TAF_CALL_APP_SET_EC_KMC_REQ,                        TAF_PrivacyMatchCallAppSetEcKmcReq},
 #endif
 };
 #endif
 #endif
 
-/* TAF发给MMA消息的脱敏处理函数表 */
+/* TAF????MMA???????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafAcorePrivacyMatchToMmaMsgListTbl[] =
 {
 #if (FEATURE_ON == FEATURE_CL_INTERWORK)
@@ -527,13 +527,13 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafAcorePrivacy
     {ID_TAF_MMA_EFPSLOCIINFO_SET_REQ,                       TAF_MMA_PrivacyMatchAtEfPsClocInfoSetReq},
 };
 
-/* RNIC发给CDS消息的脱敏处理函数表 */
+/* RNIC????CDS???????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astRnicAcorePrivacyMatchToCdsMsgListTbl[] =
 {
     {ID_RNIC_CDS_IMS_DATA_REQ,                              RNIC_PrivacyMatchCdsImsDataReq},
 };
 
-/* TAF发给AT消息的脱敏处理函数表 */
+/* TAF????AT???????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafDsmAcorePrivacyMatchPsEvtMsgListTbl[] =
 {
     {ID_EVT_TAF_PS_CALL_PDP_ACTIVATE_CNF,                   TAF_DSM_PrivacyMatchPsCallPdpActCnf},
@@ -555,7 +555,7 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafDsmAcorePriv
     {ID_EVT_TAF_PS_GET_NEGOTIATION_DNS_CNF,                 TAF_DSM_PrivacyMatchTafGetNegotiationDnsCnf},
 };
 
-/* MTA发给AT消息的脱敏处理函数表 */
+/* MTA????AT???????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                      g_astTafMtaAcorePrivacyMatchToAtMsgListTbl[] =
 {
     {ID_MTA_AT_CPOSR_IND,                                   TAF_MTA_PrivacyMatchCposrInd},
@@ -568,7 +568,7 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                      g_astTafMtaAcorePrivacyM
     {ID_MTA_AT_SET_NETMON_NCELL_CNF,                        TAF_MTA_PrivacyMatchAtSetNetMonNcellCnf},
 };
 
-/* MMA发给AT消息的脱敏处理函数表 */
+/* MMA????AT???????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafMmaAcorePrivacyMatchToAtMsgListTbl[] =
 {
     {ID_TAF_MMA_USIM_STATUS_IND,                            TAF_MMA_PrivacyMatchAtUsimStatusInd},
@@ -588,7 +588,7 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafMmaAcorePriv
 };
 
 
-/* TAF发给DSM消息的脱敏处理函数表 */
+/* TAF????DSM???????????????????? */
 TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafAcorePrivacyMatchToDsmMsgListTbl[] =
 {
     {ID_MSG_TAF_PS_SET_AUTHDATA_INFO_REQ,                   TAF_DSM_PrivacyMatchTafSetAuthDataReq},
@@ -606,22 +606,22 @@ TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU                          g_astTafDrvAgentAcor
 };
 
 /**********************************************************************************************/
-/*************************************** PID映射处理表 ****************************************/
-/* WUEPS_PID_AT发送给不同pid的消息对应的脱敏处理表 */
+/*************************************** PID?????????? ****************************************/
+/* WUEPS_PID_AT??????????pid?????????????????????? */
 TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                      g_astAtAcorePrivacyMatchRcvPidListTbl[] =
 {
-    /* AT发送给XPDS的消息过滤 */
+    /* AT??????XPDS?????????? */
 #if ((FEATURE_ON == FEATURE_UE_MODE_CDMA) && (FEATURE_ON == FEATURE_AGPS) && (FEATURE_ON == FEATURE_XPDS))
     {UEPS_PID_XPDS,      sizeof(g_astAtAcorePrivacyMatchToXpdsMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),        g_astAtAcorePrivacyMatchToXpdsMsgListTbl},
 #endif
 
-    /* AT发送给TAF的消息过滤 */
+    /* AT??????TAF?????????? */
     {WUEPS_PID_TAF,     sizeof(g_astAtAcorePrivacyMatchToTafMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),          g_astAtAcorePrivacyMatchToTafMsgListTbl},
-    /* AT发送给XSMS的消息 */
+    /* AT??????XSMS?????? */
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
     {UEPS_PID_XSMS,     sizeof(g_astAtAcorePrivacyMatchToXsmsMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),         g_astAtAcorePrivacyMatchToXsmsMsgListTbl},
 #endif
-    /* AT发送给MTA的消息 */
+    /* AT??????MTA?????? */
     {UEPS_PID_MTA,      sizeof(g_astAtAcorePrivacyMatchToMtaMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),          g_astAtAcorePrivacyMatchToMtaMsgListTbl},
 
     {ACPU_PID_RNIC,      sizeof(g_astAtAcorePrivacyMatchToRnicMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),        g_astAtAcorePrivacyMatchToRnicMsgListTbl},
@@ -636,17 +636,17 @@ TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                      g_astAtAcorePrivacyM
 
 };
 
-/* TAF(WUEPS_PID_TAF)发送给不同pid的消息对应的脱敏处理表 */
+/* TAF(WUEPS_PID_TAF)??????????pid?????????????????????? */
 TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                      g_astTafAcorePrivacyMatchRcvPidListTbl[] =
 {
 
 #if (FEATURE_ON == FEATURE_UE_MODE_CDMA)
 #if (FEATURE_ON == FEATURE_CHINA_TELECOM_VOICE_ENCRYPT)
-    /* TAF发给TAF的消息 */
+    /* TAF????TAF?????? */
     {WUEPS_PID_TAF,     sizeof(g_astTafAcorePrivacyMatchToTafMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),         g_astTafAcorePrivacyMatchToTafMsgListTbl},
 #endif
 #endif
-    /* GUC A核C核都有调用，放最外层处理 */
+    /* GUC A??C???????????????????????? */
     {WUEPS_PID_AT,      sizeof(g_astTafAcorePrivacyMatchToAtMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),          g_astTafAcorePrivacyMatchToAtMsgListTbl},
 
     {WUEPS_PID_MMA,     sizeof(g_astTafAcorePrivacyMatchToMmaMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),         g_astTafAcorePrivacyMatchToMmaMsgListTbl},
@@ -654,28 +654,28 @@ TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                      g_astTafAcorePrivacy
     {UEPS_PID_DSM,      sizeof(g_astTafAcorePrivacyMatchToDsmMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),         g_astTafAcorePrivacyMatchToDsmMsgListTbl},
 };
 
-/* UEPS_PID_XSMS发送给不同pid的消息对应的脱敏处理表 */
+/* UEPS_PID_XSMS??????????pid?????????????????????? */
 #if(FEATURE_ON == FEATURE_UE_MODE_CDMA)
 TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                      g_astXsmsAcorePrivacyMatchRcvPidListTbl[] =
 {
-    /* XSMS发送给AT的消息过滤 */
+    /* XSMS??????AT?????????? */
     {WUEPS_PID_AT,      sizeof(g_astTafXsmsAcorePrivacyMatchToAtMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),      g_astTafXsmsAcorePrivacyMatchToAtMsgListTbl},
 };
 
-/* UEPS_PID_XPDS发送给不同pid的消息对应的脱敏处理表 */
+/* UEPS_PID_XPDS??????????pid?????????????????????? */
 #if ((FEATURE_ON == FEATURE_AGPS) && (FEATURE_ON == FEATURE_XPDS))
 TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                      g_astXpdsAcorePrivacyMatchRcvPidListTbl[] =
 {
-    /* XPDS发送给AT的消息过滤 */
+    /* XPDS??????AT?????????? */
     {WUEPS_PID_AT,      sizeof(g_astTafXpdsAcorePrivacyMatchToAtMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),      g_astTafXpdsAcorePrivacyMatchToAtMsgListTbl},
 };
 #endif
 #endif
 
-/* MTA发送给不同PID的消息对应的脱敏处理表 */
+/* MTA??????????PID?????????????????????? */
 TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                  g_astTafMtaAcorePrivacyMatchRcvPidListTbl[] =
 {
-    /* MTA发给AT的消息 */
+    /* MTA????AT?????? */
     {WUEPS_PID_AT,     sizeof(g_astTafMtaAcorePrivacyMatchToAtMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),  g_astTafMtaAcorePrivacyMatchToAtMsgListTbl},
 };
 
@@ -689,7 +689,7 @@ TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                  g_astTafDrvAgentAcorePri
     {WUEPS_PID_AT,     sizeof(g_astTafDrvAgentAcorePrivacyMatchToAtMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),  g_astTafDrvAgentAcorePrivacyMatchToAtMsgListTbl},
 };
 
-/* RNIC发送给不同pid的消息对应的脱敏处理表 */
+/* RNIC??????????pid?????????????????????? */
 TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU                      g_astRnicAcorePrivacyMatchRcvPidListTbl[] =
 {
     {UEPS_PID_CDS,     sizeof(g_astRnicAcorePrivacyMatchToCdsMsgListTbl)/sizeof(TAF_LOG_PRIVACY_MSG_MATCH_TBL_STRU),         g_astRnicAcorePrivacyMatchToCdsMsgListTbl},
@@ -728,7 +728,7 @@ LOCAL VOS_VOID* AT_PrivacyMatchRnicPdnInfoCfgInd(
 
     ulLength  = pstMsg->ulLength + VOS_MSG_HEAD_LENGTH;
 
-    /* 分配消息,申请内存后续统一由底层释放 */
+    /* ????????,?????????????????????????? */
     pstPdnInfoCfgInd = (AT_RNIC_PDN_INFO_CFG_IND_STRU *)VOS_MemAlloc(pstMsg->ulSenderPid,
                                                                      DYNAMIC_MEM_PT,
                                                                      ulLength);
@@ -743,7 +743,7 @@ LOCAL VOS_VOID* AT_PrivacyMatchRnicPdnInfoCfgInd(
                   pstMsg,
                   ulLength);
 
-    /* 将敏感信息设置为全0 */
+    /* ??????????????????0 */
     pstPdnInfoCfgInd->ulIpv4Addr = 0;
 
     TAF_MEM_SET_S(pstPdnInfoCfgInd->aucIpv6Addr,
@@ -764,7 +764,7 @@ LOCAL VOS_VOID* AT_PrivacyMatchNdisPdnInfoCfgReq(
 
     ulLength  = pstMsg->ulLength + VOS_MSG_HEAD_LENGTH;
 
-    /* 分配消息,申请内存后续统一由底层释放 */
+    /* ????????,?????????????????????????? */
     pstPdnInfoCfgReq = (AT_NDIS_PDNINFO_CFG_REQ_STRU *)VOS_MemAlloc(pstMsg->ulSenderPid,
                                                                     DYNAMIC_MEM_PT,
                                                                     ulLength);
@@ -779,7 +779,7 @@ LOCAL VOS_VOID* AT_PrivacyMatchNdisPdnInfoCfgReq(
                   pstMsg,
                   ulLength);
 
-    /* 将敏感信息设置为全0 */
+    /* ??????????????????0 */
     TAF_MEM_SET_S(&(pstPdnInfoCfgReq->stIpv4PdnInfo),
                   sizeof(pstPdnInfoCfgReq->stIpv4PdnInfo),
                   0,
@@ -803,7 +803,7 @@ LOCAL VOS_VOID* AT_PrivacyMatchNdisIfaceUpConfigReq(
 
     ulLength  = pstMsg->ulLength + VOS_MSG_HEAD_LENGTH;
 
-    /* 分配消息,申请内存后续统一由底层释放 */
+    /* ????????,?????????????????????????? */
     pstIfaceUpConfigInd = (AT_NDIS_IFACE_UP_CONFIG_IND_STRU *)VOS_MemAlloc(pstMsg->ulSenderPid,
                                                                            DYNAMIC_MEM_PT,
                                                                            ulLength);
@@ -818,7 +818,7 @@ LOCAL VOS_VOID* AT_PrivacyMatchNdisIfaceUpConfigReq(
                   pstMsg,
                   ulLength);
 
-    /* 将敏感信息设置为全0 */
+    /* ??????????????????0 */
     TAF_MEM_SET_S(&(pstIfaceUpConfigInd->stIpv4PdnInfo),
                   sizeof(pstIfaceUpConfigInd->stIpv4PdnInfo),
                   0,
@@ -866,7 +866,7 @@ VOS_VOID* AT_PrivacyMatchAtCmd(
 
     pstAtMsg        = (AT_MSG_STRU *)pstMsg;
 
-    /* 白名单中的消息不脱敏, 直接返回原消息, 不在白名单中的信息再进行脱敏检查 */
+    /* ????????????????????, ??????????????, ???????????????????????????????? */
     if (VOS_TRUE == AT_PrivacyMatchIsWhiteListAtCmd(pstAtMsg))
     {
         return (VOS_VOID *)pstMsg;
@@ -877,14 +877,14 @@ VOS_VOID* AT_PrivacyMatchAtCmd(
         {
             if (AT_XML_MODE == g_stParseContext[pstAtMsg->ucIndex].ucMode)
             {
-                /* xml模式直接进行过滤 */
+                /* xml???????????????? */
                 MN_NORM_LOG1("AT_PrivacyMatchAtCmd: TRUE,XML MODE, ulMsgName ", pstAtMsg->enMsgId);
                 return VOS_NULL_PTR;
             }
 
             if (AT_SMS_MODE == g_stParseContext[pstAtMsg->ucIndex].ucMode)
             {
-               /* 短信模式直接进行过滤 */
+               /* ???????????????????? */
                MN_NORM_LOG1("AT_PrivacyMatchAtCmd: TRUE,SMS MODE ulMsgName ", pstAtMsg->enMsgId);
                return VOS_NULL_PTR;
             }
@@ -907,7 +907,7 @@ VOS_VOID* AT_PrivacyMatchAtCmd(
             }
         }
 
-        /* 申请足够大的内存, 临时存放AT Cmd, 用于判断是否需要过滤, 使用后释放 */
+        /* ????????????????, ????????AT Cmd, ????????????????????, ?????????? */
         usTempAtCmdLen  = (pstAtMsg->usLen > LOG_PRIVACY_AT_CMD_MAX_LEN) ? pstAtMsg->usLen : LOG_PRIVACY_AT_CMD_MAX_LEN;
         pucAtCmdData    = (VOS_UINT8 *)PS_MEM_ALLOC(WUEPS_PID_AT, usTempAtCmdLen);
 
@@ -927,9 +927,9 @@ VOS_VOID* AT_PrivacyMatchAtCmd(
             {
                 usPrivacyAtCmdLen       = (VOS_UINT16)(VOS_StrLen(g_astPrivacyMatchAtCmdMapTbl[ulLoop].pcPrivacyAtCmd));
 
-                /* 消息结构体长度 + at命令字符串长度 - 消息结构体中aucValue数组长度 */
+                /* ?????????????? + at?????????????? - ????????????aucValue???????? */
                 usPrivacyAtMsgLen       = sizeof(AT_MSG_STRU) + usPrivacyAtCmdLen - 4;
-                /* A核不调用多实例接口申请内存 */
+                /* A?????????????????????????? */
                 pstPrivacyMatchAtMsg    = (AT_MSG_STRU *)VOS_MemAlloc(WUEPS_PID_AT,
                                                                       DYNAMIC_MEM_PT,
                                                                       usPrivacyAtMsgLen);
@@ -945,17 +945,17 @@ VOS_VOID* AT_PrivacyMatchAtCmd(
 
                 usAtMsgHeaderLen  = sizeof(AT_MSG_STRU) - 4;
 
-                /* 拷贝原始消息头部 */
+                /* ???????????????? */
                 TAF_MEM_CPY_S(pstPrivacyMatchAtMsg,
                               usAtMsgHeaderLen,
                               pstAtMsg,
                               usAtMsgHeaderLen);
 
-                /* 设置新的at cmd字符串长度 */
+                /* ????????at cmd?????????? */
                 pstPrivacyMatchAtMsg->ulLength = usPrivacyAtMsgLen - VOS_MSG_HEAD_LENGTH;
                 pstPrivacyMatchAtMsg->usLen    = usPrivacyAtCmdLen;
 
-                /* 拷贝脱敏后at命令字符串 */
+                /* ??????????at?????????? */
                 TAF_MEM_CPY_S(pstPrivacyMatchAtMsg->aucValue,
                               usPrivacyAtCmdLen,
                               g_astPrivacyMatchAtCmdMapTbl[ulLoop].pcPrivacyAtCmd,
@@ -967,7 +967,7 @@ VOS_VOID* AT_PrivacyMatchAtCmd(
             }
         }
 
-        /* 未匹配, 不包含敏感信息, 返回原始消息 */
+        /* ??????, ??????????????, ???????????? */
         PS_MEM_FREE(WUEPS_PID_AT, pucAtCmdData);
 
         return (VOS_VOID *)pstMsg;
@@ -991,7 +991,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterCnfCommProc(
 
     ulIndex         = 0;
 
-    /* 判断是查询请求还是回复结果,如果是查询请求则不需要脱敏 */
+    /* ??????????????????????????,?????????????????????????? */
     if ('\r' != pstAtMsg->aucValue[0])
     {
         return VOS_NULL_PTR;
@@ -999,7 +999,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterCnfCommProc(
 
     usPrivacyAtMsgLen    = sizeof(AT_MSG_STRU) + pstAtMsg->usLen - 4;
 
-    /* A核不调用多实例接口申请内存 */
+    /* A?????????????????????????? */
     pucPrivacyMatchAtMsg = (VOS_UINT8 *)VOS_MemAlloc(WUEPS_PID_AT,
                                          DYNAMIC_MEM_PT,
                                          usPrivacyAtMsgLen);
@@ -1011,7 +1011,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterCnfCommProc(
 
     pstPrivacyMatchAtMsg = (AT_MSG_STRU *)pucPrivacyMatchAtMsg;
 
-    /* 拷贝原始消息 */
+    /* ???????????? */
     TAF_MEM_CPY_S(pstPrivacyMatchAtMsg,
                   usPrivacyAtMsgLen,
                   pstAtMsg,
@@ -1043,7 +1043,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterCimi(
 )
 {
     /****************************************
-    从第7位开始替换为*,第0位到第6位不需要替换
+    ????7????????????*,??0??????6????????????
     0:\r     1:\n     2-4:MCC      5-6:MNC
     ****************************************/
     return AT_PrivacyFilterCnfCommProc(pstMsg, 7, '\r');
@@ -1054,7 +1054,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterCgsn(
 )
 {
     /****************************************
-    从第2位开始替换为*,第0位和第1位不需要替换
+    ????2????????????*,??0??????1????????????
     0:\r     1:\n
     ****************************************/
     return AT_PrivacyFilterCnfCommProc(pstMsg, 2, '\r');
@@ -1076,7 +1076,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterMsid(
 
     pstAtMsg        = (AT_MSG_STRU *)pstMsg;
 
-    /* 申请内存, 临时存放AT Cmd, 用于判断是否需要过滤, 使用后释放 */
+    /* ????????, ????????AT Cmd, ????????????????????, ?????????? */
     pucAtCmdData    = (VOS_UINT8 *)PS_MEM_ALLOC(WUEPS_PID_AT, pstAtMsg->usLen);
 
     if (VOS_NULL_PTR == pucAtCmdData)
@@ -1088,7 +1088,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterMsid(
 
     (VOS_VOID)At_UpString(pucAtCmdData, pstAtMsg->usLen);
 
-    /* 判断是ATI的查询请求还是回复结果,如果是查询请求则不需要脱敏 */
+    /* ??????ATI??????????????????????,?????????????????????????? */
     if ( VOS_OK == PS_MEM_CMP((VOS_UINT8 *)pcAtCmd, pucAtCmdData, VOS_StrLen(pcAtCmd)))
     {
         PS_MEM_FREE(WUEPS_PID_AT, pucAtCmdData);
@@ -1098,7 +1098,7 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterMsid(
 
     usPrivacyAtMsgLen    = sizeof(AT_MSG_STRU) + pstAtMsg->usLen - 4;
 
-    /* A核不调用多实例接口申请内存 */
+    /* A?????????????????????????? */
     pstPrivacyMatchAtMsg = (AT_MSG_STRU *)VOS_MemAlloc(WUEPS_PID_AT,
                                                        DYNAMIC_MEM_PT,
                                                        usPrivacyAtMsgLen);
@@ -1109,14 +1109,14 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterMsid(
         return VOS_NULL_PTR;
     }
 
-    /* 拷贝原始消息 */
+    /* ???????????? */
     TAF_MEM_CPY_S(pstPrivacyMatchAtMsg,
                   usPrivacyAtMsgLen,
                   pstAtMsg,
                   usPrivacyAtMsgLen);
 
     /****************************************
-    只替换IMEI字段后的信息
+    ??????IMEI????????????
     ****************************************/
     usFilterFieldLen = (VOS_UINT16)VOS_StrLen(pcFilterField);
 
@@ -1137,10 +1137,10 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterMsid(
 
     for (ulIndex = 0; ulIndex < (VOS_UINT32)(pstPrivacyMatchAtMsg->usLen - usFilterFieldLen); ulIndex++)
     {
-        /* 找出IMEI字段 */
+        /* ????IMEI???? */
         if (VOS_OK == PS_MEM_CMP((VOS_UINT8 *)pcFilterField, &(pstPrivacyMatchAtMsg->aucValue[ulIndex]), usFilterFieldLen))
         {
-            /* 将IMEI具体值替换成* */
+            /* ??IMEI????????????* */
             for (ulIndex2 = (ulIndex + usFilterFieldLen); ulIndex2 < pstPrivacyMatchAtMsg->usLen; ulIndex2++)
             {
                 if ('\r' == pstPrivacyMatchAtMsg->aucValue[ulIndex2])
@@ -1166,8 +1166,8 @@ LOCAL AT_MSG_STRU* AT_PrivacyFilterHplmn(
 )
 {
     /****************************************
-    从第15位开始替换为*,第0位到第14位不需要替换
-    0:\r     1:\n     2-9:^HPLMN:(此处还有一个空格)
+    ????15????????????*,??0??????14????????????
+    0:\r     1:\n     2-9:^HPLMN:(????????????????)
     10-12:MCC   13-14:MNC
     ****************************************/
     return AT_PrivacyFilterCnfCommProc(pstMsg, 15, ',');
@@ -1196,12 +1196,12 @@ VOS_VOID* AT_AcoreMsgLogPrivacyMatchProc(
         return (VOS_VOID *)pstAtMsgPrivacyMatchMsg;
     }
 
-    /* A核单编译, 需要将I1/I2的PID转换为I0的PID */
+    /* A????????, ??????I1/I2??PID??????I0??PID */
     ulRcvPid        = TAF_LogPrivacyGetModem0Pid(pstRcvMsgHeader->ulReceiverPid);
 
     ulTblSize       = 0;
 
-    /* 查找入参消息对应的rcvpid表 */
+    /* ??????????????????rcvpid?? */
     for (ulLoop = 0; ulLoop < (sizeof(g_astAtAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU)); ulLoop++)
     {
         if (ulRcvPid == g_astAtAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1216,7 +1216,7 @@ VOS_VOID* AT_AcoreMsgLogPrivacyMatchProc(
 
     ulMsgName = (VOS_UINT16)(pstRcvMsgHeader->ulMsgName);
 
-    /* 查找入参消息对应的脱敏函数 */
+    /* ?????????????????????????? */
     if (VOS_NULL_PTR != pstPrivacyMatchMsgTbl)
     {
         for (ulLoop = 0; ulLoop < ulTblSize; ulLoop++)
@@ -1230,7 +1230,7 @@ VOS_VOID* AT_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 
@@ -1253,10 +1253,10 @@ VOS_VOID* TAF_AcoreMsgLogPrivacyMatchProc(
     ulRcvPidMatchTblSize = sizeof(g_astTafAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU);
     ulMsgMatchTblSize    = 0;
 
-    /* A核单编译, 需要将I1/I2的PID转换为I0的PID */
+    /* A????????, ??????I1/I2??PID??????I0??PID */
     ulRcvPid = TAF_LogPrivacyGetModem0Pid(pstRcvMsgHeader->ulReceiverPid);
 
-    /* 根据rcv pid查找pid映射表 */
+    /* ????rcv pid????pid?????? */
     for (ulLoop = 0; ulLoop < ulRcvPidMatchTblSize; ulLoop++)
     {
         if (ulRcvPid == g_astTafAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1269,12 +1269,12 @@ VOS_VOID* TAF_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 若根据rcv pid找到pid映射表，继续根据匹配表查找处理函数 */
+    /* ??????rcv pid????pid?????????????????????????????????? */
     if (VOS_NULL_PTR != pstLogPrivacyMsgMatchTbl)
     {
         ulMsgName = (VOS_UINT16)(pstRcvMsgHeader->ulMsgName);
 
-        /* 根据msg name查找过滤函数映射表 */
+        /* ????msg name?????????????????? */
         for (ulLoop = 0; ulLoop < ulMsgMatchTblSize; ulLoop++)
         {
             if (ulMsgName == pstLogPrivacyMsgMatchTbl[ulLoop].ulMsgName)
@@ -1286,7 +1286,7 @@ VOS_VOID* TAF_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 
@@ -1306,7 +1306,7 @@ VOS_VOID* TAF_XSMS_AcoreMsgLogPrivacyMatchProc(
     pstMsgHeader    = (MSG_HEADER_STRU *)pstMsg;
     ulTblSize       = 0;
 
-    /* 查找入参消息对应的rcvpid表 */
+    /* ??????????????????rcvpid?? */
     for (ulIndex = 0; ulIndex < (sizeof(g_astXsmsAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU)); ulIndex++)
     {
         if (pstMsgHeader->ulReceiverPid == g_astXsmsAcorePrivacyMatchRcvPidListTbl[ulIndex].ulReceiverPid)
@@ -1319,7 +1319,7 @@ VOS_VOID* TAF_XSMS_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 查找入参消息对应的脱敏函数 */
+    /* ?????????????????????????? */
     if (VOS_NULL_PTR != pstPrivacyMatchMsgTbl)
     {
         ulMsgName = (VOS_UINT16)(pstMsgHeader->ulMsgName);
@@ -1335,7 +1335,7 @@ VOS_VOID* TAF_XSMS_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 #endif
@@ -1356,7 +1356,7 @@ VOS_VOID* TAF_XPDS_AcoreMsgLogPrivacyMatchProc(
     pstMsgHeader    = (PS_MSG_HEADER_STRU *)pstMsg;
     ulTblSize       = 0;
 
-    /* 查找入参消息对应的rcvpid表 */
+    /* ??????????????????rcvpid?? */
     for (ulLoop = 0; ulLoop < (sizeof(g_astXpdsAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU)); ulLoop++)
     {
         if (pstMsgHeader->ulReceiverPid == g_astXpdsAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1369,7 +1369,7 @@ VOS_VOID* TAF_XPDS_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 查找入参消息对应的脱敏函数 */
+    /* ?????????????????????????? */
     if (VOS_NULL_PTR != pstPrivacyMatchMsgTbl)
     {
         ulMsgName = pstMsgHeader->ulMsgName;
@@ -1385,7 +1385,7 @@ VOS_VOID* TAF_XPDS_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 #endif
@@ -1408,7 +1408,7 @@ VOS_VOID* TAF_MTA_AcoreMsgLogPrivacyMatchProc(
     ulRcvPidMatchTblSize = sizeof(g_astTafMtaAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU);
     ulMsgMatchTblSize    = 0;
 
-    /* 根据ulReceiverPid查找PID映射表 */
+    /* ????ulReceiverPid????PID?????? */
     for (ulLoop = 0; ulLoop < ulRcvPidMatchTblSize; ulLoop++)
     {
         if (pstRcvMsgHeader->ulReceiverPid == g_astTafMtaAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1421,12 +1421,12 @@ VOS_VOID* TAF_MTA_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 若根据ulReceiverPid找到PID映射表，继续查找匹配表 */
+    /* ??????ulReceiverPid????PID?????????????????????? */
     if (VOS_NULL_PTR != pstLogPrivacyMsgMatchTbl)
     {
         ulMsgName = (VOS_UINT16)pstRcvMsgHeader->ulMsgName;
 
-        /* 根据ulMsgName查找过滤函数映射表 */
+        /* ????ulMsgName?????????????????? */
         for (ulLoop = 0; ulLoop < ulMsgMatchTblSize; ulLoop++)
         {
             if (ulMsgName == pstLogPrivacyMsgMatchTbl[ulLoop].ulMsgName)
@@ -1438,7 +1438,7 @@ VOS_VOID* TAF_MTA_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 
@@ -1460,7 +1460,7 @@ VOS_VOID* TAF_MMA_AcoreMsgLogPrivacyMatchProc(
     ulRcvPidMatchTblSize = sizeof(g_astTafMmaAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU);
     ulMsgMatchTblSize    = 0;
 
-    /* 根据ulReceiverPid查找PID映射表 */
+    /* ????ulReceiverPid????PID?????? */
     for (ulLoop = 0; ulLoop < ulRcvPidMatchTblSize; ulLoop++)
     {
         if (pstRcvMsgHeader->ulReceiverPid == g_astTafMmaAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1473,12 +1473,12 @@ VOS_VOID* TAF_MMA_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 若根据ulReceiverPid找到PID映射表，继续查找匹配表 */
+    /* ??????ulReceiverPid????PID?????????????????????? */
     if (VOS_NULL_PTR != pstLogPrivacyMsgMatchTbl)
     {
         ulMsgName = (VOS_UINT16)pstRcvMsgHeader->ulMsgName;
 
-        /* 根据ulMsgName查找过滤函数映射表 */
+        /* ????ulMsgName?????????????????? */
         for (ulLoop = 0; ulLoop < ulMsgMatchTblSize; ulLoop++)
         {
             if (ulMsgName == pstLogPrivacyMsgMatchTbl[ulLoop].ulMsgName)
@@ -1490,7 +1490,7 @@ VOS_VOID* TAF_MMA_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 
@@ -1512,7 +1512,7 @@ VOS_VOID* TAF_DRVAGENT_AcoreMsgLogPrivacyMatchProc(
     ulRcvPidMatchTblSize = sizeof(g_astTafDrvAgentAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU);
     ulMsgMatchTblSize    = 0;
 
-    /* 根据ulReceiverPid查找PID映射表 */
+    /* ????ulReceiverPid????PID?????? */
     for (ulLoop = 0; ulLoop < ulRcvPidMatchTblSize; ulLoop++)
     {
         if (pstRcvMsgHeader->ulReceiverPid == g_astTafDrvAgentAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1525,12 +1525,12 @@ VOS_VOID* TAF_DRVAGENT_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 若根据ulReceiverPid找到PID映射表，继续查找匹配表 */
+    /* ??????ulReceiverPid????PID?????????????????????? */
     if (VOS_NULL_PTR != pstLogPrivacyMsgMatchTbl)
     {
         ulMsgName = (VOS_UINT16)pstRcvMsgHeader->ulMsgName;
 
-        /* 根据ulMsgName查找过滤函数映射表 */
+        /* ????ulMsgName?????????????????? */
         for (ulLoop = 0; ulLoop < ulMsgMatchTblSize; ulLoop++)
         {
             if (ulMsgName == pstLogPrivacyMsgMatchTbl[ulLoop].ulMsgName)
@@ -1542,17 +1542,17 @@ VOS_VOID* TAF_DRVAGENT_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 
 
 VOS_VOID TAF_OM_LayerMsgLogPrivacyMatchRegAcore(VOS_VOID)
 {
-     /*  1、AT在PID init时先读取NV, 然后再注册脱敏回调函数, 所以此处直接使用NV值,
-       *     log脱敏NV打开, 则注册回调函数, 否则不注册
-       *  2、A核单编译, 只能访问I0接口, 所以I1/I2的消息同样注册I0的过滤接口, 在过滤函数内增加PID转换
-       *  3、产品线确认NV配置以MODEM_0为准
+     /*  1??AT??PID init????????NV, ??????????????????????, ????????????????NV??,
+       *     log????NV????, ??????????????, ??????????
+       *  2??A????????, ????????I0????, ????I1/I2??????????????I0??????????, ????????????????PID????
+       *  3????????????NV??????MODEM_0????
        */
 
     if (VOS_TRUE == AT_GetPrivacyFilterEnableFlg())
@@ -1641,7 +1641,7 @@ VOS_VOID* RNIC_AcoreMsgLogPrivacyMatchProc(
 
     ulRcvPid = TAF_LogPrivacyGetModem0Pid(pstRcvMsgHeader->ulReceiverPid);
 
-    /* 查找入参消息对应的rcvpid表 */
+    /* ??????????????????rcvpid?? */
     for (ulLoop = 0; ulLoop < (sizeof(g_astRnicAcorePrivacyMatchRcvPidListTbl)/sizeof(TAF_LOG_PRIVACY_RCV_PID_MATCH_TBL_STRU)); ulLoop++)
     {
         if (ulRcvPid == g_astRnicAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1656,7 +1656,7 @@ VOS_VOID* RNIC_AcoreMsgLogPrivacyMatchProc(
 
     ulMsgName = (VOS_UINT16)(pstRcvMsgHeader->ulMsgName);
 
-    /* 查找入参消息对应的脱敏函数 */
+    /* ?????????????????????????? */
     if (VOS_NULL_PTR != pstPrivacyMatchMsgTbl)
     {
         for (ulLoop = 0; ulLoop < ulTblSize; ulLoop++)
@@ -1670,7 +1670,7 @@ VOS_VOID* RNIC_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 
@@ -1695,7 +1695,7 @@ VOS_VOID* TAF_DSM_AcoreMsgLogPrivacyMatchProc(
 
     ulReceiverPid = TAF_LogPrivacyGetModem0Pid(pstRcvMsgHeader->ulReceiverPid);
 
-    /* 根据rcv pid查找pid映射表 */
+    /* ????rcv pid????pid?????? */
     for (ulLoop = 0; ulLoop < ulRcvPidMatchTblSize; ulLoop++)
     {
         if (ulReceiverPid == g_astTafDsmAcorePrivacyMatchRcvPidListTbl[ulLoop].ulReceiverPid)
@@ -1708,13 +1708,13 @@ VOS_VOID* TAF_DSM_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 若根据rcv pid找到pid映射表，继续根据匹配表查找处理函数 */
+    /* ??????rcv pid????pid?????????????????????????????????? */
     if (VOS_NULL_PTR != pstLogPrivacyMsgMatchTbl)
     {
-        /* 目前只处理AT消息,后续增加其他模块时需要修改 */
+        /* ??????????AT????,?????????????????????????? */
         ulMsgName = ((TAF_PS_EVT_STRU *)pstRcvMsgHeader)->ulEvtId;
 
-        /* 根据msg name查找过滤函数映射表 */
+        /* ????msg name?????????????????? */
         for (ulLoop = 0; ulLoop < ulMsgMatchTblSize; ulLoop++)
         {
             if (ulMsgName == pstLogPrivacyMsgMatchTbl[ulLoop].ulMsgName)
@@ -1728,7 +1728,7 @@ VOS_VOID* TAF_DSM_AcoreMsgLogPrivacyMatchProc(
         }
     }
 
-    /* 没找到处理函数，直接返回原消息 */
+    /* ?????????????????????????????? */
     return (VOS_VOID *)pstMsg;
 }
 

@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include "oal_aes.h"
 #include "oal_util.h"
 #include "oal_types.h"
@@ -8,7 +8,7 @@
 #include "oal_mm.h"
 #include "securec.h"
 
-/* 全局变量定义 */
+/* ???????????? */
 /*lint -e717*/ /*lint -e778*/
 OAL_STATIC OAL_INLINE oal_uint8 oal_byte(OAL_CONST oal_uint32 x, OAL_CONST unsigned n)
 {
@@ -4274,7 +4274,7 @@ OAL_STATIC OAL_CONST oal_uint32 crypto_il_tab[OAL_AES_CRYPTO_ARRY_SIZE][OAL_AES_
         f_rl(bo, bi, 3, k); \
     } while (0)
 
-/* AES解密过程用到的宏 */
+/* AES???????????????? */
 #define i_rn(bo, bi, n, k)                                                 \
     do {                                                                   \
         (bo)[(n)] = crypto_it_tab[0][oal_byte((bi)[(n)], 0)] ^                     \
@@ -4309,8 +4309,8 @@ OAL_STATIC OAL_CONST oal_uint32 crypto_il_tab[OAL_AES_CRYPTO_ARRY_SIZE][OAL_AES_
     } while (0)
 
 /*
- * 函 数 名  : oal_aes_expand_key_etc
- * 功能描述  : AES算法展开密钥
+ * ?? ?? ??  : oal_aes_expand_key_etc
+ * ????????  : AES????????????
  */
 oal_uint32 oal_aes_expand_key_etc(oal_aes_key_stru *pst_aes_key,
                                   OAL_CONST oal_uint8 *puc_key,
@@ -4383,8 +4383,8 @@ oal_uint32 oal_aes_expand_key_etc(oal_aes_key_stru *pst_aes_key,
 }
 
 /*
- * 函 数 名  : oal_aes_encrypt_etc
- * 功能描述  : AES加密
+ * ?? ?? ??  : oal_aes_encrypt_etc
+ * ????????  : AES????
  */
 oal_uint32 oal_aes_encrypt_etc(oal_aes_key_stru *pst_aes_key,
                                oal_uint8 *puc_ciphertext,
@@ -4440,8 +4440,8 @@ oal_uint32 oal_aes_encrypt_etc(oal_aes_key_stru *pst_aes_key,
 }
 
 /*
- * 函 数 名  : oal_aes_decrypt_etc
- * 功能描述  : AES解密
+ * ?? ?? ??  : oal_aes_decrypt_etc
+ * ????????  : AES????
  */
 oal_uint32 oal_aes_decrypt_etc(oal_aes_key_stru *pst_aes_key,
                                oal_uint8 *puc_plaintext,
@@ -4497,11 +4497,11 @@ oal_uint32 oal_aes_decrypt_etc(oal_aes_key_stru *pst_aes_key,
 }
 
 /*
- * 函 数 名  : oal_aes_key_setup_encrypt
- * 功能描述  : 将AES密钥进行展开
- * 输入参数  : aes_key : CMAC算法秘钥相关的存储结构
- *             in_key  : 秘钥指针
- *             key_len : 秘钥长度
+ * ?? ?? ??  : oal_aes_key_setup_encrypt
+ * ????????  : ??AES????????????
+ * ????????  : aes_key : CMAC??????????????????????
+ *             in_key  : ????????
+ *             key_len : ????????
  */
 OAL_STATIC oal_int32 oal_aes_key_setup_encrypt(oal_uint8 *in_key, oal_uint32 key_len, oal_aes_key_stru *pst_aes_key)
 {
@@ -4521,7 +4521,7 @@ OAL_STATIC oal_int32 oal_aes_key_setup_encrypt(oal_uint8 *in_key, oal_uint32 key
 
     pst_aes_key->ul_key_length = key_len;
 
-    /* 跳过帧头的位置 */
+    /* ?????????????? */
     pst_aes_key->ul_key_dec[key_len + OAL_AES_FRAME_HEAD_LEN] = pst_aes_key->ul_key_enc[0] = oal_le32_to_host(key[0]);
     pst_aes_key->ul_key_dec[key_len + OAL_AES_FRAME_HEAD_LEN + 1] = pst_aes_key->ul_key_enc[1] = oal_le32_to_host(key[1]);
     pst_aes_key->ul_key_dec[key_len + OAL_AES_FRAME_HEAD_LEN + 2] = pst_aes_key->ul_key_enc[2] = oal_le32_to_host(key[2]);
@@ -4546,7 +4546,7 @@ OAL_STATIC oal_int32 oal_aes_key_setup_encrypt(oal_uint8 *in_key, oal_uint32 key
         break;
 
         case OAL_AES_KEYSIZE_256:
-        default:  // Coverity修改:前面已经限定只有这三种情况了
+        default:  // Coverity????:????????????????????????????
         {
             pst_aes_key->ul_key_enc[4] = oal_le32_to_host(key[4]);
             pst_aes_key->ul_key_enc[5] = oal_le32_to_host(key[5]);
@@ -4560,13 +4560,13 @@ OAL_STATIC oal_int32 oal_aes_key_setup_encrypt(oal_uint8 *in_key, oal_uint32 key
         break;
     }
 
-    /* 跳过帧头的长度 */
+    /* ?????????????? */
     pst_aes_key->ul_key_dec[0] = pst_aes_key->ul_key_enc[key_len + OAL_AES_FRAME_HEAD_LEN];
     pst_aes_key->ul_key_dec[1] = pst_aes_key->ul_key_enc[key_len + OAL_AES_FRAME_HEAD_LEN + 1];
     pst_aes_key->ul_key_dec[2] = pst_aes_key->ul_key_enc[key_len + OAL_AES_FRAME_HEAD_LEN + 2];
     pst_aes_key->ul_key_dec[3] = pst_aes_key->ul_key_enc[key_len + OAL_AES_FRAME_HEAD_LEN + 3];
 
-    /* 偏移过帧头的长度 */
+    /* ???????????????? */
     for (i = 4; i < key_len + OAL_AES_FRAME_HEAD_LEN; ++i) {
         j = key_len + OAL_AES_FRAME_HEAD_LEN - (i & ~3) + (i & 3);
         imix_col(pst_aes_key->ul_key_dec[j], pst_aes_key->ul_key_enc[i]);
@@ -4585,10 +4585,10 @@ OAL_STATIC OAL_INLINE oal_void oal_bip_ipn_swap(oal_uint8 *d, OAL_CONST oal_uint
     *d = s[0];
 }
 /*
- * 函 数 名  : oal_bip_aad
- * 功能描述  : 组织AAD结构体
- * 输入参数  : pst_netbuf : 存储加802.11头的帧的netbuf
- *             aad        : 待组合的AAD结构指针
+ * ?? ?? ??  : oal_bip_aad
+ * ????????  : ????AAD??????
+ * ????????  : pst_netbuf : ??????802.11????????netbuf
+ *             aad        : ????????AAD????????
  */
 OAL_STATIC oal_void oal_bip_aad(oal_netbuf_stru *pst_netbuf, oal_uint8 *aad, oal_uint32 aad_len)
 {
@@ -4598,7 +4598,7 @@ OAL_STATIC oal_void oal_bip_aad(oal_netbuf_stru *pst_netbuf, oal_uint8 *aad, oal
     aad[0] = pst_netbuf->data[0];
     /* Mask FC Retry, PwrMgt, MoreData flags to zero */
     aad[1] = pst_netbuf->data[1] & ~(BIT(4) | BIT(5) | BIT(6));
-    /* A1 || A2 || A3 */ /* 2表示偏移已经填充数据的区域，3表示FC填充完成后还有3块A1、A2、A3 */
+    /* A1 || A2 || A3 */ /* 2????????????????????????????3????FC??????????????3??A1??A2??A3 */
     ret = memcpy_s(aad + 2, aad_len - 2, pst_netbuf->data + 4, 3 * OAL_ETH_ALEN);
     if (ret != EOK) {
         OAL_IO_PRINT("aad buf too short");
@@ -4712,8 +4712,8 @@ OAL_STATIC oal_uint32 oal_aes_128_cmac_vector(oal_aes_key_stru *aes_key,
 }
 
 /*
- * 函 数 名  : oal_ieee80211_aes_cmac
- * 功能描述  : 运用AES-128-CMAC算法计算mic值
+ * ?? ?? ??  : oal_ieee80211_aes_cmac
+ * ????????  : ????AES-128-CMAC????????mic??
  */
 OAL_STATIC oal_void oal_aes_cmac(oal_aes_key_stru *aes_key, oal_uint8 *scratch, OAL_CONST oal_uint8 *aad,
                                  OAL_CONST oal_uint8 *data, oal_uint32 data_len, oal_uint8 *mic, oal_uint32 mic_len)
@@ -4734,10 +4734,10 @@ OAL_STATIC oal_void oal_aes_cmac(oal_aes_key_stru *aes_key, oal_uint8 *scratch, 
 }
 
 /*
- * 函 数 名  : oal_ieee80211_crypto_aes_cmac_encrypt
- * 功能描述  : 为一段输入数据进行AES-128-CMAC加密
- * 输入参数  : aes_ctx    : CMAC算法秘钥相关的存储结构
- *             pst_netbuf : 存储加802.11头的帧的netbuf
+ * ?? ?? ??  : oal_ieee80211_crypto_aes_cmac_encrypt
+ * ????????  : ??????????????????AES-128-CMAC????
+ * ????????  : aes_ctx    : CMAC??????????????????????
+ *             pst_netbuf : ??????802.11????????netbuf
  */
 oal_uint32 oal_crypto_aes_cmac_encrypt_etc(oal_aes_ctx_stru *aes_ctx, oal_netbuf_stru *pst_netbuf)
 {
@@ -4779,12 +4779,12 @@ oal_uint32 oal_crypto_aes_cmac_encrypt_etc(oal_aes_ctx_stru *aes_ctx, oal_netbuf
 }
 
 /*
- * 函 数 名  : oal_ieee80211_crypto_aes_cmac_decrypt
- * 功能描述  : 为一段带MMIE(包含mic值)输入数据进行AES-128-CMAC解密
- * 输入参数  : aes_ctx    : CMAC算法秘钥相关的存储结构
- *             pst_netbuf : 存储加802.11头的帧的netbuf
- *             pul_dot11RSNAStatsCMACReplays   : bip 组播管理帧重放计数器
- *             pul_dot11RSNAStatsCMACICVErrors : bip 组播管理帧完整性验证失败计数器
+ * ?? ?? ??  : oal_ieee80211_crypto_aes_cmac_decrypt
+ * ????????  : ????????MMIE(????mic??)????????????AES-128-CMAC????
+ * ????????  : aes_ctx    : CMAC??????????????????????
+ *             pst_netbuf : ??????802.11????????netbuf
+ *             pul_dot11RSNAStatsCMACReplays   : bip ????????????????????
+ *             pul_dot11RSNAStatsCMACICVErrors : bip ??????????????????????????????
  */
 OAL_STATIC oal_uint32 oal_crypto_aes_cmac_decrypt(oal_aes_ctx_stru *aes_ctx,
                                                   oal_netbuf_stru *pst_netbuf)
@@ -4806,7 +4806,7 @@ OAL_STATIC oal_uint32 oal_crypto_aes_cmac_decrypt(oal_aes_ctx_stru *aes_ctx,
 
     oal_bip_ipn_swap(ipn, mmie->sequence_number);
 
-    /* 重放攻击检测 */
+    /* ???????????? */
     if (memcmp(ipn, aes_ctx->pn, sizeof(ipn)) <= 0) {
         return OAL_ERR_CODE_PMF_REPLAY_ATTAC;
     }
@@ -4815,7 +4815,7 @@ OAL_STATIC oal_uint32 oal_crypto_aes_cmac_decrypt(oal_aes_ctx_stru *aes_ctx,
     oal_aes_cmac(&aes_ctx->key, aes_ctx->crypto_buf, aad, pst_netbuf->data + OAL_AES_FRAME_HEAD_LEN,
                  pst_netbuf->len - OAL_AES_FRAME_HEAD_LEN, mic, sizeof(mic));
 
-    /* 完整性校验 */
+    /* ?????????? */
     if (memcmp(mic, mmie->mic, OAL_SIZEOF(mmie->mic)) != 0) {
         return OAL_ERR_CODE_PMF_MMIE_ERR;
     }
@@ -4832,13 +4832,13 @@ OAL_STATIC oal_uint32 oal_crypto_aes_cmac_decrypt(oal_aes_ctx_stru *aes_ctx,
   should't change skb tail pointer! */
 #if (!defined(_PRE_PRODUCT_ID_HI110X_HOST))
 /*
- * 函 数 名  : oal_crypto_bip_enmic
- * 功能描述  : bip加密接口函数，为管理帧body尾增加MMIE,并计算MIC值
- * 输入参数  : uc_igtk_keyid       : user的igtk id
- *             pst_igtk_key        : user协商后的igtk
- *             pst_igtk_seq        : igtk的pn序列号
- *             pst_netbuf    :存储加802.11头的帧的netbuf
- *             pst_frame_len :帧长度
+ * ?? ?? ??  : oal_crypto_bip_enmic
+ * ????????  : bip??????????????????????body??????MMIE,??????MIC??
+ * ????????  : uc_igtk_keyid       : user??igtk id
+ *             pst_igtk_key        : user????????igtk
+ *             pst_igtk_seq        : igtk??pn??????
+ *             pst_netbuf    :??????802.11????????netbuf
+ *             pst_frame_len :??????
  */
 oal_void oal_crypto_bip_enmic(oal_uint8 uc_igtk_keyid,
                               oal_uint8 *pst_igtk_key,
@@ -4852,10 +4852,10 @@ oal_void oal_crypto_bip_enmic(oal_uint8 uc_igtk_keyid,
     memset_s(&st_aes_ctx, OAL_SIZEOF(st_aes_ctx), 0, OAL_SIZEOF(st_aes_ctx));
     pst_netbuf->tail = pst_netbuf->data + *pst_frame_len;
 
-    /* 将AES密钥展开 */
+    /* ??AES???????? */
     oal_aes_key_setup_encrypt(pst_igtk_key, OAL_AES_KEYSIZE_128, &st_aes_ctx.key);
 
-    /* 准备PN码 */
+    /* ????PN?? */
     st_aes_ctx.pn[0] = pst_igtk_seq[5];
     st_aes_ctx.pn[1] = pst_igtk_seq[4];
     st_aes_ctx.pn[2] = pst_igtk_seq[3];
@@ -4863,10 +4863,10 @@ oal_void oal_crypto_bip_enmic(oal_uint8 uc_igtk_keyid,
     st_aes_ctx.pn[4] = pst_igtk_seq[1];
     st_aes_ctx.pn[5] = pst_igtk_seq[0];
 
-    /* 准备key index */
+    /* ????key index */
     st_aes_ctx.key_idx = uc_igtk_keyid;
 
-    /* 对帧体进行AES-CMAC加密 */
+    /* ??????????AES-CMAC???? */
     ul_ret = oal_crypto_aes_cmac_encrypt_etc(&st_aes_ctx, pst_netbuf);
     if (ul_ret != OAL_SUCC) {
         return;
@@ -4877,15 +4877,15 @@ oal_void oal_crypto_bip_enmic(oal_uint8 uc_igtk_keyid,
 #endif
 
 /*
- * 函 数 名  : oal_crypto_bip_demic_etc
- * 功能描述  : 为组播管理帧进行重放判断,并验证MIC值
- * 输入参数  : uc_igtk_keyid       : user的igtk id
- *           pst_igtk_key        : user协商后的igtk
- *           pst_igtk_seq        : igtk的pn序列号
- *           pst_netbuf          : 存储加802.11头的帧的netbuf
- *           pul_dot11RSNAStatsCMACReplays   : bip 组播管理帧重放计数器
- *           pul_dot11RSNAStatsCMACICVErrors : bip 组播管理帧完整性验证失败计数器
- * 返 回 值  : OAL_SUCC:解密成功 &&重放检测没问题
+ * ?? ?? ??  : oal_crypto_bip_demic_etc
+ * ????????  : ????????????????????????,??????MIC??
+ * ????????  : uc_igtk_keyid       : user??igtk id
+ *           pst_igtk_key        : user????????igtk
+ *           pst_igtk_seq        : igtk??pn??????
+ *           pst_netbuf          : ??????802.11????????netbuf
+ *           pul_dot11RSNAStatsCMACReplays   : bip ????????????????????
+ *           pul_dot11RSNAStatsCMACICVErrors : bip ??????????????????????????????
+ * ?? ?? ??  : OAL_SUCC:???????? &&??????????????
  */
 oal_uint32 oal_crypto_bip_demic_etc(oal_uint8 uc_igtk_keyid,
                                     oal_uint8 *pst_igtk_key,
@@ -4896,10 +4896,10 @@ oal_uint32 oal_crypto_bip_demic_etc(oal_uint8 uc_igtk_keyid,
 
     memset_s(&st_aes_ctx, OAL_SIZEOF(st_aes_ctx), 0, OAL_SIZEOF(st_aes_ctx));
 
-    /* 将AES密钥展开 */
+    /* ??AES???????? */
     oal_aes_key_setup_encrypt(pst_igtk_key, OAL_AES_KEYSIZE_128, &st_aes_ctx.key);
 
-    /* 准备PN码 */
+    /* ????PN?? */
     st_aes_ctx.pn[0] = pst_igtk_seq[5];
     st_aes_ctx.pn[1] = pst_igtk_seq[4];
     st_aes_ctx.pn[2] = pst_igtk_seq[3];
@@ -4907,7 +4907,7 @@ oal_uint32 oal_crypto_bip_demic_etc(oal_uint8 uc_igtk_keyid,
     st_aes_ctx.pn[4] = pst_igtk_seq[1];
     st_aes_ctx.pn[5] = pst_igtk_seq[0];
 
-    /* 将接收到的加密管理帧进行AES-CCM/AES-CMAC解密 */
+    /* ????????????????????????AES-CCM/AES-CMAC???? */
     return oal_crypto_aes_cmac_decrypt(&st_aes_ctx, pst_netbuf);
 }
 

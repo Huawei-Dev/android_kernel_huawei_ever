@@ -50,7 +50,7 @@
 #include <mdrv_sysboot.h>
 #include <bsp_reset.h>
 
-#if !defined( CONFIG_BALONG_MODEM_RESET) && !defined(CONFIG_BALONG_MODEM_GLOBAL_RESET)&& !defined(CONFIG_BALONG_MODEM_RESET_CTRL) /* ´ò×®!CONFIG_BALONG_MODEM_RESET */
+#if !defined( CONFIG_BALONG_MODEM_RESET) && !defined(CONFIG_BALONG_MODEM_GLOBAL_RESET)&& !defined(CONFIG_BALONG_MODEM_RESET_CTRL) /* ????!CONFIG_BALONG_MODEM_RESET */
 
 int mdrv_sysboot_register_reset_notify(const char *pname, pdrv_reset_cbfun pcbfun, int userdata, int priolevel)
 {
@@ -95,7 +95,7 @@ u32 bsp_reset_is_connect_ril(void)
 }
 
 
-#else  /* ÊµÏÖ */
+#else  /* ???? */
 
 int mdrv_sysboot_register_reset_notify(const char *pname, pdrv_reset_cbfun pcbfun, int userdata, int priolevel)
 {

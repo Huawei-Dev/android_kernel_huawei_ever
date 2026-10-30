@@ -1718,10 +1718,10 @@ static int fusb302_psy_get_property(struct power_supply *psy,
 		val->intval = chip->charge_on;
 		break;
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-		val->intval = chip->supply_voltage * 1000; /* mV -> µV */
+		val->intval = chip->supply_voltage * 1000; /* mV -> ??V */
 		break;
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
-		val->intval = chip->current_limit * 1000; /* mA -> µA */
+		val->intval = chip->current_limit * 1000; /* mA -> ??A */
 		break;
 	default:
 		return -ENODATA;

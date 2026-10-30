@@ -151,7 +151,7 @@ int ipf32_ad_s2h(IPF_AD_TYPE_E type, unsigned int n, IPF_AD_DESC_S * param)
 			 IPF_DLAD0_DESC_SIZE:
 			 IPF_DLAD1_DESC_SIZE;
 
-	/*读出写指针*/
+	/*???????????????*/
 	wptr = ipf_readl(offset);
 	
 	for(i=0; i < n; i++)
@@ -166,7 +166,7 @@ int ipf32_ad_s2h(IPF_AD_TYPE_E type, unsigned int n, IPF_AD_DESC_S * param)
 		wptr = ((wptr + 1) < size)? (wptr + 1) : 0;
 	}
 	g_ipf_ctx.status->cfg_ad_cnt[type] += n;
-	/* 更新AD0写指针*/
+	/* ??????AD0?????????*/
 	ipf_writel(wptr, offset);
 
 	if(IPF_AD_0==type)
@@ -311,7 +311,7 @@ unsigned int ipf32_get_dlrd_num(void)
 {
     HI_IPF_CH1_DQ_DEPTH_T dq_depth;
 
-    /* 读取RD深度 */
+    /* ??????RD?????? */
     dq_depth.u32 = ipf_readl(HI_IPF32_CH1_DQ_DEPTH_OFFSET);
 	g_ipf_ctx.status->get_rd_num_times++;
     return dq_depth.bits.dl_rdq_depth;

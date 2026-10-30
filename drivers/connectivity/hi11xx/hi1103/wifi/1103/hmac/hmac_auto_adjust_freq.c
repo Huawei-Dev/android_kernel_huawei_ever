@@ -9,10 +9,10 @@ extern "C" {
 
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "oal_net.h"
 #include "oal_types.h"
@@ -45,7 +45,7 @@ extern "C" {
 #define INVALID_PKMODE_TH  (0xFFFFFFFF)
 #endif
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 #ifdef WIN32
 oal_uint32 jiffies;
@@ -53,7 +53,7 @@ oal_uint32 jiffies;
 
 freq_lock_control_stru g_freq_lock_control_etc = {0};
 wifi_txrx_pkt_stat g_st_wifi_rxtx_total = {0};
-/* Wi-Fi驱动收发负载识别数据区 */
+/* Wi-Fi?????????????????????? */
 freq_wifi_load_stru g_st_wifi_load = {0};
 #if defined(_PRE_FEATURE_PLAT_LOCK_CPUFREQ) && !defined(CONFIG_HI110X_KERNEL_MODULES_BUILD_SUPPORT)
 extern struct cpufreq_req g_ast_cpufreq_etc[OAL_BUS_MAXCPU_NUM];
@@ -64,20 +64,20 @@ extern struct pm_qos_request g_st_pmqos_requset_etc;
 #ifdef _PRE_WLAN_FEATURE_NEGTIVE_DET
 oal_bool_enum_uint8 g_en_pk_mode_swtich = OAL_TRUE;
 
-/* pk mode的判定的门限，以字节为单位 */
+/* pk mode?????????????????????????? */
 /*
-PK模式门限基数:
-{(单位Mbps)  20M     40M    80M   160M   80+80M
-lagency:    {valid, valid, valid, valid, valid},   (基础协议模式没有pk mode )
+PK????????????:
+{(????Mbps)  20M     40M    80M   160M   80+80M
+lagency:    {valid, valid, valid, valid, valid},   (????????????????pk mode )
 HT:         {62, 123, valid, valid, valid},
 VHT:        {77, 167, 329, 660, 660},
-HE:         {valid, valid, valid, valid, valid},   (暂不支持11ax的pk mode)
+HE:         {valid, valid, valid, valid, valid},   (????????11ax??pk mode)
 };
 
 
-PK模式二级门限:
-高档位门限: g_st_pk_mode_high_th_table = PK模式门限基数 * 70% *1024 *1024 /8  (单位字节)
-低档位门限: g_st_pk_mode_low_th_table  = PK模式门限基数 * 30% *1024 *1024 /8  (单位字节)
+PK????????????:
+??????????: g_st_pk_mode_high_th_table = PK???????????? * 70% *1024 *1024 /8  (????????)
+??????????: g_st_pk_mode_low_th_table  = PK???????????? * 30% *1024 *1024 /8  (????????)
 
 */
 #if 1
@@ -111,23 +111,23 @@ oal_uint32 g_ul_orig_ddr_min_freq       = 0;
 oal_uint32 g_ul_orig_ddr_max_freq       = 0;
 
 #ifndef WIN32
-/*由定制化进行初始化*/
+/*??????????????????*/
 host_speed_freq_level_stru g_host_speed_freq_level_etc[4] = {
-    /*pps门限                   CPU主频下限                     DDR主频下限*/
+    /*pps????                   CPU????????                     DDR????????*/
     {PPS_VALUE_0,          CPU_MIN_FREQ_VALUE_0,            DDR_MIN_FREQ_VALUE_0},
     {PPS_VALUE_1,          CPU_MIN_FREQ_VALUE_1,            DDR_MIN_FREQ_VALUE_1},
     {PPS_VALUE_2,          CPU_MIN_FREQ_VALUE_2,            DDR_MIN_FREQ_VALUE_2},
     {PPS_VALUE_3,          CPU_MIN_FREQ_VALUE_3,            DDR_MIN_FREQ_VALUE_3},
 };
 host_speed_freq_level_stru g_host_no_ba_freq_level_etc[4] = {
-    /*pps门限                        CPU主频下限                      DDR主频下限*/
+    /*pps????                        CPU????????                      DDR????????*/
     {NO_BA_PPS_VALUE_0,          CPU_MIN_FREQ_VALUE_0,            DDR_MIN_FREQ_VALUE_0},
     {NO_BA_PPS_VALUE_1,          CPU_MIN_FREQ_VALUE_1,            DDR_MIN_FREQ_VALUE_1},
     {NO_BA_PPS_VALUE_2,          CPU_MIN_FREQ_VALUE_2,            DDR_MIN_FREQ_VALUE_2},
     {NO_BA_PPS_VALUE_3,          CPU_MIN_FREQ_VALUE_2,            DDR_MIN_FREQ_VALUE_2},
 };
 device_speed_freq_level_stru g_device_speed_freq_level_etc[] = {
-    /*device主频类型*/
+    /*device????????*/
     {FREQ_IDLE},
     {FREQ_MIDIUM},
     {FREQ_HIGHER},
@@ -138,14 +138,14 @@ struct pm_qos_request *g_pst_wifi_auto_ddr_etc = NULL;
 
 #else
 host_speed_freq_level_stru g_host_speed_freq_level_etc[] = {
-    /*pps门限                   CPU主频下限                     DDR主频下限*/
+    /*pps????                   CPU????????                     DDR????????*/
     {PPS_VALUE_0,          CPU_MIN_FREQ_VALUE_0,            DDR_MIN_FREQ_VALUE_0},
     {PPS_VALUE_1,          CPU_MIN_FREQ_VALUE_1,            DDR_MIN_FREQ_VALUE_1},
     {PPS_VALUE_2,          CPU_MIN_FREQ_VALUE_2,            DDR_MIN_FREQ_VALUE_2},
     {PPS_VALUE_3,          CPU_MIN_FREQ_VALUE_3,            DDR_MIN_FREQ_VALUE_3},
 };
 device_speed_freq_level_stru g_device_speed_freq_level_etc[] = {
-    /*device主频类型*/
+    /*device????????*/
     {FREQ_IDLE},
     {FREQ_MIDIUM},
     {FREQ_HIGHEST},
@@ -196,19 +196,19 @@ oal_uint8 hmac_set_auto_freq_mod_etc(oal_uint8 uc_freq_enable)
 {
     g_freq_lock_control_etc.uc_lock_mod = uc_freq_enable;
 
-    /* 设置device是否使能 */
+    /* ????device???????? */
     if(FREQ_LOCK_ENABLE == uc_freq_enable)
     {
-        /* 初始频率为idle */
+        /* ??????????idle */
         g_freq_lock_control_etc.uc_curr_lock_level = FREQ_IDLE;
-        /* 期望频率为idle */
+        /* ??????????idle */
         g_freq_lock_control_etc.uc_req_lock_level = FREQ_IDLE;
-        /* WIFI打开时,定时器参数更新 */
+        /* WIFI??????,?????????????? */
         g_freq_lock_control_etc.ul_pre_jiffies = jiffies;
     }
     else
     {
-        /* 关闭WIFI时,将CPU频率调整为默认值 */
+        /* ????WIFI??,??CPU???????????????? */
         mutex_lock(&g_freq_lock_control_etc.st_lock_freq_mtx);
         hmac_set_cpu_freq_raw_etc(SCALING_MIN_FREQ, g_ul_orig_cpu_min_freq);
         hmac_set_cpu_freq_raw_etc(SCALING_MAX_FREQ, g_ul_orig_cpu_max_freq);
@@ -226,7 +226,7 @@ oal_void hmac_adjust_set_freq(oal_void)
 {
     oal_uint8 uc_req_lock_level = g_freq_lock_control_etc.uc_req_lock_level;
 
-    /* 相同则不需要配置系统文件 */
+    /* ???????????????????????? */
     if (uc_req_lock_level == g_freq_lock_control_etc.uc_curr_lock_level)
     {
         return;
@@ -250,7 +250,7 @@ oal_void hmac_adjust_set_freq(oal_void)
     g_freq_lock_control_etc.uc_curr_lock_level = uc_req_lock_level;
 }
 
-oal_uint8 hmac_get_freq_level_etc(oal_uint32 ul_speed)//根据吞吐率计算目标主频等级
+oal_uint8 hmac_get_freq_level_etc(oal_uint32 ul_speed)//??????????????????????????
 {
     oal_uint8 level_idx;
 
@@ -302,9 +302,9 @@ oal_uint8 hmac_get_freq_level_etc(oal_uint32 ul_speed)//根据吞吐率计算目标主频等
 
 oal_void hmac_adjust_freq_etc(oal_void)
 {
-    oal_uint8          uc_req_lock_level = 0; //目标主频等级
+    oal_uint8          uc_req_lock_level = 0; //????????????
     oal_uint32         ul_cur_jiffies;
-    oal_uint32         ul_sdio_dur_ms; //时间
+    oal_uint32         ul_sdio_dur_ms; //????
     oal_uint32         ul_trx_total = 0;
     oal_uint32         ul_tx_total;
     oal_uint32         ul_rx_total;
@@ -320,17 +320,17 @@ oal_void hmac_adjust_freq_etc(oal_void)
     g_st_wifi_rxtx_total.ul_rx_pkts = 0;
     g_st_wifi_rxtx_total.ul_tx_pkts = 0;
 
-    ul_cur_jiffies = jiffies; //jiffies是Linux内核中的一个全局变量，用来记录自系统启动以来产生的节拍的总数
+    ul_cur_jiffies = jiffies; //jiffies??Linux????????????????????????????????????????????????????????????
     ul_sdio_dur_ms = OAL_JIFFIES_TO_MSECS(ul_cur_jiffies - g_freq_lock_control_etc.ul_pre_jiffies);
     g_freq_lock_control_etc.ul_pre_jiffies = ul_cur_jiffies;
 
-    /* 如果当前统计时间不足定时器周期的一半,会导致统计PPS值偏大返回 */
+    /* ????????????????????????????????????,??????????PPS?????????? */
     if ((0 == ul_sdio_dur_ms) || (ul_sdio_dur_ms < (WLAN_FREQ_TIMER_PERIOD >> 1)))
     {
         return;
     }
 
-    //计算PPS
+    //????PPS
     g_freq_lock_control_etc.ul_total_sdio_pps = (ul_trx_total*1000)/ul_sdio_dur_ms;
     g_freq_lock_control_etc.ul_tx_pps         = (ul_tx_total*1000)/ul_sdio_dur_ms;
     g_freq_lock_control_etc.ul_rx_pps         = (ul_rx_total*1000)/ul_sdio_dur_ms;
@@ -338,7 +338,7 @@ oal_void hmac_adjust_freq_etc(oal_void)
     g_freq_lock_control_etc.uc_req_lock_level = hmac_get_freq_level_etc(g_freq_lock_control_etc.ul_total_sdio_pps);
 
     uc_req_lock_level = g_freq_lock_control_etc.uc_req_lock_level;
-    if (uc_req_lock_level == g_freq_lock_control_etc.uc_curr_lock_level) //目标主频和当前主频相同，不需要调频
+    if (uc_req_lock_level == g_freq_lock_control_etc.uc_curr_lock_level) //??????????????????????????????????
     {
         g_freq_lock_control_etc.ul_adjust_count = 0;
         return;
@@ -348,19 +348,19 @@ oal_void hmac_adjust_freq_etc(oal_void)
 
     if(uc_req_lock_level < g_freq_lock_control_etc.uc_curr_lock_level)
     {
-        /*连续MAX_DEGRADE_FREQ_TIME_THRESHOLD后才降频，保证性能*/
+        /*????MAX_DEGRADE_FREQ_TIME_THRESHOLD??????????????????*/
         g_freq_lock_control_etc.ul_adjust_count++;
 
-        if(0 != ul_trx_total) //当前数据流量不为零
+        if(0 != ul_trx_total) //??????????????????
         {
-            if(g_freq_lock_control_etc.ul_adjust_count >= MAX_DEGRADE_FREQ_COUNT_THRESHOLD_SUCCESSIVE_10)//有包时连续100个周期都需要降频才降频
+            if(g_freq_lock_control_etc.ul_adjust_count >= MAX_DEGRADE_FREQ_COUNT_THRESHOLD_SUCCESSIVE_10)//??????????100??????????????????????
             {
                 g_freq_lock_control_etc.ul_adjust_count = 0;
-                /*在这里进行主频值的调整*/
+                /*??????????????????????*/
                 hmac_adjust_set_freq();
             }
         }
-        else //没有包时连续3个周期都需要降频再降频
+        else //????????????3??????????????????????
         {
             if(g_freq_lock_control_etc.ul_adjust_count >= MAX_DEGRADE_FREQ_COUNT_THRESHOLD_SUCCESSIVE_3)
             {
@@ -371,7 +371,7 @@ oal_void hmac_adjust_freq_etc(oal_void)
     }
     else
     {
-           /*升频不等待，立即执行保证性能*/
+           /*????????????????????????????*/
            g_freq_lock_control_etc.ul_adjust_count = 0;
           hmac_adjust_set_freq();
     }
@@ -454,7 +454,7 @@ oal_bool_enum_uint8 hmac_wifi_rx_is_busy(oal_void)
 OAL_STATIC OAL_INLINE oal_void hmac_lock_max_cpu_freq(oal_void)
 {
     oal_uint8 uc_cpuid_loop = 0;
-    /* 所有核都锁定最高频率 */
+    /* ???????????????????? */
     for (uc_cpuid_loop = 0; uc_cpuid_loop < OAL_BUS_MAXCPU_NUM; uc_cpuid_loop++)
     {
         hisi_cpufreq_update_req(&g_ast_cpufreq_etc[uc_cpuid_loop], g_aul_cpumaxfreq_etc[uc_cpuid_loop]);
@@ -514,7 +514,7 @@ oal_void hmac_adjust_set_irq(oal_uint8 uc_cpu_id)
         if (g_st_rxdata_thread_etc.uc_allowed_cpus >= WLAN_IRQ_AFFINITY_BUSY_CPU)
         {
             pm_qos_update_request(&g_st_pmqos_requset_etc, PM_QOS_THOUGHTPUT_VALUE);
-            /* 所有核都锁定最高频率 */
+            /* ???????????????????? */
             hmac_lock_max_cpu_freq();
         }
         else
@@ -565,8 +565,8 @@ oal_void hmac_update_pk_mode_info(oal_uint8 *puc_vap_id)
                 continue;
             }
 
-            /* 从用户的信息中更新目前带宽和协议模式 */
-            /* TBD 此设计目前仅适用支持一个LEGACY_STA且LEGACY_STA仅一个业务用户，若规格有修改此函数需要重构 */
+            /* ???????????????????????????????????? */
+            /* TBD ????????????????????????LEGACY_STA??LEGACY_STA?????????????????????????????????????????? */
             g_st_wifi_pk_mode_status.en_curr_bw_cap             = pst_mac_user->en_bandwidth_cap;
             g_st_wifi_pk_mode_status.en_curr_num_spatial_stream = pst_mac_user->en_avail_num_spatial_stream;
 
@@ -627,26 +627,26 @@ oal_void hmac_update_pk_mode(oal_uint32 ul_tx_throughput,
     }
 
     pst_mac_device = mac_res_get_dev_etc(0);
-    /* 如果非单VAP,则不开启硬件聚合 */
+    /* ????????VAP,???????????????? */
     if (1 != mac_device_calc_up_vap_num_etc(pst_mac_device))
     {
         return;
     }
 
-    /* 更新相关的信息 */
+    /* ?????????????? */
     hmac_update_pk_mode_info(&uc_vap_id);
 
-    /* 非有效模式，不进行吞吐计算 */
+    /* ?????????????????????????? */
     if ((WLAN_BW_CAP_BUTT  == g_st_wifi_pk_mode_status.en_curr_bw_cap)||
     (WLAN_PROTOCOL_CAP_BUTT == g_st_wifi_pk_mode_status.en_curr_protocol_cap))
     {
         return;
     }
 
-    /* 计算吞吐率: rxtx吞吐之和 / 统计的时间间隔(单位s) */
+    /* ??????????: rxtx???????? / ??????????????(????s) */
     ul_txrx_throughput = ul_tx_throughput + ul_rx_throughput;
 
-    /* 依据门限值判定pk mode状态 */
+    /* ??????????????pk mode???? */
     if (OAL_TRUE == g_st_wifi_pk_mode_status.en_is_pk_mode)
     {
         ul_pk_mode_th = (g_st_pk_mode_low_th_table[g_st_wifi_pk_mode_status.en_curr_protocol_cap][g_st_wifi_pk_mode_status.en_curr_bw_cap]) * (1 + g_st_wifi_pk_mode_status.en_curr_num_spatial_stream);
@@ -657,12 +657,12 @@ oal_void hmac_update_pk_mode(oal_uint32 ul_tx_throughput,
         ul_pk_mode_th = (g_st_pk_mode_high_th_table[g_st_wifi_pk_mode_status.en_curr_protocol_cap][g_st_wifi_pk_mode_status.en_curr_bw_cap]) * (1 + g_st_wifi_pk_mode_status.en_curr_num_spatial_stream);
         en_curr_pk_mode = (ul_txrx_throughput > ul_pk_mode_th) ? OAL_TRUE : OAL_FALSE;
     }
-    /* dmac逻辑挪上来，只有下行时才进入pk mode */
+    /* dmac????????????????????????????pk mode */
     if((OAL_TRUE == en_curr_pk_mode) && (ul_rx_throughput < ul_tx_throughput))
     {
         en_curr_pk_mode = OAL_FALSE;
     }
-    /* PK mode状态未变化，不更新数值 */
+    /* PK mode?????????????????????? */
     if (en_curr_pk_mode == g_st_wifi_pk_mode_status.en_is_pk_mode)
     {
         return;
@@ -692,7 +692,7 @@ oal_void hmac_update_pk_mode(oal_uint32 ul_tx_throughput,
 
 
     /***************************************************************************
-        抛事件到DMAC层, 同步VAP最新状态到DMAC
+        ????????DMAC??, ????VAP??????????DMAC
     ***************************************************************************/
     st_pk_mode_info.ul_rx_bytes = g_st_wifi_pk_mode_status.ul_rx_bytes;
     st_pk_mode_info.ul_tx_bytes = g_st_wifi_pk_mode_status.ul_tx_bytes;
@@ -718,7 +718,7 @@ OAL_STATIC OAL_INLINE oal_void hmac_lock_cpu_freq_high_throughput_proc(oal_void)
 {
     if (OAL_TRUE == g_uc_lock_max_cpu_freq_switch)
     {
-        /* 当前还存在锁频后频率会掉下来，并且后面也无法锁到最高频率，需要继续定位。后续需要调整锁频时间。以及确认是否每次需要重新req。 */
+        /* ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????req?? */
         core_ctl_set_boost(20*WLAN_FREQ_TIMER_PERIOD*WLAN_THROUGHPUT_STA_PERIOD);
         hmac_lock_max_cpu_freq();
     }
@@ -741,7 +741,7 @@ void hmac_perform_calc_throughput(oal_uint32 ul_tx_throughput_mbps,
     {
         return;
     }
-    /* 每秒吞吐量门限 */
+    /* ?????????????? */
     if ((0 != g_freq_lock_control_etc.us_throughput_irq_high) && (0 != g_freq_lock_control_etc.us_throughput_irq_low))
     {
         ul_limit_throughput_high = g_freq_lock_control_etc.us_throughput_irq_high;
@@ -753,7 +753,7 @@ void hmac_perform_calc_throughput(oal_uint32 ul_tx_throughput_mbps,
         ul_limit_throughput_low  = WLAN_IRQ_THROUGHPUT_THRESHOLD_LOW;
     }
 
-    /* 每秒PPS门限 */
+    /* ????PPS???? */
     if ((0 != g_freq_lock_control_etc.ul_irq_pps_high) && (0 != g_freq_lock_control_etc.ul_irq_pps_low))
     {
         ul_limit_pps_high = g_freq_lock_control_etc.ul_irq_pps_high;
@@ -765,13 +765,13 @@ void hmac_perform_calc_throughput(oal_uint32 ul_tx_throughput_mbps,
         ul_limit_pps_low  = WLAN_IRQ_PPS_THRESHOLD_LOW;
     }
 
-    /* 高于200M时切大核，低于150M切小核 */
+    /* ????200M??????????????150M?????? */
     if ((ul_tx_throughput_mbps > ul_limit_throughput_high)
         || (ul_rx_throughput_mbps >  ul_limit_throughput_high)
         || (ul_trx_pps >= ul_limit_pps_high))
     {
         g_freq_lock_control_etc.uc_req_irq_cpu = WLAN_IRQ_AFFINITY_BUSY_CPU;
-        /* 关闭低功耗200ms,避免峰值跑流时CPU消耗过低被迁走 */
+        /* ??????????200ms,??????????????CPU?????????????? */
 #if defined(_PRE_FEATURE_PLAT_LOCK_CPUFREQ) && !defined(CONFIG_HI110X_KERNEL_MODULES_BUILD_SUPPORT)
 #if (_PRE_OS_VERSION_LINUX == _PRE_OS_VERSION)
         hmac_lock_cpu_freq_high_throughput_proc();
@@ -812,18 +812,18 @@ void hmac_adjust_throughput(oal_void)
     oal_uint32 ul_tx_throughput_mbps = 0;
     oal_uint32 ul_rx_throughput_mbps = 0;
 
-    /* 循环次数统计 */
+    /* ???????????? */
     g_freq_lock_control_etc.uc_timer_cycles++;
 
     ul_dur_time = OAL_JIFFIES_TO_MSECS(jiffies - g_freq_lock_control_etc.ul_pre_time);
 
-    /* 小于一个周期,不统计 */
+    /* ????????????,?????? */
     if (ul_dur_time < WLAN_FREQ_TIMER_PERIOD - 10)
     {
         return;
     }
 
-    /* 超过一定时常则不统计,排除定时器异常 */
+    /* ????????????????????,?????????????? */
     if (ul_dur_time > ((WLAN_FREQ_TIMER_PERIOD * WLAN_THROUGHPUT_STA_PERIOD) << 2))
     {
         g_freq_lock_control_etc.ul_pre_time = jiffies;
@@ -836,7 +836,7 @@ void hmac_adjust_throughput(oal_void)
     }
 
 
-    /* 总字节数 */
+    /* ???????? */
     ul_rx_throughput = g_st_wifi_rxtx_total.ul_rx_bytes;
     ul_tx_throughput = g_st_wifi_rxtx_total.ul_tx_bytes;
     if(0 != ul_dur_time)
@@ -845,7 +845,7 @@ void hmac_adjust_throughput(oal_void)
         ul_rx_throughput_mbps = (ul_rx_throughput >> 7) / ul_dur_time;
     }
 
-    /* Wi-Fi业务负载标记 */
+    /* Wi-Fi???????????? */
     if (ul_rx_throughput_mbps <= WLAN_THROUGHPUT_LOAD_LOW)
     {
         g_st_wifi_load.en_wifi_rx_busy = OAL_FALSE;
@@ -861,7 +861,7 @@ void hmac_adjust_throughput(oal_void)
     }
 
 #ifdef _PRE_WLAN_FEATURE_MULTI_NETBUF_AMSDU
-    /* AMSDU+AMPDU聚合切换入口 */
+    /* AMSDU+AMPDU???????????? */
     hmac_tx_amsdu_ampdu_switch(ul_tx_throughput_mbps);
 #endif
     hmac_tx_small_amsdu_switch(ul_rx_throughput_mbps, g_freq_lock_control_etc.ul_tx_pps);
@@ -871,34 +871,34 @@ void hmac_adjust_throughput(oal_void)
 #endif
 
 #ifdef _PRE_WLAN_FEATURE_AMPDU_TX_HW
-    /* 聚合软硬件切换入口,每个周期探测一次 */
+    /* ??????????????????,???????????????? */
     hmac_tx_ampdu_switch(ul_tx_throughput_mbps);
 #endif
 #ifdef _PRE_WLAN_TCP_OPT
     hmac_tcp_ack_filter_switch(ul_rx_throughput_mbps);
 #endif
-    /* 根据吞吐量，判断是否需要bypass 外置LNA */
+    /* ????????????????????????bypass ????LNA */
     hmac_rx_dyn_bypass_extlna_switch(ul_tx_throughput_mbps, ul_rx_throughput_mbps);
 
 
-    /* irq 2s 探测一次 */
+    /* irq 2s ???????? */
     if (g_freq_lock_control_etc.uc_timer_cycles < WLAN_THROUGHPUT_STA_PERIOD)
     {
         return;
     }
     g_freq_lock_control_etc.uc_timer_cycles = 0;
 
-    /* 2s周期清零一次 */
+    /* 2s???????????? */
     g_st_wifi_rxtx_total.ul_rx_bytes = 0;
     g_st_wifi_rxtx_total.ul_tx_bytes = 0;
 
     g_freq_lock_control_etc.ul_pre_time = jiffies;
 
 #ifdef _PRE_WLAN_FEATURE_NEGTIVE_DET
-    /* 更新pk mode */
+    /* ????pk mode */
     hmac_update_pk_mode(ul_tx_throughput_mbps, ul_rx_throughput_mbps, ul_dur_time);
 #endif
-    /* 中断动态调整 */
+    /* ???????????? */
     hmac_perform_calc_throughput(ul_tx_throughput_mbps, ul_rx_throughput_mbps,g_freq_lock_control_etc.ul_total_sdio_pps);
 
 }
@@ -907,10 +907,10 @@ void hmac_adjust_throughput(oal_void)
 OAL_STATIC oal_uint32 hmac_wlan_freq_wdg_timeout(oal_void *p_arg)
 {
 #ifdef _PRE_WLAN_FEATURE_AUTO_FREQ
-    /* CPU调频 */
+    /* CPU???? */
     hmac_adjust_freq_etc();
 #endif
-    /* 吞吐统计 */
+    /* ???????? */
     hmac_adjust_throughput();
 
     return OAL_SUCC;
@@ -920,16 +920,16 @@ OAL_STATIC oal_uint32 hmac_wlan_freq_wdg_timeout(oal_void *p_arg)
 
 oal_void  hmac_freq_timer_init(oal_void)
 {
-    /*如果这个定时器已经注册成功，则不能再次被注册，不然后发生错误！*/
+    /*??????????????????????????????????????????????????????????????*/
     if (OAL_TRUE == g_freq_lock_control_etc.hmac_freq_timer.en_is_registerd)
     {
         return;
     }
 
     g_freq_lock_control_etc.ul_pre_time = jiffies;
-    /* uc_timer_cycles 无需清零。避免停止跑流进入低功耗后，大小核切换、PK mode判断无法恢复问题 */
+    /* uc_timer_cycles ????????????????????????????????????????????????PK mode???????????????? */
 
-    /* 清空统计 */
+    /* ???????? */
     memset_s(&g_st_wifi_rxtx_total, OAL_SIZEOF(g_st_wifi_rxtx_total), 0, OAL_SIZEOF(g_st_wifi_rxtx_total));
 
     FRW_TIMER_CREATE_TIMER(&g_freq_lock_control_etc.hmac_freq_timer, //pst_timeout
@@ -943,7 +943,7 @@ oal_void  hmac_freq_timer_init(oal_void)
 
 oal_void  hmac_freq_timer_deinit(oal_void)
 {
-    /*定时器没有注册，就不用删除了，不然会发生错误！*/
+    /*??????????????????????????????????????????????*/
     if (OAL_FALSE == g_freq_lock_control_etc.hmac_freq_timer.en_is_registerd)
     {
         return;
@@ -956,12 +956,12 @@ oal_void  hmac_wifi_pm_state_notify(oal_bool_enum_uint8 en_wake_up)
 {
     if (OAL_TRUE == en_wake_up)
     {
-        /* WIFI唤醒,启动吞吐量统计定时器 */
+        /* WIFI????,???????????????????? */
         hmac_freq_timer_init();
     }
     else
     {
-        /* WIFI睡眠,关闭吞吐量统计定时器 */
+        /* WIFI????,???????????????????? */
         hmac_freq_timer_deinit();
     }
 }
@@ -972,13 +972,13 @@ oal_void  hmac_wifi_state_notify(oal_bool_enum_uint8 en_wifi_on)
 #ifdef _PRE_WLAN_FEATURE_AUTO_FREQ
     if (OAL_TRUE == en_wifi_on)
     {
-        /* WIFI上电,启动吞吐量统计定时器,打开调频功能 */
+        /* WIFI????,????????????????????,???????????? */
         hmac_freq_timer_init();
         hmac_set_device_freq_mode_etc(FREQ_LOCK_ENABLE);
     }
     else
     {
-        /* WIFI下电,关闭吞吐量统计定时器,关闭调频功能 */
+        /* WIFI????,????????????????????,???????????? */
         hmac_freq_timer_deinit();
         hmac_set_device_freq_mode_etc(FREQ_LOCK_DISABLE);
     }

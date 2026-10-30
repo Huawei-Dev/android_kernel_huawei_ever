@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "RnicCtx.h"
 #include "RnicMsgProc.h"
@@ -72,16 +72,16 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID        PS_FILE_ID_RNIC_PROCMSG_C
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 const RNIC_PROC_MSG_STRU g_astRnicMsgProcTab[] =
 {
-    /* 发送消息PID */  /* 消息ID */                          /* 消息处理函数 */
+    /* ????????PID */  /* ????ID */                          /* ???????????? */
     /*****************************    AT-> RNIC Begin  *******************************/
     {WUEPS_PID_AT,     ID_AT_RNIC_DIAL_MODE_REQ,             RNIC_RcvAtDialModeReq},
     {WUEPS_PID_AT,     ID_AT_RNIC_PDN_INFO_CFG_IND,          RNIC_RcvAtPdnInfoCfgInd},
@@ -124,7 +124,7 @@ const RNIC_PROC_MSG_STRU g_astRnicMsgProcTab[] =
 };
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 
@@ -226,7 +226,7 @@ VOS_UINT32 RNIC_RcvAtDialModeReq(
     AT_RNIC_DIAL_MODE_REQ_STRU         *pstRcvInd;
     RNIC_AT_DIAL_MODE_CNF_STRU         *pstSndMsg;
 
-    /* 内存分配 */
+    /* ???????? */
     pstSndMsg = (RNIC_AT_DIAL_MODE_CNF_STRU *)PS_ALLOC_MSG(ACPU_PID_RNIC,
                         sizeof(RNIC_AT_DIAL_MODE_CNF_STRU) - VOS_MSG_HEAD_LENGTH);
     if (VOS_NULL_PTR == pstSndMsg)
@@ -242,11 +242,11 @@ VOS_UINT32 RNIC_RcvAtDialModeReq(
     pstSndMsg->ulIdleTime               = RNIC_GET_PROC_IDLE_TIME();
     pstSndMsg->ulEventReportFlag        = RNIC_GET_PROC_EVENT_REPORT();
 
-    /* 通过ID_RNIC_AT_DIAL_MODE_CNF消息发送给AT模块 */
-    /* 填充消息 */
+    /* ????ID_RNIC_AT_DIAL_MODE_CNF??????????AT???? */
+    /* ???????? */
     RNIC_CFG_AT_MSG_HDR(pstSndMsg, ID_RNIC_AT_DIAL_MODE_CNF);
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ACPU_PID_RNIC, pstSndMsg))
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_RcvAtDialModeReq: Send msg failed!");
@@ -269,7 +269,7 @@ VOS_UINT32 RNIC_RcvAtPdnInfoCfgInd(
 
     pstRnicPdnCfgInd = (AT_RNIC_PDN_INFO_CFG_IND_STRU *)pstMsg;
 
-    /* 检查MODEMID */
+    /* ????MODEMID */
     if (!RNIC_MODEM_ID_IS_VALID(pstRnicPdnCfgInd->enModemId))
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_RcvAtPdnInfoCfgInd: ModemId is invalid.");
@@ -277,7 +277,7 @@ VOS_UINT32 RNIC_RcvAtPdnInfoCfgInd(
     }
 
 #if (FEATURE_OFF == FEATURE_DATA_SERVICE_NEW_PLATFORM)
-    /* 检查RABID */
+    /* ????RABID */
     if (!RNIC_RAB_ID_IS_VALID(pstRnicPdnCfgInd->ucRabId))
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_RcvAtPdnInfoCfgInd: RabId is invalid.");
@@ -285,14 +285,14 @@ VOS_UINT32 RNIC_RcvAtPdnInfoCfgInd(
     }
 #endif
 
-    /* 检查RmnetID */
+    /* ????RmnetID */
     if (!RNIC_RMNET_IS_VALID(pstRnicPdnCfgInd->ucRmNetId))
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_RcvAtPdnInfoCfgInd: RmNetId is invalid.");
         return VOS_ERR;
     }
 
-    /* 检查IP type */
+    /* ????IP type */
     if ( (VOS_FALSE == pstRnicPdnCfgInd->bitOpIpv4PdnInfo)
       && (VOS_FALSE == pstRnicPdnCfgInd->bitOpIpv6PdnInfo) )
     {
@@ -306,7 +306,7 @@ VOS_UINT32 RNIC_RcvAtPdnInfoCfgInd(
     pstPsIfaceInfo = RNIC_GET_IFACE_PDN_INFO_ADR(pstRnicPdnCfgInd->ucRmNetId);
     ucExRabId      = RNIC_BUILD_EXRABID(pstRnicPdnCfgInd->enModemId,pstRnicPdnCfgInd->ucRabId);
 
-    /* 更新PDP上下文 */
+    /* ????PDP?????? */
     pstPsIfaceInfo->enModemId    = pstRnicPdnCfgInd->enModemId;
     pstPsIfaceInfo->enRatType    = RNIC_PS_RAT_TYPE_3GPP;
 
@@ -348,32 +348,32 @@ VOS_UINT32 RNIC_RcvAtPdnInfoRelInd(
 
     pstRnicPdnRelInd = (AT_RNIC_PDN_INFO_REL_IND_STRU *)pstMsg;
 
-    /* 检查RmnetID */
+    /* ????RmnetID */
     if (!RNIC_RMNET_IS_VALID(pstRnicPdnRelInd->ucRmNetId))
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_RcvAtPdnInfoRelInd: RmNetId is invalid.");
         return VOS_ERR;
     }
 
-    /* 获取PDP上下文地址 */
+    /* ????PDP?????????? */
     pstPsIfaceInfo = RNIC_GET_IFACE_PDN_INFO_ADR(pstRnicPdnRelInd->ucRmNetId);
 
-    /* 更新PDP上下文信息 */
+    /* ????PDP?????????? */
     if (VOS_TRUE == pstRnicPdnRelInd->bitOpIpv4PdnInfo)
     {
-        /* 清空IPV4 PDP上下文信息 */
+        /* ????IPV4 PDP?????????? */
         RNIC_InitIpv4PdnInfo(pstPsIfaceInfo);
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV4_ADDR);
     }
 
     if (VOS_TRUE == pstRnicPdnRelInd->bitOpIpv6PdnInfo)
     {
-        /* 清空IPV6 PDP上下文信息 */
+        /* ????IPV6 PDP?????????? */
         RNIC_InitIpv6PdnInfo(pstPsIfaceInfo);
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV6_ADDR);
     }
 
-    /* PDP都未激活的时候 */
+    /* PDP?????????????? */
     if ( (RNIC_BIT_OPT_TRUE != pstPsIfaceInfo->bitOpIpv4Act)
       && (RNIC_BIT_OPT_TRUE != pstPsIfaceInfo->bitOpIpv6Act) )
     {
@@ -403,7 +403,7 @@ VOS_UINT32 RNIC_RcvAtUsbTetherInfoInd(
                   pstRnicUsbTetherInd->aucRmnetName,
                   sizeof(pstRnicUsbTetherInd->aucRmnetName));
 
-    /* 调用配置部分接口 */
+    /* ???????????????? */
     RNIC_IFACE_TetherInfo(&stTetherInfo);
 #endif
 
@@ -421,10 +421,10 @@ VOS_UINT32  RNIC_RcvTiDsflowStatsExpired(
 
     pstRcvMsg = (REL_TIMER_MSG *)pstMsg;
 
-    /* 根据定时器ID获取网卡ID */
+    /* ??????????ID????????ID */
     ucRmNetId = RNIC_GetNetIdByTimerId(pstRcvMsg->ulName);
 
-    /* 根据消息内容获得定时器ID */
+    /* ??????????????????????ID */
     enTimerId   = (VOS_UINT16)pstRcvMsg->ulName;
 
     RNIC_IFACE_SetDsFlowStats(ucRmNetId);
@@ -435,7 +435,7 @@ VOS_UINT32  RNIC_RcvTiDsflowStatsExpired(
     RNIC_CLEAN_IFACE_PERIOD_RECV_PKT(ucRmNetId);
 #endif
 
-    /* 每个流量统计周期结束后，需要将周期统计Byte数清除 */
+    /* ??????????????????????????????????????Byte?????? */
     RNIC_IFACE_ClearDsFlowFlux(ucRmNetId);
 
     RNIC_StartTimer(enTimerId, TI_RNIC_DSFLOW_STATS_LEN);
@@ -453,7 +453,7 @@ VOS_UINT32 RNIC_RcvTiDemandDialDisconnectExpired(
 
     pstRcvMsg = (REL_TIMER_MSG *)pstMsg;
 
-    /* 根据定时器ID获取网卡ID */
+    /* ??????????ID????????ID */
     ucRmNetId = RNIC_GetNetIdByTimerId(pstRcvMsg->ulName);
 
 
@@ -462,7 +462,7 @@ VOS_UINT32 RNIC_RcvTiDemandDialDisconnectExpired(
         RNIC_StartTimer(TI_RNIC_DEMAND_DIAL_DISCONNECT, TI_RNIC_DEMAND_DIAL_DISCONNECT_LEN);
     }
 
-    /* 上行发包数用于按需断开，按需断开定时器超时清零 */
+    /* ?????????????????????????????????????????????? */
     RNIC_CLEAN_IFACE_PERIOD_SEND_PKT(ucRmNetId);
 
     return VOS_OK;
@@ -481,33 +481,33 @@ VOS_UINT32 RNIC_RcvCcpuResetStartInd(
 
     RNIC_PR_LOGI("enter, %u", VOS_GetSlice());
 
-    /* 停止所有启动的定时器 */
+    /* ???????????????????? */
     RNIC_StopAllTimer();
 
     for (ucIndex = 0 ; ucIndex < RNIC_NET_ID_MAX_NUM ; ucIndex++)
     {
-        /* 复位网卡 */
+        /* ???????? */
         RNIC_IFACE_ResetPsIface(ucIndex);
 
-        /* 清除流量统计信息 */
+        /* ???????????????? */
         RNIC_IFACE_ClearDsFlowStats(ucIndex);
 
-        /* 初始化RNIC PDN信息 */
+        /* ??????RNIC PDN???? */
         RNIC_InitPdnInfo(&(pstRnicCtx->astIfaceCtx[ucIndex].stPsIfaceInfo));
     }
 
-    /* 初始化RNIC定时器上下文 */
+    /* ??????RNIC???????????? */
     RNIC_InitAllTimers();
 
 #if (FEATURE_OFF == FEATURE_DELAY_MODEM_INIT)
-    /* 初始化拨号模式信息 */
+    /* ?????????????????? */
     RNIC_InitOnDemandDialInfo();
 #endif
 
-    /* 初始化拨号断开定时器超时次数参数统计 */
+    /* ???????????????????????????????????? */
     RNIC_CLEAR_TI_DIALDOWN_EXP_CONT();
 
-    /* 释放信号量，使得调用API任务继续运行 */
+    /* ????????????????????API???????????? */
     VOS_SmV(RNIC_GET_RESET_SEM());
 
     RNIC_PR_LOGI("leave, %u", VOS_GetSlice());
@@ -530,10 +530,10 @@ VOS_UINT32 RNIC_RcvNetdevReadyInd(
     MsgBlock                           *pstMsg
 )
 {
-    /* 设置RNIC网卡特性 */
+    /* ????RNIC???????? */
     RNIC_IFACE_SetFeatureCfg();
 
-    /* 设置SPE配置 */
+    /* ????SPE???? */
 
 
 
@@ -547,7 +547,7 @@ STATIC VOS_UINT8 RNIC_GetImsEmcBearRmnetId(
     MODEM_ID_ENUM_UINT16                enModemId
 )
 {
-    /* 当前RNIC_RMNET_ID_EMC0只提供给lte使用，所以只需要判断接入技术为lte的时EmcInd标志 */
+    /* ????RNIC_RMNET_ID_EMC0????????lte??????????????????????????????lte????EmcInd???? */
     if ((IMSA_RNIC_IMS_RAT_TYPE_LTE == enRatType) && (MODEM_ID_0 == enModemId))
     {
         return RNIC_DEV_ID_RMNET_EMC0;
@@ -579,7 +579,7 @@ STATIC VOS_UINT8 RNIC_GetImsNormalBearRmnetId(
     MODEM_ID_ENUM_UINT16                enModemId
 )
 {
-    /* vowifi时为数据包转发网卡，volte时为vt网卡 */
+    /* vowifi????????????????????volte????vt???? */
     if ((MODEM_ID_0 == enModemId) && (IMSA_RNIC_IMS_RAT_TYPE_LTE == enRatType))
     {
         return RNIC_DEV_ID_RMNET_IMS00;
@@ -689,7 +689,7 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Wifi(
     VOS_UINT8                           ucRmNetId;
     PS_IFACE_ID_ENUM_UINT8              enPsIfaceId;
 
-    /* 检查IP type */
+    /* ????IP type */
     if ( (VOS_FALSE == pstPdnInfo->bitOpIpv4PdnInfo)
       && (VOS_FALSE == pstPdnInfo->bitOpIpv6PdnInfo) )
     {
@@ -698,7 +698,7 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Wifi(
         return VOS_ERR;
     }
 
-    /* 指定一张专门的网卡用于VT视频数据传输 */
+    /* ??????????????????????VT???????????? */
     ucRmNetId = RNIC_GetImsRmnetId(IMSA_RNIC_IMS_RAT_TYPE_WIFI,
                                    pstPdnInfo->enModemId,
                                    pstPdnInfo->enEmcInd);
@@ -711,23 +711,23 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Wifi(
 
     enPsIfaceId = RNIC_TransImsRmnetId2PsIfaceId(ucRmNetId);
 
-    /* 更新IFACE上下文信息 */
+    /* ????IFACE?????????? */
     pstIfaceCtx  = RNIC_GET_IFACE_CTX_ADR(ucRmNetId);
     pstIfaceCtx->enIfaceId = enPsIfaceId;
 
-    /* 更新PDP上下文信息 */
+    /* ????PDP?????????? */
     pstPsIfaceInfo = RNIC_GET_IFACE_PDN_INFO_ADR(ucRmNetId);
     pstPsIfaceInfo->enRatType = RNIC_PS_RAT_TYPE_IWLAN;
     pstPsIfaceInfo->enModemId = pstPdnInfo->enModemId;
 
-    /* IPV4激活 */
+    /* IPV4???? */
     if (VOS_TRUE == pstPdnInfo->bitOpIpv4PdnInfo)
     {
         pstPsIfaceInfo->bitOpIpv4Act = RNIC_BIT_OPT_TRUE;
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV4_ADDR);
     }
 
-    /* IPV6激活 */
+    /* IPV6???? */
     if (VOS_TRUE == pstPdnInfo->bitOpIpv6PdnInfo)
     {
         pstPsIfaceInfo->bitOpIpv6Act = RNIC_BIT_OPT_TRUE;
@@ -751,7 +751,7 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Lte(
     VOS_UINT8                           ucExRabId;
     PS_IFACE_ID_ENUM_UINT8              enPsIfaceId;
 
-    /* 检查IP type */
+    /* ????IP type */
     if ( (VOS_FALSE == pstPdnInfo->bitOpIpv4PdnInfo)
       && (VOS_FALSE == pstPdnInfo->bitOpIpv6PdnInfo) )
     {
@@ -761,7 +761,7 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Lte(
     }
 
 #if (FEATURE_OFF == FEATURE_DATA_SERVICE_NEW_PLATFORM)
-    /* 检查RABID */
+    /* ????RABID */
     if (!RNIC_RAB_ID_IS_VALID(pstPdnInfo->ucRabId))
     {
         RNIC_INFO_LOG(ACPU_PID_RNIC,
@@ -770,7 +770,7 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Lte(
     }
 #endif
 
-    /* 指定一张专门的网卡用于VT视频数据传输 */
+    /* ??????????????????????VT???????????? */
     ucRmNetId = RNIC_GetImsRmnetId(IMSA_RNIC_IMS_RAT_TYPE_LTE,
                                    pstPdnInfo->enModemId,
                                    pstPdnInfo->enEmcInd);
@@ -783,18 +783,18 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Lte(
 
     enPsIfaceId = RNIC_TransImsRmnetId2PsIfaceId(ucRmNetId);
 
-    /* 更新IFACE上下文信息 */
+    /* ????IFACE?????????? */
     pstIfaceCtx  = RNIC_GET_IFACE_CTX_ADR(ucRmNetId);
     pstIfaceCtx->enIfaceId = enPsIfaceId;
 
     ucExRabId = RNIC_BUILD_EXRABID(pstPdnInfo->enModemId, pstPdnInfo->ucRabId);
 
-    /* 更新PDP上下文信息 */
+    /* ????PDP?????????? */
     pstPsIfaceInfo = RNIC_GET_IFACE_PDN_INFO_ADR(ucRmNetId);
     pstPsIfaceInfo->enRatType = RNIC_PS_RAT_TYPE_3GPP;
     pstPsIfaceInfo->enModemId = pstPdnInfo->enModemId;
 
-    /* IPV4激活 */
+    /* IPV4???? */
     if (VOS_TRUE == pstPdnInfo->bitOpIpv4PdnInfo)
     {
         pstPsIfaceInfo->bitOpIpv4Act  = RNIC_BIT_OPT_TRUE;
@@ -803,7 +803,7 @@ VOS_UINT32 RNIC_ProcImsaPdnActInd_Lte(
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV4_ADDR);
     }
 
-    /* IPV6激活 */
+    /* IPV6???? */
     if (VOS_TRUE == pstPdnInfo->bitOpIpv6PdnInfo)
     {
         pstPsIfaceInfo->bitOpIpv6Act  = RNIC_BIT_OPT_TRUE;
@@ -843,8 +843,8 @@ VOS_UINT32 RNIC_RcvImsaPdnActInd(
         ulResult = VOS_ERR;
     }
 
-    /* 当前netmanager 只会up vt网卡，volte的RNIC_RMNET_ID_EMC0网卡也不在netmanager up，
-       vowifi的普通承载网卡和紧急承载网卡都是在mapcon处up和down的，所以此处代码逻辑暂不修改 */
+    /* ????netmanager ????up vt??????volte??RNIC_RMNET_ID_EMC0??????????netmanager up??
+       vowifi??????????????????????????????????mapcon??up??down???????????????????????????? */
     if ((VOS_OK == ulResult)
      && (IMSA_RNIC_PDN_FOR_EMC != pstPdnInfo->enEmcInd))
     {
@@ -864,7 +864,7 @@ VOS_UINT32 RNIC_ProcImsaPdnDeactInd_Wifi(
     VOS_UINT8                           ucIpFamilyMask = 0;
     VOS_UINT8                           ucRmNetId;
 
-    /* 指定一张专门的网卡用于VT视频数据传输 */
+    /* ??????????????????????VT???????????? */
     ucRmNetId = RNIC_GetImsRmnetId(IMSA_RNIC_IMS_RAT_TYPE_WIFI, enModemId, enEmcInd);
     if (RNIC_DEV_ID_BUTT == ucRmNetId)
     {
@@ -872,22 +872,22 @@ VOS_UINT32 RNIC_ProcImsaPdnDeactInd_Wifi(
         return VOS_ERR;
     }
 
-    /* 获取PDP上下文地址 */
+    /* ????PDP?????????? */
     pstPsIfaceInfo = RNIC_GET_IFACE_PDN_INFO_ADR(ucRmNetId);
     pstPsIfaceInfo->enModemId = MODEM_ID_BUTT;
     pstPsIfaceInfo->enRatType = RNIC_PS_RAT_TYPE_BUTT;
 
-    /* 如果是IPV4 PDP去激活 */
+    /* ??????IPV4 PDP?????? */
     if (RNIC_BIT_OPT_TRUE == pstPsIfaceInfo->bitOpIpv4Act)
     {
-        /* 清空IPV4 PDP上下文信息 */
+        /* ????IPV4 PDP?????????? */
         RNIC_InitIpv4PdnInfo(pstPsIfaceInfo);
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV4_ADDR);
     }
 
     if (RNIC_BIT_OPT_TRUE == pstPsIfaceInfo->bitOpIpv6Act)
     {
-        /* 清空IPV6 PDP上下文信息 */
+        /* ????IPV6 PDP?????????? */
         RNIC_InitIpv6PdnInfo(pstPsIfaceInfo);
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV6_ADDR);
     }
@@ -907,7 +907,7 @@ VOS_UINT32 RNIC_ProcImsaPdnDeactInd_Lte(
     VOS_UINT8                           ucIpFamilyMask = 0;
     VOS_UINT8                           ucRmNetId;
 
-    /* 指定一张专门的网卡用于VT视频数据传输 */
+    /* ??????????????????????VT???????????? */
     ucRmNetId = RNIC_GetImsRmnetId(IMSA_RNIC_IMS_RAT_TYPE_LTE, enModemId, enEmcInd);
     if (RNIC_DEV_ID_BUTT == ucRmNetId)
     {
@@ -919,17 +919,17 @@ VOS_UINT32 RNIC_ProcImsaPdnDeactInd_Lte(
     pstPsIfaceInfo->enModemId = MODEM_ID_BUTT;
     pstPsIfaceInfo->enRatType = RNIC_PS_RAT_TYPE_BUTT;
 
-    /* 如果是IPV4 PDP去激活 */
+    /* ??????IPV4 PDP?????? */
     if (RNIC_BIT_OPT_TRUE == pstPsIfaceInfo->bitOpIpv4Act)
     {
-        /* 清空IPV4 PDP上下文信息 */
+        /* ????IPV4 PDP?????????? */
         RNIC_InitIpv4PdnInfo(pstPsIfaceInfo);
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV4_ADDR);
     }
 
     if (RNIC_BIT_OPT_TRUE == pstPsIfaceInfo->bitOpIpv6Act)
     {
-        /* 清空IPV6 PDP上下文信息 */
+        /* ????IPV6 PDP?????????? */
         RNIC_InitIpv6PdnInfo(pstPsIfaceInfo);
         ucIpFamilyMask = RNIC_BIT8_SET(ucIpFamilyMask, RNIC_IPV6_ADDR);
     }
@@ -986,8 +986,8 @@ VOS_UINT32 RNIC_RcvImsaPdnModifyInd(
     pstRcvInd   = (IMSA_RNIC_PDN_MODIFY_IND_STRU *)pstMsg;
     pstPdnInfo  = &(pstRcvInd->stPdnInfo);
 
-    /* 当前RNIC_RMNET_ID_EMC0只提供给lte使用，且紧急呼当前不涉及切换,
-       当modify消息中Emc标志存在时，认为异常 */
+    /* ????RNIC_RMNET_ID_EMC0????????lte????????????????????????????,
+       ??modify??????Emc???????????????????? */
     if (IMSA_RNIC_PDN_FOR_EMC == pstPdnInfo->enEmcInd)
     {
         RNIC_ERROR_LOG(ACPU_PID_RNIC, "RNIC_RcvImsaPdnModifyInd: abnormal rcv emc modify ind.");
@@ -1122,10 +1122,10 @@ RNIC_PROC_MSG_FUNC RNIC_GetProcMsgFunc(
     VOS_UINT32                           i;
     VOS_UINT32                           ulTableSize;
 
-    /* 获取处理操作个数 */
+    /* ???????????????? */
     ulTableSize = sizeof(g_astRnicMsgProcTab)/sizeof(RNIC_PROC_MSG_STRU);
 
-    /* g_astRnicMsgProcTab查表，进行消息处理的分发 */
+    /* g_astRnicMsgProcTab???????????????????????? */
     for (i = 0; i < ulTableSize; i++)
     {
         if ( (g_astRnicMsgProcTab[i].ulMsgId == ulMsgId)
@@ -1183,7 +1183,7 @@ VOS_UINT32 RNIC_ProcMsg (MsgBlock *pstMsg)
 
     ulSenderPid = pstMsgHeader->ulSenderPid;
 
-    /* 超时消息显式停止定时器 */
+    /* ?????????????????????? */
     if (VOS_PID_TIMER == ulSenderPid)
     {
         pstTimerMsg = (REL_TIMER_MSG *)pstMsg;
@@ -1195,10 +1195,10 @@ VOS_UINT32 RNIC_ProcMsg (MsgBlock *pstMsg)
         ulMsgName   = pstMsgHeader->ulMsgName;
     }
 
-    /* 将SenderPid 统一转为modem0 Pid */
+    /* ??SenderPid ????????modem0 Pid */
     ulSenderPid = RNIC_GetModem0Pid(ulSenderPid);
 
-    /* 得到消息处理函数 */
+    /* ???????????????? */
     pProcMsgFunc = RNIC_GetProcMsgFunc(ulMsgName, ulSenderPid);
 
     if (VOS_NULL_PTR != pProcMsgFunc)
@@ -1228,7 +1228,7 @@ VOS_UINT32 RNIC_SendDialInfoMsg(
     RNIC_DIAL_MODE_STRU                *pstDialMode;
 
 
-    /* 内存分配 */
+    /* ???????? */
     pstDialInfo = (RNIC_NOTIFY_MSG_STRU *)PS_ALLOC_MSG(ACPU_PID_RNIC,
                                                       sizeof(RNIC_NOTIFY_MSG_STRU) - VOS_MSG_HEAD_LENGTH);
     if (VOS_NULL_PTR == pstDialInfo)
@@ -1239,7 +1239,7 @@ VOS_UINT32 RNIC_SendDialInfoMsg(
 
     pstDialMode                         = RNIC_GET_DIAL_MODE_ADR();
 
-    /* 填充消息 */
+    /* ???????? */
     RNIC_CFG_INTRA_MSG_HDR(pstDialInfo, enMsgId);
 
     TAF_MEM_CPY_S(&(pstDialInfo->stDialInfo), sizeof(pstDialInfo->stDialInfo), pstDialMode, sizeof(RNIC_DIAL_MODE_STRU));
@@ -1260,7 +1260,7 @@ VOS_VOID RNIC_FillNetManagerMsgPdnCfgInfo(
     IMSA_RNIC_PDN_INFO_CONFIG_STRU     *pSrcPdnInfo
 )
 {
-    /* 对stRnicNmMsg中参数进行赋值 */
+    /* ??stRnicNmMsg?????????????? */
     pDestPdnInfo->bitOpIpv4PdnInfo     = pSrcPdnInfo->bitOpIpv4PdnInfo;
     pDestPdnInfo->bitOpIpv6PdnInfo     = pSrcPdnInfo->bitOpIpv6PdnInfo;
     pDestPdnInfo->bitOpMtuInfo         = pSrcPdnInfo->bitOpMtuInfo;
@@ -1269,7 +1269,7 @@ VOS_VOID RNIC_FillNetManagerMsgPdnCfgInfo(
     pDestPdnInfo->enRatType    = pSrcPdnInfo->enRatType;
     pDestPdnInfo->ulMtuSize    = pSrcPdnInfo->ulMtuSize;
 
-    /* 对ipv4的pdn进行赋值 */
+    /* ??ipv4??pdn???????? */
     TAF_MEM_CPY_S(&(pDestPdnInfo->stIpv4PdnInfo),
                   sizeof(NM_IPV4_PDN_INFO_STRU),
                   &(pSrcPdnInfo->stIpv4PdnInfo),
@@ -1288,7 +1288,7 @@ VOS_VOID RNIC_FillNetManagerMsgReservedPortCfgInfo(
     IMSA_RNIC_IMS_PORT_INFO_STRU       *pSrcReservedProtInfo
 )
 {
-    /* 对stRnicNmMsg中参数进行赋值 */
+    /* ??stRnicNmMsg?????????????? */
     pDestReservedProtInfo->ulImsPortRangeNum = pSrcReservedProtInfo->ulImsPortRangeNum;
     pDestReservedProtInfo->enModemId         = pSrcReservedProtInfo->enModemId;
 
@@ -1306,7 +1306,7 @@ VOS_VOID RNIC_FillNetManagerMsgSipPortRangeInfo(
     IMSA_RNIC_SIP_PORT_RANGE_IND_STRU  *pSrcSipProtRange
 )
 {
-    /* 对stRnicNmMsg中参数进行赋值 */
+    /* ??stRnicNmMsg?????????????? */
     pDestSipProtRange->usSipPortRangeNum = pSrcSipProtRange->usSipPortRangeNum;
     pDestSipProtRange->enModemId         = pSrcSipProtRange->enModemId;
 
@@ -1334,7 +1334,7 @@ VOS_VOID RNIC_SndNetManagerPdpActInd(
 
     RNIC_FillNetManagerMsgPdnCfgInfo(&(stRnicNmMsg.unMsgInfo.stPdnCfgInfo), &(pstRcvInd->stPdnInfo));
 
-    /* 调用虚拟设备提供的发送接口发送消息 */
+    /* ?????????????????????????????????? */
     NM_CTRL_SEND_MSG(&stRnicNmMsg, sizeof(NM_MSG_STRU));
 
     return;
@@ -1354,11 +1354,11 @@ VOS_VOID RNIC_SndNetManagerPdpDeactInd(
     stRnicNmMsg.enMsgId     = ID_NM_PDN_DEACT_IND;
     stRnicNmMsg.ulMsgLen    = sizeof(NM_PDN_DEACT_IND_STRU);
 
-    /* 对stRnicNmMsg中参数进行赋值 */
+    /* ??stRnicNmMsg?????????????? */
     stRnicNmMsg.unMsgInfo.stPdnDeactInd.enModemId   = pstRcvInd->enModemId;
     stRnicNmMsg.unMsgInfo.stPdnDeactInd.enRatType   = pstRcvInd->enRatType;
 
-    /* 调用虚拟设备提供的发送接口发送消息 */
+    /* ?????????????????????????????????? */
     NM_CTRL_SEND_MSG(&stRnicNmMsg, sizeof(NM_MSG_STRU));
 
     return;
@@ -1380,7 +1380,7 @@ VOS_VOID RNIC_SndNetManagerPdpModifyInd(
 
     RNIC_FillNetManagerMsgPdnCfgInfo(&(stRnicNmMsg.unMsgInfo.stPdnCfgInfo), &(pstRcvInd->stPdnInfo));
 
-    /* 调用虚拟设备提供的发送接口发送消息 */
+    /* ?????????????????????????????????? */
     NM_CTRL_SEND_MSG(&stRnicNmMsg, sizeof(NM_MSG_STRU));
 
     return;
@@ -1396,7 +1396,7 @@ VOS_VOID RNIC_SndNetManagerModemResetInd(VOS_VOID)
     stRnicNmMsg.enMsgId     = ID_NM_MODEM_RESET_IND;
     stRnicNmMsg.ulMsgLen    = 0;
 
-    /* 调用虚拟设备提供的发送接口发送消息 */
+    /* ?????????????????????????????????? */
     NM_CTRL_SEND_MSG(&stRnicNmMsg, sizeof(NM_MSG_STRU));
 
     return;
@@ -1418,7 +1418,7 @@ VOS_VOID RNIC_SndNetManagerReservedPortCfgInd(
 
     RNIC_FillNetManagerMsgReservedPortCfgInfo(&(stRnicNmMsg.unMsgInfo.stPortsCfgInfo), &(pstRcvInd->stImsPortInfo));
 
-    /* 调用虚拟设备提供的发送接口发送消息 */
+    /* ?????????????????????????????????? */
     NM_CTRL_SEND_MSG(&stRnicNmMsg, sizeof(NM_MSG_STRU));
 
     return;
@@ -1438,11 +1438,11 @@ VOS_VOID RNIC_SndNetManagerSocketExceptInd(
     stRnicNmMsg.enMsgId     = ID_NM_SOCKET_EXCEPTION_IND;
     stRnicNmMsg.ulMsgLen    = sizeof(NM_SOCKET_EXCEPTION_IND_STRU);
 
-    /* 消息体赋值 */
+    /* ?????????? */
     stRnicNmMsg.unMsgInfo.stSocketExceptionInd.sSocketErrorNo = pstRcvInd->sSocketErrorNo;
     RNIC_FillNetManagerMsgPdnCfgInfo(&(stRnicNmMsg.unMsgInfo.stSocketExceptionInd.stPdnInfo), &(pstRcvInd->stPdnInfo));
 
-    /* 调用虚拟设备提供的发送接口发送消息 */
+    /* ?????????????????????????????????? */
     NM_CTRL_SEND_MSG(&stRnicNmMsg, sizeof(NM_MSG_STRU));
 
     return;
@@ -1464,7 +1464,7 @@ VOS_VOID RNIC_SndNetManagerSipPortRangeInd(
 
     RNIC_FillNetManagerMsgSipPortRangeInfo(&(stRnicNmMsg.unMsgInfo.stSipPortRangeInd), pstRcvInd);
 
-    /* 调用虚拟设备提供的发送接口发送消息 */
+    /* ?????????????????????????????????? */
     NM_CTRL_SEND_MSG(&stRnicNmMsg, sizeof(NM_MSG_STRU));
 
     return;

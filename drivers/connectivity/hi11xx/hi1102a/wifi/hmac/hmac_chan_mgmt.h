@@ -9,15 +9,15 @@ extern "C" {
 #endif
 #endif
 
-/* 1 其他头文件包含 */
+/* 1 ?????????????? */
 #include "hmac_vap.h"
 
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_CHAN_MGMT_H
-/* 2 宏定义 */
-#define HMAC_MAX_20M_SUB_CH 4 /* VHT80中，20MHz信道总个数 */
+/* 2 ?????? */
+#define HMAC_MAX_20M_SUB_CH 4 /* VHT80????20MHz?????????? */
 
-/* 3 枚举定义 */
+/* 3 ???????? */
 typedef enum {
     HMAC_OP_ALLOWED = BIT0,
     HMAC_SCA_ALLOWED = BIT1,
@@ -34,18 +34,18 @@ typedef enum {
 typedef oal_uint8 hmac_network_type_enum_uint8;
 
 typedef enum {
-    MAC_CHNL_AV_CHK_NOT_REQ = 0,  /* 不需要进行信道扫描 */
-    MAC_CHNL_AV_CHK_IN_PROG = 1,  /* 正在进行信道扫描 */
-    MAC_CHNL_AV_CHK_COMPLETE = 2, /* 信道扫描已完成 */
+    MAC_CHNL_AV_CHK_NOT_REQ = 0,  /* ?????????????????? */
+    MAC_CHNL_AV_CHK_IN_PROG = 1,  /* ???????????????? */
+    MAC_CHNL_AV_CHK_COMPLETE = 2, /* ?????????????? */
 
     MAC_CHNL_AV_CHK_BUTT,
 } mac_chnl_av_chk_enum;
 typedef oal_uint8 mac_chnl_av_chk_enum_uint8;
 
-/* 4 全局变量声明 */
-/* 5 消息头定义 */
-/* 6 消息定义 */
-/* 7 STRUCT定义 */
+/* 4 ???????????? */
+/* 5 ?????????? */
+/* 6 ???????? */
+/* 7 STRUCT???? */
 typedef struct {
     oal_uint16                 aus_num_networks[HMAC_NETWORK_BUTT];
     hmac_chan_op_enum_uint8    en_chan_op;
@@ -53,30 +53,30 @@ typedef struct {
 } hmac_eval_scan_report_stru;
 
 typedef struct {
-    oal_uint8     uc_idx;     /* 信道索引号 */
-    oal_uint16    us_freq;    /* 信道频点 */
+    oal_uint8     uc_idx;     /* ?????????? */
+    oal_uint16    us_freq;    /* ???????? */
     oal_uint8     auc_resv;
 } hmac_dfs_channel_info_stru;
 
 typedef struct {
-    oal_uint16  us_freq;        /* 中心频率，单位MHz */
-    oal_uint8   uc_number;      /* 信道号 */
-    oal_uint8   uc_idx;         /* 信道索引(软件用) */
+    oal_uint16  us_freq;        /* ??????????????MHz */
+    oal_uint8   uc_number;      /* ?????? */
+    oal_uint8   uc_idx;         /* ????????(??????) */
 } mac_freq_channel_map_stru;
 
 typedef struct {
     oal_uint32                   ul_channels;
     mac_freq_channel_map_stru    ast_channels[HMAC_MAX_20M_SUB_CH];
 } hmac_channel_list_stru;
-/* 频率信道索引映射关系 */
+/* ???????????????????? */
 
-/* 4 全局变量声明 */
+/* 4 ???????????? */
 extern OAL_CONST mac_freq_channel_map_stru g_ast_freq_map_5g[MAC_CHANNEL_FREQ_5_BUTT];
 extern OAL_CONST mac_freq_channel_map_stru g_ast_freq_map_2g[MAC_CHANNEL_FREQ_2_BUTT];
 
-/* 8 UNION定义 */
-/* 9 OTHERS定义 */
-/* 10 函数声明 */
+/* 8 UNION???? */
+/* 9 OTHERS???? */
+/* 10 ???????? */
 extern oal_void hmac_chan_reval_status(mac_device_stru *pst_mac_device, mac_vap_stru *pst_mac_vap);
 extern oal_void hmac_chan_reval_bandwidth_sta(mac_vap_stru *pst_mac_vap, oal_uint32 ul_change);
 extern oal_void hmac_chan_disable_machw_tx(mac_vap_stru *pst_mac_vap);
@@ -123,14 +123,14 @@ extern oal_void hmac_chan_initiate_switch_to_new_channel(mac_vap_stru *pst_mac_v
                                                          oal_uint8 uc_channel,
                                                          wlan_channel_bandwidth_enum_uint8 en_bandwidth);
 
-/* 11 inline函数定义 */
+/* 11 inline???????? */
 
 OAL_STATIC OAL_INLINE oal_void hmac_chan_initiate_switch_to_20MHz_ap(mac_vap_stru *pst_mac_vap)
 {
-    /* 设置VAP带宽模式为20MHz */
+    /* ????VAP??????????20MHz */
     pst_mac_vap->st_channel.en_bandwidth = WLAN_BAND_WIDTH_20M;
 
-    /* 设置带宽切换状态变量，表明在下一个DTIM时刻切换至20MHz运行 */
+    /* ??????????????????????????????????DTIM??????????20MHz???? */
     pst_mac_vap->st_ch_switch_info.en_bw_switch_status = WLAN_BW_SWITCH_40_TO_20;
 }
 

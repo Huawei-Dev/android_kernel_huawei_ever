@@ -43,13 +43,13 @@ struct task_struct *sdio_int_task_etc = NULL;
 
 static struct oal_sdio *hi_sdio_debug = NULL;
 
-/* 全局变量定义 */
+/* ???????????? */
 OAL_STATIC struct completion sdio_driver_complete;
 struct oal_sdio *_hi_sdio_;
 
 OAL_STATIC oal_uint8 *sdio_enum_err_str = "probe timeout";
 
-/* 函数定义 */
+/* ???????? */
 oal_void oal_sdio_dispose_data(struct oal_sdio *hi_sdio);
 oal_int32 oal_sdio_data_sg_irq_etc(struct oal_sdio *hi_sdio);
 
@@ -189,7 +189,7 @@ OAL_STATIC oal_int32 oal_sdio_power_action(hcc_bus *pst_bus, HCC_BUS_POWER_ACTIO
         oal_wlan_gpio_intr_enable_etc(HBUS_TO_DEV(pst_bus), OAL_FALSE);
         hcc_disable_etc(HBUS_TO_HCC(pst_bus), OAL_TRUE);
 #ifdef CONFIG_MMC
-        /* 下电之前关闭 SDIO HOST 控制器时钟 */
+        /* ???????????? SDIO HOST ?????????? */
         mmc_power_save_host(hi_sdio->func->card->host);
 #endif
     }
@@ -201,7 +201,7 @@ OAL_STATIC oal_int32 oal_sdio_power_action(hcc_bus *pst_bus, HCC_BUS_POWER_ACTIO
         hcc_bus_disable_state(pst_bus, OAL_BUS_STATE_ALL);
         /* close sdio master */
 #ifdef CONFIG_MMC
-        /* 关闭 SDIO HOST 控制器时钟, 此时slave已经下电 */
+        /* ???? SDIO HOST ??????????, ????slave???????? */
         mmc_power_save_host(hi_sdio->func->card->host);
 #endif
     }
@@ -218,10 +218,10 @@ OAL_STATIC oal_int32 oal_sdio_power_action(hcc_bus *pst_bus, HCC_BUS_POWER_ACTIO
     }
 
     if (action == HCC_BUS_POWER_PATCH_LAUCH) {
-        /* Patch下载完后 初始化通道资源，然后等待业务初始化完成 */
+        /* Patch???????? ?????????????????????????????????????? */
         oal_wlan_gpio_intr_enable_etc(HBUS_TO_DEV(pst_bus), OAL_TRUE);
 
-        /* 第一个中断有可能在中断使能之前上报，强制调度一次RX Thread */
+        /* ????????????????????????????????????????????????RX Thread */
         up(&pst_bus->rx_sema);
 
         if (oal_wait_for_completion_timeout(&pst_bus->st_device_ready,
@@ -235,7 +235,7 @@ OAL_STATIC oal_int32 oal_sdio_power_action(hcc_bus *pst_bus, HCC_BUS_POWER_ACTIO
                 oal_print_hi11xx_log(HI11XX_LOG_WARN, "retry 5 second hold, still timeout");
                 return -OAL_ETIMEDOUT;
             } else {
-                /* 强制调度成功，说明有可能是GPIO中断未响应 */
+                /* ??????????????????????????GPIO?????????? */
                 oal_print_hi11xx_log(HI11XX_LOG_WARN, KERN_WARNING "[E]retry succ, maybe gpio interrupt issue");
                 DECLARE_DFT_TRACE_KEY_INFO("sdio gpio int issue", OAL_DFT_TRACE_FAIL);
             }
@@ -294,7 +294,7 @@ oal_int32 sdio_dev_init_etc(struct oal_sdio *hi_sdio)
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "failed to set sdio blk size! ret=%d", ret);
     }
 
-    /* func 1 enable 之后, device 发的消息会被这里清掉 */
+    /* func 1 enable ????, device ???????????????????? */
     /*
      * enable four interrupt sources in function 1:
      *      data ready for host to read
@@ -335,14 +335,14 @@ oal_int32 oal_sdio_switch_clean_res(hcc_bus *pst_bus)
     oal_int32 ret;
 
     /*
-     * 清空SDIO 通道，通知Device关闭发送通道，
-     * 等待DMA完成所有传输后返回
+     * ????SDIO ??????????Device??????????????
+     * ????DMA??????????????????
      */
     struct oal_sdio *hi_sdio = (struct oal_sdio *)pst_bus->data;
 
     OAL_INIT_COMPLETION(&hi_sdio->st_sdio_shutdown_response);
 
-    /* 清理SDIO聚合报文 */
+    /* ????SDIO???????? */
     hcc_restore_assemble_netbuf_list(HBUS_TO_HCC(pst_bus));
 
     ret = oal_sdio_send_msg_etc(pst_bus, H2D_MSG_SHUTDOWN_IP_PRE);
@@ -374,7 +374,7 @@ oal_int32 oal_sdio_reinit(hcc_bus *pst_bus)
     time_start = ktime_get();
 
     oal_print_hi11xx_log(HI11XX_LOG_INFO, "wake_sema_count=%d", pst_bus->sr_wake_sema.count);
-    sema_init(&pst_bus->sr_wake_sema, 1); /* S/R信号量 */
+    sema_init(&pst_bus->sr_wake_sema, 1); /* S/R?????? */
 
     ret = mmc_power_save_host(hi_sdio->func->card->host);
     hi_sdio->func->card->host->pm_flags &= ~MMC_PM_KEEP_POWER;
@@ -384,7 +384,7 @@ oal_int32 oal_sdio_reinit(hcc_bus *pst_bus)
         unsigned long long module_set = SSI_MODULE_MASK_COMM | SSI_MODULE_MASK_SDIO;
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "failed to mmc_power_restore_host ret=%d", ret);
         if (hi11xx_get_os_build_variant() == HI1XX_OS_BUILD_VARIANT_USER) {
-            if (!oal_print_rate_limit(24 * PRINT_RATE_HOUR)) { /* 24小时打印一次 */
+            if (!oal_print_rate_limit(24 * PRINT_RATE_HOUR)) { /* 24???????????? */
                 module_set = 0x0;
             }
         }
@@ -411,7 +411,7 @@ oal_int32 oal_sdio_reinit(hcc_bus *pst_bus)
     if (ret) {
         unsigned long long module_set = SSI_MODULE_MASK_COMM | SSI_MODULE_MASK_SDIO;
         if (hi11xx_get_os_build_variant() == HI1XX_OS_BUILD_VARIANT_USER) {
-            if (!oal_print_rate_limit(PRINT_RATE_HOUR)) { /* 1小时打印一次 */
+            if (!oal_print_rate_limit(PRINT_RATE_HOUR)) { /* 1???????????? */
                 module_set = 0x0;
             }
         }
@@ -586,7 +586,7 @@ OAL_STATIC OAL_INLINE oal_int32 oal_sdio_msg_stat(struct oal_sdio *hi_sdio, oal_
     }
 #ifdef CONFIG_SDIO_D2H_MSG_ACK
     /* read from old register */
-    /* 当使用0x30寄存器时需要下发CMD52读0x2B 才会产生HOST2ARM ACK中断 */
+    /* ??????0x30????????????????CMD52??0x2B ????????HOST2ARM ACK???? */
     (void)oal_sdio_readb(hi_sdio->func, HISDIO_REG_FUNC1_MSG_HIGH_FROM_DEV, &ret);
     if (ret) {
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "[E]sdio readb error![ret=%d]", ret);
@@ -639,7 +639,7 @@ oal_int32 oal_sdio_msg_irq_etc(struct oal_sdio *hi_sdio)
     oal_sdio_release_host(hi_sdio);
     hcc_bus_rx_transfer_unlock(hi_sdio->pst_bus);
 
-    /* 优先处理Panic消息 */
+    /* ????????Panic???? */
     if (test_and_clear_bit(D2H_MSG_DEVICE_PANIC, &msg64)) {
         bit = D2H_MSG_DEVICE_PANIC;
         hi_sdio->pst_bus->msg[bit].count++;
@@ -652,7 +652,7 @@ oal_int32 oal_sdio_msg_irq_etc(struct oal_sdio *hi_sdio)
     }
 
     bit = 0;
-    /* 表示以第一个参数为迭代位下标，遍历第二个参数地址中低15bit中所有置1的位 */
+    /* ????????????????????????????????????????????????????15bit????????1???? */
     for_each_set_bit(bit, (const unsigned long *)&msg64, 15)
     {
         if (OAL_UNLIKELY(bit > 15)) {
@@ -724,7 +724,7 @@ oal_int32 oal_sdio_extend_buf_get(struct oal_sdio *hi_sdio)
             oal_print_hex_dump((oal_void *)hi_sdio->sdio_extend, sizeof(struct hisdio_extend_func),
                                HEX_DUMP_GROUP_SIZE, "extend :");
 
-            /* 此credit更新只在调试时使用 */
+            /* ??credit?????????????????? */
             if (oal_sdio_credit_info_update_etc(hi_sdio)) {
                 if (OAL_LIKELY(hi_sdio->credit_update_cb)) {
                     hi_sdio->credit_update_cb(hi_sdio->pst_bus->bus_ops_data);
@@ -795,7 +795,7 @@ oal_netbuf_stru *oal_sdio_alloc_rx_netbuf_etc(oal_uint32 ul_len)
 {
 #ifdef CONFIG_SDIO_RX_NETBUF_ALLOC_FAILED_DEBUG
     if (rx_alloc_netbuf_debug) {
-        if (prandom_u32() % 256) { /* 获得256以内的一个随机值 */
+        if (prandom_u32() % 256) { /* ????256???????????????? */
             return NULL;
         }
     }
@@ -1110,7 +1110,7 @@ oal_int32 oal_sdio_interrupt_register_etc(struct oal_sdio *hi_sdio)
         }
         oal_sdio_release_host(hi_sdio);
         oal_print_hi11xx_log(HI11XX_LOG_INFO, "sdio interrupt register!");
-        pm_runtime_get_sync(mmc_dev(hi_sdio->func->card->host)); /* 防止sd_clk动态开关 */
+        pm_runtime_get_sync(mmc_dev(hi_sdio->func->card->host)); /* ????sd_clk???????? */
     }
 
     return OAL_SUCC;
@@ -1726,7 +1726,7 @@ OAL_STATIC oal_int32 oal_sdio_probe(struct sdio_func *func, const struct sdio_de
         unsigned long long module_set = SSI_MODULE_MASK_COMM | SSI_MODULE_MASK_SDIO;
         sdio_enum_err_str = "sdio dev init failed";
         if (hi11xx_get_os_build_variant() == HI1XX_OS_BUILD_VARIANT_USER) {
-            if (!oal_print_rate_limit(PRINT_RATE_MINUTE)) { /* 1分钟打印一次 */
+            if (!oal_print_rate_limit(PRINT_RATE_MINUTE)) { /* 1???????????? */
                 module_set = 0x0;
             }
         }
@@ -1890,7 +1890,7 @@ oal_int32 oal_mmc_io_rw_scat_extended_etc(struct oal_sdio *hi_sdio,
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "%s error: sg_len is %d", __FUNCTION__, sg_len);
         return -EINVAL;
     }
-    if (OAL_UNLIKELY(fn > 7)) { /* sdio协议固定的内容 */
+    if (OAL_UNLIKELY(fn > 7)) { /* sdio?????????????? */
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "%s error: fn is %d", __FUNCTION__, fn);
         return -EINVAL;
     }
@@ -2091,7 +2091,7 @@ oal_int32 oal_sdio_transfer_scatt_etc(struct oal_sdio *hi_sdio, oal_int32 rw,
 
     /* sdio scatter list driver ,when letter than 512 bytes bytes mode, other blockmode */
     OAL_WARN_ON((rw_sz >= HISDIO_BLOCK_SIZE) && (rw_sz & (HISDIO_BLOCK_SIZE - 1)));
-    /* 如果不是4字节对齐，则会dump堆栈信息 */
+    /* ????????4??????????????dump???????? */
     OAL_WARN_ON((rw_sz < HISDIO_BLOCK_SIZE) && (rw_sz & (sizeof(oal_uint32) - 1)));
 
     if (OAL_WARN_ON(align_len & 0x3)) {
@@ -2131,7 +2131,7 @@ oal_int32 oal_sdio_transfer_rebuild_sglist(struct oal_sdio *hi_sdio,
 
 #if defined(CONFIG_HISDIO_H2D_SCATT_LIST_ASSEMBLE)
     if (rw == SDIO_WRITE) {
-        /* 发送内存拷贝，合并成一块内存 */
+        /* ???????????????????????????? */
         skb_queue_walk_safe(head, netbuf, tmp)
         {
             if (memcpy_s(hi_sdio->tx_scatt_buff.buff + offset, hi_sdio->tx_scatt_buff.len - offset,
@@ -2145,7 +2145,7 @@ oal_int32 oal_sdio_transfer_rebuild_sglist(struct oal_sdio *hi_sdio,
 
         align_t = HISDIO_ALIGN_4_OR_BLK(offset);
         align_len = align_t - offset;
-        offset = align_t; /* 对齐长度用内存填充 */
+        offset = align_t; /* ?????????????????? */
 
         /* build tx sg list */
         left_size = offset;
@@ -2185,7 +2185,7 @@ oal_int32 oal_sdio_transfer_rebuild_sglist(struct oal_sdio *hi_sdio,
 
         align_t = HISDIO_ALIGN_4_OR_BLK(offset);
         align_len = align_t - offset;
-        offset = align_t; /* 对齐长度用内存填充 */
+        offset = align_t; /* ?????????????????? */
 
         /* build rx sg list */
         left_size = offset;
@@ -2218,7 +2218,7 @@ oal_int32 oal_sdio_transfer_rebuild_sglist(struct oal_sdio *hi_sdio,
 
     skb_queue_walk_safe(head, netbuf, tmp)
     {
-        if (OAL_WARN_ON(!OAL_IS_ALIGNED((uintptr_t)OAL_NETBUF_DATA(netbuf), 4))) { /* 判断是不是4字节对齐 */
+        if (OAL_WARN_ON(!OAL_IS_ALIGNED((uintptr_t)OAL_NETBUF_DATA(netbuf), 4))) { /* ??????????4???????? */
             /* This should never happned, debug */
             oal_netbuf_hex_dump_etc(netbuf);
             return -OAL_EFAUL;
@@ -2252,7 +2252,7 @@ oal_int32 oal_sdio_transfer_restore_sglist(struct oal_sdio *hi_sdio,
     oal_int32 ret;
 
     if (rw == SDIO_READ) {
-        /* 接收内存拷贝，分散成离散内存 */
+        /* ???????????????????????????? */
         skb_queue_walk_safe(head, netbuf, tmp)
         {
             if ((hi_sdio->rx_scatt_buff.len - offset) > OAL_NETBUF_LEN(netbuf)) {
@@ -2406,7 +2406,7 @@ OAL_STATIC oal_int32 oal_sdio_suspend(struct device *dev)
     }
 
     if (hi_sdio->pst_bus != HDEV_TO_HBUS(HBUS_TO_DEV(hi_sdio->pst_bus))) {
-        /* sdio非当前接口 */
+        /* sdio?????????? */
         oal_print_hi11xx_log(HI11XX_LOG_INFO, "sdio is not current bus, return");
         return OAL_SUCC;
     }
@@ -2468,7 +2468,7 @@ OAL_STATIC oal_int32 oal_sdio_resume(struct device *dev)
     }
 
     if (hi_sdio->pst_bus != HDEV_TO_HBUS(HBUS_TO_DEV(hi_sdio->pst_bus))) {
-        /* sdio非当前接口 */
+        /* sdio?????????? */
         oal_print_hi11xx_log(HI11XX_LOG_INFO, "sdio is not current bus, return");
         return OAL_SUCC;
     }
@@ -2570,7 +2570,7 @@ OAL_STATIC oal_int32 oal_sdio_trigger_probe(oal_void)
         unsigned long long module_set = SSI_MODULE_MASK_COMM | SSI_MODULE_MASK_SDIO;
         oal_print_hi11xx_log(HI11XX_LOG_ERR, "sdio enum timeout, reason[%s]", sdio_enum_err_str);
         if (hi11xx_get_os_build_variant() == HI1XX_OS_BUILD_VARIANT_USER) {
-            if (!oal_print_rate_limit(PRINT_RATE_MINUTE)) { /* 1分钟打印一次 */
+            if (!oal_print_rate_limit(PRINT_RATE_MINUTE)) { /* 1???????????? */
                 module_set = 0x0;
             }
         }
@@ -2585,7 +2585,7 @@ OAL_STATIC oal_int32 oal_sdio_trigger_probe(oal_void)
         oal_sdio_claim_host(_hi_sdio_);
         hcc_bus_disable_state(_hi_sdio_->pst_bus, OAL_BUS_STATE_ALL);
 #ifndef HAVE_HISI_NFC
-        /* 等到读取完nfc低电的log数据再拉低GPIO */
+        /* ??????????nfc??????log??????????GPIO */
         hi_wlan_power_set_etc(0);
 #endif
         oal_sdio_release_host(_hi_sdio_);
@@ -3015,17 +3015,17 @@ OAL_STATIC oal_int32 oal_sdio_gpio_flowctrl_irq_etc(hcc_bus *pst_hi_bus, oal_int
         return -OAL_EFAIL;
     }
 
-    /* 获取流控GPIO管脚当前电平 */
+    /* ????????GPIO???????????? */
     l_gpio_val = oal_gpio_get_value(board_info_etc.flowctrl_gpio);
 
     if (1 == l_gpio_val)
     {
-        /* 高电平, 流控开启, 无法发送 */
+        /* ??????, ????????, ???????? */
         hcc_dev_flowctrl_off_etc(pst_hcc);
     }
     else if (0 == l_gpio_val)
     {
-        /* 低电平, 流控关闭, 可以发送 */
+        /* ??????, ????????, ???????? */
         hcc_dev_flowctrl_on_etc(pst_hcc, OAL_FALSE);
     }
     else
@@ -3062,7 +3062,7 @@ OAL_STATIC oal_int32 oal_sdio_gpio_irq(hcc_bus *hi_bus, oal_int32 irq)
     ul_state = hi_bus->pst_pm_callback->pm_state_get();
 
     if (ul_state == 0) {
-        /* 0==HOST_DISALLOW_TO_SLEEP表示不允许休眠 */
+        /* 0==HOST_DISALLOW_TO_SLEEP?????????????? */
         hi_bus->data_int_count++;
 
         oal_print_hi11xx_log(HI11XX_LOG_DBG, "Gpio Rx Data Interrupt.");
@@ -3070,7 +3070,7 @@ OAL_STATIC oal_int32 oal_sdio_gpio_irq(hcc_bus *hi_bus, oal_int32 irq)
         up(&hi_bus->rx_sema);
 
     } else {
-        /* 1==HOST_ALLOW_TO_SLEEP表示当前是休眠，唤醒host */
+        /* 1==HOST_ALLOW_TO_SLEEP????????????????????host */
         if (OAL_WARN_ON(!hi_bus->pst_pm_callback->pm_wakeup_host)) {
             oal_print_hi11xx_log(HI11XX_LOG_DBG, "%s error:hi_bus->pst_pm_callback->pm_wakeup_host is null",
                                  __FUNCTION__);

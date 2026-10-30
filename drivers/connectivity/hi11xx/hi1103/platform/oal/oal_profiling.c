@@ -1,13 +1,13 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include "oal_profiling.h"
 #include "oam_ext_if.h"
 
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_OAL_PROFILING_C
 
-/* 全局变量定义 */
+/* ???????????? */
 #ifdef _PRE_WLAN_PROFLING_SOC
 #if (_PRE_OS_VERSION_RAW == _PRE_OS_VERSION)
 #pragma arm section rwdata = "BTCM", code = "ATCM", zidata = "BTCM", rodata = "ATCM"
@@ -25,17 +25,17 @@ OAL_STATIC SHARE_MEM_B oal_uint32 pkt_ram[OAL_RAM_SPACE_SIZE];
 #endif
 
 #ifdef _PRE_WLAN_PROFLING_MIPS
-/* 保存tx profiling测试的所有数据 */
+/* ????tx profiling?????????????? */
 oal_profiling_tx_statistic_stru mips_tx_statistic;
 EXPORT_SYMBOL(mips_tx_statistic);
-/* 保存rx profiling测试的所有数据 */
+/* ????rx profiling?????????????? */
 oal_profiling_rx_statistic_stru mips_rx_statistic;
 EXPORT_SYMBOL(mips_rx_statistic);
 #endif
 
 oal_thruput_bypass_enum_uint8 thruput_bypass_enable_etc[OAL_THRUPUT_BYPASS_BUTT] = {0};
 
-/* 函数实现*/
+/* ????????*/
 #ifdef _PRE_WLAN_PROFLING_SOC
 #if (_PRE_OS_VERSION_RAW == _PRE_OS_VERSION)
 oal_void oal_profiling_read16_single(oal_uint32 ul_addr_start)
@@ -97,7 +97,7 @@ oal_void oal_profiling_read16_ex(oal_uint32 ul_addr_start)
     OAL_IO_PRINT("Single Addr  : 0x%08x \n\r", ul_addr_start);
     OAL_IO_PRINT("Read Value   : 0x%08x \n\r", us_val);
     OAL_IO_PRINT("Total Cycle  : %d cycles\n\r", ul_cycles);
-    OAL_IO_PRINT("Read Cycle   : %d cycles\n\r", ul_cycles / 32); /* 代表每次读cycle数历经32次读操作 */
+    OAL_IO_PRINT("Read Cycle   : %d cycles\n\r", ul_cycles / 32); /* ??????????cycle??????32???????? */
 }
 
 oal_void oal_profiling_write16_single(oal_uint32 ul_addr_start, oal_uint16 us_val)
@@ -156,7 +156,7 @@ oal_void oal_profiling_write16_ex(oal_uint32 ul_addr_start, oal_uint16 us_val)
 
     OAL_IO_PRINT("Single Addr  : 0x%08x \n\r", ul_addr_start);
     OAL_IO_PRINT("Write Value  : 0x%08x \n\r", us_val);
-    OAL_IO_PRINT("Write Cycle  : %d cycles\n\r", ul_cycles / 32); /* 代表每次读cycle数历经32次写操作 */
+    OAL_IO_PRINT("Write Cycle  : %d cycles\n\r", ul_cycles / 32); /* ??????????cycle??????32???????? */
 }
 
 oal_void oal_profiling_read32_single(oal_uint32 ul_addr_start)
@@ -217,7 +217,7 @@ oal_void oal_profiling_read32_ex(oal_uint32 ul_addr_start)
 
     OAL_IO_PRINT("Addr         : 0x%08x \n\r", ul_addr_start);
     OAL_IO_PRINT("Read Value   : 0x%08x \n\r", ul_val);
-    OAL_IO_PRINT("Read Cycle   : %d cycles\n\r", ul_cycles / 32); /* 代表每次读cycle数历经32次读操作 */
+    OAL_IO_PRINT("Read Cycle   : %d cycles\n\r", ul_cycles / 32); /* ??????????cycle??????32???????? */
 }
 
 oal_void oal_profiling_write32_single(oal_uint32 ul_addr_start, oal_uint32 ul_val)
@@ -276,7 +276,7 @@ oal_void oal_profiling_write32_ex(oal_uint32 ul_addr_start, oal_uint32 ul_val)
 
     OAL_IO_PRINT("Addr        : 0x%08x \n\r", ul_addr_start);
     OAL_IO_PRINT("Write Value : 0x%08x \n\r", ul_val);
-    OAL_IO_PRINT("Write Cycle : %d cycles\n\r", ul_cycles / 32); /* 代表每次读cycle数历经32次写操作 */
+    OAL_IO_PRINT("Write Cycle : %d cycles\n\r", ul_cycles / 32); /* ??????????cycle??????32???????? */
 }
 
 oal_void oal_profiling_read32_many(oal_uint32 ul_addr_start, oal_uint32 ul_addr_end)
@@ -289,11 +289,11 @@ oal_void oal_profiling_read32_many(oal_uint32 ul_addr_start, oal_uint32 ul_addr_
     enable_cycle_counter();
     while (ul_addr <= ul_addr_end) {
         ul_val = OAL_REG_READ32(ul_addr);
-        ul_addr += sizeof(oal_uint32); /* 每次偏移4字节 */
+        ul_addr += sizeof(oal_uint32); /* ????????4???? */
     }
     ul_cycles = get_cycle_count();
     disable_cycle_counter();
-    ul_num = (ul_addr_end - ul_addr_start) / sizeof(oal_uint32) + 1; /* 以4字节为单位算出一共操作了多少地址 */
+    ul_num = (ul_addr_end - ul_addr_start) / sizeof(oal_uint32) + 1; /* ??4???????????????????????????????? */
 
     OAL_IO_PRINT("Start Addr   : 0x%08x \n\r", ul_addr_start);
     OAL_IO_PRINT("End Addr     : 0x%08x \n\r", ul_addr_end);
@@ -311,11 +311,11 @@ oal_void oal_profiling_write32_many(oal_uint32 ul_addr_start, oal_uint32 ul_addr
     enable_cycle_counter();
     while (ul_addr <= ul_addr_end) {
         OAL_REG_WRITE32(ul_addr, ul_val);
-        ul_addr += sizeof(oal_uint32); /* 每次偏移4字节 */
+        ul_addr += sizeof(oal_uint32); /* ????????4???? */
     }
     ul_cycles = get_cycle_count();
     disable_cycle_counter();
-    ul_num = (ul_addr_end - ul_addr_start) / sizeof(oal_uint32) + 1; /* 以4字节为单位算出一共操作了多少地址 */
+    ul_num = (ul_addr_end - ul_addr_start) / sizeof(oal_uint32) + 1; /* ??4???????????????????????????????? */
 
     OAL_IO_PRINT("Start Addr   : 0x%08x \n\r", ul_addr_start);
     OAL_IO_PRINT("End Addr     : 0x%08x \n\r", ul_addr_end);
@@ -464,8 +464,8 @@ oal_void oal_profiling_check_soc(oal_void)
 
 #ifdef _PRE_WLAN_PROFLING_MIPS
 /*
- * 函 数 名  : oal_profiling_enable_cycles
- * 功能描述  : 打开cycles统计功能
+ * ?? ?? ??  : oal_profiling_enable_cycles
+ * ????????  : ????cycles????????
  */
 void oal_profiling_enable_cycles(oal_void)
 {
@@ -477,8 +477,8 @@ void oal_profiling_enable_cycles(oal_void)
 }
 
 /*
- * 函 数 名  : oal_profiling_get_cycles
- * 功能描述  : 获取cycles统计值
+ * ?? ?? ??  : oal_profiling_get_cycles
+ * ????????  : ????cycles??????
  */
 oal_uint32 oal_profiling_get_cycles(oal_void)
 {
@@ -490,8 +490,8 @@ oal_uint32 oal_profiling_get_cycles(oal_void)
 }
 
 /*
- * 函 数 名  : oal_profiling_disable_cycles
- * 功能描述  : 关闭cycles统计功能
+ * ?? ?? ??  : oal_profiling_disable_cycles
+ * ????????  : ????cycles????????
  */
 void oal_profiling_disable_cycles(oal_void)
 {
@@ -503,8 +503,8 @@ void oal_profiling_disable_cycles(oal_void)
 }
 
 /*
- * 函 数 名  : oal_profiling_stop_rx_save
- * 功能描述  : 停止接收方向记录，防止数据被覆盖
+ * ?? ?? ??  : oal_profiling_stop_rx_save
+ * ????????  : ????????????????????????????????
  */
 oal_void oal_profiling_stop_rx_save(oal_void)
 {
@@ -513,8 +513,8 @@ oal_void oal_profiling_stop_rx_save(oal_void)
 EXPORT_SYMBOL(oal_profiling_stop_rx_save);
 
 /*
- * 函 数 名  : oal_profiling_stop_tx_save
- * 功能描述  : 停止发送方向记录，防止数据被覆盖
+ * ?? ?? ??  : oal_profiling_stop_tx_save
+ * ????????  : ????????????????????????????????
  */
 oal_void oal_profiling_stop_tx_save(oal_void)
 {
@@ -523,8 +523,8 @@ oal_void oal_profiling_stop_tx_save(oal_void)
 EXPORT_SYMBOL(oal_profiling_stop_tx_save);
 
 /*
- * 函 数 名  : oal_profiling_mips_tx_init
- * 功能描述  : DMAC的发送流程mips统计初始化
+ * ?? ?? ??  : oal_profiling_mips_tx_init
+ * ????????  : DMAC??????????mips??????????
  */
 oal_uint32 oal_profiling_mips_tx_init(oal_void)
 {
@@ -535,8 +535,8 @@ oal_uint32 oal_profiling_mips_tx_init(oal_void)
 }
 
 /*
- * 函 数 名  : oal_profiling_tx_save_data
- * 功能描述  : 发送流程记录数据
+ * ?? ?? ??  : oal_profiling_tx_save_data
+ * ????????  : ????????????????
  */
 oal_void oal_profiling_tx_save_data(oal_profiling_tx_func_enum_uint8 en_func_index)
 {
@@ -549,8 +549,8 @@ oal_void oal_profiling_tx_save_data(oal_profiling_tx_func_enum_uint8 en_func_ind
 EXPORT_SYMBOL(oal_profiling_tx_save_data);
 
 /*
- * 函 数 名  : oal_profiling_irq_save
- * 功能描述  : 发送流程记录数据
+ * ?? ?? ??  : oal_profiling_irq_save
+ * ????????  : ????????????????
  */
 oal_void oal_profiling_irq_save(oal_void)
 {
@@ -559,8 +559,8 @@ oal_void oal_profiling_irq_save(oal_void)
 EXPORT_SYMBOL(oal_profiling_irq_save);
 
 /*
- * 函 数 名  : oal_profiling_irq_restore
- * 功能描述  : 发送流程记录数据
+ * ?? ?? ??  : oal_profiling_irq_restore
+ * ????????  : ????????????????
  */
 oal_void oal_profiling_irq_restore(oal_void)
 {
@@ -592,8 +592,8 @@ oal_void oal_profiling_tx_dump(oal_uint32 ul_packet_idx,
 EXPORT_SYMBOL(oal_profiling_tx_dump);
 
 /*
- * 函 数 名  : oal_profiling_tx_mips_show
- * 功能描述  : 发送流程显示数据
+ * ?? ?? ??  : oal_profiling_tx_mips_show
+ * ????????  : ????????????????
  */
 oal_void oal_profiling_tx_mips_show(oal_void)
 {
@@ -623,8 +623,8 @@ oal_void oal_profiling_tx_mips_show(oal_void)
 EXPORT_SYMBOL(oal_profiling_tx_mips_show);
 
 /*
- * 函 数 名  : oal_profiling_mips_rx_init
- * 功能描述  : DMAC的接收流程mips统计初始化
+ * ?? ?? ??  : oal_profiling_mips_rx_init
+ * ????????  : DMAC??????????mips??????????
  */
 oal_uint32 oal_profiling_mips_rx_init(oal_void)
 {
@@ -635,8 +635,8 @@ oal_uint32 oal_profiling_mips_rx_init(oal_void)
 }
 
 /*
- * 函 数 名  : oal_profiling_rx_save_data
- * 功能描述  : 接收流程记录数据
+ * ?? ?? ??  : oal_profiling_rx_save_data
+ * ????????  : ????????????????
  */
 oal_void oal_profiling_rx_save_data(oal_profiling_rx_func_enum_uint8 en_func_index)
 {
@@ -649,8 +649,8 @@ oal_void oal_profiling_rx_save_data(oal_profiling_rx_func_enum_uint8 en_func_ind
 EXPORT_SYMBOL(oal_profiling_rx_save_data);
 
 /*
- * 函 数 名  : oal_profiling_rx_mips_show
- * 功能描述  : 接收流程显示数据
+ * ?? ?? ??  : oal_profiling_rx_mips_show
+ * ????????  : ????????????????
  */
 oal_void oal_profiling_rx_mips_show(oal_void)
 {
@@ -664,10 +664,10 @@ oal_void oal_profiling_rx_mips_show(oal_void)
     for (ul_packet_idx = 0; ul_packet_idx < OAL_MIPS_RX_PACKET_MAX_COUNT; ul_packet_idx++) {
         OAM_WARNING_LOG1(0, OAM_SF_ANY, "\r\nRx Time Show: packet number(%d)\r\n", ul_packet_idx);
 
-        /* 接收中断 */
+        /* ???????? */
         OAM_WARNING_LOG0(0, OAM_SF_ANY, "      Current Time        Offset\r\n");
 
-        /* 接收 */
+        /* ???? */
         for (ul_loop = HMAC_PROFILING_FUNC_RX_DATA_ADAPT; ul_loop <= HMAC_PROFILING_FUNC_RX_HMAC_END; ul_loop++) {
             if (ul_loop == HMAC_PROFILING_FUNC_RX_DATA_ADAPT) {
                 ull_cycle_now = mips_rx_statistic.ast_rx_pass_cycles[ul_packet_idx][ul_loop];
@@ -724,7 +724,7 @@ oal_uint32 oal_get_thruput_bypass_enable_etc(oal_thruput_bypass_enum_uint8 uc_by
 oal_void oal_set_thruput_bypass_enable_etc(oal_thruput_bypass_enum_uint8 uc_bypass_type, oal_uint8 uc_value)
 {
     if (uc_bypass_type >= OAL_THRUPUT_BYPASS_BUTT) {
-        /* 打印临时修改成PRINTK形式，后续51的oal和oam整合成一个ko后，放开OAL调用OAM的限制 */
+        /* ??????????????PRINTK??????????51??oal??oam??????????ko????????OAL????OAM?????? */
         OAL_IO_PRINT("oal_get_thruput_bypass_enable_etc::wrong thruput bypass type:%d.\n", uc_bypass_type);
         return;
     }

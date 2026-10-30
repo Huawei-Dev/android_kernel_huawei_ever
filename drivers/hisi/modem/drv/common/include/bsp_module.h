@@ -7,21 +7,21 @@
 #include <sre_buildef.h>
 
 
-/*配置module静态初始化优先级*/
+/*????module????????????????*/
 typedef enum _module_level
 {
 	mod_level_start = 0,
 	mod_level_libc_init,
 	mod_level_mmu,
 	mod_level_dts,
-	mod_level_HardBoot_end, /*SRE_HardBootInit阶段的放此之前*/
+	mod_level_HardBoot_end, /*SRE_HardBootInit??????????????*/
 
 	mod_level_l2cache,
 	mod_level_gic,
 	mod_level_syslog_cb,
 	mod_level_serial,
 	mod_level_aslr,
-	mod_level_HardDrv_end, /*SRE_HardDrvInit 阶段的放此之前*/
+	mod_level_HardDrv_end, /*SRE_HardDrvInit ??????????????*/
  
 	mod_level_malloc,
 	mod_level_console,
@@ -140,7 +140,7 @@ typedef enum _module_level
 	mod_level_sys_pmu,
 	mod_level_mperf,
 	mod_level_dsp_dvs,
-	mod_level_dsp_dfs,                /* dspdfs初始化需要放在dspdvs的后面 */
+	mod_level_dsp_dfs,                /* dspdfs??????????????dspdvs?????? */
 	mod_level_dload,
 	mod_level_rfic_load,
 	mod_level_fault_inflood,
@@ -167,12 +167,12 @@ typedef enum _module_level
 	mod_level_rtc,
 	mod_level_trng_seed_check,
 	mod_level_slt,
-	mod_level_App_end/*SRE_AppInit阶段的放此之前*/
+	mod_level_App_end/*SRE_AppInit??????????????*/
 } module_level;
 
  typedef int (*modcall_t)(void);
 
-/*module 维测信息*/
+/*module ????????*/
 struct module_debug{
 	int insmod_errno;
 	int rmmod_errno;
@@ -190,7 +190,7 @@ struct module
 	struct module_debug debug_info;
 };
 
-/*module初始化注册接口*/
+/*module??????????????*/
 #define __init           __attribute__((section(".init.text")))
 #define __exit          __attribute__((section(".exit.text")))
 #define __used	    __attribute__((__used__))
@@ -200,18 +200,18 @@ struct module
 		= { name,  initcall, exitcall, initlevel, {0}}
 
 /**
- * @brief module初始化入口。
+ * @brief module????????????
  *
- * @par 描述:
- * 入参为不同初始化阶段的优先级水线范围。
+ * @par ????:
+ * ??????????????????????????????????????
  *
  * @attention
- * 只在系统启动阶段调用
+ * ????????????????????
  * *
  * @retval
- *无
- * @par 依赖:
- *无
+ *??
+ * @par ????:
+ *??
 */
 void bsp_module_init(module_level begin, module_level end);
 

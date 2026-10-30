@@ -3,7 +3,7 @@
 #ifndef __OAL_LINUX_THREAD_H__
 #define __OAL_LINUX_THREAD_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <asm/atomic.h>
 #include <linux/spinlock.h>
 #include <linux/interrupt.h>
@@ -15,11 +15,11 @@
 #include <linux/sched.h>
 #include <linux/kthread.h>
 
-/* STRUCT定义 */
+/* STRUCT???? */
 typedef struct task_struct oal_task_stru;
 
 
-/* 宏定义 */
+/* ?????? */
 #define oal_kthread_create      kthread_create
 #define oal_kthread_bind        kthread_bind
 #define oal_kthread_stop        kthread_stop

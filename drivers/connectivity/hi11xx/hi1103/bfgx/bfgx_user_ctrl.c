@@ -1,6 +1,6 @@
 
 
-/* 头文件包含 */
+/* ?????????? */
 #include <linux/platform_device.h>
 #include <linux/gpio.h>
 #include "plat_debug.h"
@@ -22,7 +22,7 @@
 #include "wireless_patch.h"
 #endif
 
-/* 全局变量定义 */
+/* ???????????? */
 struct kobject *sysfs_hi110x_bfgx_etc = NULL;
 struct kobject *sysfs_hisi_pmdbg_etc = NULL;
 
@@ -87,7 +87,7 @@ STATIC ssize_t store_wifi_pmdbg(struct kobject *kobj, struct kobj_attribute *att
         return -FAILURE;
     }
 
-    /* case x => echo x->测试节点用 */
+    /* case x => echo x->?????????? */
     switch (input) {
         case 1:
             wlan_pm_dump_host_info_etc();
@@ -146,7 +146,7 @@ STATIC ssize_t store_bfgx_pmdbg(struct kobject *kobj, struct kobj_attribute *att
         return -FAILURE;
     }
 
-    cmd = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+    cmd = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
     PS_PRINT_INFO("cmd:%d\n", cmd);
 
     pm_data = pm_get_drvdata_etc();
@@ -167,7 +167,7 @@ STATIC ssize_t store_bfgx_pmdbg(struct kobject *kobj, struct kobj_attribute *att
         return -FAILURE;
     }
 
-    /* case x => echo x->测试节点用 */
+    /* case x => echo x->?????????? */
     switch (cmd) {
         case 1: /* disable plat lowpower function */
             pm_data->bfgx_lowpower_enable = BFGX_PM_ENABLE;
@@ -515,7 +515,7 @@ STATIC ssize_t gnss_lowpower_state_store(struct kobject *kobj, struct kobj_attri
         return -FAILURE;
     }
 
-    flag = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+    flag = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
     PS_PRINT_INFO("flag = %d!\n", flag);
 
     /* gnss write the flag to request sleep */
@@ -585,7 +585,7 @@ STATIC ssize_t store_loglevel(struct kobject *kobj, struct kobj_attribute *attr,
         return count;
     }
 
-    loglevel = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+    loglevel = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
     if (loglevel < PLAT_LOG_ALERT) {
         plat_loglevel_etc = PLAT_LOG_ALERT;
     } else if (loglevel > PLAT_LOG_DEBUG) {
@@ -653,7 +653,7 @@ STATIC ssize_t store_ir_mode(struct kobject *kobj, struct kobj_attribute *attr, 
     }
 
     if (pm_data->board->irled_power_type == IR_GPIO_CTRL) {
-        ir_ctrl_level = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+        ir_ctrl_level = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
         if (ir_ctrl_level == GPIO_LOWLEVEL) {
             gpio_direction_output(pm_data->board->bfgx_ir_ctrl_gpio, GPIO_LOWLEVEL);
         } else if (ir_ctrl_level == GPIO_HIGHLEVEL) {
@@ -668,7 +668,7 @@ STATIC ssize_t store_ir_mode(struct kobject *kobj, struct kobj_attribute *attr, 
             return -FAILURE;
         }
 
-        ir_ctrl_level = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+        ir_ctrl_level = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
         if (ir_ctrl_level == GPIO_LOWLEVEL) {
             ret = regulator_disable(pm_data->board->bfgn_ir_ctrl_ldo);
             if (ret) {
@@ -727,10 +727,10 @@ STATIC ssize_t bfgx_wkup_host_count_show(struct kobject *kobj, struct kobj_attri
 }
 
 /*
- * 函 数 名  : get_bin_file_path
- * 功能描述  : 获取config文件中解析出来的device bin文件的路径
- * 输出参数  : int32 *bin_file 文件个数
- * 返 回 值  : int8 ** 返回指针数组
+ * ?? ?? ??  : get_bin_file_path
+ * ????????  : ????config????????????????device bin??????????
+ * ????????  : int32 *bin_file ????????
+ * ?? ?? ??  : int8 ** ????????????
  */
 STATIC int8 **get_bin_file_path(int32 *bin_file_num)
 {
@@ -744,21 +744,21 @@ STATIC int8 **get_bin_file_path(int32 *bin_file_num)
         return NULL;
     }
     *bin_file_num = 0;
-    /* 找到全局变量中储存的文件的个数 */
+    /* ?????????????????????????????? */
     for (loop = 0; loop < cfg_info_etc.al_count[BFGX_AND_WIFI_CFG]; loop++) {
         if (cfg_info_etc.apst_cmd[BFGX_AND_WIFI_CFG][loop].cmd_type == FILE_TYPE_CMD) {
             (*bin_file_num)++;
         }
     }
-    /* 为存放bin文件路径的指针数组申请空间 */
+    /* ??????bin?????????????????????????? */
     path = (int8 **)OS_KMALLOC_GFP((*bin_file_num) * OAL_SIZEOF(int8 *));
     if (unlikely(path == NULL)) {
         PS_PRINT_ERR("malloc path space fail!\n");
         return NULL;
     }
-    /* 保证没有使用的数组元素全都指向NULL,防止错误释放 */
+    /* ??????????????????????????????NULL,???????????? */
     memset_s((void *)path, (*bin_file_num) * OAL_SIZEOF(int8 *), 0, (*bin_file_num) * OAL_SIZEOF(int8 *));
-    /* 将bin文件的路径全部拷贝到一个指针数组中 */
+    /* ??bin?????????????????????????????????? */
     for (loop = 0; loop < cfg_info_etc.al_count[BFGX_AND_WIFI_CFG]; loop++) {
         if (cfg_info_etc.apst_cmd[BFGX_AND_WIFI_CFG][loop].cmd_type == FILE_TYPE_CMD && index < *bin_file_num) {
             begin = OS_STR_CHR(cfg_info_etc.apst_cmd[BFGX_AND_WIFI_CFG][loop].cmd_para, '/');
@@ -783,8 +783,8 @@ STATIC int8 **get_bin_file_path(int32 *bin_file_num)
 }
 
 /*
- * 函 数 名  : dev_version_show
- * 功能描述  : 显示device软件版本信息
+ * ?? ?? ??  : dev_version_show
+ * ????????  : ????device????????????
  */
 STATIC ssize_t dev_version_show(struct kobject *kobj, struct kobj_attribute *attr, int8 *buf)
 {
@@ -805,27 +805,27 @@ STATIC ssize_t dev_version_show(struct kobject *kobj, struct kobj_attribute *att
         return -FAILURE;
     }
 
-    /* 非1103系统暂时不支持device软件版本号 */
+    /* ??1103??????????????device?????????? */
     if (hi110x_board_info->chip_nr == BOARD_VERSION_HI1102) {
         return snprintf_s(buf, PAGE_SIZE, PAGE_SIZE - 1, "%s.\n%s.\n"
                           "NOTE:\n"
                           "     device software version only support on hi1103 now!!!\n",
                           hi110x_board_info->chip_type, param_version_etc.param_version);
     }
-    /* 检查device是否打开过，cfg配置文件是否解析过, 否则全局变量里没有数据, 提示用户加载一下frimware */
+    /* ????device????????????cfg??????????????????, ??????????????????????, ????????????????frimware */
     if (cfg_info_etc.al_count[BFGX_AND_WIFI_CFG] == 0) {
         return snprintf_s(buf, PAGE_SIZE, PAGE_SIZE - 1, "%s.\n%s.\n"
                           "NOTE:\n"
                           "You need open bt or wifi once to download frimware to get device bin file path to parse!\n",
                           hi110x_board_info->chip_type, param_version_etc.param_version);
     }
-    /* 从全局变量中获取bin文件的路径返回指向bin文件绝对路径的指针数组 */
+    /* ????????????????bin??????????????????bin?????????????????????? */
     pca_bin_file_path = get_bin_file_path(&bin_file_num);
     if (unlikely(pca_bin_file_path == NULL)) {
         PS_PRINT_ERR("get bin file path from cfg_info_etc fail\n");
         return -FAILURE;
     }
-    /* 遍历找到的所有的bin文件查找device软件版本号 */
+    /* ????????????????bin????????device?????????? */
     for (loop = 0; loop < bin_file_num; loop++) {
         dev_version_bfgx = get_str_from_file_etc(pca_bin_file_path[loop], DEV_SW_STR_BFGX);
         if (dev_version_bfgx != NULL) {
@@ -842,7 +842,7 @@ STATIC ssize_t dev_version_show(struct kobject *kobj, struct kobj_attribute *att
                      "%s.\n%s.\nBFGX DEVICE VERSION:%s.\nWIFI DEVICE VERSION:%s.\n",
                      hi110x_board_info->chip_type, param_version_etc.param_version,
                      dev_version_bfgx, dev_version_wifi);
-    /* 释放申请的所有内存空间 */
+    /* ?????????????????????? */
     for (loop = 0; loop < bin_file_num; loop++) {
         USERCTL_KFREE(pca_bin_file_path[loop]);
     }
@@ -944,7 +944,7 @@ STATIC int32 gnss_sync_convert_mode_modem2(int32 rat_mode)
 }
 
 /*
- * Driver与Host接口定义为以下几个参数，每个参数之间用‘,’分割
+ * Driver??Host????????????????????????????????????????,??????
  * "modem_id,rat_mode"
  */
 STATIC int32 gnss_sync_convert_mode(const int8 *rcv_data, int32 *set_mode, uint32 version)
@@ -979,7 +979,7 @@ STATIC int32 gnss_sync_convert_mode(const int8 *rcv_data, int32 *set_mode, uint3
         return -FAILURE;
     }
 
-    /* 根据输入的值判断 */
+    /* ???????????????? */
     switch (modem_id) {
         case 0:
             *set_mode = gnss_sync_convert_mode_modem0(rat_mode, version);
@@ -1235,9 +1235,9 @@ STATIC ssize_t store_exception_dbg(struct kobject *kobj, struct kobj_attribute *
         return 0;
     }
 
-    cmd = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+    cmd = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
     PS_PRINT_INFO("[dfr_test]cmd:%d\n", cmd);
-    /* case x => echo x->测试节点用 */
+    /* case x => echo x->?????????? */
     switch (cmd) {
         case 1:
             PS_PRINT_INFO("[dfr_test]clear dfr info\n");
@@ -1252,7 +1252,7 @@ STATIC ssize_t store_exception_dbg(struct kobject *kobj, struct kobj_attribute *
                 return ret;
             }
             pst_exception_data->debug_beat_flag = 0;
-            /* 等待dfr完成，等待进入dfr流程，防止睡眠 */
+            /* ????dfr??????????????dfr?????????????? */
             while (atomic_read(&pst_exception_data->is_reseting_device) == PLAT_EXCEPTION_RESET_IDLE) {
                 ;
             };
@@ -1361,7 +1361,7 @@ STATIC ssize_t store_uart_rx_dump(struct kobject *kobj, struct kobj_attribute *a
         return -FAILURE;
     }
 
-    uart_rx_dump_etc = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+    uart_rx_dump_etc = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
     PS_PRINT_INFO("uart_rx_dump_etc aft %d\n", uart_rx_dump_etc);
     return count;
 }
@@ -1421,8 +1421,8 @@ STATIC ssize_t store_dev_test(struct kobject *kobj, struct kobj_attribute *attr,
         return -EINVAL;
     }
 
-    cmd = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
-    /* case x => echo x->测试节点用 */
+    cmd = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
+    /* case x => echo x->?????????? */
     switch (cmd) {
         case 1:
             ret = prepare_to_visit_node_etc(ps_core_d);
@@ -1564,8 +1564,8 @@ STATIC ssize_t store_octty_test(struct kobject *kobj, struct kobj_attribute *att
         return -FAILURE;
     }
 
-    cmd = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
-    /* case x => echo x->测试节点用 */
+    cmd = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
+    /* case x => echo x->?????????? */
     switch (cmd) {
         case 1:
             result = release_tty_drv_etc(ps_core_d->pm_data);  // close tty
@@ -1642,8 +1642,8 @@ STATIC ssize_t store_wifi_mem_dump(struct kobject *kobj, struct kobj_attribute *
         return ret;
     }
 
-    cmd = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
-    /* case x => echo x->测试节点用 */
+    cmd = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
+    /* case x => echo x->?????????? */
     switch (cmd) {
         case 1:
             PS_PRINT_INFO("wifi mem dump cmd %d, halt wcpu\n", cmd);
@@ -1676,8 +1676,8 @@ STATIC ssize_t store_wifi_mem_dump(struct kobject *kobj, struct kobj_attribute *
 }
 
 /*
- * 函 数 名  : show_bfgx_dump
- * 功能描述  : 显示SDIO上报BFGX的reg
+ * ?? ?? ??  : show_bfgx_dump
+ * ????????  : ????SDIO????BFGX??reg
  */
 STATIC ssize_t show_bfgx_dump(struct kobject *kobj, struct kobj_attribute *attr, int8 *buf)
 {
@@ -1695,8 +1695,8 @@ STATIC ssize_t show_bfgx_dump(struct kobject *kobj, struct kobj_attribute *attr,
                       " 4    equal cmd 1+2+3         \n");
 }
 /*
- * 函 数 名  : store_bfgx_reg_and_reg_dump
- * 功能描述  : SDIO上报BFGX的reg
+ * ?? ?? ??  : store_bfgx_reg_and_reg_dump
+ * ????????  : SDIO????BFGX??reg
  */
 STATIC ssize_t store_bfgx_reg_and_reg_dump(struct kobject *kobj, struct kobj_attribute *attr,
                                            const char *buf, size_t count)
@@ -1731,8 +1731,8 @@ STATIC ssize_t store_bfgx_reg_and_reg_dump(struct kobject *kobj, struct kobj_att
         return ret;
     }
 
-    cmd = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
-    /* case x => echo x->测试节点用 */
+    cmd = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
+    /* case x => echo x->?????????? */
     switch (cmd) {
         case 1:
             PS_PRINT_INFO("bfgx mem dump cmd %d,sdio read bcpu pub reg\n", cmd);
@@ -1902,7 +1902,7 @@ int32 uart_download_firmware_test(uint8 *baud, uint32 file_len)
     tty_recv_etc = ps_recv_patch;
     PS_PRINT_INFO("#@open uart succ");
 
-    /* 初始化回调函数变量 */
+    /* ?????????????????? */
     l_ret = patch_init(ENUM_INFO_UART);
     if (l_ret) {
         PS_PRINT_ERR("patch modem init failed, ret:%d!\n", l_ret);
@@ -2002,7 +2002,7 @@ STATIC ssize_t store_bfgx_uart_download(struct kobject *kobj, struct kobj_attrib
     };
     max_index = i < BFGX_UART_TEST_CMD_LEN ? i : (BFGX_UART_TEST_CMD_LEN - 1);
     buf_data[max_index] = '\0';
-    file_len = simple_strtol(buf_data, NULL, 0); /* 将字符串转换成10进制数，传0是默认10进制 */
+    file_len = simple_strtol(buf_data, NULL, 0); /* ??????????????10??????????0??????10???? */
 
     PS_PRINT_INFO("baud:[%s],file_len[%d]", baud, file_len);
     uart_download_firmware_test(baud, file_len);
@@ -2100,7 +2100,7 @@ STATIC ssize_t store_wifi_download(struct kobject *kobj, struct kobj_attribute *
     };
     max_index = i < WIFI_DOWNLOAD_TEST_CMD_LEN ? i : (WIFI_DOWNLOAD_TEST_CMD_LEN - 1);
     buf_data[max_index] = '\0';
-    file_len = simple_strtol(buf_data, NULL, 0); /* 将字符串转换成10进制数，传0是默认10进制 */
+    file_len = simple_strtol(buf_data, NULL, 0); /* ??????????????10??????????0??????10???? */
     PS_PRINT_INFO("#@get file len:%d prepare succ", file_len);
 
     // do download test and set flag
@@ -2168,9 +2168,9 @@ STATIC ssize_t store_ssi_test(struct kobject *kobj, struct kobj_attribute *attr,
         return -EINVAL;
     }
 
-    cmd = simple_strtol(buf, NULL, 10); /* 将字符串转换成10进制数 */
+    cmd = simple_strtol(buf, NULL, 10); /* ??????????????10?????? */
     memset_s(&ssi_test_st, sizeof(ssi_test_st), 0, sizeof(ssi_test_st));
-    /* case x => echo x->测试节点用 */
+    /* case x => echo x->?????????? */
     switch (cmd) {
         case 1:
             PS_PRINT_INFO("ssi download test cmd %d\n", cmd);
@@ -2222,7 +2222,7 @@ STATIC ssize_t store_ssi_test(struct kobject *kobj, struct kobj_attribute *attr,
             max_index = i < SSI_TEST_CMD_MAX_LEN ? i : (SSI_TEST_CMD_MAX_LEN - 1);
             s_addr[max_index] = '\0';
             i = 0;
-            dsc_addr = simple_strtol(s_addr, NULL, 0); /* 将字符串转换成10进制数，传0是默认10进制 */
+            dsc_addr = simple_strtol(s_addr, NULL, 0); /* ??????????????10??????????0??????10???? */
             switch (buf[0]) {
                 case 'r':
                     PS_PRINT_INFO("ssi read: 0x%x=0x%x\n", dsc_addr, ssi_single_read(dsc_addr));
@@ -2247,7 +2247,7 @@ STATIC ssize_t store_ssi_test(struct kobject *kobj, struct kobj_attribute *attr,
                     };
                     max_index = i < SSI_TEST_CMD_MAX_LEN ? i : (SSI_TEST_CMD_MAX_LEN - 1);
                     s_data[max_index] = '\0';
-                    set_data = simple_strtol(s_data, NULL, 0); /* 将字符串转换成10进制数，传0是默认10进制 */
+                    set_data = simple_strtol(s_data, NULL, 0); /* ??????????????10??????????0??????10???? */
                     PS_PRINT_INFO("ssi_write s_addr:0x%x,s_data:0x%x\n", dsc_addr, set_data);
                     if (ssi_single_write(dsc_addr, set_data) != 0) {
                         PS_PRINT_ERR("ssi write fail s_addr:0x%x s_data:0x%x\n", dsc_addr, set_data);

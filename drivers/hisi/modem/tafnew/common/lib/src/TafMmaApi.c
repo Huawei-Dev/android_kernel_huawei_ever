@@ -48,7 +48,7 @@
 
 
 /*****************************************************************************
-   1 头文件包含
+   1 ??????????
 *****************************************************************************/
 #include "vos.h"
 #include "Taf_Tafm_Remote.h"
@@ -66,7 +66,7 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 
 #define    THIS_FILE_ID PS_FILE_ID_TAF_MMA_API_C
@@ -78,7 +78,7 @@
 #endif
 
 /*****************************************************************************
-   2 全局变量定义
+   2 ????????????
 *****************************************************************************/
 #if (OSA_CPU_ACPU == VOS_OSA_CPU)
     extern VOS_UINT32 AT_GetDestPid(
@@ -88,7 +88,7 @@
 #endif
 
 /*****************************************************************************
-   3 函数实现
+   3 ????????
 *****************************************************************************/
 
 
@@ -138,18 +138,18 @@ TAF_UINT32 Taf_PhonePlmnList (
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstPlmnListPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_DETACH_REQ_STRU */
+    /* ??????????TAF_MMA_DETACH_REQ_STRU */
     pstMsg = (TAF_MMA_PLMN_LIST_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_PLMN_LIST_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -160,8 +160,8 @@ TAF_UINT32 Taf_PhonePlmnList (
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_PLMN_LIST_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_PLMN_LIST_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_PLMN_LIST_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_PLMN_LIST_REQ;
@@ -170,7 +170,7 @@ TAF_UINT32 Taf_PhonePlmnList (
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stPlmnListPara), sizeof(pstMsg->stPlmnListPara), pstPlmnListPara, sizeof(TAF_MMA_PLMN_LIST_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -194,12 +194,12 @@ VOS_UINT32 TAF_MMA_AbortPlmnListReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_PLMN_LIST_ABORT_REQ_STRU */
+    /* ??????????TAF_MMA_PLMN_LIST_ABORT_REQ_STRU */
     pstMsg = (TAF_MMA_PLMN_LIST_ABORT_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_PLMN_LIST_ABORT_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -210,14 +210,14 @@ VOS_UINT32 TAF_MMA_AbortPlmnListReq(
                 0x00,
                 sizeof(TAF_MMA_PLMN_LIST_ABORT_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_PLMN_LIST_ABORT_REQ;
     pstMsg->stCtrl.ulModuleId           = ulModuleId;
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -237,12 +237,12 @@ VOS_UINT32 TAF_MMA_QryLocInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MMA_LOCINFO_QRY_REQ */
+    /* ??????????ID_TAF_MMA_LOCINFO_QRY_REQ */
     pstMsg = (TAF_MMA_LOCATION_INFO_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                                    ulSenderPid,
                                                    sizeof(TAF_MMA_LOCATION_INFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -253,14 +253,14 @@ VOS_UINT32 TAF_MMA_QryLocInfoReq(
                 0x00,
                 sizeof(TAF_MMA_LOCATION_INFO_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_LOCATION_INFO_QRY_REQ;
     pstMsg->stCtrl.ulModuleId           = ulModuleId;
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -279,12 +279,12 @@ VOS_UINT32 TAF_MMA_QryCipherReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MMA_LOCINFO_QRY_REQ */
+    /* ??????????ID_TAF_MMA_LOCINFO_QRY_REQ */
     pstMsg = (TAF_MMA_CIPHER_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_CIPHER_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -295,14 +295,14 @@ VOS_UINT32 TAF_MMA_QryCipherReq(
                 0x00,
                 sizeof(TAF_MMA_CIPHER_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CIPHER_QRY_REQ;
     pstMsg->stCtrl.ulModuleId           = ulModuleId;
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -322,12 +322,12 @@ VOS_UINT32 TAF_MMA_SetPrefPlmnTypeReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_PREF_PLMN_TYPE_SET_REQ_STRU */
+    /* ??????????TAF_MMA_PREF_PLMN_TYPE_SET_REQ_STRU */
     pstMsg = (TAF_MMA_PREF_PLMN_TYPE_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                                     ulSenderPid,
                                                     sizeof(TAF_MMA_PREF_PLMN_TYPE_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -338,7 +338,7 @@ VOS_UINT32 TAF_MMA_SetPrefPlmnTypeReq(
                 0x00,
                 sizeof(TAF_MMA_PREF_PLMN_TYPE_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_PREF_PLMN_TYPE_SET_REQ;
@@ -346,7 +346,7 @@ VOS_UINT32 TAF_MMA_SetPrefPlmnTypeReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
     pstMsg->enPrefPlmnType              = *penPrefPlmnType;
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -366,12 +366,12 @@ VOS_UINT32 TAF_MMA_MtPowerDownReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_MT_POWER_DOWN_REQ_STRU */
+    /* ??????????TAF_MMA_MT_POWER_DOWN_REQ_STRU */
     pstMsg = (TAF_MMA_MT_POWER_DOWN_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_MT_POWER_DOWN_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -382,14 +382,14 @@ VOS_UINT32 TAF_MMA_MtPowerDownReq(
                 0x00,
                 sizeof(TAF_MMA_MT_POWER_DOWN_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_MT_POWER_DOWN_REQ;
     pstMsg->stCtrl.ulModuleId           = ulModuleId;
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -412,12 +412,12 @@ VOS_UINT32 TAF_MMA_SetQuickStartReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_QUICKSTART_SET_REQ_STRU */
+    /* ??????????TAF_MMA_QUICKSTART_SET_REQ_STRU */
     pstMsg = (TAF_MMA_QUICKSTART_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                               ulSenderPid,
                                               sizeof(TAF_MMA_QUICKSTART_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -428,7 +428,7 @@ VOS_UINT32 TAF_MMA_SetQuickStartReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_QUICKSTART_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_QUICKSTART_SET_REQ;
@@ -437,7 +437,7 @@ VOS_UINT32 TAF_MMA_SetQuickStartReq(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     pstMsg->ulQuickStartMode            = ulSetValue;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -457,12 +457,12 @@ VOS_UINT32 TAF_MMA_QryQuickStartReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_QUICKSTART_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_QUICKSTART_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_QUICKSTART_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_QUICKSTART_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -473,7 +473,7 @@ VOS_UINT32 TAF_MMA_QryQuickStartReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_QUICKSTART_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_QUICKSTART_QRY_REQ;
@@ -481,7 +481,7 @@ VOS_UINT32 TAF_MMA_QryQuickStartReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -489,7 +489,7 @@ VOS_UINT32 TAF_MMA_QryQuickStartReq(
 }
 
 
-/* 函数Taf_UsimRestrictedAccessCommand无调用点，清理 */
+/* ????Taf_UsimRestrictedAccessCommand?????????????? */
 
 
 
@@ -506,12 +506,12 @@ VOS_UINT32 TAF_MMA_QrySyscfgReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_SYSCFG_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_SYSCFG_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_SYSCFG_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_SYSCFG_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
        return VOS_FALSE;
@@ -522,14 +522,14 @@ VOS_UINT32 TAF_MMA_QrySyscfgReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_SYSCFG_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_SYSCFG_QRY_REQ;
     pstMsg->stCtrl.ulModuleId           = ulModuleId;
     pstMsg->stCtrl.usClientId           = usClientId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -663,18 +663,18 @@ VOS_UINT32 TAF_MMA_PhoneModeSetReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstPhoneModePara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_PHONE_MODE_SET_REQ_STRU */
+    /* ??????????TAF_MMA_PHONE_MODE_SET_REQ_STRU */
     pstMsg = (TAF_MMA_PHONE_MODE_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_PHONE_MODE_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -685,7 +685,7 @@ VOS_UINT32 TAF_MMA_PhoneModeSetReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_PHONE_MODE_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_PHONE_MODE_SET_REQ;
@@ -694,7 +694,7 @@ VOS_UINT32 TAF_MMA_PhoneModeSetReq(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stPhoneModePara), sizeof(pstMsg->stPhoneModePara), pstPhoneModePara, sizeof(TAF_MMA_PHONE_MODE_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -718,12 +718,12 @@ VOS_UINT32 TAF_MMA_QryPhoneModeReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_PHONE_MODE_SET_REQ_STRU */
+    /* ??????????TAF_MMA_PHONE_MODE_SET_REQ_STRU */
     pstMsg = (TAF_MMA_PHONE_MODE_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_PHONE_MODE_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -734,7 +734,7 @@ VOS_UINT32 TAF_MMA_QryPhoneModeReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_PHONE_MODE_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_PHONE_MODE_QRY_REQ;
@@ -742,7 +742,7 @@ VOS_UINT32 TAF_MMA_QryPhoneModeReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -764,18 +764,18 @@ VOS_UINT32 TAF_MMA_CsgListSearchReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstPlmnListPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_CSG_LIST_SEARCH_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSenderPid,
                                              sizeof(TAF_MMA_CSG_LIST_SEARCH_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -786,7 +786,7 @@ VOS_UINT32 TAF_MMA_CsgListSearchReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CSG_LIST_SEARCH_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->enMsgName         = ID_TAF_MMA_CSG_LIST_SEARCH_REQ;
@@ -796,7 +796,7 @@ VOS_UINT32 TAF_MMA_CsgListSearchReq(
 
     TAF_MEM_CPY_S(&pstMsg->stPlmnListPara, sizeof(pstMsg->stPlmnListPara), pstPlmnListPara, sizeof(TAF_MMA_PLMN_LIST_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -819,12 +819,12 @@ VOS_UINT32 TAF_MMA_AbortCsgListSearchReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_CSG_LIST_ABORT_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_CSG_LIST_ABORT_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -835,7 +835,7 @@ VOS_UINT32 TAF_MMA_AbortCsgListSearchReq(
                 0x00,
                 sizeof(TAF_MMA_CSG_LIST_ABORT_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->enMsgName                   = ID_TAF_MMA_CSG_LIST_ABORT_REQ;
@@ -843,7 +843,7 @@ VOS_UINT32 TAF_MMA_AbortCsgListSearchReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -867,18 +867,18 @@ VOS_UINT32 TAF_MMA_SetCsgIdSearch(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstUserSelCsgId)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_CSG_SPEC_SEARCH_REQ_STRU */
+    /* ??????????TAF_MMA_CSG_SPEC_SEARCH_REQ_STRU */
     pstMsg = (TAF_MMA_CSG_SPEC_SEARCH_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSenderPid,
                                              sizeof(TAF_MMA_CSG_SPEC_SEARCH_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -889,7 +889,7 @@ VOS_UINT32 TAF_MMA_SetCsgIdSearch(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CSG_SPEC_SEARCH_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 根据输入参数填充TAF_MMA_CSG_SPEC_SEARCH_REQ_STRU, 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_MMA_CSG_SPEC_SEARCH_REQ_STRU, ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_CSG_SPEC_SEARCH_REQ;
@@ -899,7 +899,7 @@ VOS_UINT32 TAF_MMA_SetCsgIdSearch(
 
     TAF_MEM_CPY_S(&pstMsg->stCsgSpecSearchInfo, sizeof(pstMsg->stCsgSpecSearchInfo), pstUserSelCsgId, sizeof(pstMsg->stCsgSpecSearchInfo));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -922,12 +922,12 @@ VOS_UINT32 TAF_MMA_QryCampCsgIdInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_QRY_CAMP_CSG_ID_INFO_REQ_STRU */
+    /* ??????????TAF_MMA_QRY_CAMP_CSG_ID_INFO_REQ_STRU */
     pstMsg = (TAF_MMA_QRY_CAMP_CSG_ID_INFO_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         ulSenderPid,
                                         sizeof(TAF_MMA_QRY_CAMP_CSG_ID_INFO_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -938,7 +938,7 @@ VOS_UINT32 TAF_MMA_QryCampCsgIdInfoReq(
                0x00,
                (VOS_SIZE_T)(sizeof(TAF_MMA_QRY_CAMP_CSG_ID_INFO_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_QRY_CAMP_CSG_ID_INFO_REQ;
@@ -946,7 +946,7 @@ VOS_UINT32 TAF_MMA_QryCampCsgIdInfoReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -969,18 +969,18 @@ VOS_UINT32 TAF_MMA_SetSysCfgReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstSysCfgPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_SYS_CFG_REQ_STRU */
+    /* ??????????TAF_MMA_SYS_CFG_REQ_STRU */
     pstMsg = (TAF_MMA_SYS_CFG_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSenderPid,
                                              sizeof(TAF_MMA_SYS_CFG_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -991,8 +991,8 @@ VOS_UINT32 TAF_MMA_SetSysCfgReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_SYS_CFG_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_SYS_CFG_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_MMA_SYS_CFG_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_SYS_CFG_SET_REQ;
@@ -1002,7 +1002,7 @@ VOS_UINT32 TAF_MMA_SetSysCfgReq(
 
     TAF_MEM_CPY_S(&(pstMsg->stSysCfgPara), sizeof(pstMsg->stSysCfgPara), pstSysCfgPara, sizeof(TAF_MMA_SYS_CFG_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1025,12 +1025,12 @@ VOS_UINT32 TAF_MMA_QryEonsUcs2Req(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_EONS_UCS2_REQ_STRU */
+    /* ??????????TAF_MMA_EONS_UCS2_REQ_STRU */
     pstMsg = (TAF_MMA_EONS_UCS2_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         ulSenderPid,
                                         sizeof(TAF_MMA_EONS_UCS2_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1041,7 +1041,7 @@ VOS_UINT32 TAF_MMA_QryEonsUcs2Req(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_EONS_UCS2_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_EONS_UCS2_REQ_STRU */
+    /* ????????????????TAF_MMA_EONS_UCS2_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MSG_MMA_EONS_UCS2_REQ;
@@ -1049,7 +1049,7 @@ VOS_UINT32 TAF_MMA_QryEonsUcs2Req(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1073,18 +1073,18 @@ VOS_UINT32 TAF_MMA_AcqBestNetworkReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstAcqPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_ACQ_REQ_STRU */
+    /* ??????????TAF_MMA_ACQ_REQ_STRU */
     pstMsg = (TAF_MMA_ACQ_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSenderPid,
                                              sizeof(TAF_MMA_ACQ_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1095,7 +1095,7 @@ VOS_UINT32 TAF_MMA_AcqBestNetworkReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_ACQ_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_ACQ_BEST_NETWORK_REQ;
@@ -1104,7 +1104,7 @@ VOS_UINT32 TAF_MMA_AcqBestNetworkReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stAcqPara), sizeof(pstMsg->stAcqPara), pstAcqPara, sizeof(TAF_MMA_ACQ_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1128,18 +1128,18 @@ VOS_UINT32 TAF_MMA_RegReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstRegPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_REG_REQ_STRU */
+    /* ??????????TAF_MMA_REG_REQ_STRU */
     pstMsg = (TAF_MMA_REG_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSenderPid,
                                              sizeof(TAF_MMA_REG_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1150,8 +1150,8 @@ VOS_UINT32 TAF_MMA_RegReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_REG_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_REG_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_MMA_REG_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_REG_REQ;
@@ -1160,7 +1160,7 @@ VOS_UINT32 TAF_MMA_RegReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stRegPara), sizeof(pstMsg->stRegPara), pstRegPara, sizeof(TAF_MMA_REG_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1185,18 +1185,18 @@ VOS_UINT32 TAF_MMA_PowerSaveReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstPowerSavePara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_POWER_SAVE_REQ_STRU */
+    /* ??????????TAF_MMA_POWER_SAVE_REQ_STRU */
     pstMsg = (TAF_MMA_POWER_SAVE_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_POWER_SAVE_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1207,7 +1207,7 @@ VOS_UINT32 TAF_MMA_PowerSaveReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_POWER_SAVE_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_POWER_SAVE_REQ;
@@ -1216,7 +1216,7 @@ VOS_UINT32 TAF_MMA_PowerSaveReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stPowerSavePara), sizeof(pstMsg->stPowerSavePara), pstPowerSavePara, sizeof(TAF_MMA_POWER_SAVE_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1240,18 +1240,18 @@ VOS_UINT32 TAF_MMA_DetachReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstDetachPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_DETACH_REQ_STRU */
+    /* ??????????TAF_MMA_DETACH_REQ_STRU */
     pstMsg = (TAF_MMA_DETACH_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_DETACH_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1262,8 +1262,8 @@ VOS_UINT32 TAF_MMA_DetachReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_DETACH_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_DETACH_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_MMA_DETACH_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_DETACH_REQ;
@@ -1272,7 +1272,7 @@ VOS_UINT32 TAF_MMA_DetachReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stDetachPara), sizeof(pstMsg->stDetachPara), pstDetachPara, sizeof(TAF_MMA_DETACH_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1297,18 +1297,18 @@ VOS_UINT32 TAF_MMA_SetImsSwitchReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstImsSwitchInfo)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_IMS_SWITCH_SET_REQ_STRU */
+    /* ??????????TAF_MMA_IMS_SWITCH_SET_REQ_STRU */
     pstMsg = (TAF_MMA_IMS_SWITCH_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_IMS_SWITCH_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1319,7 +1319,7 @@ VOS_UINT32 TAF_MMA_SetImsSwitchReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_SWITCH_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_IMS_SWITCH_SET_REQ_STRU */
+    /* ????????????????TAF_MMA_IMS_SWITCH_SET_REQ_STRU */
     pstMsg->ulSenderPid         = ulSenderPid;
     pstMsg->ulReceiverPid       = ulReceiverPid;
     pstMsg->ulMsgName           = ID_TAF_MMA_IMS_SWITCH_SET_REQ;
@@ -1328,7 +1328,7 @@ VOS_UINT32 TAF_MMA_SetImsSwitchReq(
     pstMsg->stCtrl.ucOpId       = ucOpId;
     pstMsg->stImsSwitchInfo     = *pstImsSwitchInfo;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -1348,12 +1348,12 @@ VOS_UINT32 TAF_MMA_QryImsSwitchReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_IMS_SWITCH_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_IMS_SWITCH_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_IMS_SWITCH_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_IMS_SWITCH_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1364,7 +1364,7 @@ VOS_UINT32 TAF_MMA_QryImsSwitchReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_SWITCH_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_IMS_SWITCH_QRY_REQ_STRU */
+    /* ????????????????TAF_MMA_IMS_SWITCH_QRY_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_IMS_SWITCH_QRY_REQ;
@@ -1372,7 +1372,7 @@ VOS_UINT32 TAF_MMA_QryImsSwitchReq(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1395,12 +1395,12 @@ VOS_UINT32 TAF_MMA_QryRcsSwitchReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_IMS_SWITCH_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_IMS_SWITCH_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_RCS_SWITCH_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_RCS_SWITCH_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1411,7 +1411,7 @@ VOS_UINT32 TAF_MMA_QryRcsSwitchReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_RCS_SWITCH_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_RCS_SWITCH_QRY_REQ_STRU */
+    /* ????????????????TAF_MMA_RCS_SWITCH_QRY_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_RCS_SWITCH_QRY_REQ;
@@ -1419,7 +1419,7 @@ VOS_UINT32 TAF_MMA_QryRcsSwitchReq(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -1440,18 +1440,18 @@ VOS_UINT32 TAF_MMA_SetVoiceDomainReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (enVoiceDomain >= TAF_MMA_VOICE_DOMAIN_BUTT)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_VOICE_DOMAIN_SET_REQ_STRU */
+    /* ??????????TAF_MMA_VOICE_DOMAIN_SET_REQ_STRU */
     pstMsg = (TAF_MMA_VOICE_DOMAIN_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_VOICE_DOMAIN_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1462,7 +1462,7 @@ VOS_UINT32 TAF_MMA_SetVoiceDomainReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_VOICE_DOMAIN_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_VOICE_DOMAIN_SET_REQ_STRU */
+    /* ????????????????TAF_MMA_VOICE_DOMAIN_SET_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_VOICE_DOMAIN_SET_REQ;
@@ -1471,7 +1471,7 @@ VOS_UINT32 TAF_MMA_SetVoiceDomainReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->enVoiceDomain     = enVoiceDomain;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1494,12 +1494,12 @@ VOS_UINT32 TAF_MMA_QryVoiceDomainReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_VOICE_DOMAIN_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_VOICE_DOMAIN_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_VOICE_DOMAIN_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_VOICE_DOMAIN_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1510,7 +1510,7 @@ VOS_UINT32 TAF_MMA_QryVoiceDomainReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_VOICE_DOMAIN_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_VOICE_DOMAIN_QRY_REQ_STRU */
+    /* ????????????????TAF_MMA_VOICE_DOMAIN_QRY_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_VOICE_DOMAIN_QRY_REQ;
@@ -1518,7 +1518,7 @@ VOS_UINT32 TAF_MMA_QryVoiceDomainReq(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1542,18 +1542,18 @@ VOS_UINT32 TAF_MMA_SetRoamImsSupportReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (TAF_MMA_ROAM_IMS_BUTT <= enRoamImsSupport)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ_STRU */
+    /* ??????????TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ_STRU */
     pstMsg = (TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1564,8 +1564,8 @@ VOS_UINT32 TAF_MMA_SetRoamImsSupportReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_ROAM_IMS_SUPPORT_SET_REQ;
@@ -1574,7 +1574,7 @@ VOS_UINT32 TAF_MMA_SetRoamImsSupportReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->enRoamingImsSupportFlag), sizeof(pstMsg->enRoamingImsSupportFlag), &enRoamImsSupport, sizeof(TAF_MMA_ROAM_IMS_SUPPORT_ENUM_UINT32));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1603,12 +1603,12 @@ VOS_UINT32 TAF_MMA_SetImsDomainCfgReq(
         return VOS_FALSE;
     }
 
-    /* 内存申请 */
+    /* ???????? */
     pstMsg = (TAF_MMA_IMS_DOMAIN_CFG_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_IMS_DOMAIN_CFG_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1619,7 +1619,7 @@ VOS_UINT32 TAF_MMA_SetImsDomainCfgReq(
           0x00,
           (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_DOMAIN_CFG_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 根据输入参数填充TAF_MMA_IMS_DOMAIN_CFG_SET_REQ_STRU */
+    /* ????????????????TAF_MMA_IMS_DOMAIN_CFG_SET_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_IMS_DOMAIN_CFG_SET_REQ;
@@ -1628,7 +1628,7 @@ VOS_UINT32 TAF_MMA_SetImsDomainCfgReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->enImsDoaminCfg    = enImsDomainCfg;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1651,12 +1651,12 @@ VOS_UINT32 TAF_MMA_QryImsDomainCfgReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 内存申请*/
+    /* ????????*/
     pstMsg = (TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1667,7 +1667,7 @@ VOS_UINT32 TAF_MMA_QryImsDomainCfgReq(
           0x00,
           (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 根据输入参数填充TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ_STRU */
+    /* ????????????????TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ;
@@ -1675,7 +1675,7 @@ VOS_UINT32 TAF_MMA_QryImsDomainCfgReq(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-     /* 发送消息 */
+     /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -1699,12 +1699,12 @@ VOS_UINT32 TAF_MMA_SetImsVtCapCfgReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 内存申请 */
+    /* ???????? */
     pstMsg = (TAF_MMA_IMS_VIDEO_CALL_CAP_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         ulSenderPid,
                                         sizeof(TAF_MMA_IMS_VIDEO_CALL_CAP_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1715,7 +1715,7 @@ VOS_UINT32 TAF_MMA_SetImsVtCapCfgReq(
           0x00,
           (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_VIDEO_CALL_CAP_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 根据输入参数填充TAF_MMA_IMS_SMS_CFG_SET_REQ_STRU */
+    /* ????????????????TAF_MMA_IMS_SMS_CFG_SET_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_IMS_VIDEO_CALL_CAP_SET_REQ;
@@ -1724,7 +1724,7 @@ VOS_UINT32 TAF_MMA_SetImsVtCapCfgReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&pstMsg->stImsVtCap, sizeof(pstMsg->stImsVtCap), pstImsVtCap, sizeof(TAF_MMA_IMS_VIDEO_CALL_CAP_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -1745,12 +1745,12 @@ VOS_UINT32 TAF_MMA_SetImsSmsCfgReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 内存申请 */
+    /* ???????? */
     pstMsg = (TAF_MMA_IMS_SMS_CFG_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         ulSenderPid,
                                         sizeof(TAF_MMA_IMS_SMS_CFG_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1761,7 +1761,7 @@ VOS_UINT32 TAF_MMA_SetImsSmsCfgReq(
           0x00,
           (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_SMS_CFG_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 根据输入参数填充TAF_MMA_IMS_SMS_CFG_SET_REQ_STRU */
+    /* ????????????????TAF_MMA_IMS_SMS_CFG_SET_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_IMS_SMS_CFG_SET_REQ;
@@ -1770,7 +1770,7 @@ VOS_UINT32 TAF_MMA_SetImsSmsCfgReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->stImsSmsCfg       = *pstImsSmsCfg;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -1790,12 +1790,12 @@ VOS_UINT32 TAF_MMA_QryImsSmsCfgReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 内存申请*/
+    /* ????????*/
     pstMsg = (TAF_MMA_IMS_SMS_CFG_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         ulSenderPid,
                                         sizeof(TAF_MMA_IMS_SMS_CFG_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1806,7 +1806,7 @@ VOS_UINT32 TAF_MMA_QryImsSmsCfgReq(
           0x00,
           (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_SMS_CFG_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 根据输入参数填充TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ_STRU */
+    /* ????????????????TAF_MMA_IMS_DOMAIN_CFG_QRY_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_IMS_SMS_CFG_QRY_REQ;
@@ -1814,7 +1814,7 @@ VOS_UINT32 TAF_MMA_QryImsSmsCfgReq(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-     /* 发送消息 */
+     /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -1837,12 +1837,12 @@ VOS_UINT32 TAF_MMA_AttachReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请内存消息并初始化 */
+    /* ???????????????????? */
     pstMsg = (TAF_MMA_ATTACH_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_ATTACH_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1853,8 +1853,8 @@ VOS_UINT32 TAF_MMA_AttachReq(
                0x00,
                (VOS_SIZE_T)(sizeof(TAF_MMA_ATTACH_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_ATTACH_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_MMA_ATTACH_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->enMsgName         = ID_TAF_MMA_ATTACH_REQ;
@@ -1863,7 +1863,7 @@ VOS_UINT32 TAF_MMA_AttachReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->enAttachType      = enAttachType;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -1884,12 +1884,12 @@ VOS_UINT32 TAF_MMA_AttachStatusQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请内存消息并初始化 */
+    /* ???????????????????? */
     pstMsg = (TAF_MMA_ATTACH_STATUS_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_ATTACH_STATUS_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -1900,8 +1900,8 @@ VOS_UINT32 TAF_MMA_AttachStatusQryReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_ATTACH_STATUS_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充TAF_MMA_ATTACH_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????????????????TAF_MMA_ATTACH_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->enMsgName         = ID_TAF_MMA_ATTACH_STATUS_QRY_REQ;
@@ -1910,7 +1910,7 @@ VOS_UINT32 TAF_MMA_AttachStatusQryReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->enDomainType      = enDomainType;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -1935,12 +1935,12 @@ MODULE_EXPORTED VOS_VOID TAF_MMA_SrvAcqReq(
     ulSndPid  = NAS_MULTIINSTANCE_GetSpecModemPid(enModemId, WUEPS_PID_TAF);
     ulRcvPid  = NAS_MULTIINSTANCE_GetSpecModemPid(enModemId, WUEPS_PID_MMA);
 
-    /* 申请消息包TAF_MMA_SRV_ACQ_REQ_STRU */
+    /* ??????????TAF_MMA_SRV_ACQ_REQ_STRU */
     pstMsg = (TAF_MMA_SRV_ACQ_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSndPid,
                                              sizeof(TAF_MMA_SRV_ACQ_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
 
@@ -1952,7 +1952,7 @@ MODULE_EXPORTED VOS_VOID TAF_MMA_SrvAcqReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_SRV_ACQ_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSndPid;
     pstMsg->ulReceiverPid     = ulRcvPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_SRV_ACQ_REQ;
@@ -1962,7 +1962,7 @@ MODULE_EXPORTED VOS_VOID TAF_MMA_SrvAcqReq(
     pstMsg->enSrvType         = enSrvType;
     pstMsg->stRatList         = *pstRatList;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSndPid, pstMsg))
     {
         return;
@@ -1985,10 +1985,10 @@ MODULE_EXPORTED VOS_VOID TAF_MMA_SrvAcqStop(
     ulSndPid  = NAS_MULTIINSTANCE_GetSpecModemPid(enModemId, WUEPS_PID_TAF);
     ulRcvPid  = NAS_MULTIINSTANCE_GetSpecModemPid(enModemId, WUEPS_PID_MMA);
 
-    /* 申请消息包TAF_MMA_STOP_SRVACQ_NOTIFY_STRU */
+    /* ??????????TAF_MMA_STOP_SRVACQ_NOTIFY_STRU */
     pstMsg = (TAF_MMA_STOP_SRVACQ_NOTIFY_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSndPid, sizeof(TAF_MMA_STOP_SRVACQ_NOTIFY_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return;
@@ -2003,7 +2003,7 @@ MODULE_EXPORTED VOS_VOID TAF_MMA_SrvAcqStop(
     pstMsg->ulReceiverPid           = ulRcvPid;
     pstMsg->ulMsgName               = ID_TAF_MMA_STOP_SRVACQ_NOTIFY;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSndPid, pstMsg);
 
     return;
@@ -2025,11 +2025,11 @@ VOS_UINT32 TAF_MMA_SetQuitCallBack(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MMA_QUIT_CALLBACK_SET_REQ */
+    /* ??????????ID_TAF_MMA_QUIT_CALLBACK_SET_REQ */
     pstMsg = (TAF_MMA_QUIT_CALLBACK_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                 sizeof(TAF_MMA_QUIT_CALLBACK_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2040,7 +2040,7 @@ VOS_UINT32 TAF_MMA_SetQuitCallBack(
                 0x00,
                 sizeof(TAF_MMA_QUIT_CALLBACK_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_QUIT_CALLBACK_SET_REQ;
@@ -2048,7 +2048,7 @@ VOS_UINT32 TAF_MMA_SetQuitCallBack(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2072,13 +2072,13 @@ VOS_UINT32  TAF_MMA_ProcCFreqLockSetReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstCFreqLockPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_CFREQ_LOCK_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CFREQ_LOCK_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CFREQ_LOCK_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_CFREQ_LOCK_SET_REQ_STRU));
@@ -2092,7 +2092,7 @@ VOS_UINT32  TAF_MMA_ProcCFreqLockSetReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CFREQ_LOCK_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_CDMA_FREQ_LOCK_SET_REQ;
@@ -2101,7 +2101,7 @@ VOS_UINT32  TAF_MMA_ProcCFreqLockSetReq(
     pstMsg->ucOpId            = ucOpId;
     TAF_MEM_CPY_S(&pstMsg->stCFreqLockPara, sizeof(pstMsg->stCFreqLockPara), pstCFreqLockPara, sizeof(TAF_MMA_CFREQ_LOCK_SET_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2121,12 +2121,12 @@ VOS_UINT32 TAF_MMA_ProcCFreqLockQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CFREQ_LOCK_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_CFREQ_LOCK_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_CFREQ_LOCK_QUERY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                                    ulSenderPid,
                                                    sizeof(TAF_MMA_CFREQ_LOCK_QUERY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2137,7 +2137,7 @@ VOS_UINT32 TAF_MMA_ProcCFreqLockQryReq(
                 0x00,
                 sizeof(TAF_MMA_CFREQ_LOCK_QUERY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CDMA_FREQ_LOCK_QRY_REQ;
@@ -2145,7 +2145,7 @@ VOS_UINT32 TAF_MMA_ProcCFreqLockQryReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2166,18 +2166,18 @@ VOS_UINT32 TAF_MMA_ProcCdmaCsqSetReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstCdmaCsqPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CDMACSQ_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_CDMACSQ_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2188,7 +2188,7 @@ VOS_UINT32 TAF_MMA_ProcCdmaCsqSetReq(
                 0x00,
                 sizeof(TAF_MMA_CDMACSQ_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CDMACSQ_SET_REQ;
@@ -2197,7 +2197,7 @@ VOS_UINT32 TAF_MMA_ProcCdmaCsqSetReq(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stCdmaCsqPara), sizeof(pstMsg->stCdmaCsqPara), pstCdmaCsqPara, sizeof(TAF_MMA_CDMACSQ_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2217,12 +2217,12 @@ VOS_UINT32 TAF_MMA_ProcCdmaCsqQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CDMACSQ_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_CDMACSQ_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_CDMACSQ_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_CDMACSQ_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2233,7 +2233,7 @@ VOS_UINT32 TAF_MMA_ProcCdmaCsqQryReq(
                 0x00,
                 sizeof(TAF_MMA_CDMACSQ_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CDMACSQ_QRY_REQ;
@@ -2241,7 +2241,7 @@ VOS_UINT32 TAF_MMA_ProcCdmaCsqQryReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2263,13 +2263,13 @@ VOS_UINT32  TAF_MMA_Proc1xChanSetReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstCFreqLockPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_CFREQ_LOCK_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CFREQ_LOCK_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CFREQ_LOCK_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_CFREQ_LOCK_SET_REQ_STRU));
@@ -2283,7 +2283,7 @@ VOS_UINT32  TAF_MMA_Proc1xChanSetReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CFREQ_LOCK_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_1XCHAN_SET_REQ;
@@ -2292,7 +2292,7 @@ VOS_UINT32  TAF_MMA_Proc1xChanSetReq(
     pstMsg->ucOpId            = ucOpId;
     TAF_MEM_CPY_S(&pstMsg->stCFreqLockPara, sizeof(pstMsg->stCFreqLockPara), pstCFreqLockPara, sizeof(TAF_MMA_CFREQ_LOCK_SET_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -2315,11 +2315,11 @@ VOS_UINT32 TAF_MMA_Proc1xChanQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MSG_MMA_CVER_QUERY_REQ */
+    /* ??????????ID_TAF_MSG_MMA_CVER_QUERY_REQ */
     pstMsg = (TAF_MMA_1XCHAN_QUERY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                 sizeof(TAF_MMA_1XCHAN_QUERY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2330,7 +2330,7 @@ VOS_UINT32 TAF_MMA_Proc1xChanQryReq(
                 0x00,
                 sizeof(TAF_MMA_1XCHAN_QUERY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_1XCHAN_QUERY_REQ;
@@ -2338,7 +2338,7 @@ VOS_UINT32 TAF_MMA_Proc1xChanQryReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -2361,11 +2361,11 @@ VOS_UINT32 TAF_MMA_ProcProRevInUseQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MSG_MMA_CVER_QUERY_REQ */
+    /* ??????????ID_TAF_MSG_MMA_CVER_QUERY_REQ */
     pstMsg = (TAF_MMA_CVER_QUERY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                 sizeof(TAF_MMA_CVER_QUERY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2376,7 +2376,7 @@ VOS_UINT32 TAF_MMA_ProcProRevInUseQryReq(
                 0x00,
                 sizeof(TAF_MMA_CVER_QUERY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CVER_QUERY_REQ;
@@ -2384,7 +2384,7 @@ VOS_UINT32 TAF_MMA_ProcProRevInUseQryReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -2407,11 +2407,11 @@ VOS_UINT32 TAF_MMA_ProcStateQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MSG_MMA_CVER_QUERY_REQ */
+    /* ??????????ID_TAF_MSG_MMA_CVER_QUERY_REQ */
     pstMsg = (TAF_MMA_STATE_QUERY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                 sizeof(TAF_MMA_STATE_QUERY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2422,7 +2422,7 @@ VOS_UINT32 TAF_MMA_ProcStateQryReq(
                 0x00,
                 sizeof(TAF_MMA_STATE_QUERY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_GETSTA_QUERY_REQ;
@@ -2430,7 +2430,7 @@ VOS_UINT32 TAF_MMA_ProcStateQryReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -2453,11 +2453,11 @@ VOS_UINT32 TAF_MMA_ProcCHVerQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MSG_MMA_CVER_QUERY_REQ */
+    /* ??????????ID_TAF_MSG_MMA_CVER_QUERY_REQ */
     pstMsg = (TAF_MMA_CHIGHVER_QUERY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                 sizeof(TAF_MMA_CHIGHVER_QUERY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2468,7 +2468,7 @@ VOS_UINT32 TAF_MMA_ProcCHVerQryReq(
                 0x00,
                 sizeof(TAF_MMA_CHIGHVER_QUERY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CHIGHVER_QUERY_REQ;
@@ -2476,7 +2476,7 @@ VOS_UINT32 TAF_MMA_ProcCHVerQryReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -2488,7 +2488,7 @@ VOS_UINT32 TAF_MMA_ProcCHVerQryReq(
 
 
 
-/* 移出CDMA编译开关 */
+/* ????CDMA???????? */
 #if (FEATURE_ON == FEATURE_PHONE_ENG_AT_CMD)
 
 VOS_UINT32 TAF_MMA_SetCSidList(
@@ -2505,11 +2505,11 @@ VOS_UINT32 TAF_MMA_SetCSidList(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MSG_MMA_CVER_QUERY_REQ */
+    /* ??????????ID_TAF_MSG_MMA_CVER_QUERY_REQ */
     pstMsg = (TAF_MMA_CSIDLIST_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                 sizeof(TAF_MMA_CSIDLIST_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2520,7 +2520,7 @@ VOS_UINT32 TAF_MMA_SetCSidList(
                 0x00,
                 sizeof(TAF_MMA_CSIDLIST_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CSIDLIST_SET_REQ;
@@ -2529,14 +2529,14 @@ VOS_UINT32 TAF_MMA_SetCSidList(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     TAF_MEM_CPY_S(&pstMsg->stWhiteSidInfo, sizeof(pstMsg->stWhiteSidInfo), pstWhiteSidList, sizeof(TAF_MMA_OPER_LOCK_WHITE_SID_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
 }
 #endif
 
-/* 移出CDMA编译开关 */
+/* ????CDMA???????? */
 
 
 
@@ -2554,12 +2554,12 @@ VOS_UINT32 TAF_MMA_ProcHdrCsqSetReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
     pstMsg = (TAF_MMA_HDR_CSQ_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_HDR_CSQ_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2570,7 +2570,7 @@ VOS_UINT32 TAF_MMA_ProcHdrCsqSetReq(
                 0x00,
                 sizeof(TAF_MMA_HDR_CSQ_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_HDR_CSQ_SET_REQ;
@@ -2579,7 +2579,7 @@ VOS_UINT32 TAF_MMA_ProcHdrCsqSetReq(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stHdrCsqSetting), sizeof(pstMsg->stHdrCsqSetting), pstHdrCsqPara, sizeof(TAF_MMA_HDR_CSQ_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2599,12 +2599,12 @@ VOS_UINT32 TAF_MMA_ProcHdrCsqQryReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CDMACSQ_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_CDMACSQ_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_HDR_CSQ_QRY_SETTING_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_HDR_CSQ_QRY_SETTING_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2615,7 +2615,7 @@ VOS_UINT32 TAF_MMA_ProcHdrCsqQryReq(
                 0x00,
                 sizeof(TAF_MMA_HDR_CSQ_QRY_SETTING_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_HDR_CSQ_QRY_SETTING_REQ;
@@ -2623,7 +2623,7 @@ VOS_UINT32 TAF_MMA_ProcHdrCsqQryReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2727,11 +2727,11 @@ VOS_UINT32 TAF_MMA_SetCtOosCount(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MMA_QUIT_CALLBACK_SET_REQ */
+    /* ??????????ID_TAF_MMA_QUIT_CALLBACK_SET_REQ */
     pstMsg = (TAF_MMA_CTCC_OOS_COUNT_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                 sizeof(TAF_MMA_CTCC_OOS_COUNT_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2742,7 +2742,7 @@ VOS_UINT32 TAF_MMA_SetCtOosCount(
                 0x00,
                 sizeof(TAF_MMA_CTCC_OOS_COUNT_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->enMsgName                   = ID_TAF_MMA_CTCC_OOS_COUNT_SET_REQ;
@@ -2752,7 +2752,7 @@ VOS_UINT32 TAF_MMA_SetCtOosCount(
     pstMsg->usClOosCount                = (VOS_UINT16)ulClOosCount;
     pstMsg->usGulOosCount               = (VOS_UINT16)ulGulOosCount;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2773,11 +2773,11 @@ VOS_UINT32 TAF_MMA_SetCtRoamInfo(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包ID_TAF_MMA_CTCC_ROAMING_NW_INFO_RTP_CFG_SET_REQ */
+    /* ??????????ID_TAF_MMA_CTCC_ROAMING_NW_INFO_RTP_CFG_SET_REQ */
     pstMsg = (TAF_MMA_CTCC_ROAMING_NW_INFO_RTP_CFG_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                   sizeof(TAF_MMA_CTCC_ROAMING_NW_INFO_RTP_CFG_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -2788,7 +2788,7 @@ VOS_UINT32 TAF_MMA_SetCtRoamInfo(
                 0x00,
                 sizeof(TAF_MMA_CTCC_ROAMING_NW_INFO_RTP_CFG_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->enMsgName         = ID_TAF_MMA_CTCC_ROAMING_NW_INFO_RTP_CFG_SET_REQ;
@@ -2797,7 +2797,7 @@ VOS_UINT32 TAF_MMA_SetCtRoamInfo(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->ucCtRoamRtpFlag   = ucCtRoamRtpFlag;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -2897,7 +2897,7 @@ VOS_UINT32  TAF_MMA_ProcResetNtf(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CFREQ_LOCK_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CFREQ_LOCK_SET_REQ_STRU */
     pstMsg = (TAF_MMA_RESET_NTF_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_RESET_NTF_STRU));
@@ -2911,7 +2911,7 @@ VOS_UINT32  TAF_MMA_ProcResetNtf(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_RESET_NTF_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_RESET_NTF;
@@ -2920,7 +2920,7 @@ VOS_UINT32  TAF_MMA_ProcResetNtf(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->ucResetStep       = ucResetStep;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3028,18 +3028,18 @@ VOS_UINT32 TAF_MMA_SetFPlmnInfo(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstCFPlmnPara)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CFPLMN_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_CFPLMN_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -3050,7 +3050,7 @@ VOS_UINT32 TAF_MMA_SetFPlmnInfo(
                 0x00,
                 sizeof(TAF_MMA_CFPLMN_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CFPLMN_SET_REQ;
@@ -3059,7 +3059,7 @@ VOS_UINT32 TAF_MMA_SetFPlmnInfo(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stCFPlmnPara), sizeof(pstMsg->stCFPlmnPara), pstCFPlmnPara, sizeof(TAF_PH_FPLMN_OPERATE_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3079,12 +3079,12 @@ VOS_UINT32 TAF_MMA_QryFPlmnInfo(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CDMACSQ_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_CDMACSQ_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_CFPLMN_QUERY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                               ulSenderPid,
                                               sizeof(TAF_MMA_CFPLMN_QUERY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -3095,7 +3095,7 @@ VOS_UINT32 TAF_MMA_QryFPlmnInfo(
                 0x00,
                 sizeof(TAF_MMA_CFPLMN_QUERY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CFPLMN_QUERY_REQ;
@@ -3103,7 +3103,7 @@ VOS_UINT32 TAF_MMA_QryFPlmnInfo(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
     return VOS_TRUE;
 }
@@ -3123,13 +3123,13 @@ VOS_UINT32 TAF_MMA_SetCpolReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstPrefPlmn)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_PREF_PLMN_SET_REQ_STRU */
+    /* ??????????TAF_MMA_PREF_PLMN_SET_REQ_STRU */
     pstMsg = (TAF_MMA_PREF_PLMN_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_PREF_PLMN_SET_REQ_STRU));
@@ -3143,7 +3143,7 @@ VOS_UINT32 TAF_MMA_SetCpolReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_PREF_PLMN_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_PREF_PLMN_SET_REQ;
@@ -3152,7 +3152,7 @@ VOS_UINT32 TAF_MMA_SetCpolReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&pstMsg->stPrefPlmn, sizeof(pstMsg->stPrefPlmn), pstPrefPlmn, sizeof(TAF_PH_SET_PREFPLMN_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3173,13 +3173,13 @@ VOS_UINT32 TAF_MMA_QueryCpolReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstCpolInfo)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_PREF_PLMN_QUERY_REQ_STRU */
+    /* ??????????TAF_MMA_PREF_PLMN_QUERY_REQ_STRU */
     pstMsg = (TAF_MMA_PREF_PLMN_QUERY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_PREF_PLMN_QUERY_REQ_STRU));
@@ -3193,7 +3193,7 @@ VOS_UINT32 TAF_MMA_QueryCpolReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_PREF_PLMN_QUERY_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填写消息头 */
+    /* ?????????? */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_PREF_PLMN_QUERY_REQ;
@@ -3203,7 +3203,7 @@ VOS_UINT32 TAF_MMA_QueryCpolReq(
 
     TAF_MEM_CPY_S(&pstMsg->stCpolInfo, sizeof(pstMsg->stCpolInfo), pstCpolInfo, sizeof(TAF_MMA_CPOL_INFO_QUERY_REQ_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3224,13 +3224,13 @@ VOS_UINT32 TAF_MMA_TestCpolReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (MN_PH_PREF_PLMN_HPLMN < enPrefPlmnType)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_PREF_PLMN_TEST_REQ_STRU */
+    /* ??????????TAF_MMA_PREF_PLMN_TEST_REQ_STRU */
     pstMsg = (TAF_MMA_PREF_PLMN_TEST_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_PREF_PLMN_TEST_REQ_STRU));
@@ -3244,7 +3244,7 @@ VOS_UINT32 TAF_MMA_TestCpolReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_PREF_PLMN_TEST_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_PREF_PLMN_TEST_REQ;
@@ -3253,7 +3253,7 @@ VOS_UINT32 TAF_MMA_TestCpolReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->enPrefPlmnType    = enPrefPlmnType;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3274,18 +3274,18 @@ VOS_UINT32 TAF_MMA_SetCerssiReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstStartInfoInd)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CDMA_CSQ_SET_REQ_STRU */
     pstCerssiCfg = (TAF_MMA_CERSSI_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_CERSSI_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstCerssiCfg)
     {
         return VOS_FALSE;
@@ -3296,7 +3296,7 @@ VOS_UINT32 TAF_MMA_SetCerssiReq(
                 0x00,
                 sizeof(TAF_MMA_CERSSI_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstCerssiCfg->ulSenderPid                 = ulSenderPid;
     pstCerssiCfg->ulReceiverPid               = ulReceiverPid;
     pstCerssiCfg->ulMsgName                   = ID_TAF_MMA_CERSSI_SET_REQ;
@@ -3309,7 +3309,7 @@ VOS_UINT32 TAF_MMA_SetCerssiReq(
     pstCerssiCfg->ucMinRptTimerInterval       = pstStartInfoInd->ucMinRptTimerInterval;
     pstCerssiCfg->ucSignThreshold             = pstStartInfoInd->ucSignThreshold;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstCerssiCfg);
 
     return VOS_TRUE;
@@ -3329,12 +3329,12 @@ VOS_UINT32 TAF_MMA_QryCerssiReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_PHONE_MODE_SET_REQ_STRU */
+    /* ??????????TAF_MMA_PHONE_MODE_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CERSSI_INFO_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                                 ulSenderPid,
                                                 sizeof(TAF_MMA_CERSSI_INFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -3345,7 +3345,7 @@ VOS_UINT32 TAF_MMA_QryCerssiReq(
                 0x00,
                 sizeof(TAF_MMA_CERSSI_INFO_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CERSSI_QRY_REQ;
@@ -3357,7 +3357,7 @@ VOS_UINT32 TAF_MMA_QryCerssiReq(
     pstMsg->ucNsaQryFlag                = VOS_FALSE;
 #endif
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3379,12 +3379,12 @@ VOS_UINT32 TAF_MMA_QryCserssiReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_PHONE_MODE_SET_REQ_STRU */
+    /* ??????????TAF_MMA_PHONE_MODE_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CERSSI_INFO_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                                 ulSenderPid,
                                                 sizeof(TAF_MMA_CERSSI_INFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -3395,7 +3395,7 @@ VOS_UINT32 TAF_MMA_QryCserssiReq(
                 0x00,
                 sizeof(TAF_MMA_CERSSI_INFO_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CERSSI_QRY_REQ;
@@ -3404,7 +3404,7 @@ VOS_UINT32 TAF_MMA_QryCserssiReq(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     pstMsg->ucNsaQryFlag                = VOS_TRUE;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3427,18 +3427,18 @@ VOS_UINT32 TAF_MMA_SetCindReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (VOS_NULL_PTR == pstStartInfoInd)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息 */
+    /* ???????? */
     pstCindCfg = (TAF_MMA_CIND_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_CIND_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstCindCfg)
     {
         return VOS_FALSE;
@@ -3449,7 +3449,7 @@ VOS_UINT32 TAF_MMA_SetCindReq(
                 0x00,
                 sizeof(TAF_MMA_CIND_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstCindCfg->ulSenderPid                 = ulSenderPid;
     pstCindCfg->ulReceiverPid               = ulReceiverPid;
     pstCindCfg->ulMsgName                   = ID_TAF_MMA_CIND_SET_REQ;
@@ -3462,7 +3462,7 @@ VOS_UINT32 TAF_MMA_SetCindReq(
     pstCindCfg->ucMinRptTimerInterval       = pstStartInfoInd->ucMinRptTimerInterval;
     pstCindCfg->ucSignThreshold             = pstStartInfoInd->ucSignThreshold;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstCindCfg);
 
     return VOS_TRUE;
@@ -3483,12 +3483,12 @@ VOS_UINT32 TAF_MMA_QryCrpnReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CRPN_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_CRPN_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_CRPN_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_CRPN_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
        return VOS_FALSE;
@@ -3499,7 +3499,7 @@ VOS_UINT32 TAF_MMA_QryCrpnReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CRPN_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CRPN_QRY_REQ;
@@ -3512,7 +3512,7 @@ VOS_UINT32 TAF_MMA_QryCrpnReq(
         TAF_MEM_CPY_S(&pstMsg->stCrpnQryPara, sizeof(pstMsg->stCrpnQryPara), pstCrpnQryReq, sizeof(TAF_MMA_CRPN_QRY_PARA_STRU));
     }
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3533,12 +3533,12 @@ VOS_UINT32 TAF_MMA_SetCmmReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CMM_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CMM_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CMM_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_CMM_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
        return VOS_FALSE;
@@ -3549,7 +3549,7 @@ VOS_UINT32 TAF_MMA_SetCmmReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CMM_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CMM_SET_REQ;
@@ -3562,7 +3562,7 @@ VOS_UINT32 TAF_MMA_SetCmmReq(
         TAF_MEM_CPY_S(&pstMsg->stCmmSetReq, sizeof(pstMsg->stCmmSetReq), pstTestAtCmd, sizeof(MM_TEST_AT_CMD_STRU));
     }
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -3623,9 +3623,9 @@ VOS_UINT32 TAF_MMA_QryCopnInfoReq(
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
     /*
-    AT向MMA请求运营商信息:
-    因为核间消息限制，不能一次获取所有运营商信息，这里定义为一次获取50条运营商信息
-    第一条请求消息，从索引0开始要求连续的50条运营商信息
+    AT??MMA??????????????:
+    ????????????????????????????????????????????????????????????????50????????????
+    ??????????????????????0??????????????50????????????
     */
 
     /* Allocating memory for message */
@@ -4087,12 +4087,12 @@ VOS_UINT32  TAF_MMA_SetAutoAttachReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_AUTO_ATTACH_SET_REQ_STRU */
+    /* ??????????TAF_MMA_AUTO_ATTACH_SET_REQ_STRU */
     pstMsg = (TAF_MMA_AUTO_ATTACH_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_AUTO_ATTACH_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4103,7 +4103,7 @@ VOS_UINT32  TAF_MMA_SetAutoAttachReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_AUTO_ATTACH_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_AUTO_ATTACH_SET_REQ;
@@ -4112,7 +4112,7 @@ VOS_UINT32  TAF_MMA_SetAutoAttachReq(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     pstMsg->ulAutoAttachEnable          = ulSetValue;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4132,12 +4132,12 @@ VOS_UINT32 TAF_MMA_TestSysCfgReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_SYSCFG_TEST_REQ_STRU */
+    /* ??????????TAF_MMA_SYSCFG_TEST_REQ_STRU */
     pstMsg = (TAF_MMA_SYSCFG_TEST_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_SYSCFG_TEST_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4148,7 +4148,7 @@ VOS_UINT32 TAF_MMA_TestSysCfgReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_SYSCFG_TEST_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_SYSCFG_TEST_REQ;
@@ -4156,7 +4156,7 @@ VOS_UINT32 TAF_MMA_TestSysCfgReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
     return VOS_TRUE;
 }
@@ -4176,12 +4176,12 @@ VOS_UINT32 TAF_MMA_QryAccessModeReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_ACCESS_MODE_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_ACCESS_MODE_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_ACCESS_MODE_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_ACCESS_MODE_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4192,7 +4192,7 @@ VOS_UINT32 TAF_MMA_QryAccessModeReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_ACCESS_MODE_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_ACCESS_MODE_QRY_REQ;
@@ -4200,7 +4200,7 @@ VOS_UINT32 TAF_MMA_QryAccessModeReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4220,12 +4220,12 @@ VOS_UINT32 TAF_MMA_QryCopsInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_COPS_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_COPS_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_COPS_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         ulSenderPid,
                                         sizeof(TAF_MMA_COPS_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4236,7 +4236,7 @@ VOS_UINT32 TAF_MMA_QryCopsInfoReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_COPS_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_COPS_QRY_REQ;
@@ -4244,7 +4244,7 @@ VOS_UINT32 TAF_MMA_QryCopsInfoReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4265,10 +4265,10 @@ VOS_UINT32 TAF_MMA_SetEflociInfo(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_EFLOCIINFO_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_EFLOCIINFO_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4291,7 +4291,7 @@ VOS_UINT32 TAF_MMA_SetEflociInfo(
                    pstEfLociInfo,
                    sizeof(TAF_MMA_EFLOCIINFO_STRU));
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4311,10 +4311,10 @@ VOS_UINT32 TAF_MMA_QryEflociInfo(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_EFLOCIINFO_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_EFLOCIINFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4332,7 +4332,7 @@ VOS_UINT32 TAF_MMA_QryEflociInfo(
     pstMsg->stCtrl.ulModuleId = ulModuleId;
     pstMsg->stCtrl.usClientId = usClientId;
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4353,10 +4353,10 @@ VOS_UINT32 TAF_MMA_SetPsEflociInfo(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_EFPSLOCIINFO_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_EFPSLOCIINFO_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4379,7 +4379,7 @@ VOS_UINT32 TAF_MMA_SetPsEflociInfo(
                    pstPsefLociInfo,
                    sizeof(TAF_MMA_EFPSLOCIINFO_STRU));
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4399,10 +4399,10 @@ VOS_UINT32 TAF_MMA_QryPsEflociInfo(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_EFPSLOCIINFO_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_EFPSLOCIINFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4420,7 +4420,7 @@ VOS_UINT32 TAF_MMA_QryPsEflociInfo(
     pstMsg->stCtrl.ulModuleId = ulModuleId;
     pstMsg->stCtrl.usClientId = usClientId;
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4440,10 +4440,10 @@ VOS_UINT32 TAF_MMA_QryDplmnListReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_DPLMN_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_DPLMN_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4454,7 +4454,7 @@ VOS_UINT32 TAF_MMA_QryDplmnListReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_DPLMN_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 填写消息头 */
+    /* ?????????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -4464,7 +4464,7 @@ VOS_UINT32 TAF_MMA_QryDplmnListReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4486,7 +4486,7 @@ VOS_UINT32 TAF_MMA_SetDplmnListReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_DPLMN_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         WUEPS_PID_TAF,
                                         sizeof(TAF_MMA_DPLMN_SET_REQ_STRU));
@@ -4496,13 +4496,13 @@ VOS_UINT32 TAF_MMA_SetDplmnListReq(
         return VOS_FALSE;
     }
 
-    /* 清空消息内容 */
+    /* ???????????? */
     TAF_MEM_SET_S((VOS_UINT8 *)pstMsg + VOS_MSG_HEAD_LENGTH,
                (VOS_SIZE_T)sizeof(TAF_MMA_DPLMN_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH,
                 0x00,
                (VOS_SIZE_T)sizeof(TAF_MMA_DPLMN_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 填充消息头 */
+    /* ?????????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -4512,7 +4512,7 @@ VOS_UINT32 TAF_MMA_SetDplmnListReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = 0;
 
-    /* 填充流水号、版本号*/
+    /* ??????????????????*/
     pstMsg->ucSeq                       = ucSeq;
     TAF_MEM_CPY_S( pstMsg->aucVersionId,
                 sizeof(pstMsg->aucVersionId),
@@ -4529,7 +4529,7 @@ VOS_UINT32 TAF_MMA_SetDplmnListReq(
         pstDplmnInfo->usDplmnNum = TAF_MMA_MAX_DPLMN_NUM;
     }
 
-    /* 填充HPLMN个数、HPLMN列表、预制DPLMN个数、DPLMN列表 */
+    /* ????HPLMN??????HPLMN??????????DPLMN??????DPLMN???? */
     pstMsg->stDplmnInfo.ucEhPlmnNum     = pstDplmnInfo->ucEhPlmnNum;
     pstMsg->stDplmnInfo.usDplmnNum      = pstDplmnInfo->usDplmnNum;
     TAF_MEM_CPY_S(pstMsg->stDplmnInfo.astEhPlmnInfo,
@@ -4541,7 +4541,7 @@ VOS_UINT32 TAF_MMA_SetDplmnListReq(
                pstDplmnInfo->astDplmnList,
                sizeof(TAF_MMA_PLMN_WITH_SIM_RAT_STRU) * pstDplmnInfo->usDplmnNum );
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -4565,7 +4565,7 @@ VOS_UINT32 TAF_MMA_SetBorderInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_BORDER_INFO_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         WUEPS_PID_TAF,
                                         sizeof(TAF_MMA_BORDER_INFO_SET_REQ_STRU) + pstBorderInfo->ulBorderInfoLen - 4);
@@ -4575,13 +4575,13 @@ VOS_UINT32 TAF_MMA_SetBorderInfoReq(
         return VOS_FALSE;
     }
 
-    /* 清空消息内容 */
+    /* ???????????? */
     TAF_MEM_SET_S((VOS_UINT8 *)pstMsg + VOS_MSG_HEAD_LENGTH,
                (VOS_SIZE_T)sizeof(TAF_MMA_BORDER_INFO_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH + pstBorderInfo->ulBorderInfoLen - 4,
                 0x00,
                (VOS_SIZE_T)sizeof(TAF_MMA_BORDER_INFO_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH + pstBorderInfo->ulBorderInfoLen - 4);
 
-    /* 填充消息头 */
+    /* ?????????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -4591,7 +4591,7 @@ VOS_UINT32 TAF_MMA_SetBorderInfoReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = 0;
 
-    /* 填充消息内容 */
+    /* ???????????? */
     pstMsg->enOperateType               = enOperateType;
 
     TAF_MEM_CPY_S(&(pstMsg->stBorderInfo),
@@ -4599,7 +4599,7 @@ VOS_UINT32 TAF_MMA_SetBorderInfoReq(
                   pstBorderInfo,
                   sizeof(TAF_MMA_BORDER_INFO_STRU) + pstBorderInfo->ulBorderInfoLen - 4);
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4619,10 +4619,10 @@ VOS_UINT32 TAF_MMA_QryBorderInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_BORDER_INFO_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_BORDER_INFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4633,7 +4633,7 @@ VOS_UINT32 TAF_MMA_QryBorderInfoReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_BORDER_INFO_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 填写消息头 */
+    /* ?????????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -4643,7 +4643,7 @@ VOS_UINT32 TAF_MMA_QryBorderInfoReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4664,7 +4664,7 @@ VOS_UINT32 TAF_MMA_SetDsdsStateReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_DSDS_STATE_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_DSDS_STATE_SET_REQ_STRU));
 
     if (VOS_NULL_PTR == pstMsg)
@@ -4672,13 +4672,13 @@ VOS_UINT32 TAF_MMA_SetDsdsStateReq(
         return VOS_FALSE;
     }
 
-    /* 清空消息内容 */
+    /* ???????????? */
     TAF_MEM_SET_S((VOS_INT8 *)pstMsg + VOS_MSG_HEAD_LENGTH,
                (VOS_SIZE_T)(sizeof(TAF_MMA_DSDS_STATE_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH),
                0x00,
                (VOS_SIZE_T)(sizeof(TAF_MMA_DSDS_STATE_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 填充消息头 */
+    /* ?????????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -4688,10 +4688,10 @@ VOS_UINT32 TAF_MMA_SetDsdsStateReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = 0;
 
-    /* 填充消息内容 */
+    /* ???????????? */
     pstMsg->ucEnable                    = (VOS_UINT8)ulEnable;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4713,12 +4713,12 @@ VOS_UINT32 TAF_MMA_QryRegStateReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_REG_STATE_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_REG_STATE_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_REG_STATE_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                               ulSenderPid,
                                               sizeof(TAF_MMA_REG_STATE_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4729,7 +4729,7 @@ VOS_UINT32 TAF_MMA_QryRegStateReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_REG_STATE_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_REG_STATE_QRY_REQ;
@@ -4739,7 +4739,7 @@ VOS_UINT32 TAF_MMA_QryRegStateReq(
 
     pstMsg->enQryRegStaType = enRegStaType;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4759,12 +4759,12 @@ VOS_UINT32 TAF_MMA_QryAutoAttachInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_AUTOATTACH_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_AUTOATTACH_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_AUTO_ATTACH_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                                ulSenderPid,
                                                sizeof(TAF_MMA_AUTO_ATTACH_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4775,7 +4775,7 @@ VOS_UINT32 TAF_MMA_QryAutoAttachInfoReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_AUTO_ATTACH_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_AUTO_ATTACH_QRY_REQ;
@@ -4783,7 +4783,7 @@ VOS_UINT32 TAF_MMA_QryAutoAttachInfoReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4804,12 +4804,12 @@ VOS_UINT32 TAF_MMA_QrySystemInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_SYSINFO_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_SYSINFO_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_SYSINFO_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_SYSINFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4820,7 +4820,7 @@ VOS_UINT32 TAF_MMA_QrySystemInfoReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_SYSINFO_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_SYSINFO_QRY_REQ;
@@ -4829,12 +4829,12 @@ VOS_UINT32 TAF_MMA_QrySystemInfoReq(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     pstMsg->ulSysInfoExFlag             = ulSysInfoExFlag;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
 }
-/* QryAntennaInfoReq 移至MTA处理 */
+/* QryAntennaInfoReq ????MTA???? */
 
 
 VOS_UINT32 TAF_MMA_QryApHplmnInfoReq(
@@ -4850,12 +4850,12 @@ VOS_UINT32 TAF_MMA_QryApHplmnInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_APHPLMN_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_APHPLMN_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_HOME_PLMN_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                               ulSenderPid,
                                               sizeof(TAF_MMA_HOME_PLMN_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4866,7 +4866,7 @@ VOS_UINT32 TAF_MMA_QryApHplmnInfoReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_HOME_PLMN_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -4876,13 +4876,13 @@ VOS_UINT32 TAF_MMA_QryApHplmnInfoReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
 }
 
-/* QryCsnrReq移至MTA处理 */
+/* QryCsnrReq????MTA???? */
 
 
 VOS_UINT32 TAF_MMA_QryCsqReq(
@@ -4898,12 +4898,12 @@ VOS_UINT32 TAF_MMA_QryCsqReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CSQ_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_CSQ_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_CSQ_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_CSQ_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4914,7 +4914,7 @@ VOS_UINT32 TAF_MMA_QryCsqReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CSQ_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CSQ_QRY_REQ;
@@ -4922,14 +4922,14 @@ VOS_UINT32 TAF_MMA_QryCsqReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
 
 }
 
-/* QryCsqlvlReq移至MTA处理 */
+/* QryCsqlvlReq????MTA???? */
 
 
 
@@ -4946,12 +4946,12 @@ VOS_UINT32 TAF_MMA_QryBatteryCapacityReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_CBC_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_CBC_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_BATTERY_CAPACITY_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                         ulSenderPid,
                                         sizeof(TAF_MMA_BATTERY_CAPACITY_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -4962,7 +4962,7 @@ VOS_UINT32 TAF_MMA_QryBatteryCapacityReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_BATTERY_CAPACITY_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_BATTERY_CAPACITY_QRY_REQ;
@@ -4970,7 +4970,7 @@ VOS_UINT32 TAF_MMA_QryBatteryCapacityReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -4990,12 +4990,12 @@ VOS_UINT32 TAF_MMA_QryHandShakeReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_HS_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_HS_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_HAND_SHAKE_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                        ulSenderPid,
                                        sizeof(TAF_MMA_HAND_SHAKE_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5006,7 +5006,7 @@ VOS_UINT32 TAF_MMA_QryHandShakeReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_HAND_SHAKE_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_HAND_SHAKE_QRY_REQ;
@@ -5014,7 +5014,7 @@ VOS_UINT32 TAF_MMA_QryHandShakeReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5036,10 +5036,10 @@ VOS_UINT32 TAF_MMA_QryPacspReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_PACSP_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_PACSP_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5057,7 +5057,7 @@ VOS_UINT32 TAF_MMA_QryPacspReq(
     pstMsg->stCtrl.ulModuleId = ulModuleId;
     pstMsg->stCtrl.usClientId = usClientId;
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5080,10 +5080,10 @@ VOS_UINT32 TAF_MMA_AcdcAppNotify(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_ACDC_APP_NOTIFY_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_ACDC_APP_NOTIFY_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5106,7 +5106,7 @@ VOS_UINT32 TAF_MMA_AcdcAppNotify(
                   pstAcdcAppInfo,
                   sizeof(TAF_MMA_ACDC_APP_INFO_STRU));
 
-    /* 消息发送*/
+    /* ????????*/
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5146,7 +5146,7 @@ MODULE_EXPORTED VOS_VOID TAF_MMA_SndRestartReq(
 
     pstMsg = (TAF_MMA_RESTART_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid, sizeof(TAF_MMA_RESTART_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return;
@@ -5162,7 +5162,7 @@ MODULE_EXPORTED VOS_VOID TAF_MMA_SndRestartReq(
     pstMsg->enMsgName         = ID_TAF_MMA_RESTART_REQ;
     pstMsg->ulModuleId        = ulModuleId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return;
@@ -5183,7 +5183,7 @@ VOS_UINT32 TAF_MMA_ExchangeModemInfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包 */
+    /* ?????????? */
     pstMsg = (TAF_MMA_EXCHANGE_MODEM_INFO_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                             sizeof(TAF_MMA_EXCHANGE_MODEM_INFO_REQ_STRU));
 
@@ -5192,13 +5192,13 @@ VOS_UINT32 TAF_MMA_ExchangeModemInfoReq(
         return VOS_FALSE;
     }
 
-    /* 清空消息内容 */
+    /* ???????????? */
     TAF_MEM_SET_S((VOS_UINT8 *)pstMsg + VOS_MSG_HEAD_LENGTH,
                   (VOS_SIZE_T)sizeof(TAF_MMA_EXCHANGE_MODEM_INFO_REQ_STRU) - VOS_MSG_HEAD_LENGTH,
                   0x00,
                   (VOS_SIZE_T)sizeof(TAF_MMA_EXCHANGE_MODEM_INFO_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 填充消息头 */
+    /* ?????????? */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -5210,7 +5210,7 @@ VOS_UINT32 TAF_MMA_ExchangeModemInfoReq(
     pstMsg->enFirstModemId              = enFirstModemId;
     pstMsg->enSecondModemId             = enSecondModemId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5230,12 +5230,12 @@ VOS_UINT32 TAF_MMA_PlmnSearchReq(
     ulReceiverPid = TAF_GET_DEST_PID(pstCtrl->usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(pstCtrl->usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_PLMN_AUTO_RESEL_REQ_STRU */
+    /* ??????????TAF_MMA_PLMN_AUTO_RESEL_REQ_STRU */
     pstMsg = (TAF_MMA_PLMN_SEARCH_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                             ulSenderPid,
                                             sizeof(TAF_MMA_PLMN_SEARCH_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5246,18 +5246,18 @@ VOS_UINT32 TAF_MMA_PlmnSearchReq(
                 0x00,
                 sizeof(TAF_MMA_PLMN_SEARCH_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_PLMN_SEARCH_REQ;
     pstMsg->enSearchType                = enSearchType;
 
-    /* 控制信息 */
+    /* ???????? */
     TAF_MEM_CPY_S(&pstMsg->stCtrl, sizeof(pstMsg->stCtrl), pstCtrl, sizeof(TAF_MMA_CTRL_STRU));
 
     TAF_MEM_CPY_S(&pstMsg->stPlmnUserSel, sizeof(pstMsg->stPlmnUserSel), pstPlmnUserSel, sizeof(TAF_PLMN_USER_SEL_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5279,7 +5279,7 @@ VOS_VOID TAF_MMA_SendSmcNoEntityNtf(VOS_VOID)
                                              WUEPS_PID_TAF,
                                              sizeof(TAF_MMA_SMC_NO_ENTITY_NOTIFY_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return;
@@ -5290,12 +5290,12 @@ VOS_VOID TAF_MMA_SendSmcNoEntityNtf(VOS_VOID)
                0x00,
                (VOS_SIZE_T)(sizeof(TAF_MMA_SMC_NO_ENTITY_NOTIFY_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = WUEPS_PID_TAF;
     pstMsg->ulReceiverPid     = WUEPS_PID_MMA;
     pstMsg->enMsgName         = ID_TAF_MMA_SMC_NO_ENTITY_NOTIFY;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)NAS_MULTIINSTANCE_SendMsg(enModemId, pstMsg);
 
     return;
@@ -5313,12 +5313,12 @@ VOS_VOID TAF_MMA_ImsRegDomainNotify(
 
     enModemId = NAS_MULTIINSTANCE_GetCurrInstanceModemId(WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_SRV_ACQ_REQ_STRU */
+    /* ??????????TAF_MMA_SRV_ACQ_REQ_STRU */
     pstMsg = (TAF_MMA_IMS_REG_DOMAIN_NOTIFY_STRU*)NAS_MULTIINSTANCE_AllocMsgWithHdr(enModemId,
                                              WUEPS_PID_TAF,
                                              sizeof(TAF_MMA_IMS_REG_DOMAIN_NOTIFY_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return;
@@ -5329,7 +5329,7 @@ VOS_VOID TAF_MMA_ImsRegDomainNotify(
                0x00,
                (VOS_SIZE_T)(sizeof(TAF_MMA_IMS_REG_DOMAIN_NOTIFY_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = WUEPS_PID_TAF;
     pstMsg->ulReceiverPid     = WUEPS_PID_MMA;
     pstMsg->enMsgName         = ID_TAF_MMA_IMS_REG_DOMAIN_NOTIFY;
@@ -5337,7 +5337,7 @@ VOS_VOID TAF_MMA_ImsRegDomainNotify(
 
     pstMsg->enImsRegStatus    = enImsRegStatus;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != NAS_MULTIINSTANCE_SendMsg(enModemId, pstMsg))
     {
         return;
@@ -5354,12 +5354,12 @@ VOS_VOID TAF_MMA_VolteEmc380FailNotify(VOS_VOID)
 
     enModemId = NAS_MULTIINSTANCE_GetCurrInstanceModemId(WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_VOLTE_EMC_380_FAIL_NTF_STRU */
+    /* ??????????TAF_MMA_VOLTE_EMC_380_FAIL_NTF_STRU */
     pstMsg = (TAF_MMA_VOLTE_EMC_380_FAIL_NTF_STRU*)NAS_MULTIINSTANCE_AllocMsgWithHdr(enModemId,
                                              WUEPS_PID_TAF,
                                              sizeof(TAF_MMA_VOLTE_EMC_380_FAIL_NTF_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return;
@@ -5370,12 +5370,12 @@ VOS_VOID TAF_MMA_VolteEmc380FailNotify(VOS_VOID)
                0x00,
                (VOS_SIZE_T)(sizeof(TAF_MMA_VOLTE_EMC_380_FAIL_NTF_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = WUEPS_PID_TAF;
     pstMsg->ulReceiverPid     = WUEPS_PID_MMA;
     pstMsg->ulMsgName         = ID_TAF_MMA_VOLTE_EMC_380_FAIL_NTF;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)NAS_MULTIINSTANCE_SendMsg(enModemId, pstMsg);
 
     return;
@@ -5400,12 +5400,12 @@ VOS_UINT32 TAF_MMA_SetCemodeReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_SYS_CFG_REQ_STRU */
+    /* ??????????TAF_MMA_SYS_CFG_REQ_STRU */
     pstMsg = (TAF_MMA_CEMODE_SET_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSenderPid,
                                              sizeof(TAF_MMA_CEMODE_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5416,8 +5416,8 @@ VOS_UINT32 TAF_MMA_SetCemodeReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CEMODE_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充 TAF_MMA_CEMODE_SET_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ???????????????? TAF_MMA_CEMODE_SET_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_CEMODE_SET_REQ;
@@ -5426,7 +5426,7 @@ VOS_UINT32 TAF_MMA_SetCemodeReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     pstMsg->ucCeMode          = (VOS_UINT8)ulSetValue;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -5449,12 +5449,12 @@ VOS_UINT32 TAF_MMA_QryCemodeReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_SYS_CFG_REQ_STRU */
+    /* ??????????TAF_MMA_SYS_CFG_REQ_STRU */
     pstMsg = (TAF_MMA_CEMODE_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                              ulSenderPid,
                                              sizeof(TAF_MMA_CEMODE_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5465,8 +5465,8 @@ VOS_UINT32 TAF_MMA_QryCemodeReq(
             0x00,
             (VOS_SIZE_T)(sizeof(TAF_MMA_CEMODE_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充 TAF_MMA_CEMODE_QRY_REQ_STRU */
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ???????????????? TAF_MMA_CEMODE_QRY_REQ_STRU */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_CEMODE_QRY_REQ;
@@ -5474,7 +5474,7 @@ VOS_UINT32 TAF_MMA_QryCemodeReq(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -5498,12 +5498,12 @@ VOS_UINT32 TAF_MMA_QryRejinfoReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_REJINFO_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_REJINFO_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_REJINFO_QRY_REQ_STRU*)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                               ulSenderPid,
                                               sizeof(TAF_MMA_REJINFO_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5514,7 +5514,7 @@ VOS_UINT32 TAF_MMA_QryRejinfoReq(
                 0x00,
                 (VOS_SIZE_T)(sizeof(TAF_MMA_REJINFO_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderCpuId               = VOS_LOCAL_CPUID;
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverCpuId             = VOS_LOCAL_CPUID;
@@ -5524,7 +5524,7 @@ VOS_UINT32 TAF_MMA_QryRejinfoReq(
     pstMsg->stCtrl.usClientId           = usClientId;
     pstMsg->stCtrl.ucOpId               = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5550,23 +5550,23 @@ VOS_UINT32  TAF_MMA_SetEmRssiCfgReq(
     ulSenderPid   = WUEPS_PID_TAF;
 #endif
 
-    /* 申请消息包TAF_MMA_EMRSSICFG_SET_REQ_STRU */
+    /* ??????????TAF_MMA_EMRSSICFG_SET_REQ_STRU */
     pstMsg = (TAF_MMA_EMRSSICFG_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                             sizeof(TAF_MMA_EMRSSICFG_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
     }
 
-    /* 初始化 */
+    /* ?????? */
     TAF_MEM_SET_S((VOS_INT8 *)pstMsg + VOS_MSG_HEAD_LENGTH,
                     (VOS_SIZE_T)(sizeof(TAF_MMA_EMRSSICFG_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH),
                     0x00,
                     (VOS_SIZE_T)(sizeof(TAF_MMA_EMRSSICFG_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH));
 
-    /* 根据输入参数填充TAF_MMA_EMRSSICFG_SET_REQ_STRU */
+    /* ????????????????TAF_MMA_EMRSSICFG_SET_REQ_STRU */
     pstMsg->ulSenderPid       = ulSenderPid;
     pstMsg->ulReceiverPid     = ulReceiverPid;
     pstMsg->ulMsgName         = ID_TAF_MMA_EMRSSICFG_SET_REQ;
@@ -5576,7 +5576,7 @@ VOS_UINT32  TAF_MMA_SetEmRssiCfgReq(
 
     TAF_MEM_CPY_S(&(pstMsg->stEmRssiCfg), sizeof(pstMsg->stEmRssiCfg), psEmRssiCfgPara, sizeof(TAF_MMA_EMRSSICFG_REQ_STRU));
 
-   /* 发送消息 */
+   /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5601,11 +5601,11 @@ VOS_UINT32 TAF_MMA_QryEmRssiCfgReq(
     ulSenderPid   = WUEPS_PID_TAF;
 #endif
 
-    /* 申请消息包TAF_MMA_EMRSSICFG_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_EMRSSICFG_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_EMRSSICFG_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                             sizeof(TAF_MMA_EMRSSICFG_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
        return VOS_FALSE;
@@ -5616,14 +5616,14 @@ VOS_UINT32 TAF_MMA_QryEmRssiCfgReq(
                     0x00,
                    (VOS_SIZE_T)(sizeof(TAF_MMA_EMRSSICFG_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid         = ulSenderPid;
     pstMsg->ulReceiverPid       = ulReceiverPid;
     pstMsg->ulMsgName           = ID_TAF_MMA_EMRSSICFG_QRY_REQ;
     pstMsg->stCtrl.ulModuleId   = ulModuleId;
     pstMsg->stCtrl.usClientId   = usClientId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5649,11 +5649,11 @@ VOS_UINT32 TAF_MMA_SetEmRssiRptReq(
     ulSenderPid   = WUEPS_PID_TAF;
 #endif
 
-    /* 申请消息包TAF_MMA_EMRSSIPRT_SET_REQ_STRU */
+    /* ??????????TAF_MMA_EMRSSIPRT_SET_REQ_STRU */
     pstMsg = (TAF_MMA_EMRSSIRPT_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                             sizeof(TAF_MMA_EMRSSIRPT_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5664,7 +5664,7 @@ VOS_UINT32 TAF_MMA_SetEmRssiRptReq(
                    0x00,
                    (VOS_SIZE_T)(sizeof(TAF_MMA_EMRSSIRPT_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充ID_TAF_MMA_EMRSSIRPT_SET_REQ */
+    /* ????????????????ID_TAF_MMA_EMRSSIRPT_SET_REQ */
     pstMsg->ulSenderPid         = ulSenderPid;
     pstMsg->ulReceiverPid       = ulReceiverPid;
     pstMsg->ulMsgName           = ID_TAF_MMA_EMRSSIRPT_SET_REQ;
@@ -5673,7 +5673,7 @@ VOS_UINT32 TAF_MMA_SetEmRssiRptReq(
     pstMsg->stCtrl.ucOpId       = ucOpId;
     pstMsg->ucEmRssiRptSwitch   = *pucEmRssiRptSwitch;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5697,11 +5697,11 @@ VOS_UINT32 TAF_MMA_QryEmRssiRptReq(
     ulSenderPid   = WUEPS_PID_TAF;
 #endif
 
-    /* 申请消息包TAF_MMA_EMRSSICFG_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_EMRSSICFG_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_EMRSSIRPT_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                             sizeof(TAF_MMA_EMRSSIRPT_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5712,14 +5712,14 @@ VOS_UINT32 TAF_MMA_QryEmRssiRptReq(
                    0x00,
                    (VOS_SIZE_T)(sizeof(TAF_MMA_EMRSSIRPT_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid         = ulSenderPid;
     pstMsg->ulReceiverPid       = ulReceiverPid;
     pstMsg->ulMsgName           = ID_TAF_MMA_EMRSSIRPT_QRY_REQ;
     pstMsg->stCtrl.ulModuleId   = ulModuleId;
     pstMsg->stCtrl.usClientId   = usClientId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5740,11 +5740,11 @@ VOS_UINT32 TAF_MMA_SetUlFreqRptReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_ULFREQRPT_SET_REQ_STRU */
+    /* ??????????TAF_MMA_ULFREQRPT_SET_REQ_STRU */
     pstMsg = (TAF_MMA_ULFREQRPT_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                             sizeof(TAF_MMA_ULFREQRPT_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5755,7 +5755,7 @@ VOS_UINT32 TAF_MMA_SetUlFreqRptReq(
                   0x00,
                   (VOS_SIZE_T)(sizeof(TAF_MMA_ULFREQRPT_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 根据输入参数填充ID_TAF_MMA_ULFREQRPT_SET_REQ */
+    /* ????????????????ID_TAF_MMA_ULFREQRPT_SET_REQ */
     pstMsg->ulSenderPid         = ulSenderPid;
     pstMsg->ulReceiverPid       = ulReceiverPid;
     pstMsg->ulMsgName           = ID_TAF_MMA_ULFREQRPT_SET_REQ;
@@ -5764,7 +5764,7 @@ VOS_UINT32 TAF_MMA_SetUlFreqRptReq(
     pstMsg->stCtrl.ucOpId       = ucOpId;
     pstMsg->enMode              = ucMode;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5784,11 +5784,11 @@ VOS_UINT32 TAF_MMA_QryUlFreqRptReq(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 申请消息包TAF_MMA_ULFREQRPT_QRY_REQ_STRU */
+    /* ??????????TAF_MMA_ULFREQRPT_QRY_REQ_STRU */
     pstMsg = (TAF_MMA_ULFREQRPT_QRY_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(ulSenderPid,
                                                                             sizeof(TAF_MMA_ULFREQRPT_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5799,14 +5799,14 @@ VOS_UINT32 TAF_MMA_QryUlFreqRptReq(
                    0x00,
                    (VOS_SIZE_T)(sizeof(TAF_MMA_ULFREQRPT_QRY_REQ_STRU) - VOS_MSG_HEAD_LENGTH) );
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid         = ulSenderPid;
     pstMsg->ulReceiverPid       = ulReceiverPid;
     pstMsg->ulMsgName           = ID_TAF_MMA_ULFREQRPT_QRY_REQ;
     pstMsg->stCtrl.ulModuleId   = ulModuleId;
     pstMsg->stCtrl.usClientId   = usClientId;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5830,18 +5830,18 @@ VOS_UINT32 TAF_MMA_SetClDbDomainStatus(
     ulReceiverPid = TAF_GET_DEST_PID(usClientId, WUEPS_PID_MMA);
     ulSenderPid   = TAF_GET_DEST_PID(usClientId, WUEPS_PID_TAF);
 
-    /* 参数检查 */
+    /* ???????? */
     if (1 < ucMode)
     {
         return VOS_FALSE;
     }
 
-    /* 申请消息包TAF_MMA_CL_DBDOMAIN_STATUS_SET_REQ_STRU */
+    /* ??????????TAF_MMA_CL_DBDOMAIN_STATUS_SET_REQ_STRU */
     pstMsg = (TAF_MMA_CL_DBDOMAIN_STATUS_SET_REQ_STRU *)PS_ALLOC_MSG_WITH_HEADER_LEN(
                                                         ulSenderPid,
                                                         sizeof(TAF_MMA_CL_DBDOMAIN_STATUS_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5852,7 +5852,7 @@ VOS_UINT32 TAF_MMA_SetClDbDomainStatus(
                 0x00,
                 sizeof(TAF_MMA_CL_DBDOMAIN_STATUS_SET_REQ_STRU) - VOS_MSG_HEAD_LENGTH);
 
-    /* 发送PID统一填写为WUEPS_PID_TAF */
+    /* ????PID??????????WUEPS_PID_TAF */
     pstMsg->ulSenderPid                 = ulSenderPid;
     pstMsg->ulReceiverPid               = ulReceiverPid;
     pstMsg->ulMsgName                   = ID_TAF_MMA_CL_DBDOMAIN_STATUSE_SET_REQ;
@@ -5861,7 +5861,7 @@ VOS_UINT32 TAF_MMA_SetClDbDomainStatus(
     pstMsg->stCtrl.ucOpId               = ucOpId;
     pstMsg->ucEnableFlag                = ucMode;
 
-    /* 发送消息 */
+    /* ???????? */
     (VOS_VOID)PS_SEND_MSG(ulSenderPid, pstMsg);
 
     return VOS_TRUE;
@@ -5887,7 +5887,7 @@ VOS_UINT32 TAF_MMA_SetPsSceneReq(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_PS_SCENE_SET_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5906,7 +5906,7 @@ VOS_UINT32 TAF_MMA_SetPsSceneReq(
     pstMsg->stCtrl.ucOpId     = ucOpId;
     TAF_MEM_CPY_S(&(pstMsg->stPsStatePara), sizeof(pstMsg->stPsStatePara), pstPsSrvStatePara, sizeof(TAF_MMA_DETACH_PARA_STRU));
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;
@@ -5931,7 +5931,7 @@ VOS_UINT32 TAF_MMA_QryPsSceneReq(
                                            ulSenderPid,
                                            sizeof(TAF_MMA_PS_SCENE_QRY_REQ_STRU));
 
-    /* 内存申请失败，返回 */
+    /* ?????????????????? */
     if (VOS_NULL_PTR == pstMsg)
     {
         return VOS_FALSE;
@@ -5949,7 +5949,7 @@ VOS_UINT32 TAF_MMA_QryPsSceneReq(
     pstMsg->stCtrl.usClientId = usClientId;
     pstMsg->stCtrl.ucOpId     = ucOpId;
 
-    /* 发送消息 */
+    /* ???????? */
     if (VOS_OK != PS_SEND_MSG(ulSenderPid, pstMsg))
     {
         return VOS_FALSE;

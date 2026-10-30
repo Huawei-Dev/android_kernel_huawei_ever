@@ -73,23 +73,23 @@ extern "C" {
   2 macro
 *****************************************************************************/
 
-/* diag初始化成功且HSO连接上 */
+/* diag????????????HSO?????? */
 #define  DIAG_IS_CONN_ON            ((g_ulDiagCfgInfo & (DIAG_CFG_INIT | DIAG_CFG_CONN )) == (DIAG_CFG_INIT | DIAG_CFG_CONN ))
 
-/* 允许LT 空口上报 */
+/* ????LT ???????? */
 #define  DIAG_IS_LT_AIR_ON          ((g_ulDiagCfgInfo & (DIAG_CFG_INIT | DIAG_CFG_CONN | DIAG_CFG_LT_AIR)) == (DIAG_CFG_INIT | DIAG_CFG_CONN | DIAG_CFG_LT_AIR))
 
-/* 允许GU 空口上报 */
+/* ????GU ???????? */
 #define  DIAG_IS_GU_AIR_ON          ((g_ulDiagCfgInfo & (DIAG_CFG_INIT | DIAG_CFG_CONN | DIAG_CFG_GU_AIR)) == (DIAG_CFG_INIT | DIAG_CFG_CONN | DIAG_CFG_GU_AIR))
 
-/* 允许事件上报 */
+/* ???????????? */
 #define  DIAG_IS_EVENT_ON           ((g_ulDiagCfgInfo & (DIAG_CFG_INIT | DIAG_CFG_CONN | DIAG_CFG_EVT)) == (DIAG_CFG_INIT | DIAG_CFG_CONN | DIAG_CFG_EVT))
 
-/* 允许开机(PowerOn)log上报 */
+/* ????????(PowerOn)log???? */
 #define  DIAG_IS_POLOG_ON           ((g_ulDiagCfgInfo & (DIAG_CFG_INIT | DIAG_CFG_POWERONLOG)) == (DIAG_CFG_INIT | DIAG_CFG_POWERONLOG))
 
 
-/* 日志类型定义*/
+/* ????????????*/
 #define DIAG_CMD_LOG_CATETORY_PRINT_ID              (1<<15)
 #define DIAG_CMD_LOG_CATETORY_EVENT_ID              (1<<14)
 #define DIAG_CMD_LOG_CATETORY_AIR_ID                (1<<13)
@@ -97,11 +97,11 @@ extern "C" {
 #define DIAG_CMD_LOG_CATETORY_MSG_ID                (1<<10)
 #define DIAG_CMD_LOG_CATETORY_USERPLANE_ID          (1<<9)
 
-/* 单帧最大长度 */
+/* ???????????? */
 #define DIAG_FRAME_MAX_LEN      (4*1024)
-/* 单消息最大帧个数 */
+/* ???????????????? */
 #define DIAG_FRMAE_MAX_CNT      (16)
-/* 总长度最大值 */
+/* ???????????? */
 #define DIAG_FRAME_SUM_LEN      (DIAG_FRAME_MAX_LEN * DIAG_FRMAE_MAX_CNT)
 
 /*****************************************************************************
@@ -112,7 +112,7 @@ extern "C" {
 /*****************************************************************************
   4 Enum
 *****************************************************************************/
-/*物理通道类型枚举*/
+/*????????????????*/
 enum
 {
     DIAG_CPM_OM_PORT_TYPE_USB    = 0,
@@ -147,9 +147,9 @@ extern VOS_UINT32 diag_FailedCmdCnf(DIAG_FRAME_INFO_STRU *pData, VOS_UINT32 ulEr
 *****************************************************************************/
 VOS_UINT32 diag_LogPortSwich(VOS_UINT32 ulPhyPort, VOS_BOOL ulEffect);
 /*****************************************************************************
- 函 数 名      : DIAG_LayerMsgReport
- 功能描述  : 层间消息上报接口，用于对OSA消息进行勾包
- 输入参数  : pMsg(标准的VOS消息体，源模块、目的模块信息从消息体中获取)
+ ?? ?? ??      : DIAG_LayerMsgReport
+ ????????  : ????????????????????????OSA????????????
+ ????????  : pMsg(??????VOS??????????????????????????????????????????)
 *****************************************************************************/
 VOS_UINT32 DIAG_LayerMsgReport(VOS_VOID *pMsg);
 

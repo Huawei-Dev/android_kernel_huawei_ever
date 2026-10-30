@@ -1,6 +1,6 @@
 
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "oam_ext_if.h"
 #include "wlan_spec.h"
 #include "mac_resource.h"
@@ -13,12 +13,12 @@
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_MAC_USER_ROM_C
 
-/* 2 全局变量定义 */
+/* 2 ???????????? */
 mac_user_rom_cb g_st_mac_user_rom_other_cb = {
     .p_mac_user_init                    = OAL_PTR_NULL,
     .p_mac_user_update_ap_bandwidth_cap = OAL_PTR_NULL};
 
-/* 3 函数实现 */
+/* 3 ???????? */
 
 oal_uint32 mac_user_add_wep_key_etc(mac_user_stru *pst_mac_user, oal_uint8 uc_key_index, mac_key_params_stru *pst_key)
 {
@@ -94,7 +94,7 @@ oal_uint32 mac_user_add_bip_key_etc(mac_user_stru *pst_mac_user, oal_uint8 uc_ke
 {
     oal_int32 l_ret;
 
-    /* keyid校验 */
+    /* keyid???? */
     if (uc_key_index < WLAN_NUM_TK || uc_key_index > WLAN_MAX_IGTK_KEY_INDEX) {
         return OAL_ERR_CODE_SECURITY_KEY_ID;
     }
@@ -174,17 +174,17 @@ oal_uint32 mac_user_init_etc(mac_user_stru *pst_mac_user,
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 初始化chip id, device ip, vap id */
+    /* ??????chip id, device ip, vap id */
     pst_mac_user->uc_chip_id = uc_chip_id;
     pst_mac_user->uc_device_id = uc_device_id;
     pst_mac_user->uc_vap_id = uc_vap_id;
     pst_mac_user->us_assoc_id = us_user_idx;
 
-    /* 初始化密钥 */
+    /* ?????????? */
     pst_mac_user->st_user_tx_info.st_security.en_cipher_key_type = WLAN_KEY_TYPE_PTK;
     pst_mac_user->st_user_tx_info.st_security.en_cipher_protocol_type = WLAN_80211_CIPHER_SUITE_NO_ENCRYP;
 
-    /* 初始化安全加密信息 */
+    /* ?????????????????? */
     mac_user_init_key_etc(pst_mac_user);
     mac_user_set_key_etc(pst_mac_user, WLAN_KEY_TYPE_PTK, WLAN_80211_CIPHER_SUITE_NO_ENCRYP, 0);
     mac_user_set_port_etc(pst_mac_user, OAL_FALSE);
@@ -194,21 +194,21 @@ oal_uint32 mac_user_init_etc(mac_user_stru *pst_mac_user,
         pst_mac_user->en_is_multi_user = OAL_TRUE;
         pst_mac_user->en_user_asoc_state = MAC_USER_STATE_ASSOC;
     } else {
-        /* 初始化一个用户是否是组播用户的标志，组播用户初始化时不会调用本函数 */
+        /* ?????????????????????????????????????????????????????????????????? */
         pst_mac_user->en_is_multi_user = OAL_FALSE;
 
-        /* 设置mac地址 */
+        /* ????mac???? */
         oal_set_mac_addr(pst_mac_user->auc_user_mac_addr, puc_mac_addr);
     }
 
-    /* 初始化能力 */
+    /* ?????????? */
     mac_user_set_pmf_active_etc(pst_mac_user, OAL_FALSE);
     pst_mac_user->st_cap_info.bit_proxy_arp = OAL_FALSE;
 
     mac_user_set_avail_num_spatial_stream_etc(pst_mac_user, WLAN_SINGLE_NSS);
 
 #ifdef _PRE_WLAN_FEATURE_WMMAC
-    /* TS信息初始化 */
+    /* TS?????????? */
     for (uc_ac_loop = 0; uc_ac_loop < WLAN_WME_AC_BUTT; uc_ac_loop++) {
         pst_mac_user->st_ts_info[uc_ac_loop].uc_up = WLAN_WME_AC_TO_TID(uc_ac_loop);
         pst_mac_user->st_ts_info[uc_ac_loop].en_ts_status = MAC_TS_NONE;
@@ -255,8 +255,8 @@ oal_void mac_user_set_bandwidth_info_etc(mac_user_stru *pst_mac_user,
     pst_mac_user->en_avail_bandwidth = en_avail_bandwidth;
     pst_mac_user->en_cur_bandwidth = en_cur_bandwidth;
 
-    /* Autorate将协议从11n切换成11b后, cur_bandwidth会变为20M
-       此时如果软件将带宽改为40M, cur_bandwidth仍需要保持20M */
+    /* Autorate????????11n??????11b??, cur_bandwidth??????20M
+       ??????????????????????40M, cur_bandwidth??????????20M */
     if ((pst_mac_user->en_cur_protocol_mode == WLAN_LEGACY_11B_MODE) &&
         (pst_mac_user->en_cur_bandwidth != WLAN_BW_CAP_20M)) {
         pst_mac_user->en_cur_bandwidth = WLAN_BW_CAP_20M;
@@ -275,7 +275,7 @@ oal_uint8 mac_user_get_sta_cap_bandwidth_11ac(wlan_channel_band_enum_uint8 en_ba
 {
     wlan_bw_cap_enum_uint8        en_bandwidth_cap = WLAN_BW_CAP_20M;
 
-    /* 2.4g band不应根据vht cap获取带宽信息 */
+    /* 2.4g band????????vht cap???????????? */
     if ((en_band == WLAN_BAND_2G) && (pst_mac_ht_hdl->en_ht_capable == OAL_TRUE)) {
         en_bandwidth_cap = (pst_mac_ht_hdl->bit_supported_channel_width == WLAN_BW_CAP_40M) ?     \
                             WLAN_BW_CAP_40M : WLAN_BW_CAP_20M;
@@ -309,14 +309,14 @@ oal_void mac_user_get_sta_cap_bandwidth_etc(mac_user_stru *pst_mac_user, wlan_bw
     if (pst_mac_vap == OAL_PTR_NULL) {
         return;
     }
-    /* 获取HT和VHT结构体指针 */
+    /* ????HT??VHT?????????? */
     pst_mac_ht_hdl = &(pst_mac_user->st_ht_hdl);
     pst_mac_vht_hdl = &(pst_mac_user->st_vht_hdl);
 #ifdef _PRE_WLAN_FEATURE_11AX
     pst_mac_he_hdl = MAC_USER_HE_HDL_STRU(pst_mac_user);
     if (OAL_TRUE == MAC_USER_IS_HE_USER(pst_mac_user)) {
         if (pst_mac_he_hdl->st_he_cap_ie.st_he_phy_cap.bit_channel_width_set & 0x2) {
-            /* Bit2 指示5G 80MHz */
+            /* Bit2 ????5G 80MHz */
             en_bandwidth_cap = WLAN_BW_CAP_80M;
         } else if (pst_mac_he_hdl->st_he_cap_ie.st_he_phy_cap.bit_channel_width_set & 0x1) {
             en_bandwidth_cap = WLAN_BW_CAP_40M;
@@ -338,7 +338,7 @@ oal_void mac_user_get_sta_cap_bandwidth_etc(mac_user_stru *pst_mac_user, wlan_bw
 
     mac_user_set_bandwidth_cap_etc(pst_mac_user, en_bandwidth_cap);
 
-    /* 将带宽值由出参带出 */
+    /* ?????????????????? */
     *pen_bandwidth_cap = en_bandwidth_cap;
 }
 
@@ -538,7 +538,7 @@ oal_uint32 mac_user_update_wep_key_etc(mac_user_stru *pst_mac_usr, oal_uint16 us
         return OAL_ERR_CODE_SECURITY_KEY_ID;
     }
 
-    /* wep加密下，拷贝组播用户的密钥信息到单播用户 */
+    /* wep???????????????????????????????????????? */
     l_ret = memcpy_s(&pst_mac_usr->st_key_info, OAL_SIZEOF(mac_key_mgmt_stru),
                      &pst_multi_user->st_key_info, OAL_SIZEOF(mac_key_mgmt_stru));
     if (l_ret != EOK) {
@@ -546,9 +546,9 @@ oal_uint32 mac_user_update_wep_key_etc(mac_user_stru *pst_mac_usr, oal_uint16 us
         return OAL_FAIL;
     }
 
-    /* TBD 发送信息要挪出去 */
+    /* TBD ???????????????? */
     pst_mac_usr->st_user_tx_info.st_security.en_cipher_key_type =
-        pst_mac_usr->st_key_info.uc_default_index + HAL_KEY_TYPE_PTK;  // 获取WEP default key id
+        pst_mac_usr->st_key_info.uc_default_index + HAL_KEY_TYPE_PTK;  // ????WEP default key id
 
     return OAL_SUCC;
 }
@@ -572,7 +572,7 @@ oal_void *mac_res_get_mac_user_etc(oal_uint16 us_idx)
         return OAL_PTR_NULL;
     }
 
-    /* 异常: 用户资源已被释放 */
+    /* ????: ???????????????? */
     if (pst_mac_user->uc_is_user_alloced != MAC_USER_ALLOCED) {
 #if (_PRE_OS_VERSION_RAW == _PRE_OS_VERSION)
         /*lint -e718*/ /*lint -e746*/
@@ -581,8 +581,8 @@ oal_void *mac_res_get_mac_user_etc(oal_uint16 us_idx)
                          us_idx, (oal_uint32)__return_address());
         /*lint +e718*/ /*lint +e746*/
 #endif
-        /* device侧获取用户时用户已经释放属于正常，返回空指针，
-         * 后续调用者查找用户失败，请打印WARNING并直接释放buf，走其他分支等等
+        /* device??????????????????????????????????????????????
+         * ??????????????????????????????WARNING??????????buf????????????????
          */
         return OAL_PTR_NULL;
     }

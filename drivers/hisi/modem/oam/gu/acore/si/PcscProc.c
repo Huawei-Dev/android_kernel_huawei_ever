@@ -49,19 +49,19 @@
 
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "PcscProc.h"
 #include "pam_tag.h"
 #include "sitypedef.h"
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID PS_FILE_ID_PCSC_APP_PROC_C
 #define    THIS_MODU    mod_pam_pcsc
 
-/* ACPU上维护卡状态的全局变量*/
+/* ACPU??????????????????????*/
 USIMM_CARDAPP_SERVIC_ENUM_UINT32 g_enAcpuCardStatus = USIMM_CARDAPP_SERVIC_BUTT;
 
 extern VOS_VOID OM_RecordInfoStart(VOS_EXC_DUMP_MEM_NUM_ENUM_UINT32 enNumber, VOS_UINT32 ulSendPid, VOS_UINT32 ulRcvPid, VOS_UINT32 ulMsgName);
@@ -75,7 +75,7 @@ VOS_VOID PCSC_UpdateCardStatus(USIMM_CARDSTATUS_IND_STRU *pstMsg)
         mdrv_debug("<PCSC_UpdateCardStatus> Reg PCSC Func.\n");
     }
 
-    /*更新本地卡状态的全局变量*/
+    /*????????????????????????*/
     g_enAcpuCardStatus = pstMsg->stUsimSimInfo.enCardAppService;
 
     mdrv_debug("<PCSC_UpdateCardStatus> g_enAcpuCardStatus=%d .\n", g_enAcpuCardStatus);

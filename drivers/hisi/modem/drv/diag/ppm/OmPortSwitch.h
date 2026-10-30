@@ -51,7 +51,7 @@
 #define __OM_PORT_SWITCH_H__
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 
 
@@ -64,14 +64,14 @@ extern "C" {
 #pragma pack(4)
 
 /*****************************************************************************
- 结构名    : PPM_PORT_SWITCH_NV_INFO
- 结构说明  : 切端口时写NV从ACORE写改为CCORE写，发送ICC的消息结构体
+ ??????    : PPM_PORT_SWITCH_NV_INFO
+ ????????  : ??????????NV??ACORE??????CCORE????????ICC????????????
 *****************************************************************************/
 typedef struct
 {
     u32 msgid;
     u32 sn;
-    u32 ret; //发送的时候写0 回复的时候C核的处理结果
+    u32 ret; //????????????0 ??????????C????????????
     u32 len;
     DIAG_CHANNLE_PORT_CFG_STRU data;
 }PPM_PORT_SWITCH_NV_INFO;
@@ -87,28 +87,28 @@ typedef struct
 
 enum
 {
-    PPM_MSGID_PORT_SWITCH_NV_A2C = 1,   /* PPM把切端口NV从A核给C核写NV标志 */
-    PPM_MSGID_PORT_SWITCH_NV_C2A = 2,   /* PPM把切端口NV结果从C核返回A核 */
+    PPM_MSGID_PORT_SWITCH_NV_A2C = 1,   /* PPM????????NV??A????C????NV???? */
+    PPM_MSGID_PORT_SWITCH_NV_C2A = 2,   /* PPM????????NV??????C??????A?? */
     PPM_MSGID_BUTT
-};//PPM_消息ID记录
+};//PPM_????ID????
 
 #define AP_CP_PORT_SWITCH_TIMEOUT_MS        (10)    /* 100ms */
 
 typedef struct
 {
-    u32 ulMsgId;    /* 消息ID */
-    u32 ulLen;      /* 消息长度 */
-    u32 ulPortNum;  /* 端口号 */
+    u32 ulMsgId;    /* ????ID */
+    u32 ulLen;      /* ???????? */
+    u32 ulPortNum;  /* ?????? */
 }AP_CP_MSG_PORT_STRU;
 
 typedef struct
 {
-    u32 ulMsgId;    /* 消息ID */
-    u32 ulLen;      /* 消息长度 */
-    u32 ulRet;      /* 结果码 */
+    u32 ulMsgId;    /* ????ID */
+    u32 ulLen;      /* ???????? */
+    u32 ulRet;      /* ?????? */
 }AP_CP_MSG_RET_STRU;
 /*****************************************************************************
-  4 函数声明
+  4 ????????
 *****************************************************************************/
 u32 PPM_DisconnectTLPort(void);
 void PPM_DisconnectAllPort(OM_LOGIC_CHANNEL_ENUM_UINT32 enChannel);

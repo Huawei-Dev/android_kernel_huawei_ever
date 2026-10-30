@@ -68,8 +68,8 @@ extern "C" {
 #include "msp_service.h"
 #include "bsp_diag.h"
 
-#pragma pack(push)//保存对齐状态
-#pragma pack(4)//强制4字节对齐
+#pragma pack(push)//????????????
+#pragma pack(4)//????4????????
 
 /*****************************************************************************
   2 macro
@@ -110,8 +110,8 @@ do{\
 
 typedef struct
 {
-    SOCP_CODER_SRC_ENUM_U32         ulIndChannelID;    /* 编码源通道ID，固定配置 */
-    SOCP_CODER_SRC_ENUM_U32         ulCnfChannelID;    /* 编码源通道ID，固定配置 */
+    SOCP_CODER_SRC_ENUM_U32         ulIndChannelID;    /* ??????????ID?????????? */
+    SOCP_CODER_SRC_ENUM_U32         ulCnfChannelID;    /* ??????????ID?????????? */
     struct wakeup_source            stWakelock;
 }DIAG_SRV_CTRL;
 
@@ -140,7 +140,7 @@ u32 diag_ServicePacketResetData(DIAG_MSG_REPORT_HEAD_STRU *pData);
 u32 diag_GetSrvData(diag_frame_head_stru *pHeader, u32 ulDatalen, diag_frame_head_stru **pProcHead);
 
 
-#pragma pack(pop) //恢复对齐方式
+#pragma pack(pop) //????????????
 
 #ifdef __cplusplus
     #if __cplusplus

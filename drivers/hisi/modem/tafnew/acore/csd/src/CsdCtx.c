@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include  "CsdCtx.h"
 
@@ -56,7 +56,7 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 
 #define    THIS_FILE_ID                 PS_FILE_ID_CSD_CTX_C
@@ -65,13 +65,13 @@
 
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 
 CSD_CTX_STRU                            g_stCsdCtx;
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 VOS_UINT8 CSD_UL_GetAtClientIndex(VOS_VOID)
@@ -91,21 +91,21 @@ VOS_UINT32 CSD_UL_InsertQueueTail(
     IMM_ZC_STRU                        *pstNode
 )
 {
-    /* Modified by l60609 for AP适配项目 ，2012-08-31 Begin */
+    /* Modified by l60609 for AP???????? ??2012-08-31 Begin */
     VOS_ULONG                           ulLockLevel;
 
     ulLockLevel = 0;
 
-    /* 队列加锁 */
+    /* ???????? */
     VOS_SpinLockIntLock(&g_stCsdCtx.stSpinLock, ulLockLevel);
 
-    /* 数据插入队尾 */
+    /* ???????????? */
     IMM_ZcQueueTail(pstQueueHead, pstNode);
 
-    /* 队列解锁 */
+    /* ???????? */
     VOS_SpinUnlockIntUnlock(&g_stCsdCtx.stSpinLock, ulLockLevel);
 
-    /* Modified by l60609 for AP适配项目 ，2012-08-31 End */
+    /* Modified by l60609 for AP???????? ??2012-08-31 End */
 
     CSD_NORMAL_LOG3(ACPU_PID_CSD,
                    "CSD_UL_InsertQueueTail:: Queue len is , Pre is , Next is ",
@@ -120,21 +120,21 @@ VOS_UINT32 CSD_UL_InsertQueueTail(
 IMM_ZC_STRU  *CSD_UL_GetQueueFrontNode(IMM_ZC_HEAD_STRU *pstQueue)
 {
     IMM_ZC_STRU                        *pstNode;
-    /* Modified by l60609 for AP适配项目 ，2012-08-31 Begin */
+    /* Modified by l60609 for AP???????? ??2012-08-31 Begin */
     VOS_ULONG                           ulLockLevel;
 
     ulLockLevel = 0;
 
-    /* 队列加锁 */
+    /* ???????? */
     VOS_SpinLockIntLock(&g_stCsdCtx.stSpinLock, ulLockLevel);
 
-    /* 返回队尾节点指针 */
+    /* ???????????????? */
     pstNode        = IMM_ZcDequeueHead(pstQueue);
 
-    /* 队列解锁 */
+    /* ???????? */
     VOS_SpinUnlockIntUnlock(&g_stCsdCtx.stSpinLock, ulLockLevel);
 
-    /* Modified by l60609 for AP适配项目 ，2012-08-31 End */
+    /* Modified by l60609 for AP???????? ??2012-08-31 End */
 
     CSD_NORMAL_LOG3(ACPU_PID_CSD,
                    "CSD_UL_GetQueueFrontNode:: Queue len is , Pre is , Next is ",
@@ -166,7 +166,7 @@ VOS_UINT32 CSD_UL_FreeQueue(IMM_ZC_HEAD_STRU *pstQueue)
             return VOS_ERR;
         }
 
-        /*释放数据内存*/
+        /*????????????*/
         IMM_ZcFree(pstNode);
 
     }
@@ -236,7 +236,7 @@ VOS_UINT32 CSD_InitSem(VOS_VOID)
     hDLDataSem  = CSD_GetDownLinkDataSem();
     hULDataSem  = CSD_GetUpLinkDataSem();
 
-    /* 初始下行信号量 */
+    /* ?????????????? */
     ulRslt      = VOS_SmBCreate("ulDldataSem",
                                 CSD_SEMAPHORE_INIT_CNT,
                                 VOS_SEMA4_FIFO,
@@ -251,7 +251,7 @@ VOS_UINT32 CSD_InitSem(VOS_VOID)
         return VOS_ERR;
     }
 
-    /* 初始上行信号量 */
+    /* ?????????????? */
     ulRslt      = VOS_SmBCreate("ulUldataSem",
                                 CSD_SEMAPHORE_INIT_CNT,
                                 VOS_SEMA4_FIFO,
@@ -272,19 +272,19 @@ VOS_UINT32 CSD_InitSem(VOS_VOID)
 VOS_UINT32 CSD_InitCtx(VOS_VOID)
 {
 
-    /*缓存队列头指针初始化*/
+    /*????????????????????*/
     CSD_UL_SetQueue(VOS_NULL_PTR);
 
-    /*用来记录最近触发DICC中断的时间，初始为0*/
+    /*????????????????DICC??????????????????0*/
     CSD_SetCurrTxSlice(CSD_DEFAULT_TX_SLICE);
 
-    /*CSD默认通话状态设置*/
+    /*CSD????????????????*/
     CSD_SetCallState(AT_CSD_CALL_STATE_OFF);
 
-    /* Added by l60609 for AP适配项目 ，2012-09-10 Begin */
-    /* 锁初始化 */
+    /* Added by l60609 for AP???????? ??2012-09-10 Begin */
+    /* ???????? */
     VOS_SpinLockInit(&g_stCsdCtx.stSpinLock);
-    /* Added by l60609 for AP适配项目 ，2012-09-10 End */
+    /* Added by l60609 for AP???????? ??2012-09-10 End */
 
     CSD_UL_SetAtClientIndex(0);
 

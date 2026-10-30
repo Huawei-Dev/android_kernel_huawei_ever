@@ -196,25 +196,25 @@ enum VOS_EXC_DUMP_MEM_NUM_ENUM
 };
 
 /**
- * 内存对齐方式。
- * 需要和RTOS的OS_MEM_ALIGN_E一一对应
+ * ??????????????
+ * ??????RTOS??OS_MEM_ALIGN_E????????
  */
 typedef enum
 {
-    VOS_UNCACHE_MEM_ADDR_ALIGN_004 = 2  , /**< 4字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_008 = 3  , /**< 8字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_016 = 4  , /**< 16字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_032 = 5  , /**< 32字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_064 = 6  , /**< 64字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_128 = 7  , /**< 128字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_256 = 8  , /**< 256字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_512 = 9  , /**< 512字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_1K  = 10 , /**< 1K字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_2K  = 11 , /**< 2K字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_4K  = 12 , /**< 4K字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_8K  = 13 , /**< 8K字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_ALIGN_16K = 14 , /**< 16K字节对齐*/
-    VOS_UNCACHE_MEM_ADDR_BUTT             /**< 字节对齐非法*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_004 = 2  , /**< 4????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_008 = 3  , /**< 8????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_016 = 4  , /**< 16????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_032 = 5  , /**< 32????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_064 = 6  , /**< 64????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_128 = 7  , /**< 128????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_256 = 8  , /**< 256????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_512 = 9  , /**< 512????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_1K  = 10 , /**< 1K????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_2K  = 11 , /**< 2K????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_4K  = 12 , /**< 4K????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_8K  = 13 , /**< 8K????????*/
+    VOS_UNCACHE_MEM_ADDR_ALIGN_16K = 14 , /**< 16K????????*/
+    VOS_UNCACHE_MEM_ADDR_BUTT             /**< ????????????*/
 }VOS_UNCACHE_MEM_ALIGN_ENUM;
 
 typedef VOS_UINT32      VOS_EXC_DUMP_MEM_NUM_ENUM_UINT32;

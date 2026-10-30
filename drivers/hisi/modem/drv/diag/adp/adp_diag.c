@@ -133,18 +133,18 @@ unsigned int mdrv_diag_shared_mem_read(unsigned int eType)
     return diag_shared_mem_read(eType);
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_debug_file_header
- 功能描述  : 为DIAG维测添加文件头
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_debug_file_header
+ ????????  : ??DIAG??????????????
+ ????????  : void
 *****************************************************************************/
 unsigned int mdrv_diag_debug_file_header(void *pFile)
 {
     return DIAG_DebugFileHeader(pFile);
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_debug_file_tail
- 功能描述  : 为DIAG维测添加文件尾
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_debug_file_tail
+ ????????  : ??DIAG??????????????
+ ????????  : void
 *****************************************************************************/
 void mdrv_diag_debug_file_tail(void *pFile, char *FilePath)
 {
@@ -152,9 +152,9 @@ void mdrv_diag_debug_file_tail(void *pFile, char *FilePath)
 }
 
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_log
- 功能描述  :
- 输入参数  :
+ ?? ?? ??     : mdrv_diag_report_log
+ ????????  :
+ ????????  :
 *****************************************************************************/
 unsigned int mdrv_diag_report_log(unsigned int ulModuleId, unsigned int ulPid, unsigned int level, char *cFileName, unsigned int ulLineNum, char* pszFmt, va_list arg)
 {
@@ -162,24 +162,24 @@ unsigned int mdrv_diag_report_log(unsigned int ulModuleId, unsigned int ulPid, u
 }
 
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_trans
- 功能描述  : 结构化数据上报接口(替换原来的DIAG_ReportCommand)
- 输入参数  : DRV_DIAG_TRANS_IND_STRU->ulModule( 31-24:modemid,23-16:modeid )
-             DRV_DIAG_TRANS_IND_STRU->ulMsgId(透传命令ID)
-             DRV_DIAG_TRANS_IND_STRU->ulLength(透传信息的长度)
-             DRV_DIAG_TRANS_IND_STRU->pData(透传信息)
+ ?? ?? ??     : mdrv_diag_report_trans
+ ????????  : ??????????????????(??????????DIAG_ReportCommand)
+ ????????  : DRV_DIAG_TRANS_IND_STRU->ulModule( 31-24:modemid,23-16:modeid )
+             DRV_DIAG_TRANS_IND_STRU->ulMsgId(????????ID)
+             DRV_DIAG_TRANS_IND_STRU->ulLength(??????????????)
+             DRV_DIAG_TRANS_IND_STRU->pData(????????)
 *****************************************************************************/
 unsigned int mdrv_diag_report_trans(DRV_DIAG_TRANS_IND_STRU *pstData)
 {
     return diag_report_trans(pstData);
 }
 /*****************************************************************************
- 函 数 名  : DIAG_EventReport
- 功能描述  : 事件上报接口
- 输入参数  : DRV_DIAG_EVENT_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
+ ?? ?? ??  : DIAG_EventReport
+ ????????  : ????????????
+ ????????  : DRV_DIAG_EVENT_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
              DRV_DIAG_EVENT_IND_STRU->ulEventId(event ID)
-             DRV_DIAG_EVENT_IND_STRU->ulLength(event的长度)
-             DRV_DIAG_EVENT_IND_STRU->pData(event信息)
+             DRV_DIAG_EVENT_IND_STRU->ulLength(event??????)
+             DRV_DIAG_EVENT_IND_STRU->pData(event????)
 *****************************************************************************/
 unsigned int mdrv_diag_report_event(DRV_DIAG_EVENT_IND_STRU *pstData)
 {
@@ -191,9 +191,9 @@ unsigned int mdrv_diag_report_air(DRV_DIAG_AIR_IND_STRU *pstData)
 }
 
 /*****************************************************************************
- 函 数 名     : DIAG_TraceReport
- 功能描述  : 层间消息上报接口
- 输入参数  : pMsg(标准的VOS消息体，源模块、目的模块信息从消息体中获取)
+ ?? ?? ??     : DIAG_TraceReport
+ ????????  : ????????????????
+ ????????  : pMsg(??????VOS??????????????????????????????????????????)
 *****************************************************************************/
 unsigned int mdrv_diag_report_trace(void *pstData, unsigned int modemid)
 {
@@ -201,18 +201,18 @@ unsigned int mdrv_diag_report_trace(void *pstData, unsigned int modemid)
 }
 
 /*****************************************************************************
- 函 数 名     : mdrv_diag_reset
- 功能描述  : 复位diag相关内容
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_reset
+ ????????  : ????diag????????
+ ????????  : void
 *****************************************************************************/
 void mdrv_diag_report_reset(void)
 {
     return diag_report_reset();
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_reset_mntn_info
- 功能描述  : 复位diag维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_reset_mntn_info
+ ????????  : ????diag????????????
+ ????????  : void
 *****************************************************************************/
 void mdrv_diag_reset_mntn_info(DIAGLOG_MNTN_ENUM  type)
 {
@@ -226,9 +226,9 @@ void mdrv_diag_reset_mntn_info(DIAGLOG_MNTN_ENUM  type)
     }
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_get_mntn_info
- 功能描述  : 获取维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_get_mntn_info
+ ????????  : ????????????????
+ ????????  : void
 *****************************************************************************/
 void* mdrv_diag_get_mntn_info(DIAGLOG_MNTN_ENUM  type)
 {
@@ -242,36 +242,36 @@ void* mdrv_diag_get_mntn_info(DIAGLOG_MNTN_ENUM  type)
     }
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_msg_trans
- 功能描述  : 获取维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_report_msg_trans
+ ????????  : ????????????????
+ ????????  : void
 *****************************************************************************/
 unsigned int mdrv_diag_report_msg_trans(DRV_DIAG_TRANS_IND_STRU *pstData, unsigned int ulcmdid)
 {
     return diag_report_msg_trans(pstData, ulcmdid);
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_msg_trans
- 功能描述  : 获取维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_report_msg_trans
+ ????????  : ????????????????
+ ????????  : void
 *****************************************************************************/
 unsigned int mdrv_diag_report_cnf(DRV_DIAG_CNF_INFO_STRU *pstData, void *pData, unsigned int ulLen)
 {
     return diag_report_cnf(pstData, pData, ulLen);
 }
 /*****************************************************************************
- 函 数 名  : diag_report_reset_msg
- 功能描述  :
- 输入参数  : 上报单独复位消息(CNF通道TRNANS消息)
+ ?? ?? ??  : diag_report_reset_msg
+ ????????  :
+ ????????  : ????????????????(CNF????TRNANS????)
 *****************************************************************************/
 unsigned int mdrv_diag_report_reset_msg(DRV_DIAG_TRANS_IND_STRU *pstData)
 {
     return diag_report_reset_msg(pstData);
 }
 /*****************************************************************************
- 函 数 名  : bsp_diag_report_drv_log
- 功能描述  : 上报字符串信息
- 输入参数  : void
+ ?? ?? ??  : bsp_diag_report_drv_log
+ ????????  : ??????????????
+ ????????  : void
 *****************************************************************************/
 unsigned int bsp_diag_report_drv_log(unsigned int level, char* fmt, va_list arg)
 {
@@ -358,9 +358,9 @@ void mdrv_diag_debug_file_tail(void *pFile, char *FilePath)
 }
 
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_log
- 功能描述  :
- 输入参数  :
+ ?? ?? ??     : mdrv_diag_report_log
+ ????????  :
+ ????????  :
 *****************************************************************************/
 unsigned int mdrv_diag_report_log(unsigned int ulModuleId, unsigned int ulPid, unsigned int level, char *cFileName, unsigned int ulLineNum, char* pszFmt, va_list arg)
 {
@@ -368,24 +368,24 @@ unsigned int mdrv_diag_report_log(unsigned int ulModuleId, unsigned int ulPid, u
 }
 
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_trans
- 功能描述  : 结构化数据上报接口(替换原来的DIAG_ReportCommand)
- 输入参数  : DRV_DIAG_TRANS_IND_STRU->ulModule( 31-24:modemid,23-16:modeid )
-             DRV_DIAG_TRANS_IND_STRU->ulMsgId(透传命令ID)
-             DRV_DIAG_TRANS_IND_STRU->ulLength(透传信息的长度)
-             DRV_DIAG_TRANS_IND_STRU->pData(透传信息)
+ ?? ?? ??     : mdrv_diag_report_trans
+ ????????  : ??????????????????(??????????DIAG_ReportCommand)
+ ????????  : DRV_DIAG_TRANS_IND_STRU->ulModule( 31-24:modemid,23-16:modeid )
+             DRV_DIAG_TRANS_IND_STRU->ulMsgId(????????ID)
+             DRV_DIAG_TRANS_IND_STRU->ulLength(??????????????)
+             DRV_DIAG_TRANS_IND_STRU->pData(????????)
 *****************************************************************************/
 unsigned int mdrv_diag_report_trans(DRV_DIAG_TRANS_IND_STRU *pstData)
 {
     return 0;
 }
 /*****************************************************************************
- 函 数 名  : DIAG_EventReport
- 功能描述  : 事件上报接口
- 输入参数  : DRV_DIAG_EVENT_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
+ ?? ?? ??  : DIAG_EventReport
+ ????????  : ????????????
+ ????????  : DRV_DIAG_EVENT_IND_STRU->ulModule( 31-24:modemid,23-16:modeid,15-12:level,11-0:pid )
              DRV_DIAG_EVENT_IND_STRU->ulEventId(event ID)
-             DRV_DIAG_EVENT_IND_STRU->ulLength(event的长度)
-             DRV_DIAG_EVENT_IND_STRU->pData(event信息)
+             DRV_DIAG_EVENT_IND_STRU->ulLength(event??????)
+             DRV_DIAG_EVENT_IND_STRU->pData(event????)
 *****************************************************************************/
 unsigned int mdrv_diag_report_event(DRV_DIAG_EVENT_IND_STRU *pstData)
 {
@@ -396,63 +396,63 @@ unsigned int mdrv_diag_report_air(DRV_DIAG_AIR_IND_STRU *pstData)
     return 0;
 }
 /*****************************************************************************
- 函 数 名     : DIAG_TraceReport
- 功能描述  : 层间消息上报接口
- 输入参数  : pMsg(标准的VOS消息体，源模块、目的模块信息从消息体中获取)
+ ?? ?? ??     : DIAG_TraceReport
+ ????????  : ????????????????
+ ????????  : pMsg(??????VOS??????????????????????????????????????????)
 *****************************************************************************/
 unsigned int mdrv_diag_report_trace(void *pstData, unsigned int modemid)
 {
     return 0;
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_reset
- 功能描述  : 复位diag相关内容
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_reset
+ ????????  : ????diag????????
+ ????????  : void
 *****************************************************************************/
 void mdrv_diag_report_reset(void)
 {
     return;
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_reset_mntn_info
- 功能描述  : 复位diag维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_reset_mntn_info
+ ????????  : ????diag????????????
+ ????????  : void
 *****************************************************************************/
 void mdrv_diag_reset_mntn_info(DIAGLOG_MNTN_ENUM  type)
 {
     return;
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_get_mntn_info
- 功能描述  : 获取维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_get_mntn_info
+ ????????  : ????????????????
+ ????????  : void
 *****************************************************************************/
 void* mdrv_diag_get_mntn_info(DIAGLOG_MNTN_ENUM  type)
 {
     return NULL;
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_msg_trans
- 功能描述  : 获取维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_report_msg_trans
+ ????????  : ????????????????
+ ????????  : void
 *****************************************************************************/
 unsigned int mdrv_diag_report_msg_trans(DRV_DIAG_TRANS_IND_STRU *pstData, unsigned int ulcmdid)
 {
     return 0;
 }
 /*****************************************************************************
- 函 数 名     : mdrv_diag_report_msg_trans
- 功能描述  : 获取维测统计信息
- 输入参数  : void
+ ?? ?? ??     : mdrv_diag_report_msg_trans
+ ????????  : ????????????????
+ ????????  : void
 *****************************************************************************/
 unsigned int mdrv_diag_report_cnf(DRV_DIAG_CNF_INFO_STRU *pstData, void *pData, unsigned int ulLen)
 {
     return 0;
 }
 /*****************************************************************************
- 函 数 名  : bsp_diag_report_drv_log
- 功能描述  : 上报字符串信息
- 输入参数  : void
+ ?? ?? ??  : bsp_diag_report_drv_log
+ ????????  : ??????????????
+ ????????  : void
 *****************************************************************************/
 unsigned int bsp_diag_report_drv_log(unsigned int level, char* fmt, va_list arg)
 {

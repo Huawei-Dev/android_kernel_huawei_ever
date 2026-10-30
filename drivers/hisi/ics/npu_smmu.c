@@ -1372,7 +1372,7 @@ bool npu_smmu_interrupt_handler(unsigned int coreID)
 		}
 		if (reg_smmu_comm_status & SMMU_INTCLR_NS_PERMIS_STAT) {
 			ret = true;
-			/* When the input transaction¡¯s attributes doesn¡¯t match the attributes descripted in the page table, the mmu will raise a fault for this. */
+			/* When the input transaction??s attributes doesn??t match the attributes descripted in the page table, the mmu will raise a fault for this. */
 			irq_count->comm_permis_stat++;
 		}
 

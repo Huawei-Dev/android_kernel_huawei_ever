@@ -11,7 +11,7 @@ extern "C" {
 
 #if (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE)
 
-/* 1 其他头文件包含 */
+/* 1 ?????????????? */
 #include "oam_ext_if.h"
 #include "hmac_ext_if.h"
 #include "dmac_ext_if.h"
@@ -21,22 +21,22 @@ extern "C" {
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_HCC_ADAPT_H
 
-/* 2 宏定义 */
-/* 3 枚举定义 */
-/* 4 全局变量声明 */
+/* 2 ?????? */
+/* 3 ???????? */
+/* 4 ???????????? */
 extern oal_uint32 pm_wifi_rxtx_count;
 
-/* 5 消息头定义 */
-/* 6 消息定义 */
-/* 7 STRUCT定义 */
-/* 8 UNION定义 */
-/* 9 OTHERS定义 */
-/* 10 函数声明 */
-/* Hcc 事件处理 */
+/* 5 ?????????? */
+/* 6 ???????? */
+/* 7 STRUCT???? */
+/* 8 UNION???? */
+/* 9 OTHERS???? */
+/* 10 ???????? */
+/* Hcc ???????? */
 extern oal_uint32 hmac_hcc_rx_event_comm_adapt(frw_event_mem_stru *pst_hcc_event_mem);
 extern frw_event_mem_stru *hmac_hcc_test_rx_adapt(frw_event_mem_stru *pst_hcc_event_mem);
 
-/* Rx适配部分 */
+/* Rx???????? */
 extern frw_event_mem_stru *hmac_rx_process_data_sta_rx_adapt(frw_event_mem_stru *pst_hcc_event_mem);
 
 extern frw_event_mem_stru *hmac_rx_process_mgmt_event_rx_adapt(frw_event_mem_stru *pst_hcc_event_mem);
@@ -44,7 +44,7 @@ extern frw_event_mem_stru *hmac_hcc_rx_convert_netbuf_to_event_default(frw_event
 #ifdef _PRE_WLAN_FEATURE_APF
 extern frw_event_mem_stru *hmac_apf_program_report_rx_adapt(frw_event_mem_stru *pst_hcc_event_mem);
 #endif
-/* Tx适配部分 */
+/* Tx???????? */
 extern oal_uint32 hmac_proc_add_user_tx_adapt(frw_event_mem_stru *pst_event_mem);
 extern oal_uint32 hmac_proc_del_user_tx_adapt(frw_event_mem_stru *pst_event_mem);
 extern oal_uint32 hmac_proc_config_syn_tx_adapt(frw_event_mem_stru *pst_event_mem);

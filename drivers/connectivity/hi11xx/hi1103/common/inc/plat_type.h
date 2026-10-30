@@ -3,7 +3,7 @@
 #ifndef __PLAT_TYPE_H__
 #define __PLAT_TYPE_H__
 
-/* ∫Í∂®“Â */
+/* ?????? */
 #define STATIC static
 
 #if (defined(_PRE_PC_LINT) || defined(WIN32))

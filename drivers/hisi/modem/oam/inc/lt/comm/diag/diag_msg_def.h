@@ -73,8 +73,8 @@ extern "C" {
 #define     DIAG_MSG_PHY_A_TRANS_C_REQ          0x00000006
 #define     DIAG_MSG_MSP_AUTH_REQ               0x00000007      /* DIAG_AUTH_STRU */
 #define     DIAG_MSG_MSP_AUTH_FINISH_REQ        0x00000008
-#define     DIAG_MSG_MSP_A_DEBUG_C_REQ          0x00000009      /* 通知C核保存debug信息 */
-#define     DIAG_MSG_BSP_NV_AUTH_REQ            0x0000000A      /* 通知A核鉴权信息 */
+#define     DIAG_MSG_MSP_A_DEBUG_C_REQ          0x00000009      /* ????C??????debug???? */
+#define     DIAG_MSG_BSP_NV_AUTH_REQ            0x0000000A      /* ????A?????????? */
 #define     DIAG_MSG_HIFI_A_TRANS_C_REQ         0x0000000B
 #define     DIAG_MSG_BSP_CMD_LIST_REQ           0x0000000C
 
@@ -105,10 +105,10 @@ extern "C" {
 /*****************************************************************************
   5 struct
 *****************************************************************************/
-/* 核间透传通信结构体 */
+/* ?????????????????? */
 typedef struct
 {
-     VOS_MSG_HEADER                     /*VOS头 */
+     VOS_MSG_HEADER                     /*VOS?? */
      VOS_UINT32                         ulMsgId;
      DIAG_FRAME_INFO_STRU               stInfo;
 }DIAG_MSG_TRANS_STRU;
@@ -120,7 +120,7 @@ typedef struct
 {
     union
     {
-        VOS_UINT32          ulID;           /* 结构化ID */
+        VOS_UINT32          ulID;           /* ??????ID */
         MSP_DIAG_STID_STRU  stID;
     };
     VOS_UINT32 ulTransId;       /* transid */
@@ -128,10 +128,10 @@ typedef struct
     VOS_UINT8  pData[0];        /*lint !e43 */
 }DIAG_HAC_CNF_NRM_STRU;
 
-/* 核间透传通信结构体 */
+/* ?????????????????? */
 typedef struct
 {
-     VOS_MSG_HEADER                     /*VOS头 */
+     VOS_MSG_HEADER                     /*VOS?? */
      VOS_UINT32                         ulMsgId;
      DIAG_FRAME_INFO_STRU               stInfo;
 }DIAG_BSP_MSG_A_TRANS_C_STRU;

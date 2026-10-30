@@ -3,11 +3,11 @@
 #ifndef __BFGX_USER_CTRL_H__
 #define __BFGX_USER_CTRL_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "plat_type.h"
 #include "hisi_customize_wifi.h"
 
-/* 宏定义 */
+/* ?????? */
 #define DEV_SW_STR_BFGX     ("@DEV_SW_VERSION_BFGX:")
 #define DEV_SW_STR_WIFI     ("@DEV_SW_VERSION_WIFI:")
 

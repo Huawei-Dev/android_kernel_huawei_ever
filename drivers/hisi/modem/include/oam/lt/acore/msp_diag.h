@@ -59,8 +59,8 @@ extern "C"
 /* diag debug switch */
 typedef struct
 {
-    VOS_UINT16 usMntnSwitch;    /* 1 打开 0关闭 */
-    VOS_UINT16 usMntnTime;      /*上报周期*/
+    VOS_UINT16 usMntnSwitch;    /* 1 ???? 0???? */
+    VOS_UINT16 usMntnTime;      /*????????*/
 }DIAG_CMD_LOG_DIAG_MNTN_REQ_STRU;
 
 

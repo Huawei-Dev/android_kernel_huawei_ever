@@ -1,6 +1,6 @@
 
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "oal_mem.h"
 #include "oal_net.h"
 #include "wlan_spec.h"
@@ -13,15 +13,15 @@
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_MAC_DATA_ROM_C
 
-/* 2 全局变量定义 */
+/* 2 ???????????? */
 mac_data_cb g_st_mac_data_rom_cb = { OAL_PTR_NULL };
 
-/* 3 函数实现 */
+/* 3 ???????? */
 
 oal_bool_enum_uint8 mac_is_dhcp_port_etc(mac_ip_header_stru *pst_ip_hdr)
 {
     udp_hdr_stru *pst_udp_hdr = OAL_PTR_NULL;
-    /* DHCP判断标准: udp协议，ip头部fragment offset字段为0，目的端口号为67或68 */
+    /* DHCP????????: udp??????ip????fragment offset??????0??????????????67??68 */
     if (pst_ip_hdr->uc_protocol == MAC_UDP_PROTOCAL && ((pst_ip_hdr->us_frag_off & 0xFF1F) == 0)) {
         pst_udp_hdr = (udp_hdr_stru *)(pst_ip_hdr + 1);
 
@@ -105,48 +105,48 @@ oal_uint8 mac_get_data_type_from_8023_etc(oal_uint8 *puc_frame_hdr, mac_netbuff_
     }
 
     switch (us_ether_type) {
-            /* lint -e778 */ /* 屏蔽Info-- Constant expression evaluates to 0 in operation '&' */
+            /* lint -e778 */ /* ????Info-- Constant expression evaluates to 0 in operation '&' */
         case OAL_HOST2NET_SHORT(ETHER_TYPE_IP):
-            /* 从IP TOS字段寻找优先级 */
+            /* ??IP TOS?????????????? */
             /* ----------------------------------------------------------------------
-                tos位定义
+                tos??????
              ----------------------------------------------------------------------
             | bit7~bit5 | bit4 |  bit3  |  bit2  |   bit1   | bit0 |
-            | 包优先级  | 时延 | 吞吐量 | 可靠性 | 传输成本 | 保留 |
+            | ????????  | ???? | ?????? | ?????? | ???????? | ???? |
              ---------------------------------------------------------------------- */
-            pst_ip = (mac_ip_header_stru *)puc_frame_body; /* 偏移一个以太网头，取ip头 */
+            pst_ip = (mac_ip_header_stru *)puc_frame_body; /* ????????????????????ip?? */
 
             if (mac_is_dhcp_port_etc(pst_ip) == OAL_TRUE) {
                 uc_datatype = MAC_DATA_DHCP;
             }
             break;
         case OAL_HOST2NET_SHORT(ETHER_TYPE_IPV6):
-            /* 从IPv6 traffic class字段获取优先级 */
+            /* ??IPv6 traffic class?????????????? */
             /* ----------------------------------------------------------------------
-                IPv6包头 前32为定义
+                IPv6???? ??32??????
              -----------------------------------------------------------------------
-            | 版本号 | traffic class   | 流量标识 |
-            | 4bit   | 8bit(同ipv4 tos)|  20bit   |
+            | ?????? | traffic class   | ???????? |
+            | 4bit   | 8bit(??ipv4 tos)|  20bit   |
             ----------------------------------------------------------------------- */
-            /* 如果是ND帧，则进入VO队列发送 */
+            /* ??????ND??????????VO???????? */
             if (mac_is_nd_etc((oal_ipv6hdr_stru *)puc_frame_body) == OAL_TRUE) {
                 uc_datatype = MAC_DATA_ND;
             }
 
-            /* 如果是DHCPV6帧 */
+            /* ??????DHCPV6?? */
             else if (mac_is_dhcp6_etc((oal_ipv6hdr_stru *)puc_frame_body) == OAL_TRUE) {
                 uc_datatype = MAC_DATA_DHCPV6;
             }
             break;
         case OAL_HOST2NET_SHORT(ETHER_TYPE_PAE):
-            /* 如果是EAPOL帧，则进入VO队列发送 */
+            /* ??????EAPOL??????????VO???????? */
             uc_datatype = MAC_DATA_EAPOL; /* eapol */
             break;
-        /* TDLS帧处理，建链保护，入高优先级TID队列 */
+        /* TDLS????????????????????????????TID???? */
         case OAL_HOST2NET_SHORT(ETHER_TYPE_TDLS):
             uc_datatype = MAC_DATA_TDLS;
             break;
-        /* PPPOE帧处理，建链保护(发现阶段, 会话阶段)，入高优先级TID队列 */
+        /* PPPOE????????????????(????????, ????????)????????????TID???? */
         case OAL_HOST2NET_SHORT(ETHER_TYPE_PPP_DISC):
         case OAL_HOST2NET_SHORT(ETHER_TYPE_PPP_SES):
             uc_datatype = MAC_DATA_PPPOE;
@@ -158,7 +158,7 @@ oal_uint8 mac_get_data_type_from_8023_etc(oal_uint8 *puc_frame_hdr, mac_netbuff_
             uc_datatype = MAC_DATA_VLAN;
             break;
         case OAL_HOST2NET_SHORT(ETHER_TYPE_ARP):
-            /* 如果是ARP帧，则进入VO队列发送 */
+            /* ??????ARP??????????VO???????? */
             uc_datatype = (oal_uint8)mac_get_arp_type_by_arphdr((oal_eth_arphdr_stru *)puc_frame_body);
             break;
         /* lint +e778 */
@@ -242,7 +242,7 @@ pkt_trace_type_enum_uint8 mac_pkt_should_trace(oal_uint8 *puc_frame_hdr, mac_net
     oal_ip_header_stru          *pst_ip = OAL_PTR_NULL;
     oal_uint8                   *puc_icmp_body = OAL_PTR_NULL;
 
-    // 识别出DHCP/ECHO/EAPOL/ARP
+    // ??????DHCP/ECHO/EAPOL/ARP
     uc_data_type = mac_get_data_type_from_8023_etc(puc_frame_hdr, uc_hdr_type);
 
     if (uc_data_type == MAC_DATA_DHCP) {
@@ -266,9 +266,9 @@ pkt_trace_type_enum_uint8 mac_pkt_should_trace(oal_uint8 *puc_frame_hdr, mac_net
 
         /* lint -e778 */
         if (us_ether_type == OAL_HOST2NET_SHORT(ETHER_TYPE_IP)) {
-            pst_ip = (oal_ip_header_stru *)puc_frame_body; /* 偏移一个以太网头，取ip头 */
+            pst_ip = (oal_ip_header_stru *)puc_frame_body; /* ????????????????????ip?? */
 
-            if (pst_ip->uc_protocol == MAC_ICMP_PROTOCAL) {  // 判定为ICMP报文之后，进而筛选出ICMP REQ和ICMP REPLY
+            if (pst_ip->uc_protocol == MAC_ICMP_PROTOCAL) {  // ??????ICMP????????????????????ICMP REQ??ICMP REPLY
                 puc_icmp_body = puc_frame_body + (oal_uint16)OAL_SIZEOF(oal_ip_header_stru);
                 if (*puc_icmp_body == 0 || *puc_icmp_body == 8) {
                     en_trace_data_type = PKT_TRACE_DATA_ICMP;

@@ -81,14 +81,14 @@
 #include "mdrv.h"
 #include "pam_tag.h"
 
-/* LINUX不支持 */
+/* LINUX?????? */
 #if (VOS_VXWORKS == VOS_OS_VER)
 #include "stdlib.h"
 #endif
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID        PS_FILE_ID_V_RTC_TIMER_C
 #define    THIS_MODU           mod_pam_osa
@@ -242,7 +242,7 @@ VOS_UINT32                RTC_Start_Value = ELAPESD_TIME_INVAILD;
 
 VOS_CHAR g_acRtcTimerCtrlBuf[RTC_TIMER_CTRL_BUF_SIZE];
 
-/* 循环记录SOC Timer的启停记录 */
+/* ????????SOC Timer?????????? */
 enum
 {
     RTC_SOC_TIMER_SEND_ERR = 0xfffffffd,
@@ -254,7 +254,7 @@ VOS_UINT32  g_ulRtcSocTimerDebugInfoSuffix = 0;
 
 RTC_SOC_TIMER_DEBUG_INFO_STRU g_astRtcSocTimerDebugInfo[RTC_MAX_TIMER_NUMBER];
 
-/* 记录 RTC timer 可维可测信息 */
+/* ???? RTC timer ???????????? */
 VOS_TIMER_SOC_TIMER_INFO_STRU g_stRtcSocTimerInfo;
 
 /* Added by g47350 for DRX timer Project, 2012/11/5, begin */
@@ -286,15 +286,15 @@ VOS_UINT32                  g_ulBit64NextHardTimerSlice = 0;
 
 #if (OSA_CPU_CCPU == VOS_OSA_CPU)
 
-/* 自旋锁，用来作DRX Timer的临界资源保护 */
+/* ??????????????DRX Timer?????????????? */
 VOS_SPINLOCK                    g_stDrxTimerSpinLock;
 
 /* flight mode max mode number */
 #define DRX_TIMER_WAKE_SRC_MODE_NUM     (8)
 
-VOS_UINT32                      g_ulFlightModeVoteMap = 0;  /*DRX TIMER在飞行模式投票*/
+VOS_UINT32                      g_ulFlightModeVoteMap = 0;  /*DRX TIMER??????????????*/
 
-VOS_SPINLOCK                    g_ulFlightModeVoteMapSpinLock;/* 用于投票的自旋锁 */
+VOS_SPINLOCK                    g_ulFlightModeVoteMapSpinLock;/* ???????????????? */
 
 enum DRX_TIMER_WAKE_SRC_VOTE_TYPE_ENUM
 {
@@ -378,11 +378,11 @@ VOS_INT VOS_TimerLpmCb(VOS_INT x)
 
 /*****************************************************************************
  Function   : RTC_MUL_32_DOT_768
- Description: 乘以32.768
+ Description: ????32.768
  Input      : ulValue -- timer's value.uint is 32K cycle.
-              ulFileID -- 文件ID
-              usLineNo -- 行号
- Return     : 与32.768做乘法的结果
+              ulFileID -- ????ID
+              usLineNo -- ????
+ Return     : ??32.768????????????
  Other      :
  *****************************************************************************/
 VOS_UINT32 RTC_MUL_32_DOT_768(VOS_UINT32 ulValue,VOS_UINT32 ulFileID,
@@ -420,11 +420,11 @@ VOS_UINT32 RTC_MUL_32_DOT_768(VOS_UINT32 ulValue,VOS_UINT32 ulFileID,
 
 /*****************************************************************************
  Function   : RTC_DIV_32_DOT_768
- Description: 除以32.768
+ Description: ????32.768
  Input      : ulValue -- timer's value.uint is 32K cycle.
-              ulFileID -- 文件ID
-              usLineNo -- 行号
- Return     : 与32.768做除法的结果
+              ulFileID -- ????ID
+              usLineNo -- ????
+ Return     : ??32.768????????????
  Other      :
  *****************************************************************************/
 VOS_UINT32 RTC_DIV_32_DOT_768(VOS_UINT32 ulValue,VOS_UINT32 ulFileID,
@@ -464,11 +464,11 @@ VOS_UINT32 RTC_DIV_32_DOT_768(VOS_UINT32 ulValue,VOS_UINT32 ulFileID,
 
 /*****************************************************************************
  Function   : RTC_MUL_DOT_32768
- Description: 乘以0.32768
+ Description: ????0.32768
  Input      : ulValue -- timer's value.uint is 32K cycle.
-              ulFileID -- 文件ID
-              usLineNo -- 行号
- Return     : 与0.32768做乘法的结果
+              ulFileID -- ????ID
+              usLineNo -- ????
+ Return     : ??0.32768????????????
  Other      :
  *****************************************************************************/
 VOS_UINT32 RTC_MUL_DOT_32768(VOS_UINT32 ulValue,VOS_UINT32 ulFileID,
@@ -562,7 +562,7 @@ VOS_VOID RTC_GetDebugSocInfo(VOS_UINT32 *pulAction, VOS_UINT32 *pulSlice, VOS_UI
  *****************************************************************************/
 VOS_VOID RTC_SocTimerMemDump(VOS_VOID)
 {
-    /*lint -e438 屏蔽pucDumpBuffer没有使用的错误*/
+    /*lint -e438 ????pucDumpBuffer??????????????*/
     VOS_UINT8       *pucDumpBuffer;
     VOS_UINT32       ulBufferSize;
 
@@ -664,7 +664,7 @@ VOS_VOID RTC_DualTimerIsrEntry(VOS_UINT32 ulElapsedCycles)
         else
         {
             /*lint -e613 */
-            RTC_TimerCtrlBlkexpiredTail->next = RTC_TimerCtrlBlkCurrent;/* [false alarm]: 屏蔽Fortify 错误 */
+            RTC_TimerCtrlBlkexpiredTail->next = RTC_TimerCtrlBlkCurrent;/* [false alarm]: ????Fortify ???? */
             /*lint +e613 */
             RTC_TimerCtrlBlkexpiredTail = RTC_TimerCtrlBlkCurrent;
         }
@@ -676,7 +676,7 @@ VOS_VOID RTC_DualTimerIsrEntry(VOS_UINT32 ulElapsedCycles)
     {
         RTC_Timer_head_Ptr->previous = VOS_NULL_PTR;
 
-        /* 上面已经把为0的都过滤了，这里不会再有为0的 */
+        /* ????????????0??????????????????????????0?? */
         if (0 == RTC_Timer_head_Ptr->TimeOutValueInCycle)
         {
             RTC_Timer_head_Ptr->TimeOutValueInCycle += 1;
@@ -947,7 +947,7 @@ RTC_TIMER_CONTROL_BLOCK *RTC_TimerCtrlBlkGet(VOS_UINT32 ulFileID, VOS_INT32 usLi
             mdrv_om_system_error(VOS_REBOOT_MEMSET_MEM, 0, (VOS_INT)((THIS_FILE_ID << 16) | __LINE__), 0, 0);
         }
 
-        /* 防止拷贝内存越界，取最小值 */
+        /* ?????????????????????????? */
         /*lint -e506 */
         if ( VOS_NULL_PTR == VOS_MemCpy_s(pDumpBuffer, VOS_DUMP_MEM_TOTAL_SIZE, (VOS_VOID *)g_acRtcTimerCtrlBuf,
                    ((VOS_DUMP_MEM_TOTAL_SIZE < RTC_TIMER_CTRL_BUF_SIZE) ? VOS_DUMP_MEM_TOTAL_SIZE : RTC_TIMER_CTRL_BUF_SIZE )) )
@@ -1106,7 +1106,7 @@ VOS_VOID RTC_TimerTaskFunc( VOS_UINT32 Para0, VOS_UINT32 Para1,
 
             TempValue = (VOS_UINT_PTR)(RTC_TimerCtrlBlkexpired->CallBackFunc);
 
-            /* CallBackFunc需要用32位传入，所以和name互换位置保证数据不丢失 */
+            /* CallBackFunc??????32??????????????name?????????????????????? */
             OM_RecordInfoStart(VOS_EXC_DUMP_MEM_NUM_3, (VOS_UINT32)(RTC_TimerCtrlBlkexpired->Pid), RTC_TimerCtrlBlkexpired->Name, (VOS_UINT32)TempValue);
 
             if ( VOS_NULL_PTR == RTC_TimerCtrlBlkexpired->CallBackFunc )
@@ -2135,10 +2135,10 @@ VOS_UINT32 VOS_DrxTimerTaskCreat(VOS_VOID)
 {
     VOS_UINT32 TimerArguments[4] = {0,0,0,0};
 
-    /* DrxTimer自旋锁的初始化 */
+    /* DrxTimer?????????????? */
     VOS_SpinLockInit(&g_stDrxTimerSpinLock);
 
-    /* Wake Src投票中使用的自旋锁的初始化 */
+    /* Wake Src?????????????????????????? */
     VOS_SpinLockInit(&g_ulFlightModeVoteMapSpinLock);
 
     return( VOS_CreateTask( "DRX_TIMER",
@@ -2319,7 +2319,7 @@ MODULE_EXPORTED VOS_UINT32 V_StartDrxTimer( HTIMER *phTm, VOS_PID Pid, VOS_UINT3
 
 /*****************************************************************************
  Function   : OM_SetDrxTimerWakeSrcAllVote
- Description: 清除当前modem上所有的票
+ Description: ????????modem??????????
  Input      : MODEM_ID_ENUM_UINT16 enModem
  Return     : VOS_VOID
  Other      :
@@ -2332,7 +2332,7 @@ MODULE_EXPORTED VOS_VOID OM_SetDrxTimerWakeSrcAllVote(MODEM_ID_ENUM_UINT16 enMod
     DRX_TIMER_WAKE_SRC_VOTE_STRU        stDrxTimerWakeSrcVoteInfo;
     VOS_UINT32                          ulVoteMap;
 
-    /* 参数检查 */
+    /* ???????? */
     if (enModem >= MODEM_ID_BUTT)
     {
         return;
@@ -2340,7 +2340,7 @@ MODULE_EXPORTED VOS_VOID OM_SetDrxTimerWakeSrcAllVote(MODEM_ID_ENUM_UINT16 enMod
 
     VOS_SpinLockIntLock(&g_ulFlightModeVoteMapSpinLock, ulLockLevel);
 
-    /* 当前modem不在drx，进飞行模式，销整个modem上的票 */
+    /* ????modem????drx????????????????????modem?????? */
     for (ulBitPos = 0; ulBitPos < DRX_TIMER_WAKE_SRC_MODE_NUM; ulBitPos++)
     {
         ulVoteBit               = enModem * DRX_TIMER_WAKE_SRC_MODE_NUM + ulBitPos;
@@ -2350,7 +2350,7 @@ MODULE_EXPORTED VOS_VOID OM_SetDrxTimerWakeSrcAllVote(MODEM_ID_ENUM_UINT16 enMod
 
     VOS_SpinUnlockIntUnlock(&g_ulFlightModeVoteMapSpinLock, ulLockLevel);
 
-    /* 所有mode都退出了drx，就设为唤醒源 */
+    /* ????mode????????drx?????????????? */
     if ( 0 == ulVoteMap )
     {
         mdrv_pm_set_wakesrc(PM_WAKE_SRC_DRX_TIMER);
@@ -2369,7 +2369,7 @@ MODULE_EXPORTED VOS_VOID OM_SetDrxTimerWakeSrcAllVote(MODEM_ID_ENUM_UINT16 enMod
 
 /*****************************************************************************
  Function   : OM_SetDrxTimerWakeSrc
- Description: 设置DRX timer作为唤醒源
+ Description: ????DRX timer??????????
  Input      : MODEM_ID_ENUM_UINT16 enModem
  Return     : VOS_VOID
  Other      :
@@ -2381,7 +2381,7 @@ MODULE_EXPORTED VOS_VOID OM_SetDrxTimerWakeSrc(MODEM_ID_ENUM_UINT16 enModem, VOS
     DRX_TIMER_WAKE_SRC_VOTE_STRU        stDrxTimerWakeSrcVoteInfo;
     VOS_UINT32                          ulVoteMap;
 
-    /* 参数检查 */
+    /* ???????? */
     if ((enModem >= MODEM_ID_BUTT) || (enMode >= VOS_RATMODE_BUTT))
     {
         return;
@@ -2389,14 +2389,14 @@ MODULE_EXPORTED VOS_VOID OM_SetDrxTimerWakeSrc(MODEM_ID_ENUM_UINT16 enModem, VOS
 
     VOS_SpinLockIntLock(&g_ulFlightModeVoteMapSpinLock, ulLockLevel);
 
-    /* 当前mode退出drx，要销票 */
+    /* ????mode????drx???????? */
     ulVoteBit               = enModem * DRX_TIMER_WAKE_SRC_MODE_NUM + enMode;
     g_ulFlightModeVoteMap  &= (~ BIT(ulVoteBit));
     ulVoteMap               = g_ulFlightModeVoteMap;
 
     VOS_SpinUnlockIntUnlock(&g_ulFlightModeVoteMapSpinLock, ulLockLevel);
 
-    /* 所有mode都退出了drx，就设为唤醒源 */
+    /* ????mode????????drx?????????????? */
     if ( 0 == ulVoteMap )
     {
         mdrv_pm_set_wakesrc(PM_WAKE_SRC_DRX_TIMER);
@@ -2415,7 +2415,7 @@ MODULE_EXPORTED VOS_VOID OM_SetDrxTimerWakeSrc(MODEM_ID_ENUM_UINT16 enModem, VOS
 
 /*****************************************************************************
  Function   : OM_DelDrxTimerWakeSrc
- Description: 设置DRX timer不作为唤醒源
+ Description: ????DRX timer????????????
  Input      : MODEM_ID_ENUM_UINT16 enModem
  Return     : VOS_VOID
  Other      :
@@ -2427,7 +2427,7 @@ MODULE_EXPORTED VOS_VOID OM_DelDrxTimerWakeSrc(MODEM_ID_ENUM_UINT16 enModem, VOS
     DRX_TIMER_WAKE_SRC_VOTE_STRU        stDrxTimerWakeSrcVoteInfo;
     VOS_UINT32                          ulVoteMap;
 
-    /* 参数检查 */
+    /* ???????? */
     if ((enModem >= MODEM_ID_BUTT) || (enMode >= VOS_RATMODE_BUTT))
     {
         return;
@@ -2435,14 +2435,14 @@ MODULE_EXPORTED VOS_VOID OM_DelDrxTimerWakeSrc(MODEM_ID_ENUM_UINT16 enModem, VOS
 
     VOS_SpinLockIntLock(&g_ulFlightModeVoteMapSpinLock, ulLockLevel);
 
-    /* 当前mode进drx，要投票 */
+    /* ????mode??drx???????? */
     ulVoteBit               = enModem * DRX_TIMER_WAKE_SRC_MODE_NUM + enMode;
     g_ulFlightModeVoteMap  |= BIT(ulVoteBit);
     ulVoteMap               = g_ulFlightModeVoteMap;
 
     VOS_SpinUnlockIntUnlock(&g_ulFlightModeVoteMapSpinLock, ulLockLevel);
 
-    /* 只要有mode进drx，就设成不作为唤醒源 */
+    /* ??????mode??drx???????????????????? */
     if ( 0 != ulVoteMap )
     {
         mdrv_pm_clear_wakesrc(PM_WAKE_SRC_DRX_TIMER);
@@ -2465,11 +2465,11 @@ MODULE_EXPORTED VOS_VOID OM_DelDrxTimerWakeSrc(MODEM_ID_ENUM_UINT16 enModem, VOS
 #if ((OSA_CPU_CCPU == VOS_OSA_CPU) || (OSA_CPU_NRCPU == VOS_OSA_CPU)) && (FEATURE_ON == FEATURE_VOS_18H_TIMER)
 /*****************************************************************************
  Function   : BIT64_MUL_32_DOT_768
- Description: 乘以32.768
+ Description: ????32.768
  Input      : ulValue -- timer's value.uint is 32K cycle.
-              ulFileID -- 文件ID
-              usLineNo -- 行号
- Return     : 与32.768做乘法的结果
+              ulFileID -- ????ID
+              usLineNo -- ????
+ Return     : ??32.768????????????
  Other      :
  *****************************************************************************/
 VOS_UINT64 BIT64_MUL_32_DOT_768(VOS_UINT32 ulValue,VOS_UINT32 ulFileID,
@@ -2504,11 +2504,11 @@ VOS_UINT64 BIT64_MUL_32_DOT_768(VOS_UINT32 ulValue,VOS_UINT32 ulFileID,
 
 /*****************************************************************************
  Function   : BIT64_DIV_32_DOT_768
- Description: 除以32.768
+ Description: ????32.768
  Input      : ulValue -- timer's value.uint is 32K cycle.
-              ulFileID -- 文件ID
-              usLineNo -- 行号
- Return     : 与32.768做除法的结果
+              ulFileID -- ????ID
+              usLineNo -- ????
+ Return     : ??32.768????????????
  Other      :
  *****************************************************************************/
 VOS_UINT64 BIT64_DIV_32_DOT_768(VOS_UINT64 ulValue,VOS_UINT32 ulFileID,
@@ -2621,8 +2621,8 @@ VOS_UINT32 VOS_GetNextBit64Timer(VOS_UINT64 ullCurSlice, VOS_UINT32* pulNeedStar
     VOS_UINT64                          ullInterval;
     VOS_UINT32                          ulMinValue;
 
-    /* 64BIT定时器资源池列表中所有定时器距离当前系统时间超时时长超过18小时，
-       则需要启动18小时最大的定时计数。换算成32K硬件定时器时长为0x7E900000 */
+    /* 64BIT????????????????????????????????????????????????????????18??????
+       ??????????18??????????????????????????32K????????????????0x7E900000 */
     ulMinValue         = 0x7E900000;
     *pulNeedStartTimer  = VOS_FALSE;
 
@@ -2648,7 +2648,7 @@ VOS_UINT32 VOS_GetNextBit64Timer(VOS_UINT64 ullCurSlice, VOS_UINT32* pulNeedStar
         }
     }
 
-    /* 规避芯片timerbug，不能启动0步长定时器 */
+    /* ????????timerbug??????????0?????????? */
     if (0 == ulMinValue)
     {
         ulMinValue += 1;
@@ -2689,11 +2689,11 @@ VOS_VOID VOS_Bit64TimerTaskFunc( VOS_UINT32 Para0, VOS_UINT32 Para1,
         {
             if (BIT64_TIMER_USED_FLAG == g_astBit64TimerCtrlBlk[i].ulUsedFlag)
             {
-                /* 64位Slice时间是个非常大的时间，按照正常使用该时间是几乎不会
-                  发生反转的，所以此处判断可以不用考虑反转场景 */
+                /* 64??Slice??????????????????????????????????????????????????
+                  ???????????????????????????????????????????? */
                 if (ullCurSlice >= g_astBit64TimerCtrlBlk[i].ullTimeEndSlice)
                 {
-                    /* 定时器超时后，给调用组件发送消息通知 */
+                    /* ???????????????????????????????????? */
                     pstExpireMsg = VOS_TimerPreAllocMsg(g_astBit64TimerCtrlBlk[i].ulPid);
 
                     if ( VOS_NULL_PTR != pstExpireMsg )
@@ -2789,7 +2789,7 @@ VOS_UINT32 VOS_StopBit64Timer( HTIMER *phTm,
 
         VOS_ProtectionReboot(VOS_ERRNO_BIT64TIME_ERROR_TIMERNOUSED, (VOS_INT)ulFileID, (VOS_INT)lLineNo, (VOS_CHAR*)phTm, sizeof(VOS_CHAR *));
 
-        /* 补充异常处理流程 */
+        /* ???????????????? */
         return VOS_ERRNO_BIT64TIME_ERROR_TIMERNOUSED;
     }
 
@@ -2825,7 +2825,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_StartBit64Timer( HTIMER *phTm,
 
     VOS_SpinLockIntLock(&g_stVosTimerSpinLock, ulLockLevel);
 
-    /* 如果定时器已经启动，则先停止该定时器 */
+    /* ???????????????????????????????????? */
     if (VOS_NULL_PTR != *phTm)
     {
         if (VOS_OK != VOS_StopBit64Timer(phTm, ulFileID, lLineNo, VOS_NULL_PTR))
@@ -2840,7 +2840,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_StartBit64Timer( HTIMER *phTm,
         }
     }
 
-    /* 查找资源池中空闲的定时器资源 */
+    /* ???????????????????????????? */
     for(i = 0; i < BIT64_TIMER_MAX_NUMBER; i++)
     {
         if (BIT64_TIMER_NOT_USED_FLAG == g_astBit64TimerCtrlBlk[i].ulUsedFlag)
@@ -2849,7 +2849,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_StartBit64Timer( HTIMER *phTm,
         }
     }
 
-    /* 所有定时器资源都被使用，OSA发起保护性复位保留现场确认资源使用情况 */
+    /* ????????????????????????OSA?????????????????????????????????????? */
     if (BIT64_TIMER_MAX_NUMBER == i)
     {
         VOS_SpinUnlockIntUnlock(&g_stVosTimerSpinLock, ulLockLevel);
@@ -2883,7 +2883,7 @@ MODULE_EXPORTED VOS_UINT32 VOS_StartBit64Timer( HTIMER *phTm,
 
     *phTm = (HTIMER)(&g_astBit64TimerCtrlBlk[i]);
 
-    /* 遍历资源池，确认是否需要启动硬件定时器 */
+    /* ?????????????????????????????????????? */
     ulNextTime = VOS_GetNextBit64Timer(ullCurSlice, &ulNeedStartTimer);
 
     if (VOS_TRUE == ulNeedStartTimer)
@@ -2919,10 +2919,10 @@ VOS_UINT32 VOS_RestartBit64Timer( HTIMER *phTm,
 
     ullCurSlice = VOS_Get64BitSlice();
 
-    /* 重置定时器预期超时物理时间 */
+    /* ?????????????????????????? */
     pstTimerCtrl->ullTimeEndSlice    = pstTimerCtrl->ullTimeOutValueSlice + ullCurSlice;
 
-    /* 遍历资源池，确认是否需要启动硬件定时器 */
+    /* ?????????????????????????????????????? */
     ulNextTime = VOS_GetNextBit64Timer(ullCurSlice, &ulNeedStartTimer);
 
     if (VOS_TRUE == ulNeedStartTimer)
@@ -3019,10 +3019,10 @@ VOS_VOID RTC_ReportOmInfo(VOS_VOID)
     VOS_UINT32                   ulRTCTimerInfoLength      = 0;
     VOS_RTC_OM_INFO_STRU        *pstRTCInfo                = VOS_NULL_PTR;
 
-    /* 获取g_astRtcSocTimerDebugInfo的大小 */
+    /* ????g_astRtcSocTimerDebugInfo?????? */
     ulRTCTimerDebugInfoLength = sizeof(RTC_SOC_TIMER_DEBUG_INFO_STRU) * RTC_MAX_TIMER_NUMBER;
 
-    /* 获取g_stRtcSocTimerInfo的大小 */
+    /* ????g_stRtcSocTimerInfo?????? */
     ulRTCTimerInfoLength = sizeof(VOS_TIMER_SOC_TIMER_INFO_STRU);
 
     ulRTCLength = ulRTCTimerDebugInfoLength + ulRTCTimerInfoLength;

@@ -8,7 +8,7 @@ extern "C" {
 
 #ifdef _PRE_WLAN_FEATURE_DAQ
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "wlan_spec.h"
 #include "mac_resource.h"
 #include "mac_device.h"
@@ -20,10 +20,10 @@ extern "C" {
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_DATA_ACQ_C
 
-/* 2 全局变量定义 */
+/* 2 ???????????? */
 oal_uint8 g_uc_data_acq_used = OAL_FALSE;
 
-/* 3 函数实现 */
+/* 3 ???????? */
 
 oal_void hmac_data_acq_init(oal_void)
 {
@@ -52,7 +52,7 @@ oal_void hmac_data_acq_down_vap(mac_vap_stru *pst_mac_vap)
         return;
     }
 
-    /* 遍历device下所有vap，设置vap 下的信道号 */
+    /* ????device??????vap??????vap ?????????? */
     for (uc_vap_idx = 0; uc_vap_idx < pst_device->uc_vap_num; uc_vap_idx++) {
         pst_hmac_vap = mac_res_get_hmac_vap(pst_device->auc_vap_id[uc_vap_idx]);
         if (OAL_PTR_NULL == pst_hmac_vap) {

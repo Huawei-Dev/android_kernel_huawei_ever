@@ -3,8 +3,8 @@
 #ifndef __OAL_WINDOWS_CFG80211_H__
 #define __OAL_WINDOWS_CFG80211_H__
 
-/* 宏定义 */
-/* hostapd和supplicant事件上报需要用到宏 */
+/* ?????? */
+/* hostapd??supplicant?????????????????? */
 #define OAL_NLMSG_GOODSIZE            1920
 #define OAL_ETH_ALEN_SIZE             6
 #define OAL_NLMSG_DEFAULT_SIZE        (OAL_NLMSG_GOODSIZE - OAL_NLMSG_HDRLEN)

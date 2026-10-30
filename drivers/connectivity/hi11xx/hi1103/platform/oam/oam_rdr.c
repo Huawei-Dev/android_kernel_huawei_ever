@@ -264,7 +264,7 @@ int32 hisi_conn_save_stat_info(char *buf, int32 index, int32 limit)
             "   id:%-10d  upload_en:%d    upload_cnt:%llu    happen_cnt:%llu    interva_stime:%llus   lastuploadtime:%4d-%02d-%02d  %02d:%02d:%02d\n",
             i, hisi_conn_modid_cfg[i].upload_en, hisi_conn_modid_cfg[i].stat_info.upload_cnt,
             hisi_conn_modid_cfg[i].stat_info.happen_cnt, hisi_conn_modid_cfg[i].interva_stime,
-            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec); /* 转换成当前时间 */
+            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec); /* ?????????????? */
         if (ret < 0) {
             OAL_IO_PRINT("log str format err line[%d]\n", __LINE__);
             return index;

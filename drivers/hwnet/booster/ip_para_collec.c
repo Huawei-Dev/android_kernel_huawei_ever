@@ -79,7 +79,7 @@ static u32 match_app(struct sock *sk, struct tcp_res *stat,
 	u32 uid;
 	u32 pid;
 
-	// udp_in、forward
+	// udp_in???forward
 	if (stat->uid == 0)
 		return BACKGROUND;
 	if (sk == NULL)

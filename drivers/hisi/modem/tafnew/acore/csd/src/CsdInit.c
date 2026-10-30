@@ -47,7 +47,7 @@
 */
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "CsdInit.h"
 
@@ -56,18 +56,18 @@
 
 
 /*****************************************************************************
-    协议栈打印打点方式下的.C文件宏定义
+    ??????????????????????.C??????????
 *****************************************************************************/
 #define    THIS_FILE_ID                 PS_FILE_ID_CSD_INIT_C
 
 #if( FEATURE_ON == FEATURE_CSD )
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 VOS_UINT32 CSD_InitDicc(VOS_VOID)
@@ -76,21 +76,21 @@ VOS_UINT32 CSD_InitDicc(VOS_VOID)
     DICC_INIT_CHN_INFO_STRU             stSendInitInfo;
     DICC_INIT_CHN_INFO_STRU             stRcvInitInfo;
 
-    /* 发送端参数设置 */
+    /* ?????????????? */
     stSendInitInfo.enUserRole      = DICC_CHAN_ROLE_SENDER;
     stSendInitInfo.u.stSndInitInfo.stSndChnInfo.usChnBlkNum
                                    = DICC_PER_QUEUE_MAX_NODE_NUM;
     stSendInitInfo.u.stSndInitInfo.stSndChnInfo.usChnBlkSize
                                    = DICC_INFO_BLOCK_MAX_LEN;
 
-    /* 接收端参数设置 */
+    /* ?????????????? */
     stRcvInitInfo.enUserRole       = DICC_CHAN_ROLE_RECVER;
 
-    /*中断响应函数*/
+    /*????????????*/
     stRcvInitInfo.u.stRcvInitInfo.pfuncRecvIsr
                                    = CSD_DL_ProcIsr;
 
-    /*初始化DICC发送通道*/
+    /*??????DICC????????*/
     ulDICCRslt                     = DICC_SingleChnInit(ACPU_PID_CSD,
                                                         DICC_SERVICE_TYPE_CSD_DATA,
                                                         &stSendInitInfo,
@@ -102,7 +102,7 @@ VOS_UINT32 CSD_InitDicc(VOS_VOID)
         return VOS_ERR;
     }
 
-    /* 初始化DICC接收通道*/
+    /* ??????DICC????????*/
     ulDICCRslt                     = DICC_SingleChnInit(ACPU_PID_CSD,
                                                         DICC_SERVICE_TYPE_CSD_DATA,
                                                         &stRcvInitInfo,
@@ -115,7 +115,7 @@ VOS_UINT32 CSD_InitDicc(VOS_VOID)
     }
 
 
-    /*打开上行DICC发送通道*/
+    /*????????DICC????????*/
     ulDICCRslt                      = DICC_OpenChannel(ACPU_PID_CSD,
                                                        DICC_CHAN_ID_UL_CSD_DATA_CHAN,
                                                        DICC_CHAN_ROLE_SENDER,
@@ -127,7 +127,7 @@ VOS_UINT32 CSD_InitDicc(VOS_VOID)
         return VOS_ERR;
     }
 
-    /*打开下行DICC接收通道*/
+    /*????????DICC????????*/
     ulDICCRslt                      = DICC_OpenChannel(ACPU_PID_CSD,
                                                        DICC_CHAN_ID_DL_CSD_DATA_CHAN,
                                                        DICC_CHAN_ROLE_RECVER,
@@ -152,7 +152,7 @@ VOS_UINT32 CSD_UL_PidInit(enum VOS_INIT_PHASE_DEFINE ip)
     {
         case   VOS_IP_LOAD_CONFIG:
 
-            /*DICC通道初始化*/
+            /*DICC??????????*/
             ulRslt = CSD_InitDicc();
 
             if (VOS_OK != ulRslt)
@@ -162,7 +162,7 @@ VOS_UINT32 CSD_UL_PidInit(enum VOS_INIT_PHASE_DEFINE ip)
                 return VOS_ERR;
             }
 
-            /*全局变量初始化*/
+            /*??????????????*/
             ulRslt = CSD_InitCtx();
 
             break;
@@ -195,7 +195,7 @@ VOS_UINT32 CSD_FidInit (enum VOS_INIT_PHASE_DEFINE  enInitPhase)
     {
         case   VOS_IP_LOAD_CONFIG:
 
-            /*初始化上行下行信号量*/
+            /*????????????????????*/
            ulReturnCode = CSD_InitSem();
 
             if (VOS_OK != ulReturnCode)
@@ -217,7 +217,7 @@ VOS_UINT32 CSD_FidInit (enum VOS_INIT_PHASE_DEFINE  enInitPhase)
             }
 
 
-            /* 上行自处理任务注册 */
+            /* ?????????????????? */
             ulReturnCode  = VOS_RegisterSelfTask(ACPU_FID_CSD,
                                                  (VOS_TASK_ENTRY_TYPE)CSD_UL_ProcDataTask,
                                                  VOS_PRIORITY_P5,
@@ -230,7 +230,7 @@ VOS_UINT32 CSD_FidInit (enum VOS_INIT_PHASE_DEFINE  enInitPhase)
                 return VOS_ERR;
             }
 
-            /* 下行自处理任务注册 */
+            /* ?????????????????? */
             ulReturnCode  = VOS_RegisterSelfTask(ACPU_FID_CSD,
                                                  (VOS_TASK_ENTRY_TYPE)CSD_DL_ProcDataTask,
                                                  VOS_PRIORITY_P5,
@@ -244,7 +244,7 @@ VOS_UINT32 CSD_FidInit (enum VOS_INIT_PHASE_DEFINE  enInitPhase)
             }
 
 
-            /* 任务优先级 */
+            /* ?????????? */
             ulReturnCode = VOS_RegisterMsgTaskPrio(ACPU_FID_CSD, VOS_PRIORITY_P3);
             if( VOS_OK != ulReturnCode )
             {

@@ -321,7 +321,7 @@ oal_int32 oal_pcie_firmware_cmd_send_writem(oal_pcie_res *pst_pcie_res, oal_uint
 
     PCI_PRINT_LOG(PCI_LOG_DBG, "pcie writem cmd send");
 
-    /* buff之前会初始化，这里取出 */
+    /* buff?????????????????????? */
     reg_width = ParamBuf[0];
     cpu_addr = ParamBuf[1];
     value = ParamBuf[2];
@@ -334,7 +334,7 @@ oal_int32 oal_pcie_firmware_cmd_send_writem(oal_pcie_res *pst_pcie_res, oal_uint
         return -OAL_EFAUL;
     }
 
-    /* 地址宽度 */
+    /* ???????? */
     switch (reg_width) {
         case 1:
             *(oal_uint8 *)addr_map.va = (oal_uint8)value;
@@ -393,7 +393,7 @@ oal_int32 oal_pcie_firmware_cmd_send_readm(oal_pcie_res *pst_pcie_res, oal_uint8
     cpu_addr = ParamBuf[0];
     ulLen = ParamBuf[1];
 
-    /* 起始地址和长度需要四字节对齐 */
+    /* ???????????????????????????? */
     if (((cpu_addr % 4) != 0) || ((ulLen % 4) != 0) || (ulLen == 0)) {
         PCI_PRINT_LOG(PCI_LOG_ERR, "pcie readm cmd error, addr 0x%x len %u", cpu_addr, ulLen);
         return -OAL_EINVAL;
@@ -514,7 +514,7 @@ oal_int32 oal_pcie_firmware_get_param(oal_uint8 *buff, oal_int32 len)
         }
 
         pucTmp = pucDataBuff;
-        ulParam = simple_strtoul(pucTmp, (char **)&pucDataBuff, 0);  // 0自动识别进制
+        ulParam = simple_strtoul(pucTmp, (char **)&pucDataBuff, 0);  // 0????????????
 
         ParamBuf[ulParamIndex] = ulParam;
         ulParamIndex++;

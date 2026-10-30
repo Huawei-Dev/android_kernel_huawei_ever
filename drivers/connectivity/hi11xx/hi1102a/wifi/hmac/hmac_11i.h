@@ -6,7 +6,7 @@ extern "C" {
 #endif
 #endif
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "mac_resource.h"
 #include "hmac_vap.h"
 #include "hmac_user.h"
@@ -14,15 +14,15 @@ extern "C" {
 #undef THIS_FILE_ID
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_11i_H
 
-/* 2 宏定义 */
-/* 3 枚举定义 */
-/* 4 全局变量声明 */
-/* 5 消息头定义 */
-/* 6 消息定义 */
-/* 7 STRUCT定义 */
-/* 8 UNION定义 */
-/* 9 OTHERS定义 */
-/* 10 函数声明 */
+/* 2 ?????? */
+/* 3 ???????? */
+/* 4 ???????????? */
+/* 5 ?????????? */
+/* 6 ???????? */
+/* 7 STRUCT???? */
+/* 8 UNION???? */
+/* 9 OTHERS???? */
+/* 10 ???????? */
 oal_uint32 hmac_init_security(mac_vap_stru *pst_mac_vap, oal_uint8 *puc_addr);
 extern oal_uint32 hmac_check_pcip_policy(mac_vap_stru *pst_mac_vap,
                                          oal_uint8 *auc_pcip_policy,

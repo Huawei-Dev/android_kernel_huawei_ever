@@ -3,7 +3,7 @@
 #ifndef __BFGX_EXCEPTION_RST_H__
 #define __BFGX_EXCEPTION_RST_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "plat_exception_rst.h"
 
 /* plat cfg cmd */

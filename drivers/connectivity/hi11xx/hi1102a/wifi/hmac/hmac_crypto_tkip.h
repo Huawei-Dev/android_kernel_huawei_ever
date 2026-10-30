@@ -9,11 +9,11 @@ extern "C" {
 #endif
 #endif
 
-/* 1 其他头文件包含 */
+/* 1 ?????????????? */
 #include "oal_ext_if.h"
 #include "mac_vap.h"
 
-/* 2 宏定义 */
+/* 2 ?????? */
 #define michael_block(l, r) \
     do {                    \
         r ^= rotl(l, 17);   \
@@ -40,14 +40,14 @@ extern "C" {
 #define WEP_IV_FIELD_SIZE 4 /* wep IV field size */
 #define EXT_IV_FIELD_SIZE 4 /* ext IV field size */
 
-/* 3 枚举定义 */
-/* 4 全局变量声明 */
-/* 5 消息头定义 */
-/* 6 消息定义 */
-/* 7 STRUCT定义 */
-/* 8 UNION定义 */
-/* 9 OTHERS定义 */
-/* 10 函数声明 */
+/* 3 ???????? */
+/* 4 ???????????? */
+/* 5 ?????????? */
+/* 6 ???????? */
+/* 7 STRUCT???? */
+/* 8 UNION???? */
+/* 9 OTHERS???? */
+/* 10 ???????? */
 OAL_STATIC OAL_INLINE oal_uint32 rotl(oal_uint32 val, oal_uint32 bits)
 {
     return (val << bits) | (val >> (32 - bits));

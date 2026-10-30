@@ -6,11 +6,11 @@ extern "C"
 {
 #endif
 
-/* easyrf dump头结构 */
+/* easyrf dump?????? */
 typedef struct
 {
-    unsigned char                       aucDescription[4];                      /* dump文件信息描述，填写RFIC对应的ASCII码 */
-    unsigned int                        uwDumpSize;                             /* dump文件大小，包含头，单位byte */
+    unsigned char                       aucDescription[4];                      /* dump??????????????????RFIC??????ASCII?? */
+    unsigned int                        uwDumpSize;                             /* dump??????????????????????byte */
 }EASYRF_DUMP_HEAD_STRU;
 
 #ifdef __cplusplus

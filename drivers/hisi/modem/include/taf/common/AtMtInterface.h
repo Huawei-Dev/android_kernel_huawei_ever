@@ -50,7 +50,7 @@
 #define __ATMTINTERFACE_H__
 
 /*****************************************************************************
-  1 其他头文件包含
+  1 ??????????????
 *****************************************************************************/
 
 #ifdef __cplusplus
@@ -72,9 +72,9 @@ extern "C" {
 
 #if(FEATURE_ON == FEATURE_UE_MODE_NR)
 /*****************************************************************************
-  2 宏定义
+  2 ??????
 *****************************************************************************/
-/* 将BBIC CAL模块定义的消息转换成AT和BBIC模块间的消息 */
+/* ??BBIC CAL????????????????????AT??BBIC???????????? */
 #define ID_AT_BBIC_CAL_RF_DEBUG_TX_REQ          ID_TOOL_BBIC_CAL_RF_DEBUG_TX_REQ            /* _H2ASN_MsgChoice BBIC_CAL_RF_DEBUG_TX_REQ_STRU           */
 #define ID_BBIC_AT_CAL_MSG_CNF                  ID_BBIC_TOOL_CAL_MSG_CNF                    /* _H2ASN_MsgChoice BBIC_CAL_MSG_CNF_STRU                   */
 #define ID_BBIC_AT_CAL_RF_DEBUG_TX_RESULT_IND   ID_BBIC_TOOL_CAL_RF_DEBUG_TX_RESULT_IND     /* _H2ASN_MsgChoice BBIC_CAL_RF_DEBUG_TX_RESULT_IND_STRU    */
@@ -129,7 +129,7 @@ typedef struct
     VOS_UINT16                          usRev;
 }AT_MT_MSG_HEADER_STRU;
 
-/* 填写消息头 */
+/* ?????????? */
 #define AT_CFG_MT_MSG_HDR(pstMsg, ulRecvPid, usSndMsgId)\
             ((AT_MT_MSG_HEADER_STRU *)(pstMsg))->ulSenderCpuId   = VOS_LOCAL_CPUID;\
             ((AT_MT_MSG_HEADER_STRU *)(pstMsg))->ulSenderPid     = WUEPS_PID_AT;\
@@ -137,22 +137,22 @@ typedef struct
             ((AT_MT_MSG_HEADER_STRU *)(pstMsg))->ulReceiverPid   = (ulRecvPid);\
             ((AT_MT_MSG_HEADER_STRU *)(pstMsg))->usMsgId         = (usSndMsgId);
 
-/* 获取消息内容开始地址 */
+/* ???????????????????? */
 #define AT_MT_GET_MSG_ENTITY(pstMsg)\
             ((VOS_VOID *)&(((AT_MT_MSG_HEADER_STRU *)(pstMsg))->usMsgId))
 
-/* 获取消息长度 */
+/* ???????????? */
 #define AT_MT_GET_MSG_LENGTH(pstMsg)\
             (((MSG_HEADER_STRU *)(pstMsg))->ulLength)
 
 
-/* 封装消息初始化消息内容接口 */
+/* ?????????????????????????? */
 #define AT_MT_CLR_MSG_ENTITY(pstMsg)\
             TAF_MEM_SET_S(AT_MT_GET_MSG_ENTITY(pstMsg), AT_MT_GET_MSG_LENGTH(pstMsg), 0x00, AT_MT_GET_MSG_LENGTH(pstMsg))
 
 
 /*****************************************************************************
-  3 枚举定义
+  3 ????????
 *****************************************************************************/
 
 enum AT_PROTOCOL_BAND_ENUM
@@ -401,8 +401,8 @@ typedef VOS_UINT8 AT_CMD_PALEVEL_ENUM_UINT8;
 
 enum AT_ANT_TYPE_ENUM
 {
-    AT_ANT_TYPE_PRI                     = 1,                                    /* 主极 */
-    AT_ANT_TYPE_DIV                     = 2,                                    /* 分极 */
+    AT_ANT_TYPE_PRI                     = 1,                                    /* ???? */
+    AT_ANT_TYPE_DIV                     = 2,                                    /* ???? */
     AT_ANT_TYPE_MIMO                    = 4,                                    /* MINO */
 
     AT_ANT_TYPE_BUTT
@@ -412,9 +412,9 @@ typedef VOS_UINT8   AT_ANT_TYPE_ENUM_UINT8;
 
 enum AT_MIMO_TYPE_ENUM
 {
-    AT_MIMO_TYPE_2                      = 1,                                    /* 双天线 */
-    AT_MIMO_TYPE_4                      = 2,                                    /* 四天线 */
-    AT_MIMO_TYPE_8                      = 3,                                    /* 八天线 */
+    AT_MIMO_TYPE_2                      = 1,                                    /* ?????? */
+    AT_MIMO_TYPE_4                      = 2,                                    /* ?????? */
+    AT_MIMO_TYPE_8                      = 3,                                    /* ?????? */
 
     AT_MIMO_TYPE_BUTT
 };
@@ -423,14 +423,14 @@ typedef VOS_UINT8   AT_MIMO_TYPE_UINT8;
 
 enum AT_MIMO_ANT_NUM_ENUM
 {
-    AT_MIMO_ANT_NUM_1                   = 1,                                    /* 第1根天线 */
-    AT_MIMO_ANT_NUM_2                   = 2,                                    /* 第2根天线 */
-    AT_MIMO_ANT_NUM_3                   = 3,                                    /* 第3根天线 */
-    AT_MIMO_ANT_NUM_4                   = 4,                                    /* 第4根天线 */
-    AT_MIMO_ANT_NUM_5                   = 5,                                    /* 第5根天线 */
-    AT_MIMO_ANT_NUM_6                   = 6,                                    /* 第6根天线 */
-    AT_MIMO_ANT_NUM_7                   = 7,                                    /* 第7根天线 */
-    AT_MIMO_ANT_NUM_8                   = 8,                                    /* 第8根天线 */
+    AT_MIMO_ANT_NUM_1                   = 1,                                    /* ??1?????? */
+    AT_MIMO_ANT_NUM_2                   = 2,                                    /* ??2?????? */
+    AT_MIMO_ANT_NUM_3                   = 3,                                    /* ??3?????? */
+    AT_MIMO_ANT_NUM_4                   = 4,                                    /* ??4?????? */
+    AT_MIMO_ANT_NUM_5                   = 5,                                    /* ??5?????? */
+    AT_MIMO_ANT_NUM_6                   = 6,                                    /* ??6?????? */
+    AT_MIMO_ANT_NUM_7                   = 7,                                    /* ??7?????? */
+    AT_MIMO_ANT_NUM_8                   = 8,                                    /* ??8?????? */
 
     AT_MIMO_ANT_NUM_BUTT
 };
@@ -464,21 +464,21 @@ typedef VOS_UINT32  AT_TSELRF_PATH_ENUM_UINT32;
 
 #if(FEATURE_ON == FEATURE_UE_MODE_NR)
 /*****************************************************************************
-  4 全局变量声明
+  4 ????????????
 *****************************************************************************/
 //extern AT_MT_INFO_STRU                         g_stMtInfoCtx;
 
 
 /*****************************************************************************
-  5 消息头定义
+  5 ??????????
 *****************************************************************************/
 
 /*****************************************************************************
-  6 消息定义
+  6 ????????
 *****************************************************************************/
 
 /*****************************************************************************
-  7 STRUCT定义
+  7 STRUCT????
 *****************************************************************************/
 
 typedef struct
@@ -490,22 +490,22 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulChannelMin;                               /* 信道最小值 */
-    VOS_UINT32                          ulChannelMax;                               /* 信道最大值 */
+    VOS_UINT32                          ulChannelMin;                               /* ?????????? */
+    VOS_UINT32                          ulChannelMax;                               /* ?????????? */
 }AT_CHANNEL_RANGE_STRU;
 
 
 typedef struct
 {
-    VOS_UINT32                          ulFreqMin;                              /* 频率最小值,单位KHZ */
-    VOS_UINT32                          ulFreqMax;                              /* 频率最大值,单位KHZ */
+    VOS_UINT32                          ulFreqMin;                              /* ??????????,????KHZ */
+    VOS_UINT32                          ulFreqMax;                              /* ??????????,????KHZ */
 }AT_FREQ_RANGE_STRU;
 
 
 typedef struct
 {
     AT_FREQ_RANGE_STRU                  stFreqRange;
-    VOS_UINT32                          ulFreqGlobal;                           /* 信道最大值,单位KHZ */
+    VOS_UINT32                          ulFreqGlobal;                           /* ??????????,????KHZ */
     VOS_UINT32                          ulFreqOffset;
     VOS_UINT32                          ulOffsetChannel;
     AT_CHANNEL_RANGE_STRU               stChannelRange;
@@ -560,9 +560,9 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulUlChanNo;  /*上行的Channel No*/
-    VOS_UINT32                          ulDlChanNo;  /*下行的Channel No*/
-    VOS_UINT16                          usDspBand;  /*DSP格式的频段值*/
+    VOS_UINT32                          ulUlChanNo;  /*??????Channel No*/
+    VOS_UINT32                          ulDlChanNo;  /*??????Channel No*/
+    VOS_UINT16                          usDspBand;  /*DSP????????????*/
     VOS_UINT8                           aucReserved[2];
 }AT_DSP_BAND_CHANNEL_STRU;
 
@@ -571,9 +571,9 @@ typedef struct
 
 typedef struct
 {
-    VOS_UINT32                          ulUlFreq;                               /*上行频点:单位KHZ*/
-    VOS_UINT32                          ulDlFreq;                               /*下行频点:单位KHZ*/
-    VOS_UINT16                          usDspBand;                              /*DSP格式的频段值*/
+    VOS_UINT32                          ulUlFreq;                               /*????????:????KHZ*/
+    VOS_UINT32                          ulDlFreq;                               /*????????:????KHZ*/
+    VOS_UINT16                          usDspBand;                              /*DSP????????????*/
     VOS_UINT8                           aucReserved[2];
 }AT_DSP_BAND_FREQ_STRU;
 
@@ -595,15 +595,15 @@ typedef struct
     AT_DEVICE_CMD_RAT_MODE_ENUM_UINT8   enRatMode;
     AT_SUB_CARRIER_SPACING_ENUM_UINT8   enBbicScs;
     AT_FWAVE_TYPE_ENUM_UINT8            enFaveType;
-    AT_DSP_RF_ON_OFF_ENUM_UINT8         enRxOnOff;       /* Rx on off值*/
-    AT_DSP_RF_ON_OFF_ENUM_UINT8         enTxOnOff;       /* Tx On off值*/
-    AT_DSP_RF_ON_OFF_ENUM_UINT8         enTempRxorTxOnOff; /* 临时记录Rx 或 Tx on off值*/
-    VOS_UINT8                           ucAgcGainLevel;   /* 接收机AGCGAIN等级*/
-    AT_CMD_PALEVEL_ENUM_UINT8           enPaLevel;        /* 发射机的PA等级*/
+    AT_DSP_RF_ON_OFF_ENUM_UINT8         enRxOnOff;       /* Rx on off??*/
+    AT_DSP_RF_ON_OFF_ENUM_UINT8         enTxOnOff;       /* Tx On off??*/
+    AT_DSP_RF_ON_OFF_ENUM_UINT8         enTempRxorTxOnOff; /* ????????Rx ?? Tx on off??*/
+    VOS_UINT8                           ucAgcGainLevel;   /* ??????AGCGAIN????*/
+    AT_CMD_PALEVEL_ENUM_UINT8           enPaLevel;        /* ????????PA????*/
     AT_DCXOTEMPCOMP_ENABLE_ENUM_UINT8   enDcxoTempCompEnableFlg;
     VOS_UINT8                           aucRes[2];
     VOS_UINT16                          usFwavePower;
-    AT_BAND_WIDTH_ENUM_UINT16           enBandWidth;  /* 存储AT下发的值，用于查询命令 */
+    AT_BAND_WIDTH_ENUM_UINT16           enBandWidth;  /* ????AT?????????????????????? */
     AT_DSP_BAND_CHANNEL_STRU            stBandArfcn;
     AT_TSELRF_PATH_ENUM_UINT32          enTseLrfTxPath;
     AT_TSELRF_PATH_ENUM_UINT32          enTseLrfRxPath;
@@ -624,7 +624,7 @@ typedef struct
     VOS_INT16                           sFwavePower;
     RAT_MODE_ENUM_UINT16                enCurrtRatMode;
     RAT_MODE_ENUM_UINT16                enDpdtRatMode;
-    AT_BAND_WIDTH_VALUE_ENUM_UINT32     enBandWidthValue; /* 真正的带宽频率 */
+    AT_BAND_WIDTH_VALUE_ENUM_UINT32     enBandWidthValue; /* ?????????????? */
     AT_DSP_BAND_FREQ_STRU               stDspBandFreq;
     BBIC_TEMP_CHANNEL_TYPE_ENUM_UINT16  enCurrentChannelType;
     BANDWIDTH_ENUM_UINT16               enBandWidth;
@@ -647,10 +647,10 @@ typedef struct
 }AT_MT_INFO_STRU;
 
 
-/*AT与BBIC模块间消息处理函数指针*/
+/*AT??BBIC??????????????????????*/
 typedef VOS_UINT32 (*AT_BBIC_MSG_PROC_FUNC)(VOS_VOID *pMsg);
 
-/*AT与CBT模块间消息处理函数指针*/
+/*AT??CBT??????????????????????*/
 typedef VOS_UINT32 (*AT_CBT_MSG_PROC_FUNC)(VOS_VOID *pMsg);
 
 
@@ -670,17 +670,17 @@ typedef struct
 
 
 /*****************************************************************************
-  8 UNION定义
+  8 UNION????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  9 OTHERS定义
+  9 OTHERS????
 *****************************************************************************/
 
 
 /*****************************************************************************
-  10 函数声明
+  10 ????????
 *****************************************************************************/
 #endif
 

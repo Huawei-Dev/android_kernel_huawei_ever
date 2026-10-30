@@ -59,7 +59,7 @@
 #define DUMP_STATUS_FILE  "dump_status.txt"
 #define PATH_ROOT         "/data/hisi_logs/"
 
-/*modem ap flag ?¡§¨°?*/
+/*modem ap flag ??????*/
 #define DUMP_INIT_FLAG_CONFIG                 (0x5B5B0000)
 #define DUMP_INIT_FLAG_BASEINFO               (0x5B5B0001)
 #define DUMP_INIT_FLAG_SAVETASK               (0x5B5B0002)

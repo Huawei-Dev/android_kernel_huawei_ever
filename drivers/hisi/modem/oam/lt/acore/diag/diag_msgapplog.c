@@ -73,7 +73,7 @@ VOS_UINT32 diag_MspMsgProc(DIAG_FRAME_INFO_STRU *pData);
 
 /*****************************************************************************
  Function Name   : diag_AppLogMsgProc
- Description     : APPLOG  消息处理
+ Description     : APPLOG  ????????
  Input           : None
  Output          : None
  Return          : None
@@ -106,7 +106,7 @@ VOS_UINT32 diag_AppLogDataConfig(VOS_UINT8* pstReq)
     stAppLog.ulRc  = (VOS_UINT32) mdrv_applog_cfg(plogcfg->enable, plogcfg->level);
 
 APP_OUT:
-    /*组包回复*/
+    /*????????*/
     ulRet = DIAG_MsgReport(&stDiagInfo, &stAppLog, sizeof(stAppLog));
     if(ulRet)
     {
@@ -116,7 +116,7 @@ APP_OUT:
 }
 /*****************************************************************************
  Function Name   : diag_AppLogMsgProc
- Description     : APPLOG处理消息处理
+ Description     : APPLOG????????????
  Input           : None
  Output          : None
  Return          : None
@@ -149,7 +149,7 @@ VOS_UINT32 diag_AppLogMsgProc(DIAG_FRAME_INFO_STRU *pData)
 
 /*****************************************************************************
  Function Name   : diag_AppLogMsgInit
- Description     : APP LOG初始化
+ Description     : APP LOG??????
  Input           : None
  Output          : None
  Return          : None
@@ -160,7 +160,7 @@ VOS_VOID diag_AppLogMsgInit(VOS_VOID)
 {
     VOS_UINT32 ulRet;
 
-    /*注册message消息回调*/
+    /*????message????????*/
     DIAG_MsgProcReg(DIAG_MSG_TYPE_APP,diag_AppLogMsgProc);
     ulRet = diag_ConnMgrSendFuncReg(DIAG_CONN_ID_ACPU_APP, g_DiagApplogCtrl.ulChannelNum, &g_DiagApplogCtrl.ulChannelID, diag_AppConnect);
     if(ulRet)

@@ -3,7 +3,7 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <linux/platform_device.h>
 #include <linux/regulator/consumer.h>
 #include <linux/regulator/driver.h>
@@ -28,7 +28,7 @@
 extern void hw_1103_dsm_client_notify(int sub_sys, int dsm_id, const char *fmt, ...);
 #endif
 
-/* 宏定义 */
+/* ?????? */
 #define BOARD_SUCC 0
 #define BOARD_FAIL (-1)
 
@@ -139,7 +139,7 @@ extern void hw_1103_dsm_client_notify(int sub_sys, int dsm_id, const char *fmt, 
 #define SSI_DELAY(x) ndelay(x)
 #endif
 
-/* STRUCT 定义 */
+/* STRUCT ???? */
 typedef struct bd_init_s {
     int32 (*get_board_power_gpio)(void);
     void (*free_board_power_gpio_etc)(void);
@@ -332,7 +332,7 @@ typedef enum sub_system {
 extern DOWNLOAD_MODE device_download_mode_list_etc[MODE_DOWNLOAD_BUTT];
 extern BOARD_INFO board_info_etc;
 
-/* 函数声明 */
+/* ???????? */
 extern BOARD_INFO *get_hi110x_board_info_etc(void);
 extern int isAsic_etc(void);
 extern int is_wifi_support(void);

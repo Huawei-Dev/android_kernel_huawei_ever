@@ -6,7 +6,7 @@ extern "C" {
 #endif
 #endif
 
-/* 1 头文件包含 */
+/* 1 ?????????? */
 #include "oal_ext_if.h"
 #include "frw_ext_if.h"
 #include "mac_device.h"
@@ -27,10 +27,10 @@ extern "C" {
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_TEST_MAIN_C
 
 #ifdef _PRE_WLAN_CHIP_TEST
-/* 2 全局变量定义 */
+/* 2 ???????????? */
 hmac_test_mng_stru g_st_hmac_test_mng;
 
-/* 3 函数实现 */
+/* 3 ???????? */
 
 oal_void hmac_test_init(oal_void)
 {

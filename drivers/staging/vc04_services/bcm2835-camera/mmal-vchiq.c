@@ -1,7 +1,7 @@
 /*
  * Broadcom BM2835 V4L2 driver
  *
- * Copyright © 2013 Raspberry Pi (Trading) Ltd.
+ * Copyright ?? 2013 Raspberry Pi (Trading) Ltd.
  *
  * This file is subject to the terms and conditions of the GNU General Public
  * License.  See the file COPYING in the main directory of this archive

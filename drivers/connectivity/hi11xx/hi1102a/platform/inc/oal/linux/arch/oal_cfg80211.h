@@ -3,13 +3,13 @@
 #ifndef __OAL_LINUX_CFG80211_H__
 #define __OAL_LINUX_CFG80211_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include <net/genetlink.h>
 #include <net/cfg80211.h>
 #include <linux/nl80211.h>
 
-/* 宏定义 */
-/* hostapd和supplicant事件上报需要用到宏 */
+/* ?????? */
+/* hostapd??supplicant?????????????????? */
 #define OAL_NLMSG_GOODSIZE            NLMSG_GOODSIZE
 #define OAL_ETH_ALEN_SIZE             ETH_ALEN
 #define OAL_NLMSG_DEFAULT_SIZE        NLMSG_DEFAULT_SIZE
@@ -23,7 +23,7 @@
 
 typedef enum rate_info_flags oal_rate_info_flags;
 
-/* 函数声明 */
+/* ???????? */
 /*
  * struct cfg80211_external_auth_params - Trigger External authentication.
  *

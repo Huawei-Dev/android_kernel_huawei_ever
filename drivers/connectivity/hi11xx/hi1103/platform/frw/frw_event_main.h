@@ -3,7 +3,7 @@
 #ifndef __FRW_EVENT_MAIN_H__
 #define __FRW_EVENT_MAIN_H__
 
-/* 其他头文件包含 */
+/* ?????????????? */
 #include "oal_ext_if.h"
 #include "oam_ext_if.h"
 #include "frw_ext_if.h"
@@ -16,27 +16,27 @@
 #define THIS_FILE_ID OAM_FILE_ID_FRW_EVENT_MAIN_H
 
 /*
- * 枚举名  : frw_event_deploy_enum_uint8
- * 枚举说明: 事件部署类型
+ * ??????  : frw_event_deploy_enum_uint8
+ * ????????: ????????????
  */
 typedef enum {
-    FRW_EVENT_DEPLOY_NON_IPC = 0, /* 非核间通信 */
-    FRW_EVENT_DEPLOY_IPC,         /* 核间通讯 */
+    FRW_EVENT_DEPLOY_NON_IPC = 0, /* ?????????? */
+    FRW_EVENT_DEPLOY_IPC,         /* ???????? */
 
     FRW_EVENT_DEPLOY_BUTT
 } frw_event_deploy_enum;
 typedef oal_uint8 frw_event_deploy_enum_uint8;
 
-/* 事件表的最大个数 */
-/* 一种类型的事件对应两个表项，所以事件表的大小为事件类型的2倍 */
+/* ???????????????? */
+/* ????????????????????????????????????????????????????????2?? */
 #define FRW_EVENT_TABLE_MAX_ITEMS (FRW_EVENT_TYPE_BUTT * 2)
 
-/* 全局变量声明 */
+/* ???????????? */
 #ifdef _PRE_FRW_EVENT_PROCESS_TRACE_DEBUG
 typedef struct _frw_event_segment_stru_ {
-    frw_event_type_enum_uint8 en_type;         /* 事件类型 */
-    oal_uint8 uc_sub_type;                     /* 事件子类型 */
-    frw_event_pipeline_enum_uint8 en_pipeline; /* 事件分段号 */
+    frw_event_type_enum_uint8 en_type;         /* ???????? */
+    oal_uint8 uc_sub_type;                     /* ?????????? */
+    frw_event_pipeline_enum_uint8 en_pipeline; /* ?????????? */
     oal_uint8 uc_vap_id;                       /* VAP ID */
 } frw_event_segment_stru;
 
@@ -56,12 +56,12 @@ typedef struct _frw_event_trace_stru_ {
 #endif
 
 /*
- * 结构名  : frw_event_mgmt_stru
- * 结构说明: 事件管理结构体
+ * ??????  : frw_event_mgmt_stru
+ * ????????: ??????????????
  */
 typedef struct _frw_event_mgmt_stru_ {
-    frw_event_queue_stru st_event_queue[FRW_EVENT_MAX_NUM_QUEUES];    /* 事件队列 */
-    frw_event_sched_queue_stru st_sched_queue[FRW_SCHED_POLICY_BUTT]; /* 可调度队列 */
+    frw_event_queue_stru st_event_queue[FRW_EVENT_MAX_NUM_QUEUES];    /* ???????? */
+    frw_event_sched_queue_stru st_sched_queue[FRW_SCHED_POLICY_BUTT]; /* ?????????? */
 #ifdef _PRE_FRW_EVENT_PROCESS_TRACE_DEBUG
     frw_event_trace_stru *pst_frw_trace;
 #endif
@@ -70,7 +70,7 @@ extern frw_event_table_item_stru event_table_etc[FRW_EVENT_TABLE_MAX_ITEMS];
 
 extern frw_event_mgmt_stru event_manager_etc[WLAN_FRW_MAX_NUM_CORES];
 
-/* 函数声明 */
+/* ???????? */
 extern oal_uint32 frw_event_init_etc(oal_void);
 extern oal_uint32 frw_event_exit_etc(oal_void);
 extern oal_uint32 frw_event_queue_enqueue_etc(frw_event_queue_stru *pst_event_queue, frw_event_mem_stru *pst_event_mem);
@@ -89,10 +89,10 @@ extern oal_uint32 frw_event_vap_flush_event_etc(oal_uint8 uc_vap_id, frw_event_t
 extern oal_uint32 frw_event_queue_info_etc(oal_void);
 
 /*
- * 函 数 名  : frw_event_to_qid
- * 功能描述  : 根据事件内容获取相应的事件队列ID
- * 输入参数  : pst_event_mem: 指向事件内存块的指针
- * 输出参数  : pus_qid      : 队列ID
+ * ?? ?? ??  : frw_event_to_qid
+ * ????????  : ??????????????????????????????ID
+ * ????????  : pst_event_mem: ????????????????????
+ * ????????  : pus_qid      : ????ID
  */
 OAL_STATIC OAL_INLINE oal_uint32 frw_event_to_qid(frw_event_mem_stru *pst_event_mem, oal_uint16 *pus_qid)
 {
@@ -104,12 +104,12 @@ OAL_STATIC OAL_INLINE oal_uint32 frw_event_to_qid(frw_event_mem_stru *pst_event_
         return OAL_FAIL;
     }
 
-    /* 获取事件头结构 */
+    /* ?????????????? */
     pst_event_hrd = (frw_event_hdr_stru *)pst_event_mem->puc_data;
 
     us_qid = pst_event_hrd->uc_vap_id * FRW_EVENT_TYPE_BUTT + pst_event_hrd->en_type;
 
-    /* 异常: 队列ID超过最大值 */
+    /* ????: ????ID?????????? */
     if ((us_qid >= FRW_EVENT_MAX_NUM_QUEUES)) {
         OAM_ERROR_LOG4(0, OAM_SF_FRW,
                        "{frw_event_to_qid, array overflow! us_qid[%d], vap_id[%d], en_type[%d], sub_type[%d]}",
@@ -123,8 +123,8 @@ OAL_STATIC OAL_INLINE oal_uint32 frw_event_to_qid(frw_event_mem_stru *pst_event_
 }
 
 /*
- * 函 数 名  : frw_event_lookup_process_entry
- * 功能描述  : 根据事件类型，子类型以及分段号，找到相应事件处理函数
+ * ?? ?? ??  : frw_event_lookup_process_entry
+ * ????????  : ????????????????????????????????????????????????????
  */
 OAL_STATIC OAL_INLINE oal_uint32 _frw_event_lookup_process_entry_(frw_event_mem_stru *pst_event_mem,
                                                                   frw_event_hdr_stru *pst_event_hrd)
@@ -147,14 +147,14 @@ OAL_STATIC OAL_INLINE oal_uint32 _frw_event_lookup_process_entry_(frw_event_mem_
 #if (((_PRE_OS_VERSION_WIN32 == _PRE_OS_VERSION) || (_PRE_OS_VERSION_WIN32_RAW == _PRE_OS_VERSION)) && \
      (_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC == _PRE_MULTI_CORE_MODE))
 
-    /* UT环境下打桩实现测试 */
+    /* UT?????????????????? */
     if (pst_event_hrd->en_pipeline == FRW_EVENT_PIPELINE_STAGE_2) {
         pst_event_hrd->en_pipeline = FRW_EVENT_PIPELINE_STAGE_1;
         b_is_rx_adapt = OAL_TRUE;
     }
 #endif
 
-    /* 根据事件类型及分段号计算事件表索引 */
+    /* ?????????????????????????????????? */
     uc_index = (oal_uint8)((pst_event_hrd->en_type << 1) | (pst_event_hrd->en_pipeline & 0x01));
     if (OAL_UNLIKELY(uc_index >= FRW_EVENT_TABLE_MAX_ITEMS)) {
         OAM_ERROR_LOG3(0, OAM_SF_FRW,
@@ -170,7 +170,7 @@ OAL_STATIC OAL_INLINE oal_uint32 _frw_event_lookup_process_entry_(frw_event_mem_
     }
 #endif
 
-    /* 先把全局变量变成局部变量 */
+    /* ???????????????????????? */
     pst_frw_event_table = &event_table_etc[uc_index];
 
     if (pst_frw_event_table->pst_sub_table == OAL_PTR_NULL) {
@@ -178,11 +178,11 @@ OAL_STATIC OAL_INLINE oal_uint32 _frw_event_lookup_process_entry_(frw_event_mem_
                        "{frw_event_lookup_process_entry::pst_sub_table is NULL! sub_type[0x%x], index[0x%x].}",
                        uc_sub_type, uc_index);
 
-        /* 打印当前事件内存的部分内容 */
+        /* ?????????????????????????? */
         oal_print_hex_dump(frw_get_event_data(pst_event_mem), l_dump_head_len,
                            HEX_DUMP_GROUP_SIZE, "current event mem info:");
 
-        /* 打印当前事件内存的前64字节内容 */
+        /* ????????????????????64???????? */
         oal_print_hex_dump(frw_get_event_data(pst_event_mem) + l_dump_event_len,
                            l_dump_event_len, HEX_DUMP_GROUP_SIZE, "64bytes mem info in front of this mem:");
 
@@ -200,7 +200,7 @@ OAL_STATIC OAL_INLINE oal_uint32 _frw_event_lookup_process_entry_(frw_event_mem_
     pst_frw_event_table->pst_sub_table[uc_sub_type].p_func(pst_event_mem);
     return OAL_SUCC;
 #else
-    /* pipeline=1的抛事件处理，需要增加返回值，同时frw_event_dispatch_event调用时也要增加返回值判断，做正确处理 */
+    /* pipeline=1??????????????????????????????????frw_event_dispatch_event???????????????????????????????????? */
     return pst_frw_event_table->pst_sub_table[uc_sub_type].p_func(pst_event_mem);
 #endif
 #else /* 1102 */
@@ -220,7 +220,7 @@ OAL_STATIC OAL_INLINE oal_uint32 _frw_event_lookup_process_entry_(frw_event_mem_
     /* For pipeline 1 type */
 #if (((_PRE_OS_VERSION_WIN32 == _PRE_OS_VERSION) || (_PRE_OS_VERSION_WIN32_RAW == _PRE_OS_VERSION)) && \
      (_PRE_TEST_MODE == _PRE_TEST_MODE_UT))
-    // 在51单板上打桩实现tx adapt和rx adapt的测试，后续该代码删除
+    // ??51??????????????tx adapt??rx adapt??????????????????????
     if ((pst_frw_event_table->pst_sub_table[uc_sub_type].p_tx_adapt_func == OAL_PTR_NULL)
         && (pst_frw_event_table->pst_sub_table[uc_sub_type].p_rx_adapt_func == OAL_PTR_NULL)) {
         if (pst_frw_event_table->pst_sub_table[uc_sub_type].p_func == OAL_PTR_NULL) {
@@ -322,9 +322,9 @@ OAL_STATIC OAL_INLINE oal_uint32 frw_event_lookup_process_entry(frw_event_mem_st
 }
 
 /*
- * 函 数 名  : frw_event_report
- * 功能描述  : 将WiTP内存各层之间的事件上报SDT
- * 输入参数  : pst_event_mem: 指向事件内存块的指针
+ * ?? ?? ??  : frw_event_report
+ * ????????  : ??WiTP??????????????????????SDT
+ * ????????  : pst_event_mem: ????????????????????
  */
 OAL_STATIC OAL_INLINE oal_void frw_event_report(frw_event_mem_stru *pst_event_mem)
 {
@@ -338,7 +338,7 @@ OAL_STATIC OAL_INLINE oal_void frw_event_report(frw_event_mem_stru *pst_event_me
 
     pst_event = frw_get_event_stru(pst_event_mem);
 
-    /* 复制事件头 */
+    /* ?????????? */
     if (memcpy_s((oal_void *)auc_event, OAL_SIZEOF(auc_event),
                  (const oal_void *)&pst_event->st_event_hdr, OAL_SIZEOF(frw_event_hdr_stru)) != EOK) {
         OAM_ERROR_LOG2(0, OAM_SF_FRW, "memcpy_s error, destlen=%u, srclen=%u\n ",
@@ -350,9 +350,9 @@ OAL_STATIC OAL_INLINE oal_void frw_event_report(frw_event_mem_stru *pst_event_me
 }
 
 /*
- * 函 数 名  : frw_event_process
- * 功能描述  : 根据事件分段号，处理事件
- * 输入参数  : pst_event_mem: 指向事件内存块的指针
+ * ?? ?? ??  : frw_event_process
+ * ????????  : ????????????????????????
+ * ????????  : pst_event_mem: ????????????????????
  */
 OAL_STATIC OAL_INLINE oal_uint32 frw_event_process(frw_event_mem_stru *pst_event_mem)
 {
@@ -364,14 +364,14 @@ OAL_STATIC OAL_INLINE oal_uint32 frw_event_process(frw_event_mem_stru *pst_event
         return OAL_FAIL;
     }
 
-    /* 获取事件头结构 */
+    /* ?????????????? */
     pst_event_hrd = (frw_event_hdr_stru *)pst_event_mem->puc_data;
 
     if (OAL_UNLIKELY(pst_event_hrd->en_pipeline >= FRW_EVENT_PIPELINE_STAGE_BUTT)) {
         return OAL_ERR_CODE_ARRAY_OVERFLOW;
     }
 
-    /* 如果pipleline为0，则将事件入队。否则，根据事件类型，子类型以及分段号，执行相应的事件处理函数 */
+    /* ????pipleline??0???????????????????????????????????????????????????????????????????????????? */
     if (pst_event_hrd->en_pipeline == FRW_EVENT_PIPELINE_STAGE_0) {
         ul_core_id = OAL_GET_CORE_ID();
         return frw_event_post_event_etc(pst_event_mem, ul_core_id);

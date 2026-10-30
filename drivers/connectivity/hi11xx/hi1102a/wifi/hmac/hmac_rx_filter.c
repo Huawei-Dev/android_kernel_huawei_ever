@@ -9,7 +9,7 @@ extern "C" {
 
 
 /*****************************************************************************
-  1 头文件包含
+  1 ??????????
 *****************************************************************************/
 #include "wlan_spec.h"
 #include "wlan_types.h"
@@ -23,7 +23,7 @@ extern "C" {
 #define THIS_FILE_ID OAM_FILE_ID_HMAC_RX_FILTER_C
 
 /*****************************************************************************
-  2 全局变量定义
+  2 ????????????
 *****************************************************************************/
 oal_bool_enum_uint8 g_en_rx_filter_enable;
 oal_uint32 g_ast_single_vap_rx_filter[WLAN_VAP_MODE_BUTT][MAC_VAP_STATE_BUTT];
@@ -32,7 +32,7 @@ oal_uint32 g_ast_multi_staup_ap_rx_filter[MAC_VAP_AP_STATE_BUTT];
 oal_uint32 g_ast_multi_apup_sta_rx_filter[MAC_VAP_STA_STATE_BUTT];
 
 /*****************************************************************************
-  3 函数实现
+  3 ????????
 *****************************************************************************/
 
 oal_bool_enum_uint8 hmac_find_is_sta_up(mac_device_stru *pst_mac_device)
@@ -118,7 +118,7 @@ oal_uint32 hmac_calc_up_ap_num(mac_device_stru *pst_mac_device)
 oal_uint32 hmac_find_up_vap(mac_device_stru *pst_mac_device, mac_vap_stru **ppst_mac_vap)
 {
     oal_uint32                     ul_ret;
-    mac_vap_stru                  *pst_vap_up;     /* 处在UP状态的VAP */
+    mac_vap_stru                  *pst_vap_up;     /* ????UP??????VAP */
 
     /* find up VAP */
     ul_ret = mac_device_find_up_vap(pst_mac_device, &pst_vap_up);
@@ -364,7 +364,7 @@ oal_uint32 hmac_set_rx_filter_value(mac_vap_stru *pst_mac_vap)
     }
 
 #ifdef _PRE_WLAN_HW_TEST
-    /* 若为常收，直接返回 */
+    /* ?????????????????? */
     if (HAL_ALWAYS_RX_RESERVED == pst_mac_device->pst_device_stru->bit_al_rx_flag)
     {
         return OAL_SUCC;
@@ -382,7 +382,7 @@ oal_uint32 hmac_set_rx_filter_value(mac_vap_stru *pst_mac_vap)
         return OAL_SUCC;
     }
 
-    if (hmac_find_is_ap_up(pst_mac_device)) /* 多VAP模式，AP已经UP*/
+    if (hmac_find_is_ap_up(pst_mac_device)) /* ??VAP??????AP????UP*/
     {
         if ((MAC_VAP_STATE_INIT == pst_mac_vap->en_vap_state)
             || (MAC_VAP_STATE_STA_FAKE_UP == pst_mac_vap->en_vap_state))
@@ -403,18 +403,18 @@ oal_uint32 hmac_set_rx_filter_value(mac_vap_stru *pst_mac_vap)
         }
         else
         {
-            /* 多VAP模式，STA配置(在STA已经up和没有STA up的情况下，配置AP模式都使用该配置) */
+            /* ??VAP??????STA????(??STA????up??????STA up??????????????AP????????????????) */
             ul_rx_filter_val = g_ast_multi_apup_sta_rx_filter[pst_mac_vap->en_vap_state];
         }
     }
-    else if (hmac_find_is_sta_up(pst_mac_device)) /* 多VAP模式，STA已经UP*/
+    else if (hmac_find_is_sta_up(pst_mac_device)) /* ??VAP??????STA????UP*/
     {
-        /* 多VAP模式，STA配置(在STA已经up和没有STA up的情况下，配置AP模式都使用该配置) */
+        /* ??VAP??????STA????(??STA????up??????STA up??????????????AP????????????????) */
         if ((MAC_VAP_STATE_INIT == pst_mac_vap->en_vap_state) || (MAC_VAP_STATE_STA_FAKE_UP == pst_mac_vap->en_vap_state))
         {
             return OAL_SUCC;
         }
-        /* STA已经UP的状态下，STA的配置 */
+        /* STA????UP??????????STA?????? */
         if (WLAN_VAP_MODE_BSS_STA == pst_mac_vap->en_vap_mode)
         {
             ul_rx_filter_val = g_ast_multi_staup_sta_rx_filter[pst_mac_vap->en_vap_state];
@@ -430,11 +430,11 @@ oal_uint32 hmac_set_rx_filter_value(mac_vap_stru *pst_mac_vap)
     }
     else
     {
-        /* 没有任何设备处于UP状态，即单VAP存在 */
+        /* ????????????????UP??????????VAP???? */
         ul_rx_filter_val = g_ast_single_vap_rx_filter[pst_mac_vap->en_vap_mode][pst_mac_vap->en_vap_state];
     }
 
-     /* 抛事件到DMAC, 申请事件内存 */
+     /* ????????DMAC, ???????????? */
     pst_event_mem = FRW_EVENT_ALLOC(OAL_SIZEOF(oal_uint32));
     if (OAL_PTR_NULL == pst_event_mem)
     {
@@ -442,7 +442,7 @@ oal_uint32 hmac_set_rx_filter_value(mac_vap_stru *pst_mac_vap)
         return OAL_ERR_CODE_PTR_NULL;
     }
 
-    /* 填写事件 */
+    /* ???????? */
     pst_event = (frw_event_stru *)pst_event_mem->puc_data;
 
     FRW_EVENT_HDR_INIT(&(pst_event->st_event_hdr),
@@ -455,18 +455,18 @@ oal_uint32 hmac_set_rx_filter_value(mac_vap_stru *pst_mac_vap)
                     pst_mac_vap->uc_vap_id);
 
 #ifdef _PRE_WLAN_FEATURE_HILINK
-    /* 如果hilink fbt scan开关开启，需要不过滤其他BSS的数据帧；如果hilink fbt
-       scan开关关闭，不需要进行处理；其他BSS 单播数据帧过滤为bit 11，0--其他BSS
-       单播数据帧不过滤，1--其他BSS 单播数据帧过滤 */
+    /* ????hilink fbt scan????????????????????????BSS??????????????hilink fbt
+       scan??????????????????????????????BSS ????????????????bit 11??0--????BSS
+       ??????????????????1--????BSS ?????????????? */
     if (OAL_TRUE == pst_mac_device->st_fbt_scan_mgmt.uc_fbt_scan_enable)
     {
         ul_rx_filter_val &= ~0x800;
     }
 #endif
-    /* 拷贝参数 */
+    /* ???????? */
     oal_memcopy(pst_event->auc_event_data, (oal_void *)&ul_rx_filter_val, OAL_SIZEOF(oal_uint32));
 
-    /* 分发事件 */
+    /* ???????? */
     ul_ret = frw_event_dispatch_event(pst_event_mem);
     if (OAL_SUCC != ul_ret)
     {
@@ -495,7 +495,7 @@ oal_void  hmac_rx_filter_init_single_vap(oal_void)
         }
     }
 
-    /*            WLAN_VAP_MODE_CONFIG, 配置模式                */
+    /*            WLAN_VAP_MODE_CONFIG, ????????                */
     /* +---------------------------+--------------------------+ */
     /* | FSM State                 | RX FILTER VALUE          | */
     /* +---------------------------+--------------------------+ */
@@ -506,7 +506,7 @@ oal_void  hmac_rx_filter_init_single_vap(oal_void)
         g_ast_single_vap_rx_filter[WLAN_VAP_MODE_CONFIG][ul_state] = 0x37B9EEFA;
     }
 
-    /* WLAN_VAP_MODE_BSS_STA          BSS STA模式                  */
+    /* WLAN_VAP_MODE_BSS_STA          BSS STA????                  */
     /* +----------------------------------+--------------------------+ */
     /* | FSM State                        | RX FILTER VALUE          | */
     /* +----------------------------------+--------------------------+ */
@@ -549,7 +549,7 @@ oal_void  hmac_rx_filter_init_single_vap(oal_void)
     g_ast_single_vap_rx_filter[WLAN_VAP_MODE_BSS_STA][MAC_VAP_STATE_ROAMING]          = 0x73B9EADA;
 #endif
 
-    /* WLAN_VAP_MODE_BSS_AP                BSS AP模式                  */
+    /* WLAN_VAP_MODE_BSS_AP                BSS AP????                  */
     /* +----------------------------------+--------------------------+ */
     /* | FSM State                        | RX FILTER VALUE          | */
     /* +----------------------------------+--------------------------+ */
@@ -586,10 +586,10 @@ oal_void  hmac_rx_filter_init_multi_vap(oal_uint32 ul_proxysta_enabled)
     }
 
 /*
-   proxysta模式，重复帧过滤不能开是因为51芯片问题，已经记录到芯片痛点
-   本质帧过滤寄存器配置和非proxysta一致，这里直接复用即可，因为硬件重复帧开关不生效，51目前软件
-   实现的重复帧过滤已经采用PROXYSTA宏包起来
-   后面根据实际产品需求，需要上报特定帧体时候，再增加自己的特殊配置。因此这个函数的入参还保留，这个宏包起来的方式只是if 0掉
+   proxysta????????????????????????????51????????????????????????????
+   ????????????????????????proxysta??????????????????????????????????????????????????51????????
+   ????????????????????????PROXYSTA????????
+   ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????if 0??
 */
 
 
@@ -633,7 +633,7 @@ oal_void  hmac_rx_filter_init_multi_vap(oal_uint32 ul_proxysta_enabled)
 
 
     {
-        /*  多STA模式    WLAN_VAP_MODE_BSS_STA          BSS STA模式        */
+        /*  ??STA????    WLAN_VAP_MODE_BSS_STA          BSS STA????        */
         /* +----------------------------------+--------------------------+ */
         /* | FSM State                        | RX FILTER VALUE          | */
         /* +----------------------------------+--------------------------+ */
@@ -654,13 +654,13 @@ oal_void  hmac_rx_filter_init_multi_vap(oal_uint32 ul_proxysta_enabled)
         g_ast_multi_staup_sta_rx_filter[MAC_VAP_STATE_STA_LISTEN]       = 0x33A9EACA;
 
 
-        /* 多AP UP时,STA配置场景:  WLAN_VAP_MODE_BSS_STA   BSS STA模式     */
+        /* ??AP UP??,STA????????:  WLAN_VAP_MODE_BSS_STA   BSS STA????     */
         /* +----------------------------------+--------------------------+ */
         /* | FSM State                        | RX FILTER VALUE          | */
         /* +----------------------------------+--------------------------+ */
-        /* | MAC_VAP_STATE_INIT               | 保持原有值不配置         | */
+        /* | MAC_VAP_STATE_INIT               | ????????????????         | */
         /* | MAC_VAP_STATE_UP                 | 0x73B9EACA               | */
-        /* | MAC_VAP_STATE_STA_FAKE_UP        | 保持原有值不配置         | */
+        /* | MAC_VAP_STATE_STA_FAKE_UP        | ????????????????         | */
         /* | MAC_VAP_STATE_STA_WAIT_SCAN      | 0x33B9CACA               | */
         /* | MAC_VAP_STATE_STA_SCAN_COMP      | 0x73B9EACA               | */
         /* | MAC_VAP_STATE_STA_WAIT_JOIN      | 0x73B9EACA               | */
@@ -690,11 +690,11 @@ oal_void  hmac_rx_filter_init_multi_vap(oal_uint32 ul_proxysta_enabled)
             g_ast_multi_apup_sta_rx_filter[ul_state] = 0x73B9EACA;
         }
 
-        /* 多STA UP时,AP配置场景:  WLAN_VAP_MODE_BSS_AP    BSS AP模式      */
+        /* ??STA UP??,AP????????:  WLAN_VAP_MODE_BSS_AP    BSS AP????      */
         /* +----------------------------------+--------------------------+ */
         /* | FSM State                        | RX FILTER VALUE          | */
         /* +----------------------------------+--------------------------+ */
-        /* | MAC_VAP_STATE_INIT               | 保持原有值不配置         | */
+        /* | MAC_VAP_STATE_INIT               | ????????????????         | */
         /* | MAC_VAP_STATE_UP                 | 0x73B9EACA               | */
         /* | MAC_VAP_STATE_PAUSE              | 0x73B9EACA               | */
         /* | MAC_VAP_STATE_AP_WAIT_START      | 0x73B9EACA               | */
@@ -874,7 +874,7 @@ oal_void  hmac_rx_filter_init(oal_void)
 {
     g_en_rx_filter_enable = OAL_TRUE;
 
-    /* Normal模式帧过滤值初始化 */
+    /* Normal?????????????????? */
     hmac_rx_filter_init_single_vap();
     hmac_rx_filter_init_multi_vap(OAL_FALSE);
 

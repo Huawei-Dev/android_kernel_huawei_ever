@@ -580,7 +580,7 @@ int bsp_kernel_pcie_remove(void);
 int bsp_pcie_rc_vote_unlock(enum pcie_user_id user_id);
 int bsp_pcie_rc_vote_lock(enum pcie_user_id user_id, int wake_flag);
 
-/*******依赖于ep->rc msi使能，当前暂不可用*******/
+/*******??????ep->rc msi??????????????????*******/
 int bsp_pcie_rc_dma_isr_register(enum pcie_dma_chn_id chn, u32 direction, pcie_callback call_back, void* arg);
 
 /*******definition in pcie boot stage*******/
