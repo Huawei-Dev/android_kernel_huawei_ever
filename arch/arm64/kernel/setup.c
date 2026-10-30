@@ -66,6 +66,8 @@
 
 #if defined(CONFIG_ARM64_BUILTIN_APPENDED_DTB_OVERRIDE)
 #include <linux/libfdt.h>
+#include "huawei_everest_fdt_fixup.h"
+#include "huawei_everest_multiboard.h"
 #endif
 
 phys_addr_t __fdt_pointer __initdata;
@@ -185,6 +187,9 @@ static void __init smp_build_mpidr_hash(void)
 extern char __builtin_custom_dtb_start[];
 extern char __builtin_custom_dtb_end[];
 
+/* Persistent FDT workspace. Never place this buffer in __initdata. */
+static u8 evr_runtime_fdt[EVR_RUNTIME_DTB_BYTES] __aligned(8);
+
 static void *__init find_builtin_custom_dtb(void)
 {
 	void *dtb = __builtin_custom_dtb_start;
@@ -257,36 +262,68 @@ static int __init builtin_dtb_copy_chosen_props(void *dst_fdt, void *src_fdt)
 static void *__init setup_machine_fdt_try_builtin(void *original_fdt)
 {
 	void *builtin_fdt;
+	const void *selected = NULL;
+	const void *source_fdt;
+	u32 selected_size = 0;
 	int ret;
-	int work_size;
 
 	builtin_fdt = find_builtin_custom_dtb();
 	if (!builtin_fdt) {
-		pr_warn("Built-in custom DTB not found or invalid\n");
+		pr_crit("Built-in custom DTB/catalog not found or invalid\n");
+		return NULL;
+	}
+	if (!original_fdt || fdt_check_header(original_fdt)) {
+		pr_crit("Everest: invalid bootloader FDT\n");
 		return NULL;
 	}
 
-	work_size = __builtin_custom_dtb_end - __builtin_custom_dtb_start;
+	ret = evr_catalog_find(builtin_fdt, original_fdt,
+			       &selected, &selected_size);
+	if (ret < 0) {
+		pr_crit("Everest: DTB catalog selection failed: %d\n", ret);
+		return NULL;
+	}
+	if (ret == 0) {
+		/* The selected FDT resides inside the init-only catalog. */
+		if (!selected || selected_size > sizeof(evr_runtime_fdt) ||
+		    fdt_check_header(selected) ||
+		    fdt_totalsize(selected) != selected_size) {
+			pr_crit("Everest: selected DTB invalid or too large\n");
+			return NULL;
+		}
+		source_fdt = selected;
+	} else {
+		pr_info("Everest: legacy single built-in DTB\n");
+		source_fdt = builtin_fdt;
+	}
 
-	ret = fdt_open_into(builtin_fdt, builtin_fdt, work_size);
+	/* Copy directly to the permanent 2 MiB workspace. No extra copy. */
+	ret = fdt_open_into(source_fdt, evr_runtime_fdt,
+			    sizeof(evr_runtime_fdt));
 	if (ret) {
-		pr_warn("Built-in DTB fdt_open_into failed: %d\n", ret);
+		pr_crit("Built-in DTB fdt_open_into failed: %d\n", ret);
 		return NULL;
 	}
 
-	if (original_fdt && !fdt_check_header(original_fdt)) {
-		ret = builtin_dtb_copy_chosen_props(builtin_fdt, original_fdt);
-		if (ret)
-			pr_warn("Built-in DTB copy /chosen failed: %d\n", ret);
+	ret = builtin_dtb_copy_chosen_props(evr_runtime_fdt, original_fdt);
+	if (ret) {
+		pr_crit("Everest: /chosen copy failed: %d\n", ret);
+		return NULL;
 	}
 
-	if (!early_init_dt_scan(builtin_fdt)) {
-		pr_warn("Built-in DTB early_init_dt_scan failed, falling back to bootloader DTB\n");
+	ret = huawei_everest_adapt_fdt(evr_runtime_fdt, original_fdt);
+	if (ret) {
+		pr_crit("Everest: runtime FDT adaptation FAILED: %d\n", ret);
+		return NULL;
+	}
+
+	if (!early_init_dt_scan(evr_runtime_fdt)) {
+		pr_warn("Everest: built-in DTB early_init_dt_scan failed\n");
 		return NULL;
 	}
 
 	pr_info("Using built-in custom DTB override\n");
-	return builtin_fdt;
+	return evr_runtime_fdt;
 }
 #endif
 
@@ -300,16 +337,15 @@ static void __init setup_machine_fdt(phys_addr_t dt_phys)
 
 #if defined(CONFIG_ARM64_BUILTIN_APPENDED_DTB_OVERRIDE)
 	{
-	if (fdt_check_header(dt_virt))
-		goto invalid_fdt;
-
 		void *builtin_fdt;
 
+		if (fdt_check_header(dt_virt))
+			goto invalid_fdt;
+
 		builtin_fdt = setup_machine_fdt_try_builtin(dt_virt);
-		if (!builtin_fdt) {
-			if (!early_init_dt_scan(dt_virt))
-				goto invalid_fdt;
-		}
+		/* Never boot 4.14 with an unadapted EMUI 9.1 FDT. */
+		if (!builtin_fdt)
+			goto invalid_fdt;
 	}
 #else
 	if (!early_init_dt_scan(dt_virt))

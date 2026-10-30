@@ -144,14 +144,6 @@ SECTIONS
 	__stop_hwlog_tag = .;
 #endif
 
-#ifdef CONFIG_ARM64_BUILTIN_APPENDED_DTB_OVERRIDE
-	. = ALIGN(8);
-	.builtin_custom_dtb : {
-		KEEP(*(.builtin_custom_dtb))
-	}
-	. = ALIGN(8);
-#endif
-
 	. = ALIGN(SEGMENT_ALIGN);
 	_etext = .;			/* End of text section */
 
@@ -192,6 +184,12 @@ SECTIONS
 		CON_INITCALL
 		SECURITY_INITCALL
 		INIT_RAM_FS
+#ifdef CONFIG_ARM64_BUILTIN_APPENDED_DTB_OVERRIDE
+		/* Init-only catalog: released by free_initmem() after boot. */
+		. = ALIGN(8);
+		KEEP(*(.builtin_custom_dtb))
+		. = ALIGN(8);
+#endif
 		*(.init.rodata.* .init.bss)	/* from the EFI stub */
 	}
 	.exit.data : {
