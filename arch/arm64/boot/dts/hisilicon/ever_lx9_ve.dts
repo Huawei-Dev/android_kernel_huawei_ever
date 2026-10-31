@@ -1986,6 +1986,7 @@
 			cpu-idle-states = <0xb 0xc>;
 			operating-points-v2 = <0xd>;
 			sched-energy-costs = <0xe 0xf>;
+			memlat-monitors = <0x626 0x629>;
 			capacity-dmips-mhz = <0x1c9>;
 			phandle = <0x19>;
 		};
@@ -2003,6 +2004,7 @@
 			cpu-idle-states = <0xb 0xc>;
 			operating-points-v2 = <0xd>;
 			sched-energy-costs = <0xe 0xf>;
+			memlat-monitors = <0x626 0x629>;
 			capacity-dmips-mhz = <0x1c9>;
 			phandle = <0x1a>;
 		};
@@ -2020,6 +2022,7 @@
 			cpu-idle-states = <0xb 0xc>;
 			operating-points-v2 = <0xd>;
 			sched-energy-costs = <0xe 0xf>;
+			memlat-monitors = <0x626 0x629>;
 			capacity-dmips-mhz = <0x1c9>;
 			phandle = <0x1b>;
 		};
@@ -2037,6 +2040,7 @@
 			cpu-idle-states = <0xb 0xc>;
 			operating-points-v2 = <0xd>;
 			sched-energy-costs = <0xe 0xf>;
+			memlat-monitors = <0x626 0x629>;
 			capacity-dmips-mhz = <0x1c9>;
 			phandle = <0x1c>;
 		};
@@ -2054,6 +2058,7 @@
 			cpu-idle-states = <0xb 0x11>;
 			operating-points-v2 = <0x12>;
 			sched-energy-costs = <0x13 0x14>;
+			memlat-monitors = <0x627 0x62a>;
 			capacity-dmips-mhz = <0x3fb>;
 			phandle = <0x1d>;
 		};
@@ -2070,6 +2075,7 @@
 			cpu-idle-states = <0xb 0x11>;
 			operating-points-v2 = <0x12>;
 			sched-energy-costs = <0x13 0x14>;
+			memlat-monitors = <0x627 0x62a>;
 			capacity-dmips-mhz = <0x3fb>;
 			enable-method = "psci";
 			phandle = <0x1e>;
@@ -2087,6 +2093,7 @@
 			cpu-idle-states = <0x15>;
 			operating-points-v2 = <0x16>;
 			sched-energy-costs = <0x17 0x18>;
+			memlat-monitors = <0x628 0x62b>;
 			capacity-dmips-mhz = <0x400>;
 			enable-method = "psci";
 			phandle = <0x1f>;
@@ -2104,6 +2111,7 @@
 			cpu-idle-states = <0x15>;
 			operating-points-v2 = <0x16>;
 			sched-energy-costs = <0x17 0x18>;
+			memlat-monitors = <0x628 0x62b>;
 			capacity-dmips-mhz = <0x400>;
 			enable-method = "psci";
 			phandle = <0x20>;
