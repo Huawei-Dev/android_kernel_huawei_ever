@@ -73,6 +73,10 @@
 #include <asm/io.h>
 #include <asm/unistd.h>
 
+#if defined(CONFIG_HW_RTG_SCHED)
+#include <cpu_netlink/cpu_netlink.h>
+#endif
+
 #ifndef SET_UNALIGN_CTL
 # define SET_UNALIGN_CTL(a, b)	(-EINVAL)
 #endif
@@ -2409,6 +2413,9 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 			return -EFAULT;
 		set_task_comm(me, comm);
 		proc_comm_connector(me);
+#if defined(CONFIG_HW_RTG_SCHED)
+		iaware_proc_comm_connector(me, comm);
+#endif
 		break;
 	case PR_GET_NAME:
 		get_task_comm(comm, me);

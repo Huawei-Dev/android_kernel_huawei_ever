@@ -492,6 +492,7 @@ static int pfifo_fast_enqueue(struct sk_buff *skb, struct Qdisc *qdisc,
 {
 	if (qdisc->q.qlen < qdisc_dev(qdisc)->tx_queue_len) {
 		int band = prio2band[skb->priority & TC_PRIO_MAX];
+
 		struct pfifo_fast_priv *priv = qdisc_priv(qdisc);
 		struct qdisc_skb_head *list = band2list(priv, band);
 

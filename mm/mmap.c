@@ -445,7 +445,7 @@ static __always_inline void vma_rb_erase_ignore(struct vm_area_struct *vma,
 }
 
 static __always_inline void vma_rb_erase(struct vm_area_struct *vma,
-					 struct rb_root *root)
+					struct rb_root *root)
 {
 	/*
 	 * All rb_subtree_gap values must be consistent prior to erase,
@@ -646,7 +646,6 @@ static __always_inline void __vma_unlink_common(struct mm_struct *mm,
 						struct vm_area_struct *ignore)
 {
 	struct vm_area_struct *next;
-
 	vma_rb_erase_ignore(vma, &mm->mm_rb, ignore);
 	next = vma->vm_next;
 	if (has_prev)
@@ -895,7 +894,8 @@ again:
 	}
 
 	if (remove_next) {
-		if (file) {
+		if (file)
+		{
 			uprobe_munmap(next, next->vm_start, next->vm_end);
 			fput(file);
 		}
@@ -932,7 +932,7 @@ again:
 		}
 		if (remove_next == 2) {
 			remove_next = 1;
-			end = next->vm_end;
+			end = next->vm_end;	//lint !e613
 			goto again;
 		}
 		else if (next)
@@ -2599,7 +2599,6 @@ int __split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
 	*new = *vma;
 
 	INIT_LIST_HEAD(&new->anon_vma_chain);
-
 	if (new_below)
 		new->vm_end = addr;
 	else {
@@ -2961,7 +2960,6 @@ static int do_brk_flags(unsigned long addr, unsigned long len, unsigned long fla
 		vm_unacct_memory(len >> PAGE_SHIFT);
 		return -ENOMEM;
 	}
-
 	INIT_LIST_HEAD(&vma->anon_vma_chain);
 	vma->vm_mm = mm;
 	vma->vm_start = addr;
@@ -3148,9 +3146,10 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
 
 	if (find_vma_links(mm, addr, addr + len, &prev, &rb_link, &rb_parent))
 		return NULL;	/* should never get here */
+
 	new_vma = vma_merge(mm, prev, addr, addr + len, vma->vm_flags,
-			    vma->anon_vma, vma->vm_file, pgoff, vma_policy(vma),
-			    vma->vm_userfaultfd_ctx, vma_get_anon_name(vma));
+			  vma->anon_vma, vma->vm_file, pgoff, vma_policy(vma),
+			  vma->vm_userfaultfd_ctx, vma_get_anon_name(vma));
 	if (new_vma) {
 		/*
 		 * Source vma may have been merged into new_vma

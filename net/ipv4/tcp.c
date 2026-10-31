@@ -282,6 +282,14 @@
 #include <asm/ioctls.h>
 #include <net/busy_poll.h>
 
+#ifdef CONFIG_TCP_NODELAY
+#include <linux/blk-cgroup.h>
+#endif
+
+#ifdef CONFIG_HUAWEI_XENGINE
+#include <huawei_platform/emcom/emcom_xengine.h>
+#endif
+
 int sysctl_tcp_min_tso_segs __read_mostly = 2;
 
 int sysctl_tcp_autocorking __read_mostly = 1;
@@ -402,6 +410,32 @@ static u64 tcp_compute_delivery_rate(const struct tcp_sock *tp)
 	return rate64;
 }
 
+#ifdef CONFIG_TCP_NODELAY
+static bool tcp_is_foreground(void)
+{
+#ifdef CONFIG_BLK_DEV_THROTTLING
+	struct blkcg *blkcg;
+
+	rcu_read_lock();
+	blkcg = task_blkcg(current);
+
+	if (blkcg && blkcg->type <= BLK_THROTL_KBG) {
+		rcu_read_unlock();
+		return true;
+	}
+	rcu_read_unlock();
+#endif
+	return false;
+}
+
+static void tcp_init_nodelay(struct tcp_sock *tp)
+{
+	tp->nodelay = sysctl_tcp_nodelay;
+	tp->nodelay_size = 0;
+	tp->pingpong = 0;
+}
+#endif
+
 /* Address-family independent initialization for a tcp_sock.
  *
  * NOTE: A lot of things set to zero explicitly by call to
@@ -419,6 +453,10 @@ void tcp_init_sock(struct sock *sk)
 	icsk->icsk_rto = TCP_TIMEOUT_INIT;
 	tp->mdev_us = jiffies_to_usecs(TCP_TIMEOUT_INIT);
 	minmax_reset(&tp->rtt_min, tcp_jiffies32, ~0U);
+
+#ifdef CONFIG_TCP_NODELAY
+	tcp_init_nodelay(tp);
+#endif
 
 	/* So many TCP implementations out there (incorrectly) count the
 	 * initial SYN frame in their delayed-ACK and congestion control
@@ -451,7 +489,6 @@ void tcp_init_sock(struct sock *sk)
 
 	sk->sk_sndbuf = sysctl_tcp_wmem[1];
 	sk->sk_rcvbuf = sysctl_tcp_rmem[1];
-
 	sk_sockets_allocated_inc(sk);
 }
 EXPORT_SYMBOL(tcp_init_sock);
@@ -766,6 +803,7 @@ ssize_t tcp_splice_read(struct socket *sock, loff_t *ppos,
 	int ret;
 
 	sock_rps_record_flow(sk);
+
 	/*
 	 * We can't seek on a socket input
 	 */
@@ -879,8 +917,8 @@ struct sk_buff *sk_stream_alloc_skb(struct sock *sk, int size, gfp_t gfp,
 	return NULL;
 }
 
-static unsigned int tcp_xmit_size_goal(struct sock *sk, u32 mss_now,
-				       int large_allowed)
+static
+unsigned int tcp_xmit_size_goal(struct sock *sk, u32 mss_now, int large_allowed)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	u32 new_size_goal, size_goal;
@@ -914,6 +952,38 @@ static int tcp_send_mss(struct sock *sk, int *size_goal, int flags)
 	return mss_now;
 }
 
+#ifdef CONFIG_TCP_NODELAY
+
+#define TCP_NODELAY_COUNT_LIMIT	8
+
+static bool tcp_should_nodelay(struct sock *sk, size_t size, int mss)
+{
+	struct tcp_sock *tp = tcp_sk(sk);
+
+	if (tp->nodelay && sysctl_tcp_nodelay) {
+		/* limit no delay packet size to 3 * MTU */
+		int limit = (mss << 1) + mss;
+
+		/* send msg count */
+		tp->pingpong++;
+
+		/* 3 * mss sendmsg without response, disable nodely */
+		if (size >= limit || tp->nodelay_size >= limit ||
+		    tp->pingpong > TCP_NODELAY_COUNT_LIMIT) {
+			tp->nodelay = 0;
+			return false;
+		}
+
+		tp->nodelay_size += size;
+
+		/* allow nodelay for foreground app only */
+		return tcp_is_foreground();
+	}
+
+	return false;
+}
+#endif
+
 ssize_t do_tcp_sendpages(struct sock *sk, struct page *page, int offset,
 			 size_t size, int flags)
 {
@@ -933,7 +1003,6 @@ ssize_t do_tcp_sendpages(struct sock *sk, struct page *page, int offset,
 		if (err != 0)
 			goto out_err;
 	}
-
 	sk_clear_bit(SOCKWQ_ASYNC_NOSPACE, sk);
 
 	mss_now = tcp_send_mss(sk, &size_goal, flags);
@@ -958,7 +1027,6 @@ new_segment:
 						  skb_queue_empty(&sk->sk_write_queue));
 			if (!skb)
 				goto wait_for_memory;
-
 			skb_entail(sk, skb);
 			copy = size_goal;
 		}
@@ -1083,14 +1151,16 @@ EXPORT_SYMBOL(tcp_sendpage);
  * This also speeds up tso_fragment(), since it wont fallback
  * to tcp_fragment().
  */
-static int linear_payload_sz(bool first_skb)
+static
+int linear_payload_sz(bool first_skb)
 {
 	if (first_skb)
 		return SKB_WITH_OVERHEAD(2048 - MAX_TCP_HEADER);
 	return 0;
 }
 
-static int select_size(const struct sock *sk, bool sg, bool first_skb)
+static
+int select_size(const struct sock *sk, bool sg, bool first_skb)
 {
 	const struct tcp_sock *tp = tcp_sk(sk);
 	int tmp = tp->mss_cache;
@@ -1174,11 +1244,16 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
 	bool process_backlog = false;
 	bool sg;
 	long timeo;
-
+#ifdef CONFIG_TCP_NODELAY
+	int nonagle = 0;
+#endif
+#ifdef CONFIG_HUAWEI_XENGINE
+	bool bAccelerate = false;
+#endif
 	flags = msg->msg_flags;
 
 	if (flags & MSG_ZEROCOPY && size && sock_flag(sk, SOCK_ZEROCOPY)) {
-		if ((1 << sk->sk_state) & ~(TCPF_ESTABLISHED | TCPF_CLOSE_WAIT)) {
+		if (sk->sk_state != TCP_ESTABLISHED) {
 			err = -EINVAL;
 			goto out_err;
 		}
@@ -1217,7 +1292,6 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
 		if (err != 0)
 			goto do_error;
 	}
-
 	if (unlikely(tp->repair)) {
 		if (tp->repair_queue == TCP_RECV_QUEUE) {
 			copied = tcp_send_rcvq(sk, msg, size);
@@ -1240,6 +1314,24 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
 		}
 	}
 
+#ifdef CONFIG_HUAWEI_XENGINE
+#ifdef CONFIG_HUAWEI_BASTET
+	bAccelerate = BST_FG_Hook_Ul_Stub(sk, msg);
+#endif
+
+	if (!bAccelerate)
+		bAccelerate = emcom_xengine_hook_ul_stub(sk);
+
+	if (!bAccelerate)
+		EMCOM_XENGINE_SET_ACCSTATE(sk, EMCOM_XENGINE_ACC_NORMAL);
+#else
+#ifdef CONFIG_HUAWEI_BASTET
+	BST_FG_Hook_Ul_Stub(sk, msg);
+#endif
+#endif
+#ifdef CONFIG_HUAWEI_BASTET
+	BST_FG_Custom_Process(sk, msg, (uint8_t)BST_FG_TCP_BITMAP);
+#endif
 	/* This should be in poll */
 	sk_clear_bit(SOCKWQ_ASYNC_NOSPACE, sk);
 
@@ -1287,11 +1379,7 @@ new_segment:
 						  first_skb);
 			if (!skb)
 				goto wait_for_memory;
-
 			process_backlog = true;
-			/*
-			 * Check whether we can use HW checksum.
-			 */
 			if (sk_check_csum_caps(sk))
 				skb->ip_summed = CHECKSUM_PARTIAL;
 
@@ -1404,9 +1492,18 @@ wait_for_memory:
 	}
 
 out:
+#ifdef CONFIG_TCP_NODELAY
+	if (tcp_should_nodelay(sk, size, mss_now))
+		nonagle = TCP_NAGLE_PUSH;
+#endif
+
 	if (copied) {
 		tcp_tx_timestamp(sk, sockc.tsflags, tcp_write_queue_tail(sk));
+#ifdef CONFIG_TCP_NODELAY
+		tcp_push(sk, flags, mss_now, tp->nonagle | nonagle, size_goal);
+#else
 		tcp_push(sk, flags, mss_now, tp->nonagle, size_goal);
+#endif
 	}
 out_nopush:
 	sock_zerocopy_put(uarg);
@@ -1523,7 +1620,8 @@ static int tcp_peek_sndq(struct sock *sk, struct msghdr *msg, int len)
  * calculation of whether or not we must ACK for the sake of
  * a window update.
  */
-static void tcp_cleanup_rbuf(struct sock *sk, int copied)
+static
+void tcp_cleanup_rbuf(struct sock *sk, int copied)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	bool time_to_ack = false;
@@ -1567,7 +1665,6 @@ static void tcp_cleanup_rbuf(struct sock *sk, int copied)
 		/* Optimize, __tcp_select_window() is not cheap. */
 		if (2*rcv_window_now <= tp->window_clamp) {
 			__u32 new_window = __tcp_select_window(sk);
-
 			/* Send ACK now, if this read freed lots of space
 			 * in our buffer. Certainly, new_window is new window.
 			 * We can advertise it now, if it is not less than current one.
@@ -1577,8 +1674,13 @@ static void tcp_cleanup_rbuf(struct sock *sk, int copied)
 				time_to_ack = true;
 		}
 	}
+#ifdef CONFIG_TCP_ARGO
+	if (time_to_ack && tcp_argo_send_ack_immediatly(tp))
+		tcp_send_ack(sk);
+#else
 	if (time_to_ack)
 		tcp_send_ack(sk);
+#endif /* CONFIG_TCP_ARGO */
 }
 
 static struct sk_buff *tcp_recv_skb(struct sock *sk, u32 seq, u32 *off)
@@ -1901,7 +2003,6 @@ int tcp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int nonblock,
 				break;
 			}
 		}
-
 		tcp_cleanup_rbuf(sk, copied);
 
 		if (copied >= target) {
@@ -1996,7 +2097,6 @@ skip_copy:
 
 	/* Clean up data we have read: This will do ACK frames. */
 	tcp_cleanup_rbuf(sk, copied);
-
 	release_sock(sk);
 	return copied;
 
@@ -2018,6 +2118,10 @@ void tcp_set_state(struct sock *sk, int state)
 {
 	int oldstate = sk->sk_state;
 
+#ifdef CONFIG_HUAWEI_XENGINE
+	emcom_xengine_mpflow_fallback(sk, EMCOM_MPFLOW_FALLBACK_NOPAYLOAD, state);
+#endif
+
 	switch (state) {
 	case TCP_ESTABLISHED:
 		if (oldstate != TCP_ESTABLISHED)
@@ -2038,6 +2142,10 @@ void tcp_set_state(struct sock *sk, int state)
 			TCP_DEC_STATS(sock_net(sk), TCP_MIB_CURRESTAB);
 	}
 
+#ifdef CONFIG_HUAWEI_BASTET
+	bastet_check_partner(sk, state);
+	BST_FG_CheckSockUid(sk, state);
+#endif
 	/* Change state AFTER socket is unhashed to avoid closed
 	 * socket sitting in hash tables.
 	 */
@@ -2073,7 +2181,8 @@ static const unsigned char new_state[16] = {
   [TCP_NEW_SYN_RECV]	= TCP_CLOSE,	/* should not happen ! */
 };
 
-static int tcp_close_state(struct sock *sk)
+static
+int tcp_close_state(struct sock *sk)
 {
 	int next = (int)new_state[sk->sk_state];
 	int ns = next & TCP_STATE_MASK;
@@ -2215,12 +2324,19 @@ void tcp_close(struct sock *sk, long timeout)
 adjudge_to_death:
 	state = sk->sk_state;
 	sock_hold(sk);
+
 	sock_orphan(sk);
 
+	/* It is the last release_sock in its life. It will remove backlog. */
+	release_sock(sk);
+
+
+	/* Now socket is owned by kernel and we acquire BH lock
+	 *  to finish close. No need to check for user refs.
+	 */
 	local_bh_disable();
 	bh_lock_sock(sk);
-	/* remove backlog if any, without releasing ownership. */
-	__release_sock(sk);
+	WARN_ON(sock_owned_by_user(sk));
 
 	percpu_counter_inc(sk->sk_prot->orphan_count);
 
@@ -2289,7 +2405,6 @@ adjudge_to_death:
 out:
 	bh_unlock_sock(sk);
 	local_bh_enable();
-	release_sock(sk);
 	sock_put(sk);
 }
 EXPORT_SYMBOL(tcp_close);
@@ -2347,6 +2462,7 @@ int tcp_disconnect(struct sock *sk, int flags)
 	tp->write_seq += tp->max_window + 2;
 	if (tp->write_seq == 0)
 		tp->write_seq = 1;
+	icsk->icsk_backoff = 0;
 	tp->snd_cwnd = 2;
 	icsk->icsk_probes_out = 0;
 	tp->snd_ssthresh = TCP_INFINITE_SSTHRESH;
@@ -2560,6 +2676,9 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
 			 */
 			tp->nonagle |= TCP_NAGLE_OFF|TCP_NAGLE_PUSH;
 			tcp_push_pending_frames(sk);
+#ifdef CONFIG_TCP_NODELAY
+			tp->nodelay = 0;
+#endif
 		} else {
 			tp->nonagle &= ~TCP_NAGLE_OFF;
 		}
@@ -2581,10 +2700,19 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
 		if (!tcp_can_repair_sock(sk))
 			err = -EPERM;
 		else if (val == 1) {
+#ifdef CONFIG_HUAWEI_BASTET
+			if (bastet_sock_repair_prepare_notify(sk, val)) {
+				err = -EPERM;
+				break;
+			}
+#endif
 			tp->repair = 1;
 			sk->sk_reuse = SK_FORCE_REUSE;
 			tp->repair_queue = TCP_NO_QUEUE;
 		} else if (val == 0) {
+#ifdef CONFIG_HUAWEI_BASTET
+			bastet_sock_repair_prepare_notify(sk, val);
+#endif
 			tp->repair = 0;
 			sk->sk_reuse = SK_NO_REUSE;
 			tcp_send_window_probe(sk);
@@ -2787,6 +2915,11 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
 		tp->notsent_lowat = val;
 		sk->sk_write_space(sk);
 		break;
+#ifdef CONFIG_HUAWEI_BASTET
+	case TCP_RECONN:
+		bastet_reconn_config(sk, val);
+		break;
+#endif
 	default:
 		err = -ENOPROTOOPT;
 		break;
@@ -3415,10 +3548,8 @@ int tcp_abort(struct sock *sk, int err)
 		}
 		return -EOPNOTSUPP;
 	}
-
 	/* Don't race with userspace socket closes such as tcp_close. */
 	lock_sock(sk);
-
 	if (sk->sk_state == TCP_LISTEN) {
 		tcp_set_state(sk, TCP_CLOSE);
 		inet_csk_listen_stop(sk);
@@ -3480,6 +3611,7 @@ void __init tcp_init(void)
 	unsigned long limit;
 	unsigned int i;
 
+	BUILD_BUG_ON(TCP_MIN_SND_MSS <= MAX_TCP_OPTION_SPACE);
 	BUILD_BUG_ON(sizeof(struct tcp_skb_cb) >
 		     FIELD_SIZEOF(struct sk_buff, cb));
 

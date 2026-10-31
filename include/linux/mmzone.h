@@ -40,8 +40,6 @@ enum migratetype {
 	MIGRATE_UNMOVABLE,
 	MIGRATE_MOVABLE,
 	MIGRATE_RECLAIMABLE,
-	MIGRATE_PCPTYPES,	/* the number of types on the pcp lists */
-	MIGRATE_HIGHATOMIC = MIGRATE_PCPTYPES,
 #ifdef CONFIG_CMA
 	/*
 	 * MIGRATE_CMA migration type is designed to mimic the way
@@ -58,6 +56,8 @@ enum migratetype {
 	 */
 	MIGRATE_CMA,
 #endif
+	MIGRATE_PCPTYPES,	/* the number of types on the pcp lists */
+	MIGRATE_HIGHATOMIC = MIGRATE_PCPTYPES,
 #ifdef CONFIG_MEMORY_ISOLATION
 	MIGRATE_ISOLATE,	/* can't allocate from here */
 #endif
@@ -144,10 +144,13 @@ enum zone_stat_item {
 	NR_KERNEL_STACK_KB,	/* measured in KiB */
 	/* Second 128 byte cacheline */
 	NR_BOUNCE,
-#if IS_ENABLED(CONFIG_ZSMALLOC)
+#if IS_ENABLED(CONFIG_ZSMALLOC) /*lint !e553*/
 	NR_ZSPAGES,		/* allocated in zsmalloc */
 #endif
 	NR_FREE_CMA_PAGES,
+	NR_IONCACHE_PAGES,
+	NR_MALI_PAGES,
+	NR_SWAPCACHE,
 	NR_VM_ZONE_STAT_ITEMS };
 
 enum node_stat_item {
@@ -631,6 +634,10 @@ typedef struct pglist_data {
 #ifdef CONFIG_PAGE_EXTENSION
 	struct page_ext *node_page_ext;
 #endif
+#endif
+#ifdef CONFIG_HISI_PAGE_TRACKER
+	wait_queue_head_t ktracker_wait;
+	struct task_struct *page_ktrackerd;
 #endif
 #ifndef CONFIG_NO_BOOTMEM
 	struct bootmem_data *bdata;

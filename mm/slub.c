@@ -35,10 +35,16 @@
 #include <linux/prefetch.h>
 #include <linux/memcontrol.h>
 #include <linux/random.h>
+#include <linux/hisi/page_tracker.h>
 
+#include <linux/hisi/rdr_hisi_ap_hook.h>
 #include <trace/events/kmem.h>
-
 #include "internal.h"
+
+#ifdef CONFIG_HW_SLUB_DF
+static void set_harden_double_free_check_flags(bool status);
+static bool fill_random_malloc;
+#endif
 
 /*
  * Lock order:
@@ -290,13 +296,84 @@ static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
 {
 	unsigned long freeptr_addr = (unsigned long)object + s->offset;
 
-#ifdef CONFIG_SLAB_FREELIST_HARDENED
-	BUG_ON(object == fp); /* naive detection of double free or corruption */
-#endif
-
 	*(void **)freeptr_addr = freelist_ptr(s, fp, freeptr_addr);
 }
 
+#ifdef CONFIG_HW_SLUB_DF
+/* object size more than 16 */
+static inline unsigned long *hw_get_canary(struct kmem_cache *s, void *object)
+{
+	return (object + sizeof(void *));
+}
+
+static inline unsigned long hw_get_canary_value(const void *canary, unsigned long value)
+{
+	return (value ^ (unsigned long)canary) & CANARY_MASK;
+}
+
+static inline bool no_hw_slub_df_check(struct kmem_cache *s)
+{
+	if (s->flags & (DEBUG_DEFAULT_FLAGS | SLAB_TYPESAFE_BY_RCU))
+		return true;
+
+	if (unlikely(s->ctor))
+		return true;
+
+	if (unlikely(s->object_size < 2 * sizeof(void *)))
+		return true;
+	return false;
+}
+
+static inline void hw_set_canary(struct kmem_cache *s, void *object, unsigned long value)
+{
+	unsigned long *canary = NULL;
+
+	if (no_hw_slub_df_check(s))
+		return;
+
+	canary = hw_get_canary(s, object);
+	*canary = hw_get_canary_value(canary, value);
+}
+
+static inline bool hw_check_canary(struct kmem_cache *s, void *object, unsigned long value)
+{
+	unsigned long *canary = NULL;
+
+	if (no_hw_slub_df_check(s))
+		return true;
+
+	canary = hw_get_canary(s, object);
+
+	if (*canary == hw_get_canary_value(canary, value)) {
+#ifdef CONFIG_HW_SLUB_DF_BUGON
+		BUG_ON(1);
+#endif
+		return false;
+	}
+	return true;
+}
+
+static inline bool hw_check_and_set_canary(struct kmem_cache *s, void *object,
+	unsigned long value)
+{
+	unsigned long *canary = NULL;
+
+	if (no_hw_slub_df_check(s))
+		return true;
+
+	canary = hw_get_canary(s, object);
+
+	if (*canary == hw_get_canary_value(canary, value)) {
+#ifdef CONFIG_HW_SLUB_DF_BUGON
+		BUG_ON(1);
+#endif
+		return false;
+	}
+	*canary = hw_get_canary_value(canary, value);
+	return true;
+}
+
+#endif
 /* Loop over all objects in a slab */
 #define for_each_object(__p, __s, __addr, __objects) \
 	for (__p = fixup_red_left(__s, __addr); \
@@ -1416,6 +1493,10 @@ static void setup_object(struct kmem_cache *s, struct page *page,
 				void *object)
 {
 	setup_object_debug(s, page, object);
+#ifdef CONFIG_HW_SLUB_DF
+	if (unlikely(s->flags & SLAB_DOUBLEFREE_CHECK))
+		hw_set_canary(s, object, s->hw_random_free);
+#endif
 	kasan_init_slab_obj(s, object);
 	if (unlikely(s->ctor)) {
 		kasan_unpoison_object_data(s, object);
@@ -1594,6 +1675,7 @@ static struct page *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
 	page->objects = oo_objects(oo);
 
 	order = compound_order(page);
+	page_tracker_set_type(page, TRACK_SLAB, order);
 	page->slab_cache = s;
 	__SetPageSlab(page);
 	if (page_is_pfmemalloc(page))
@@ -2624,6 +2706,7 @@ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
 #endif
 
 	p = ___slab_alloc(s, gfpflags, node, addr, c);
+
 	local_irq_restore(flags);
 	return p;
 }
@@ -2716,12 +2799,14 @@ redo:
 		prefetch_freepointer(s, next_object);
 		stat(s, ALLOC_FASTPATH);
 	}
-
+#ifdef CONFIG_HW_SLUB_DF
+	if (unlikely(fill_random_malloc) && object)
+		hw_set_canary(s, object, s->hw_random_malloc);
+#endif
 	if (unlikely(gfpflags & __GFP_ZERO) && object)
 		memset(object, 0, s->object_size);
 
 	slab_post_alloc_hook(s, gfpflags, 1, &object);
-
 	return object;
 }
 
@@ -2747,6 +2832,8 @@ void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
 {
 	void *ret = slab_alloc(s, gfpflags, _RET_IP_);
 	trace_kmalloc(_RET_IP_, ret, size, s->size, gfpflags);
+	kmalloc_trace_hook((unsigned char)MEM_ALLOC, _RET_IP_, (unsigned long long)ret,/*lint !e571*/
+                virt_to_phys(ret), (unsigned int)size);
 	kasan_kmalloc(s, ret, size, gfpflags);
 	return ret;
 }
@@ -2926,6 +3013,12 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
 	void *tail_obj = tail ? : head;
 	struct kmem_cache_cpu *c;
 	unsigned long tid;
+
+#ifdef CONFIG_HW_SLUB_DF
+	if (unlikely(s->flags & SLAB_DOUBLEFREE_CHECK) &&
+		hw_check_and_set_canary(s, head, s->hw_random_free) == false)
+		return;
+#endif
 redo:
 	/*
 	 * Determine the currently cpus per cpu slab.
@@ -2944,7 +3037,6 @@ redo:
 
 	if (likely(page == c->page)) {
 		set_freepointer(s, tail_obj, c->freelist);
-
 		if (unlikely(!this_cpu_cmpxchg_double(
 				s->cpu_slab->freelist, s->cpu_slab->tid,
 				c->freelist, tid,
@@ -3104,7 +3196,7 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
 			  void **p)
 {
 	struct kmem_cache_cpu *c;
-	int i;
+	int i, k;
 
 	/* memcg and kmem_cache debug support */
 	s = slab_pre_alloc_hook(s, flags);
@@ -3139,7 +3231,12 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
 	}
 	c->tid = next_tid(c->tid);
 	local_irq_enable();
-
+#ifdef CONFIG_HW_SLUB_DF
+	if (unlikely(fill_random_malloc)) {
+		for (k = 0; k < i; k++)
+			hw_set_canary(s, p[k], s->hw_random_malloc);
+	}
+#endif
 	/* Clear memory outside IRQ disabled fastpath loop */
 	if (unlikely(flags & __GFP_ZERO)) {
 		int j;
@@ -3350,6 +3447,10 @@ static void early_kmem_cache_node_alloc(int node)
 #ifdef CONFIG_SLUB_DEBUG
 	init_object(kmem_cache_node, n, SLUB_RED_ACTIVE);
 	init_tracking(kmem_cache_node, n);
+#endif
+#ifdef CONFIG_HW_SLUB_DF
+	if (unlikely(fill_random_malloc))
+		hw_set_canary(kmem_cache_node, n, kmem_cache_node->hw_random_malloc);
 #endif
 	kasan_kmalloc(kmem_cache_node, n, sizeof(struct kmem_cache_node),
 		      GFP_KERNEL);
@@ -3574,6 +3675,11 @@ static int kmem_cache_open(struct kmem_cache *s, unsigned long flags)
 {
 	s->flags = kmem_cache_flags(s->size, flags, s->name, s->ctor);
 	s->reserved = 0;
+#ifdef CONFIG_HW_SLUB_DF
+	s->hw_random_malloc = get_random_long();
+	s->hw_random_free = get_random_long();
+#endif
+
 #ifdef CONFIG_SLAB_FREELIST_HARDENED
 	s->random = get_random_long();
 #endif
@@ -3745,8 +3851,12 @@ void *__kmalloc(size_t size, gfp_t flags)
 	struct kmem_cache *s;
 	void *ret;
 
-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
-		return kmalloc_large(size, flags);
+	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)){ 
+		ret = kmalloc_large(size, flags);
+		if (ret)
+			page_tracker_set_type(virt_to_page(ret), TRACK_LSLAB, get_order(size));
+		return ret;
+	}
 
 	s = kmalloc_slab(size, flags);
 
@@ -3756,6 +3866,8 @@ void *__kmalloc(size_t size, gfp_t flags)
 	ret = slab_alloc(s, flags, _RET_IP_);
 
 	trace_kmalloc(_RET_IP_, ret, size, s->size, flags);
+	kmalloc_trace_hook((unsigned char)MEM_ALLOC, _RET_IP_, (unsigned long long)ret,/*lint !e571*/
+                (unsigned long long)virt_to_phys(ret), (unsigned int)size);
 
 	kasan_kmalloc(s, ret, size, flags);
 
@@ -3828,16 +3940,21 @@ const char *__check_heap_object(const void *ptr, unsigned long n,
 	object_size = slab_ksize(s);
 
 	/* Reject impossible pointers. */
-	if (ptr < page_address(page))
-		return s->name;
+	if (ptr < page_address(page)) {
+		pr_err("ptr(%pK) is impoosible address!\n", ptr);
+		goto err;
+	}
 
 	/* Find offset within object. */
 	offset = (ptr - page_address(page)) % s->size;
 
 	/* Adjust for redzone and reject if within the redzone. */
 	if (kmem_cache_debug(s) && s->flags & SLAB_RED_ZONE) {
-		if (offset < s->red_left_pad)
-			return s->name;
+		if (offset < s->red_left_pad) {
+			pr_err("offset(%lu)/red_left_pad(%d) is wrong!\n",
+				offset, s->red_left_pad);
+			goto err;
+		}
 		offset -= s->red_left_pad;
 	}
 
@@ -3845,7 +3962,15 @@ const char *__check_heap_object(const void *ptr, unsigned long n,
 	if (offset <= object_size && n <= object_size - offset)
 		return NULL;
 
-	return s->name;
+	pr_err("Usercopy: kernel memory r/w attempt detected from/to %pK (%s) (%lu bytes)!\n",
+			ptr, s->name, n);
+
+err:
+	pr_err("ptr = %pK, page = %pK, n = %lu\n", ptr, page, n);
+	pr_err("page_addr = %pK, kmem_cache = %pK, size = %d, object= %lu, red_left_pad = %d",
+		page_address(page), s, s->size, object_size, s->red_left_pad);
+
+	BUG();
 }
 #endif /* CONFIG_HARDENED_USERCOPY */
 
@@ -3891,9 +4016,16 @@ void kfree(const void *x)
 	if (unlikely(!PageSlab(page))) {
 		BUG_ON(!PageCompound(page));
 		kfree_hook(x);
+		kmalloc_trace_hook((unsigned char)MEM_FREE, _RET_IP_, (unsigned long long)x,/*lint !e571*/
+			(unsigned long long)virt_to_phys(x),
+			(unsigned int)(PAGE_SIZE << compound_order(page)));
+
 		__free_pages(page, compound_order(page));
 		return;
 	}
+	kmalloc_trace_hook((unsigned char)MEM_FREE, _RET_IP_, (unsigned long long)x,/*lint !e571*/
+		(unsigned long long)virt_to_phys(x),
+		(unsigned int)page->slab_cache->object_size);
 	slab_free(page->slab_cache, page, object, NULL, 1, _RET_IP_);
 }
 EXPORT_SYMBOL(kfree);
@@ -4237,7 +4369,7 @@ __kmem_cache_alias(const char *name, size_t size, size_t align,
 		s->object_size = max(s->object_size, (int)size);
 		s->inuse = max_t(int, s->inuse, ALIGN(size, sizeof(void *)));
 
-		for_each_memcg_cache(c, s) {
+		for_each_memcg_cache(c, s) {/*lint !e666*/
 			c->object_size = s->object_size;
 			c->inuse = max_t(int, c->inuse,
 					 ALIGN(size, sizeof(void *)));
@@ -4277,8 +4409,12 @@ void *__kmalloc_track_caller(size_t size, gfp_t gfpflags, unsigned long caller)
 	struct kmem_cache *s;
 	void *ret;
 
-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
-		return kmalloc_large(size, gfpflags);
+	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)){
+		ret = kmalloc_large(size, gfpflags);
+		if(ret)
+			page_tracker_set_type(virt_to_page(ret), TRACK_LSLAB, get_order(size));
+		return ret;
+	}
 
 	s = kmalloc_slab(size, gfpflags);
 
@@ -4289,6 +4425,8 @@ void *__kmalloc_track_caller(size_t size, gfp_t gfpflags, unsigned long caller)
 
 	/* Honor the call site pointer we received. */
 	trace_kmalloc(caller, ret, size, s->size, gfpflags);
+	kmalloc_trace_hook((unsigned char)MEM_ALLOC, caller, (unsigned long long)ret,
+                (unsigned long long)virt_to_phys(ret), (unsigned int)size);
 
 	return ret;
 }
@@ -5500,7 +5638,7 @@ static ssize_t slab_attr_store(struct kobject *kobj,
 		 * directly either failed or succeeded, in which case we loop
 		 * through the descendants with best-effort propagation.
 		 */
-		for_each_memcg_cache(c, s)
+		for_each_memcg_cache(c, s)/*lint !e666*/
 			attribute->store(c, buf, len);
 		mutex_unlock(&slab_mutex);
 	}
@@ -5868,4 +6006,129 @@ ssize_t slabinfo_write(struct file *file, const char __user *buffer,
 {
 	return -EIO;
 }
+
+void show_slab(bool verbose)
+{
+	if (likely(!verbose)) {
+		unsigned long slab_pages = 0;
+		struct kmem_cache *cachep = NULL;
+		struct kmem_cache *pages_cachep = NULL;
+		struct kmem_cache *pages_cachep_next = NULL;
+
+		mutex_lock(&slab_mutex);
+		list_for_each_entry(cachep, &slab_caches, list) {
+			struct slabinfo sinfo;
+
+			memset(&sinfo, 0, sizeof(sinfo));
+			get_slabinfo(cachep, &sinfo);
+			if (slab_pages < (sinfo.num_slabs << sinfo.cache_order)) {
+				slab_pages = sinfo.num_slabs << sinfo.cache_order;
+				pages_cachep_next = pages_cachep;
+				pages_cachep = cachep;
+			}
+		}
+		if (pages_cachep || pages_cachep_next)
+			pr_info("[SLAB: ]# name          \
+				 <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab>\
+				 : tunables <limit> <batchcount> <sharedfactor>\
+				 : slabdata <active_slabs> <num_slabs> <sharedavail>");
+
+		if (pages_cachep) {
+			struct slabinfo sinfo;
+
+			memset(&sinfo, 0, sizeof(sinfo));
+			get_slabinfo(pages_cachep, &sinfo);
+			pr_info("[SLAB: ]%-17s %6lu %6lu %6u %4u %4d :\
+				 tunables %4u %4u %4u : slabdata %6lu %6lu %6lu\n",
+				pages_cachep->name, sinfo.active_objs,
+				sinfo.num_objs, pages_cachep->size,
+				sinfo.objects_per_slab, (1 << sinfo.cache_order),
+				sinfo.limit, sinfo.batchcount,
+				sinfo.shared, sinfo.active_slabs,
+				sinfo.num_slabs, sinfo.shared_avail);
+		}
+
+		if (pages_cachep_next) {
+			struct slabinfo sinfo;
+
+			memset(&sinfo, 0, sizeof(sinfo));
+			get_slabinfo(pages_cachep_next, &sinfo);
+			pr_info("[SLAB: ]%-17s %6lu %6lu %6u %4u %4d :\
+				 tunables %4u %4u %4u : slabdata %6lu %6lu %6lu\n",
+				pages_cachep_next->name, sinfo.active_objs,
+				sinfo.num_objs, pages_cachep_next->size,
+				sinfo.objects_per_slab, (1 << sinfo.cache_order),
+				sinfo.limit, sinfo.batchcount,
+				sinfo.shared, sinfo.active_slabs,
+				sinfo.num_slabs, sinfo.shared_avail);
+		}
+		mutex_unlock(&slab_mutex);
+	} else {
+		struct kmem_cache *cachep = NULL;
+
+		pr_info("[SLAB: ]# name          \
+			 <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab>\
+			: tunables <limit> <batchcount> <sharedfactor>\
+			: slabdata <active_slabs> <num_slabs> <sharedavail>");
+		mutex_lock(&slab_mutex);
+		list_for_each_entry(cachep, &slab_caches, list) {
+			struct slabinfo sinfo;
+
+			memset(&sinfo, 0, sizeof(sinfo));
+			get_slabinfo(cachep, &sinfo);
+			pr_info("[SLAB: ]%-17s %6lu %6lu %6u %4u %4d :\
+				 tunables %4u %4u %4u :\
+				 slabdata %6lu %6lu %6lu\n",
+				cachep->name, sinfo.active_objs,
+				sinfo.num_objs, cachep->size,
+				sinfo.objects_per_slab, (1 << sinfo.cache_order),
+				sinfo.limit, sinfo.batchcount,
+				sinfo.shared, sinfo.active_slabs,
+				sinfo.num_slabs, sinfo.shared_avail);
+		}
+		mutex_unlock(&slab_mutex);
+	}
+}
 #endif /* CONFIG_SLABINFO */
+#ifdef CONFIG_HW_SLUB_DF
+static void set_harden_double_free_check_flags(bool status)
+{
+#ifdef CONFIG_KASAN
+	pr_err("kasan versions, disable harden double free\n");
+	return;
+#endif
+	struct kmem_cache *s = NULL;
+
+	if (status) {
+		fill_random_malloc = true;
+		list_for_each_entry(s, &slab_caches, list)
+			s->flags = s->flags | SLAB_DOUBLEFREE_CHECK;
+#ifdef CONFIG_SLUB_DEBUG
+		slub_debug = slub_debug | SLAB_DOUBLEFREE_CHECK;
+#endif
+	} else {
+		list_for_each_entry(s, &slab_caches, list)
+			s->flags = s->flags & ~SLAB_DOUBLEFREE_CHECK;
+#ifdef CONFIG_SLUB_DEBUG
+		slub_debug = slub_debug & ~SLAB_DOUBLEFREE_CHECK;
+#endif
+	}
+}
+
+int set_harden_double_free_status(bool status)
+{
+#ifdef CONFIG_SLUB_DEBUG
+	if (!status && !(slub_debug & SLAB_DOUBLEFREE_CHECK)) {
+		pr_err("the harden double free feature status is already disabled\n");
+		return 0;
+	}
+
+	if (status && (slub_debug & SLAB_DOUBLEFREE_CHECK)) {
+		pr_err("the harden double free feature status is already enabled\n");
+		return 0;
+	}
+#endif
+	set_harden_double_free_check_flags(status);
+	return 0;
+}
+#endif

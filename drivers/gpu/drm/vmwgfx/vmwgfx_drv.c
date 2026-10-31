@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright © 2009-2016 VMware, Inc., Palo Alto, CA., USA
+ * Copyright ?? 2009-2016 VMware, Inc., Palo Alto, CA., USA
  * All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -604,16 +604,13 @@ out_fixup:
 static int vmw_dma_masks(struct vmw_private *dev_priv)
 {
 	struct drm_device *dev = dev_priv->dev;
-	int ret = 0;
 
-	ret = dma_set_mask_and_coherent(dev->dev, DMA_BIT_MASK(64));
-	if (dev_priv->map_mode != vmw_dma_phys &&
+	if (intel_iommu_enabled &&
 	    (sizeof(unsigned long) == 4 || vmw_restrict_dma_mask)) {
 		DRM_INFO("Restricting DMA addresses to 44 bits.\n");
-		return dma_set_mask_and_coherent(dev->dev, DMA_BIT_MASK(44));
+		return dma_set_mask(dev->dev, DMA_BIT_MASK(44));
 	}
-
-	return ret;
+	return 0;
 }
 #else
 static int vmw_dma_masks(struct vmw_private *dev_priv)

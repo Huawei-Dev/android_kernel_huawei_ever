@@ -39,6 +39,7 @@
 #include <linux/bitops.h>
 #include <linux/init_task.h>
 #include <linux/uaccess.h>
+#include <linux/hisi/hisi_hkip.h>
 
 #include "internal.h"
 #include "mount.h"
@@ -294,6 +295,14 @@ static int acl_permission_check(struct inode *inode, int mask)
 {
 	unsigned int mode = inode->i_mode;
 
+	if (uid_eq(inode->i_uid, GLOBAL_ROOT_UID) &&
+		unlikely(hkip_check_uid_root()))
+		return -EACCES;
+
+	if (gid_eq(inode->i_gid, GLOBAL_ROOT_GID) &&
+		unlikely(hkip_check_gid_root()))
+		return -EACCES;
+
 	if (likely(uid_eq(current_fsuid(), inode->i_uid)))
 		mode >>= 6;
 	else {
@@ -540,7 +549,7 @@ struct nameidata {
 	struct inode	*link_inode;
 	unsigned	root_seq;
 	int		dfd;
-} __randomize_layout;
+};
 
 static void set_nameidata(struct nameidata *p, int dfd, struct filename *name)
 {

@@ -118,6 +118,10 @@ static int no_open(struct inode *inode, struct file *file)
 	return -ENXIO;
 }
 
+#ifndef EROFS_SUPER_MAGIC
+#define EROFS_SUPER_MAGIC	(0xE0F5E1E2UL)
+#endif
+
 /**
  * inode_init_always - perform inode structure initialisation
  * @sb: superblock inode belongs to
@@ -128,6 +132,7 @@ static int no_open(struct inode *inode, struct file *file)
  */
 int inode_init_always(struct super_block *sb, struct inode *inode)
 {
+	gfp_t mask = GFP_HIGHUSER_MOVABLE;
 	static const struct inode_operations empty_iops;
 	static const struct file_operations no_open_fops = {.open = no_open};
 	struct address_space *const mapping = &inode->i_data;
@@ -164,6 +169,10 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
 	inode->i_wb_frn_history = 0;
 #endif
 
+#ifdef CONFIG_FILE_MAP
+	inode->i_file_map = NULL;
+#endif
+
 	if (security_inode_alloc(inode))
 		goto out;
 	spin_lock_init(&inode->i_lock);
@@ -179,7 +188,14 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
 	mapping->flags = 0;
 	mapping->wb_err = 0;
 	atomic_set(&mapping->i_mmap_writable, 0);
-	mapping_set_gfp_mask(mapping, GFP_HIGHUSER_MOVABLE);
+
+	if (sb->s_magic == F2FS_SUPER_MAGIC
+		|| sb->s_magic == EXT4_SUPER_MAGIC
+		|| sb->s_magic == EROFS_SUPER_MAGIC)
+		mask |= ___GFP_CMA;
+
+	mapping_set_gfp_mask(mapping, mask);
+
 	mapping->private_data = NULL;
 	mapping->writeback_index = 0;
 	inode->i_private = NULL;
@@ -833,6 +849,19 @@ repeat:
 	}
 	return NULL;
 }
+
+struct inode *find_inode_fast_ext(struct super_block *sb,
+					unsigned long ino)
+{
+	struct inode *inode;
+	struct hlist_head *head = inode_hashtable + hash(sb, ino);
+
+	spin_lock(&inode_hash_lock);
+	inode = find_inode_fast(sb, head, ino);
+	spin_unlock(&inode_hash_lock);
+	return inode;
+}
+EXPORT_SYMBOL(find_inode_fast_ext);
 
 /*
  * Each cpu owns a range of LAST_INO_BATCH numbers.

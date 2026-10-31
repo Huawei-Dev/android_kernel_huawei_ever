@@ -1,7 +1,7 @@
 /*
  * Broadcom BM2835 V4L2 driver
  *
- * Copyright © 2013 Raspberry Pi (Trading) Ltd.
+ * Copyright ?? 2013 Raspberry Pi (Trading) Ltd.
  *
  * This file is subject to the terms and conditions of the GNU General Public
  * License.  See the file COPYING in the main directory of this archive
@@ -834,7 +834,6 @@ static int send_synchronous_mmal_msg(struct vchiq_mmal_instance *instance,
 {
 	struct mmal_msg_context *msg_context;
 	int ret;
-	unsigned long timeout;
 
 	/* payload size must not cause message to exceed max size */
 	if (payload_len >
@@ -873,11 +872,11 @@ static int send_synchronous_mmal_msg(struct vchiq_mmal_instance *instance,
 		return ret;
 	}
 
-	timeout = wait_for_completion_timeout(&msg_context->u.sync.cmplt,
-					      3 * HZ);
-	if (timeout == 0) {
-		pr_err("timed out waiting for sync completion\n");
-		ret = -ETIME;
+	ret = wait_for_completion_timeout(&msg_context->u.sync.cmplt, 3 * HZ);
+	if (ret <= 0) {
+		pr_err("error %d waiting for sync completion\n", ret);
+		if (ret == 0)
+			ret = -ETIME;
 		/* todo: what happens if the message arrives after aborting */
 		release_msg_context(msg_context);
 		return ret;

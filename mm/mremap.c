@@ -323,7 +323,6 @@ static unsigned long move_vma(struct vm_area_struct *vma,
 		arch_remap(mm, old_addr, old_addr + old_len,
 			   new_addr, new_addr + new_len);
 	}
-
 	/* Conceal VM_ACCOUNT so old reservation is not undone */
 	if (vm_flags & VM_ACCOUNT) {
 		vma->vm_flags &= ~VM_ACCOUNT;

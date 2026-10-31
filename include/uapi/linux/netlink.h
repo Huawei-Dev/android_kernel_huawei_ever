@@ -30,9 +30,57 @@
 #define NETLINK_CRYPTO		21	/* Crypto layer */
 #define NETLINK_SMC		22	/* SMC monitoring */
 
+#define NETLINK_CHR_EVENT_NL  23
+
+#define NETLINK_WIFIPRO_EVENT_NL  24
+
+#define NETLINK_HW_DPI  25
+
+#ifdef CONFIG_CONNECTIVITY_HI110X
+#define NETLINK_WIFI_DFR_HISI   27
+#define NETLINK_WIFI_SDT_HISI   28
+#endif
+
 #define NETLINK_INET_DIAG	NETLINK_SOCK_DIAG
 
-#define MAX_LINKS 32		
+#define NETLINK_HW_LOGCAT     29
+
+#define NETLINK_HW_KSTATE	30	/* kstate send event to user */
+
+#define NETLINK_HW_LOGCAT_EXT 31
+
+#define NETLINK_HW_NF   32
+
+#if (defined(CONFIG_HW_CPULOAD_NOTI) || defined(CONFIG_HW_VIP_THREAD) \
+        || defined(CONFIG_HW_RTG_SCHED))
+#define NETLINK_HW_IAWARE_CPU 33
+#endif
+
+#ifdef CONFIG_RIL_NETLINK_MODULE
+#define NETLINK_RIL_EVENT_NL  34
+#endif
+
+#ifdef CONFIG_HUAWEI_EMCOM
+#define NETLINK_EMCOM 35
+#endif
+
+#ifdef CONFIG_RIL_SIM_NETLINK_MODULE
+#define NETLINK_RIL_EVENT_SIM  36
+#endif
+
+#define NETLINK_NETBOOSTER  37
+
+#ifdef CONFIG_HISI_CAMERA_VL53L0_970
+#define NETLINK_ST_LASER_DRIVER 38
+#endif
+
+#define NETLINK_EIMA 39
+
+#define NETLINK_HW_DC 40
+
+#define NETLINK_OLLIE 41
+
+#define MAX_LINKS 42
 
 struct sockaddr_nl {
 	__kernel_sa_family_t	nl_family;	/* AF_NETLINK	*/

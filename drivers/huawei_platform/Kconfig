@@ -1,0 +1,49 @@
+menu "Huawei Platform Drivers"
+
+menuconfig HUAWEI_PLATFORM
+       bool "Huawei platform drivers support"
+       default n
+       help
+       Say yes here to support the huawei platform
+
+if HUAWEI_PLATFORM
+
+source "drivers/huawei_platform/antenna_board_match/Kconfig"
+source "drivers/huawei_platform/audio/Kconfig"
+source "drivers/huawei_platform/riltcp/Kconfig"
+source "drivers/huawei_platform/connectivity/Kconfig"
+source "drivers/huawei_platform/devdetect/Kconfig"
+source "drivers/huawei_platform/ext_modem/Kconfig"
+source "drivers/huawei_platform/inputhub/Kconfig"
+source "drivers/huawei_platform/irda/Kconfig"
+source "drivers/huawei_platform/log/Kconfig"
+source "drivers/huawei_platform/net/Kconfig"
+source "drivers/huawei_platform/nfc/Kconfig"
+source "drivers/huawei_platform/power/Kconfig"
+source "drivers/huawei_platform/sensor/Kconfig"
+source "drivers/huawei_platform/storage/Kconfig"
+source "drivers/huawei_platform/touthscreen/Kconfig"
+source "drivers/huawei_platform/touch_key/Kconfig"
+source "drivers/huawei_platform/usb/Kconfig"
+source "drivers/huawei_platform/antenna_board_gpio_match/Kconfig"
+source "drivers/huawei_platform/madapt/Kconfig"
+source "drivers/huawei_platform/emcom/Kconfig"
+source "drivers/huawei_platform/dp_aux_switch/Kconfig"
+source "drivers/huawei_platform/dp_source/Kconfig"
+source "drivers/huawei_platform/rilsim/Kconfig"
+source "drivers/huawei_platform/vendor_exception/Kconfig"
+source "drivers/huawei_platform/card_tray/Kconfig"
+source "drivers/huawei_platform/rmeminspect/Kconfig"
+source "drivers/huawei_platform/switch/Kconfig"
+source "drivers/huawei_platform/spmi_hisi/Kconfig"
+source "drivers/huawei_platform/hwzerohung/Kconfig"
+source "drivers/huawei_platform/hwxcollie/Kconfig"
+source "drivers/huawei_platform/hwusb/Kconfig"
+source "drivers/huawei_platform/hwmemcheck/Kconfig"
+source "drivers/huawei_platform/hwfdleak/Kconfig"
+source "drivers/huawei_platform/hwerecovery/Kconfig"
+source "drivers/huawei_platform/cpuload/Kconfig"
+source "drivers/huawei_platform/dubai/Kconfig"
+endif #HUAWEI_PLATFORM
+
+endmenu

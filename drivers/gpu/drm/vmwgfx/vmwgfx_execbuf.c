@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright © 2009 - 2015 VMware, Inc., Palo Alto, CA., USA
+ * Copyright ?? 2009 - 2015 VMware, Inc., Palo Alto, CA., USA
  * All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -3818,7 +3818,7 @@ int vmw_execbuf_fence_commands(struct drm_file *file_priv,
 		*p_fence = NULL;
 	}
 
-	return ret;
+	return 0;
 }
 
 /**

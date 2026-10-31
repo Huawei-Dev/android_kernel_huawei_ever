@@ -79,12 +79,20 @@
 #define ALIGN __ALIGN
 #define ALIGN_STR __ALIGN_STR
 
+#ifndef ENTRY_NOTAG
+#define ENTRY_NOTAG(name) \
+	.globl name ASM_NL \
+	ALIGN ASM_NL \
+	name:
+#endif
+
 #ifndef ENTRY
 #define ENTRY(name) \
 	.globl name ASM_NL \
 	ALIGN ASM_NL \
 	name:
 #endif
+
 #endif /* LINKER_SCRIPT */
 
 #ifndef WEAK

@@ -24,6 +24,9 @@
 #include <net/inet_connection_sock.h>
 #include <net/inet_timewait_sock.h>
 #include <uapi/linux/tcp.h>
+#ifdef CONFIG_TCP_ARGO
+#include <huawei_platform/emcom/argo/tcp_argo.h>
+#endif /* CONFIG_TCP_ARGO */
 
 static inline struct tcphdr *tcp_hdr(const struct sk_buff *skb)
 {
@@ -59,7 +62,6 @@ static inline unsigned int tcp_optlen(const struct sk_buff *skb)
 #define TCP_FASTOPEN_COOKIE_MIN	4	/* Min Fast Open Cookie size in bytes */
 #define TCP_FASTOPEN_COOKIE_MAX	16	/* Max Fast Open Cookie size in bytes */
 #define TCP_FASTOPEN_COOKIE_SIZE 8	/* the size employed by this impl. */
-
 /* TCP Fast Open Cookie as stored in memory */
 struct tcp_fastopen_cookie {
 	union {
@@ -287,6 +289,12 @@ struct tcp_sock {
 
 	struct hrtimer	pacing_timer;
 
+#ifdef CONFIG_TCP_NODELAY
+	u16	nodelay_size;	/* packet size by delayed */
+	u8	nodelay;	/* Auto tcp no delay is disabled */
+	u8	pingpong;	/* send msg count without response */
+#endif
+
 	/* from STCP, retrans queue hinting */
 	struct sk_buff* lost_skb_hint;
 	struct sk_buff *retransmit_skb_hint;
@@ -363,6 +371,11 @@ struct tcp_sock {
 	 */
 	struct request_sock *fastopen_rsk;
 	u32	*saved_syn;
+
+#ifdef CONFIG_TCP_ARGO
+/* TCP ARGO */
+	struct tcp_argo *argo;
+#endif /* CONFIG_TCP_ARGO */
 };
 
 enum tsq_enum {
@@ -450,4 +463,8 @@ static inline u16 tcp_mss_clamp(const struct tcp_sock *tp, u16 mss)
 
 	return (user_mss && user_mss < mss) ? user_mss : mss;
 }
+
+int tcp_skb_shift(struct sk_buff *to, struct sk_buff *from, int pcount,
+		  int shiftlen);
+
 #endif	/* _LINUX_TCP_H */

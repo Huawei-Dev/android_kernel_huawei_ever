@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 Intel Corporation
+ * Copyright ?? 2016 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -128,7 +128,9 @@ lpe_audio_platdev_create(struct drm_i915_private *dev_priv)
 
 	kfree(rsc);
 
-	pm_runtime_no_callbacks(&platdev->dev);
+	pm_runtime_forbid(&platdev->dev);
+	pm_runtime_set_active(&platdev->dev);
+	pm_runtime_enable(&platdev->dev);
 
 	return platdev;
 
@@ -303,10 +305,8 @@ void intel_lpe_audio_teardown(struct drm_i915_private *dev_priv)
 	lpe_audio_platdev_destroy(dev_priv);
 
 	irq_free_desc(dev_priv->lpe_audio.irq);
-
-	dev_priv->lpe_audio.irq = -1;
-	dev_priv->lpe_audio.platdev = NULL;
 }
+
 
 /**
  * intel_lpe_audio_notify() - notify lpe audio event

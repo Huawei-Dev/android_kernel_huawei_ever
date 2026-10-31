@@ -50,6 +50,10 @@
 #include <linux/filter.h>
 #include <linux/bpf-cgroup.h>
 
+#ifdef CONFIG_HUAWEI_BASTET
+#include <huawei_platform/net/bastet/bastet.h>
+#endif
+
 extern struct inet_hashinfo tcp_hashinfo;
 
 extern struct percpu_counter tcp_orphan_count;
@@ -57,6 +61,8 @@ void tcp_time_wait(struct sock *sk, int state, int timeo);
 
 #define MAX_TCP_HEADER	(128 + MAX_HEADER)
 #define MAX_TCP_OPTION_SPACE 40
+#define TCP_MIN_SND_MSS		48
+#define TCP_MIN_GSO_SIZE	(TCP_MIN_SND_MSS - MAX_TCP_OPTION_SPACE)
 
 /*
  * Never offer a window over 32767 without using window scaling. Some
@@ -203,6 +209,7 @@ void tcp_time_wait(struct sock *sk, int state, int timeo);
 #define TCPOLEN_MD5SIG         18
 #define TCPOLEN_FASTOPEN_BASE  2
 #define TCPOLEN_EXP_FASTOPEN_BASE  4
+#define TCPOLEN_MPTCP_PROXY_STATUS  4
 
 /* But this is what stacks really send out. */
 #define TCPOLEN_TSTAMP_ALIGNED		12
@@ -225,6 +232,10 @@ void tcp_time_wait(struct sock *sk, int state, int timeo);
 /* TCP initial congestion window as per rfc6928 */
 #define TCP_INIT_CWND		10
 
+#ifdef CONFIG_HW_SYN_LINEAR_RETRY
+#define TCP_SYN_SENT_LINEAR_RETRIES 4   /* After 4 linear retries, do exp. backoff */
+#endif
+
 /* Bit Flags for sysctl_tcp_fastopen */
 #define	TFO_CLIENT_ENABLE	1
 #define	TFO_SERVER_ENABLE	2
@@ -237,7 +248,6 @@ void tcp_time_wait(struct sock *sk, int state, int timeo);
  * TCP_FASTOPEN socket option.
  */
 #define	TFO_SERVER_WO_SOCKOPT1	0x400
-
 
 /* sysctl variables for tcp */
 extern int sysctl_tcp_fastopen;
@@ -276,10 +286,16 @@ extern int sysctl_tcp_invalid_ratelimit;
 extern int sysctl_tcp_pacing_ss_ratio;
 extern int sysctl_tcp_pacing_ca_ratio;
 extern int sysctl_tcp_default_init_rwnd;
+#ifdef CONFIG_TCP_AUTOTUNING
+extern int sysctl_tcp_autotuning;
+#endif
 
 extern atomic_long_t tcp_memory_allocated;
 extern struct percpu_counter tcp_sockets_allocated;
 extern unsigned long tcp_memory_pressure;
+#ifdef CONFIG_TCP_NODELAY
+extern int sysctl_tcp_nodelay;
+#endif
 
 /* optimized version of sk_under_memory_pressure() for TCP sockets */
 static inline bool tcp_under_memory_pressure(const struct sock *sk)
@@ -569,7 +585,6 @@ void tcp_send_loss_probe(struct sock *sk);
 bool tcp_schedule_loss_probe(struct sock *sk, bool advancing_rto);
 void tcp_skb_collapse_tstamp(struct sk_buff *skb,
 			     const struct sk_buff *next_skb);
-
 /* tcp_input.c */
 void tcp_rearm_rto(struct sock *sk);
 void tcp_synack_rtt_meas(struct sock *sk, struct request_sock *req);
@@ -806,6 +821,7 @@ struct tcp_skb_cb {
 		 */
 		ktime_t		swtstamp;
 	};
+
 	__u8		tcp_flags;	/* TCP header flags. (tcp[13])	*/
 
 	__u8		sacked;		/* State flags for SACK/FACK.	*/
@@ -824,6 +840,7 @@ struct tcp_skb_cb {
 			has_rxtstamp:1,	/* SKB has a RX timestamp	*/
 			unused:5;
 	__u32		ack_seq;	/* Sequence number ACK'd	*/
+
 	union {
 		struct {
 			/* There is space for up to 24 bytes */
@@ -1246,6 +1263,10 @@ static inline unsigned long tcp_probe0_when(const struct sock *sk,
 
 static inline void tcp_check_probe_timer(struct sock *sk)
 {
+#ifdef CONFIG_HUAWEI_BASTET
+	if (bastet_sock_send_prepare(sk))
+		return;
+#endif
 	if (!tcp_sk(sk)->packets_out && !inet_csk(sk)->icsk_pending)
 		inet_csk_reset_xmit_timer(sk, ICSK_TIME_PROBE0,
 					  tcp_probe0_base(sk), TCP_RTO_MAX);
@@ -1623,7 +1644,6 @@ static inline void tcp_write_queue_purge(struct sock *sk)
 	tcp_clear_all_retrans_hints(tcp_sk(sk));
 	tcp_init_send_head(sk);
 	tcp_sk(sk)->packets_out = 0;
-	inet_csk(sk)->icsk_backoff = 0;
 }
 
 static inline struct sk_buff *tcp_write_queue_head(const struct sock *sk)

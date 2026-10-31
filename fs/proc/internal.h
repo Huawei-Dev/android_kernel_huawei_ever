@@ -51,7 +51,7 @@ struct proc_dir_entry {
 	spinlock_t pde_unload_lock; /* proc_fops checks and pde_users bumps */
 	u8 namelen;
 	char name[];
-} __randomize_layout;
+};
 
 union proc_op {
 	int (*proc_get_link)(struct dentry *, struct path *);
@@ -70,7 +70,7 @@ struct proc_inode {
 	struct hlist_node sysctl_inodes;
 	const struct proc_ns_operations *ns_ops;
 	struct inode vfs_inode;
-} __randomize_layout;
+};
 
 /*
  * General functions
@@ -199,6 +199,9 @@ struct pde_opener {
 extern const struct inode_operations proc_link_inode_operations;
 
 extern const struct inode_operations proc_pid_link_inode_operations;
+extern const struct file_operations proc_reclaim_operations;
+
+static inline void smart_soft_shrink(void) { }
 
 extern void proc_init_inodecache(void);
 void set_proc_pid_nlink(void);
@@ -289,7 +292,7 @@ struct proc_maps_private {
 #ifdef CONFIG_NUMA
 	struct mempolicy *task_mempolicy;
 #endif
-} __randomize_layout;
+};
 
 struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
 
@@ -299,6 +302,7 @@ extern const struct file_operations proc_pid_numa_maps_operations;
 extern const struct file_operations proc_tid_numa_maps_operations;
 extern const struct file_operations proc_pid_smaps_operations;
 extern const struct file_operations proc_pid_smaps_rollup_operations;
+extern const struct file_operations proc_pid_smaps_simple_operations;
 extern const struct file_operations proc_tid_smaps_operations;
 extern const struct file_operations proc_clear_refs_operations;
 extern const struct file_operations proc_pagemap_operations;

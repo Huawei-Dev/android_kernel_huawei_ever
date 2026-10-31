@@ -38,6 +38,12 @@ extern void proc_remove(struct proc_dir_entry *);
 extern void remove_proc_entry(const char *, struct proc_dir_entry *);
 extern int remove_proc_subtree(const char *, struct proc_dir_entry *);
 
+#ifdef CONFIG_SCHED_HWSTATUS
+extern void sched_hwstatus_updatefg(pid_t pid,pid_t tgid);
+extern void sched_hwstatus_qos_enqueue(struct task_struct *task, int qos_type);
+extern void sched_hwstatus_qos_dequeue(struct task_struct *task, int qos_type);
+#endif
+
 #else /* CONFIG_PROC_FS */
 
 static inline void proc_root_init(void)

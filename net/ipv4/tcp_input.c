@@ -78,6 +78,14 @@
 #include <linux/errqueue.h>
 
 int sysctl_tcp_fack __read_mostly;
+
+#ifdef CONFIG_HUAWEI_XENGINE
+#include <huawei_platform/emcom/emcom_xengine.h>
+#endif
+
+#ifdef CONFIG_HUAWEI_NWEVAL
+#include<huawei_platform/emcom/network_evaluation.h>
+#endif
 int sysctl_tcp_max_reordering __read_mostly = 300;
 int sysctl_tcp_dsack __read_mostly = 1;
 int sysctl_tcp_app_win __read_mostly = 31;
@@ -96,6 +104,9 @@ int sysctl_tcp_moderate_rcvbuf __read_mostly = 1;
 int sysctl_tcp_early_retrans __read_mostly = 3;
 int sysctl_tcp_invalid_ratelimit __read_mostly = HZ/2;
 int sysctl_tcp_default_init_rwnd __read_mostly = TCP_INIT_CWND * 2;
+#ifdef CONFIG_TCP_AUTOTUNING
+int sysctl_tcp_autotuning __read_mostly = 0;
+#endif
 
 #define FLAG_DATA		0x01 /* Incoming frame contained data.		*/
 #define FLAG_WIN_UPDATE		0x02 /* Incoming ACK was a window update.	*/
@@ -332,7 +343,6 @@ static void tcp_sndbuf_expand(struct sock *sk)
 
 	nr_segs = max_t(u32, TCP_INIT_CWND, tp->snd_cwnd);
 	nr_segs = max_t(u32, nr_segs, tp->reordering + 1);
-
 	/* Fast Recovery (RFC 5681 3.2) :
 	 * Cubic needs 1.7 factor, rounded to 2 to include
 	 * extra cushion (application might react slowly to POLLOUT)
@@ -340,8 +350,12 @@ static void tcp_sndbuf_expand(struct sock *sk)
 	sndmem = ca_ops->sndbuf_expand ? ca_ops->sndbuf_expand(sk) : 2;
 	sndmem *= nr_segs * per_mss;
 
-	if (sk->sk_sndbuf < sndmem)
+	/* MPTCP: after this sndmem is the new contribution of the
+	 * current subflow to the aggregated sndbuf
+	*/
+	if (sk->sk_sndbuf < sndmem) {
 		sk->sk_sndbuf = min(sndmem, sysctl_tcp_wmem[2]);
+	}
 }
 
 /* 2. Tuning advertised window (window_clamp, rcv_ssthresh)
@@ -390,6 +404,7 @@ static int __tcp_grow_window(const struct sock *sk, const struct sk_buff *skb)
 static void tcp_grow_window(struct sock *sk, const struct sk_buff *skb)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
+	/* Check #1 */
 	int room;
 
 	room = min_t(int, tp->window_clamp, tcp_space(sk)) - tp->rcv_ssthresh;
@@ -604,9 +619,9 @@ void tcp_rcv_space_adjust(struct sock *sk)
 	time = tcp_stamp_us_delta(tp->tcp_mstamp, tp->rcvq_space.time);
 	if (time < (tp->rcv_rtt_est.rtt_us >> 3) || tp->rcv_rtt_est.rtt_us == 0)
 		return;
-
 	/* Number of bytes copied to user in last RTT */
 	copied = tp->copied_seq - tp->rcvq_space.seq;
+
 	if (copied <= tp->rcvq_space.space)
 		goto new_measure;
 
@@ -838,7 +853,8 @@ static void tcp_update_pacing_rate(struct sock *sk)
 /* Calculate rto without backoff.  This is the second half of Van Jacobson's
  * routine referred to above.
  */
-static void tcp_set_rto(struct sock *sk)
+static
+void tcp_set_rto(struct sock *sk)
 {
 	const struct tcp_sock *tp = tcp_sk(sk);
 	/* Old crap is replaced with new one. 8)
@@ -1330,7 +1346,7 @@ static bool tcp_shifted_skb(struct sock *sk, struct sk_buff *skb,
 	TCP_SKB_CB(skb)->seq += shifted;
 
 	tcp_skb_pcount_add(prev, pcount);
-	BUG_ON(tcp_skb_pcount(skb) < pcount);
+	WARN_ON_ONCE(tcp_skb_pcount(skb) < pcount);
 	tcp_skb_pcount_add(skb, -pcount);
 
 	/* When we're adding to gso_segs == 1, gso_size will be zero,
@@ -1397,6 +1413,21 @@ static int skb_can_shift(const struct sk_buff *skb)
 	return !skb_headlen(skb) && skb_is_nonlinear(skb);
 }
 
+int tcp_skb_shift(struct sk_buff *to, struct sk_buff *from,
+		  int pcount, int shiftlen)
+{
+	/* TCP min gso_size is 8 bytes (TCP_MIN_GSO_SIZE)
+	 * Since TCP_SKB_CB(skb)->tcp_gso_segs is 16 bits, we need
+	 * to make sure not storing more than 65535 * 8 bytes per skb,
+	 * even if current MSS is bigger.
+	 */
+	if (unlikely(to->len + shiftlen >= 65535 * TCP_MIN_GSO_SIZE))
+		return 0;
+	if (unlikely(tcp_skb_pcount(to) + pcount > 65535))
+		return 0;
+	return skb_shift(to, from, shiftlen);
+}
+
 /* Try collapsing SACK blocks spanning across multiple skbs to a single
  * skb.
  */
@@ -1408,6 +1439,7 @@ static struct sk_buff *tcp_shift_skb_data(struct sock *sk, struct sk_buff *skb,
 	struct tcp_sock *tp = tcp_sk(sk);
 	struct sk_buff *prev;
 	int mss;
+	int next_pcount;
 	int pcount = 0;
 	int len;
 	int in_sack;
@@ -1505,7 +1537,7 @@ static struct sk_buff *tcp_shift_skb_data(struct sock *sk, struct sk_buff *skb,
 	if (!after(TCP_SKB_CB(skb)->seq + len, tp->snd_una))
 		goto fallback;
 
-	if (!skb_shift(prev, skb, len))
+	if (!tcp_skb_shift(prev, skb, pcount, len))
 		goto fallback;
 	if (!tcp_shifted_skb(sk, skb, state, pcount, len, mss, dup_sack))
 		goto out;
@@ -1524,11 +1556,11 @@ static struct sk_buff *tcp_shift_skb_data(struct sock *sk, struct sk_buff *skb,
 		goto out;
 
 	len = skb->len;
-	if (skb_shift(prev, skb, len)) {
-		pcount += tcp_skb_pcount(skb);
-		tcp_shifted_skb(sk, skb, state, tcp_skb_pcount(skb), len, mss, 0);
+	next_pcount = tcp_skb_pcount(skb);
+	if (tcp_skb_shift(prev, skb, next_pcount, len)) {
+		pcount += next_pcount;
+		tcp_shifted_skb(sk, skb, state, next_pcount, len, mss, 0);
 	}
-
 out:
 	state->fack_count += pcount;
 	return prev;
@@ -2370,6 +2402,9 @@ static void DBGUNDO(struct sock *sk, const char *msg)
 #else
 #define DBGUNDO(x...) do { } while (0)
 #endif
+#ifdef CONFIG_TCP_NODELAY
+int sysctl_tcp_nodelay __read_mostly = 0;
+#endif
 
 static void tcp_undo_cwnd_reduction(struct sock *sk, bool unmark_loss)
 {
@@ -2958,6 +2993,9 @@ static bool tcp_ack_update_rtt(struct sock *sk, const int flag,
 	if (seq_rtt_us < 0)
 		return false;
 
+#ifdef CONFIG_HUAWEI_NWEVAL
+	nweval_update_rtt(sk, seq_rtt_us);
+#endif
 	/* ca_rtt_us >= 0 is counting on the invariant that ca_rtt_us is
 	 * always taken together with ACK, SACK, or TS-opts. Any negative
 	 * values will be skipped with the seq_rtt_us < 0 check above.
@@ -2965,7 +3003,6 @@ static bool tcp_ack_update_rtt(struct sock *sk, const int flag,
 	tcp_update_rtt_min(sk, ca_rtt_us);
 	tcp_rtt_estimator(sk, seq_rtt_us);
 	tcp_set_rto(sk);
-
 	/* RFC6298: only reset backoff on valid RTT measurement. */
 	inet_csk(sk)->icsk_backoff = 0;
 	return true;
@@ -3032,7 +3069,8 @@ static void tcp_set_xmit_timer(struct sock *sk)
 }
 
 /* If we get here, the whole TSO packet has not been acked. */
-static u32 tcp_tso_acked(struct sock *sk, struct sk_buff *skb)
+static
+u32 tcp_tso_acked(struct sock *sk, struct sk_buff *skb)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	u32 packets_acked;
@@ -3188,6 +3226,7 @@ static int tcp_clean_rtx_queue(struct sock *sk, int prior_fackets,
 		sack_rtt_us = tcp_stamp_us_delta(tp->tcp_mstamp, sack->first_sackt);
 		ca_rtt_us = tcp_stamp_us_delta(tp->tcp_mstamp, sack->last_sackt);
 	}
+
 	rtt_update = tcp_ack_update_rtt(sk, flag, seq_rtt_us, sack_rtt_us,
 					ca_rtt_us, sack->rate);
 
@@ -3267,7 +3306,8 @@ static int tcp_clean_rtx_queue(struct sock *sk, int prior_fackets,
 	return flag;
 }
 
-static void tcp_ack_probe(struct sock *sk)
+static
+void tcp_ack_probe(struct sock *sk)
 {
 	const struct tcp_sock *tp = tcp_sk(sk);
 	struct inet_connection_sock *icsk = inet_csk(sk);
@@ -3892,7 +3932,6 @@ static bool tcp_fast_parse_options(const struct net *net,
 		if (tcp_parse_aligned_timestamp(tp, th))
 			return true;
 	}
-
 	tcp_parse_options(net, skb, &tp->rx_opt, 1, NULL);
 	if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr)
 		tp->rx_opt.rcv_tsecr -= tp->tsoffset;
@@ -4049,7 +4088,6 @@ void tcp_reset(struct sock *sk)
 void tcp_fin(struct sock *sk)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
-
 	inet_csk_schedule_ack(sk);
 
 	sk->sk_shutdown |= RCV_SHUTDOWN;
@@ -4104,8 +4142,10 @@ void tcp_fin(struct sock *sk)
 	sk_mem_reclaim(sk);
 
 	if (!sock_flag(sk, SOCK_DEAD)) {
+#ifdef CONFIG_HUAWEI_XENGINE
+		emcom_xengine_notify_sock_error(sk);
+#endif
 		sk->sk_state_change(sk);
-
 		/* Do not send POLL_HUP for half duplex close. */
 		if (sk->sk_shutdown == SHUTDOWN_MASK ||
 		    sk->sk_state == TCP_CLOSE)
@@ -4311,7 +4351,6 @@ static bool tcp_try_coalesce(struct sock *sk,
 	int delta;
 
 	*fragstolen = false;
-
 	/* Its possible this segment overlaps with prior segment in queue */
 	if (TCP_SKB_CB(from)->seq != TCP_SKB_CB(to)->end_seq)
 		return false;
@@ -4363,7 +4402,8 @@ static void tcp_drop(struct sock *sk, struct sk_buff *skb)
 /* This one checks to see if we can put data from the
  * out_of_order queue into the receive_queue.
  */
-static void tcp_ofo_queue(struct sock *sk)
+static
+void tcp_ofo_queue(struct sock *sk)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	__u32 dsack_high = tp->rcv_nxt;
@@ -4438,7 +4478,8 @@ static int tcp_try_rmem_schedule(struct sock *sk, struct sk_buff *skb,
 	return 0;
 }
 
-static void tcp_data_queue_ofo(struct sock *sk, struct sk_buff *skb)
+static
+void tcp_data_queue_ofo(struct sock *sk, struct sk_buff *skb)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	struct rb_node **p, *parent;
@@ -4578,8 +4619,9 @@ end:
 	}
 }
 
-static int __must_check tcp_queue_rcv(struct sock *sk, struct sk_buff *skb, int hdrlen,
-		  bool *fragstolen)
+static
+int __must_check tcp_queue_rcv(struct sock *sk, struct sk_buff *skb, int hdrlen,
+			       bool *fragstolen)
 {
 	int eaten;
 	struct sk_buff *tail = skb_peek_tail(&sk->sk_receive_queue);
@@ -4646,12 +4688,32 @@ err:
 
 }
 
+#ifdef CONFIG_TCP_AUTOTUNING
+static void tcp_autotuning_cong_avoid(struct sock *sk, struct sk_buff *skb)
+{
+	struct tcp_sock *tp = tcp_sk(sk);
+
+	tcp_dsack_set(sk, TCP_SKB_CB(skb)->seq, TCP_SKB_CB(skb)->end_seq);
+	inet_csk(sk)->icsk_ack.pingpong = 0;
+}
+#endif
+
+#ifdef CONFIG_TCP_NODELAY
+static void tcp_reset_nodelay(struct tcp_sock *tp)
+{
+	tp->pingpong = 0;
+	tp->nodelay_size = 0;
+}
+#endif
+
 static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	bool fragstolen;
 	int eaten;
-
+#ifdef CONFIG_TCP_AUTOTUNING
+	u32 seq, end_seq;
+#endif
 	if (TCP_SKB_CB(skb)->seq == TCP_SKB_CB(skb)->end_seq) {
 		__kfree_skb(skb);
 		return;
@@ -4662,6 +4724,9 @@ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
 	tcp_ecn_accept_cwr(tp, skb);
 
 	tp->rx_opt.dsack = 0;
+#ifdef CONFIG_TCP_NODELAY
+	tcp_reset_nodelay(tp);
+#endif
 
 	/*  Queue data for delivery to the user.
 	 *  Packets in sequence go to the receive queue.
@@ -4687,6 +4752,11 @@ queue_and_out:
 
 		if (!RB_EMPTY_ROOT(&tp->out_of_order_queue)) {
 			tcp_ofo_queue(sk);
+#ifdef CONFIG_TCP_AUTOTUNING
+			if (sysctl_tcp_autotuning)
+				tcp_autotuning_cong_avoid(sk, skb);
+#endif
+
 
 			/* RFC2581. 4.2. SHOULD send immediate ACK, when
 			 * gap in queue is filled.
@@ -4740,7 +4810,19 @@ drop:
 		goto queue_and_out;
 	}
 
+#ifdef CONFIG_TCP_AUTOTUNING
+	seq = TCP_SKB_CB(skb)->seq;
+	end_seq =  TCP_SKB_CB(skb)->end_seq;
+#endif
 	tcp_data_queue_ofo(sk, skb);
+
+#ifdef CONFIG_TCP_AUTOTUNING
+	if (sysctl_tcp_autotuning && tp->rx_opt.num_sacks) {
+		if (before(end_seq,tp->selective_acks[0].end_seq)) {
+			tcp_dsack_extend(sk, seq, end_seq);
+		}
+	}
+#endif
 }
 
 static struct sk_buff *tcp_skb_next(struct sk_buff *skb, struct sk_buff_head *list)
@@ -5041,7 +5123,8 @@ static int tcp_prune_queue(struct sock *sk)
 	return -1;
 }
 
-static bool tcp_should_expand_sndbuf(const struct sock *sk)
+static
+bool tcp_should_expand_sndbuf(const struct sock *sk)
 {
 	const struct tcp_sock *tp = tcp_sk(sk);
 
@@ -5075,7 +5158,6 @@ static bool tcp_should_expand_sndbuf(const struct sock *sk)
 static void tcp_new_space(struct sock *sk)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
-
 	if (tcp_should_expand_sndbuf(sk)) {
 		tcp_sndbuf_expand(sk);
 		tp->snd_cwnd_stamp = tcp_jiffies32;
@@ -5360,7 +5442,6 @@ syn_challenge:
 		tcp_send_challenge_ack(sk, skb);
 		goto discard;
 	}
-
 	return true;
 
 discard:
@@ -5396,6 +5477,10 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb,
 {
 	unsigned int len = skb->len;
 	struct tcp_sock *tp = tcp_sk(sk);
+#ifdef CONFIG_TCP_ARGO
+	u32 seq;
+	u32 end_seq;
+#endif
 
 	tcp_mstamp_refresh(tp);
 	if (unlikely(!sk->sk_rx_dst))
@@ -5417,6 +5502,11 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb,
 
 	tp->rx_opt.saw_tstamp = 0;
 
+#ifdef CONFIG_HUAWEI_BASTET
+	bastet_delay_sock_sync_notify(sk);
+	BST_FG_HOOK_DL_STUB(sk, skb, tp->tcp_header_len);
+#endif
+
 	/*	pred_flags is 0xS?10 << 16 + snd_wnd
 	 *	if header_prediction is to be made
 	 *	'S' will always be tp->tcp_header_len >> 2
@@ -5433,6 +5523,7 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb,
 
 		/* Timestamp header prediction: tcp_header_len
 		 * is automatically equal to th->doff*4 due to pred_flags
+r
 		 * match.
 		 */
 
@@ -5480,6 +5571,17 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb,
 			int eaten = 0;
 			bool fragstolen = false;
 
+#ifdef CONFIG_TCP_ARGO
+			if (tp->argo && tp->argo->delay_ack_nums == 1) {
+				argo_clear_hints(tp->argo);
+				tp->argo->delay_ack_nums = 1;
+			}
+#endif /* CONFIG_TCP_ARGO */
+
+#ifdef CONFIG_TCP_NODELAY
+			tcp_reset_nodelay(tp);
+#endif
+
 			if (tcp_checksum_complete(skb))
 				goto csum_error;
 
@@ -5513,7 +5615,12 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb,
 					goto no_ack;
 			}
 
+#ifdef CONFIG_TCP_ARGO
+			if (argo_delay_acks_in_fastpath(sk,tp))
+				__tcp_ack_snd_check(sk, 0);
+#else
 			__tcp_ack_snd_check(sk, 0);
+#endif /* CONFIG_TCP_ARGO */
 no_ack:
 			if (eaten)
 				kfree_skb_partial(skb, fragstolen);
@@ -5536,6 +5643,10 @@ slow_path:
 	if (!tcp_validate_incoming(sk, skb, th, 1))
 		return;
 
+#ifdef CONFIG_TCP_ARGO
+	argo_calc_high_seq(sk, skb);
+#endif /* CONFIG_TCP_ARGO */
+
 step5:
 	if (tcp_ack(sk, skb, FLAG_SLOWPATH | FLAG_UPDATE_TS_RECENT) < 0)
 		goto discard;
@@ -5545,11 +5656,24 @@ step5:
 	/* Process urgent data. */
 	tcp_urg(sk, skb, th);
 
+#ifdef CONFIG_TCP_ARGO
+	seq = TCP_SKB_CB(skb)->seq;
+	end_seq = TCP_SKB_CB(skb)->end_seq;
+#endif
 	/* step 7: process the segment text */
 	tcp_data_queue(sk, skb);
 
 	tcp_data_snd_check(sk);
+#ifdef CONFIG_TCP_ARGO
+	argo_calc_delay_ack_nums(sk, seq, end_seq);
+
+	if (sysctl_tcp_argo && tp->argo && tp->argo->delay_ack_nums)
+		tcp_send_delayed_ack(sk);
+	else
+		tcp_ack_snd_check(sk);
+#else
 	tcp_ack_snd_check(sk);
+#endif /* CONFIG_TCP_ARGO */
 	return;
 
 csum_error:
@@ -5585,9 +5709,7 @@ void tcp_finish_connect(struct sock *sk, struct sk_buff *skb)
 	 * packet.
 	 */
 	tp->lsndtime = tcp_jiffies32;
-
 	tcp_init_buffer_space(sk);
-
 	if (sock_flag(sk, SOCK_KEEPOPEN))
 		inet_csk_reset_keepalive_timer(sk, keepalive_time_when(tp));
 
@@ -5700,6 +5822,9 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
 
 		if (th->rst) {
 			tcp_reset(sk);
+#ifdef CONFIG_HUAWEI_XENGINE
+			emcom_xengine_mpflow_fallback(sk, EMCOM_MPFLOW_FALLBACK_SYN_RST, 0);
+#endif
 			goto discard;
 		}
 
@@ -5721,10 +5846,8 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
 		 */
 
 		tcp_ecn_rcv_synack(tp, th);
-
 		tcp_init_wl(tp, TCP_SKB_CB(skb)->seq);
 		tcp_ack(sk, skb, FLAG_SLOWPATH);
-
 		/* Ok.. it's good. Set up sequence numbers and
 		 * move to established.
 		 */
@@ -5750,7 +5873,6 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
 		} else {
 			tp->tcp_header_len = sizeof(struct tcphdr);
 		}
-
 		if (tcp_is_sack(tp) && sysctl_tcp_fack)
 			tcp_enable_fack(tp);
 
@@ -5916,11 +6038,9 @@ int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb)
 			/* It is possible that we process SYN packets from backlog,
 			 * so we need to make sure to disable BH and RCU right there.
 			 */
-			rcu_read_lock();
 			local_bh_disable();
 			acceptable = icsk->icsk_af_ops->conn_request(sk, skb) >= 0;
 			local_bh_enable();
-			rcu_read_unlock();
 
 			if (!acceptable)
 				return 1;
@@ -6009,7 +6129,6 @@ int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb)
 
 		if (tp->rx_opt.tstamp_ok)
 			tp->advmss -= TCPOLEN_TSTAMP_ALIGNED;
-
 		if (req) {
 			/* Re-arm the timer because data may have been sent out.
 			 * This is similar to the regular data transmission case
@@ -6325,7 +6444,6 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
 		if (!want_cookie)
 			goto drop;
 	}
-
 	if (sk_acceptq_is_full(sk)) {
 		NET_INC_STATS(sock_net(sk), LINUX_MIB_LISTENOVERFLOWS);
 		goto drop;
@@ -6343,7 +6461,6 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
 	tmp_opt.user_mss  = tp->rx_opt.user_mss;
 	tcp_parse_options(sock_net(sk), skb, &tmp_opt, 0,
 			  want_cookie ? NULL : &foc);
-
 	if (want_cookie && !tmp_opt.saw_tstamp)
 		tcp_clear_options(&tmp_opt);
 

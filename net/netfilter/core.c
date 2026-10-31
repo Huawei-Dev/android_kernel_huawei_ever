@@ -486,7 +486,6 @@ int nf_hook_slow(struct sk_buff *skb, struct nf_hook_state *state,
 			return 0;
 		}
 	}
-
 	return 1;
 }
 EXPORT_SYMBOL(nf_hook_slow);

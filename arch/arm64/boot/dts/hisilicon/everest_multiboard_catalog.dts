@@ -1,0 +1,84 @@
+/dts-v1/;
+
+/ {
+	compatible = "huawei,everest-dtb-catalog-v1";
+	model = "Everest EMUI10 DTB catalog";
+	everest,dtb-catalog {
+		compatible = "huawei,everest-dtb-catalog-v1";
+		board-8-4-5-2 {
+			hisi,boardid = <8 4 5 2>;
+			board-name = "EVER_TUGL_VC";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_vc.dtb");
+		};
+		board-8-4-5-3 {
+			hisi,boardid = <8 4 5 3>;
+			board-name = "EVER_TUGL_VD";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_vd.dtb");
+		};
+		board-8-4-5-4 {
+			hisi,boardid = <8 4 5 4>;
+			board-name = "EVER_LX9_VA";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_lx9_va.dtb");
+		};
+		board-8-4-5-6 {
+			hisi,boardid = <8 4 5 6>;
+			board-name = "EVER_TUGL_VE";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_ve.dtb");
+		};
+		board-8-4-5-7 {
+			hisi,boardid = <8 4 5 7>;
+			board-name = "EVER_LX9_VB";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_lx9_vb.dtb");
+		};
+		board-8-4-5-8 {
+			hisi,boardid = <8 4 5 8>;
+			board-name = "EVER_TUGL_VF";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_vf.dtb");
+		};
+		board-8-4-5-9 {
+			hisi,boardid = <8 4 5 9>;
+			board-name = "EVER_LX9_VC";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_lx9_vc.dtb");
+		};
+		board-8-4-6-0 {
+			hisi,boardid = <8 4 6 0>;
+			board-name = "EVER_TUGL_VG";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_vg.dtb");
+		};
+		board-8-4-6-1 {
+			hisi,boardid = <8 4 6 1>;
+			board-name = "EVER_LX9_VD";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_lx9_vd.dtb");
+		};
+		board-8-4-6-2 {
+			hisi,boardid = <8 4 6 2>;
+			board-name = "EVER_TUGL_VH";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_vh.dtb");
+		};
+		board-8-4-6-3 {
+			hisi,boardid = <8 4 6 3>;
+			board-name = "EVER_LX9_VE";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_lx9_ve.dtb");
+		};
+		board-8-4-6-4 {
+			hisi,boardid = <8 4 6 4>;
+			board-name = "EVER_TUGL_VI";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_vi.dtb");
+		};
+		board-8-4-6-5 {
+			hisi,boardid = <8 4 6 5>;
+			board-name = "EVER_LX9_VF";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_lx9_vf.dtb");
+		};
+		board-8-4-6-6 {
+			hisi,boardid = <8 4 6 6>;
+			board-name = "EVER_TUGL_VJ";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_tugl_vj.dtb");
+		};
+		board-8-4-6-7 {
+			hisi,boardid = <8 4 6 7>;
+			board-name = "EVER_LX9_VG";
+			dtb-data = /incbin/("everest_multiboard_catalog_payloads/ever_lx9_vg.dtb");
+		};
+	};
+};

@@ -267,6 +267,7 @@ struct sock_common {
   *	@sk_gso_type: GSO type (e.g. %SKB_GSO_TCPV4)
   *	@sk_gso_max_size: Maximum GSO segment size to build
   *	@sk_gso_max_segs: Maximum number of GSO segments
+  *	@sk_pacing_shift: scaling factor for TCP Small Queues
   *	@sk_lingertime: %SO_LINGER l_linger setting
   *	@sk_backlog: always used with the per-socket spinlock held
   *	@sk_callback_lock: used with the callbacks in the end of this struct
@@ -292,7 +293,6 @@ struct sock_common {
   *	@sk_filter: socket filtering instructions
   *	@sk_timer: sock cleanup timer
   *	@sk_stamp: time stamp of last packet received
-  *	@sk_stamp_seq: lock for accessing sk_stamp on 32 bit architectures only
   *	@sk_tsflags: SO_TIMESTAMPING socket options
   *	@sk_tskey: counter to disambiguate concurrent tstamp requests
   *	@sk_zckey: counter to order MSG_ZEROCOPY notifications
@@ -351,7 +351,7 @@ struct sock {
 #define sk_incoming_cpu		__sk_common.skc_incoming_cpu
 #define sk_flags		__sk_common.skc_flags
 #define sk_rxhash		__sk_common.skc_rxhash
-
+#define sk_hwdpi_mark   __sk_common.skc_hwdpi_mark
 	socket_lock_t		sk_lock;
 	atomic_t		sk_drops;
 	int			sk_rcvlowat;
@@ -386,6 +386,19 @@ struct sock {
 		struct socket_wq __rcu	*sk_wq;
 		struct socket_wq	*sk_wq_raw;
 	};
+
+#ifdef CONFIG_HUAWEI_BASTET
+	struct bastet_sock *bastet;
+	struct bastet_reconn *reconn;
+	int fg_Spec;
+	int fg_Step;
+	bool prio_channel;
+	uint8_t discard_duration; /* bit0~bit1 indication unit:10ms,40ms,100ms,400ms;bit2~bit7 indication gear */
+#endif
+#if defined(CONFIG_HUAWEI_BASTET) || defined(CONFIG_HUAWEI_XENGINE)
+	uint8_t acc_state;
+#endif
+
 #ifdef CONFIG_XFRM
 	struct xfrm_policy __rcu *sk_policy[2];
 #endif
@@ -446,6 +459,7 @@ struct sock {
 				sk_type      : 16;
 #define SK_PROTOCOL_MAX U8_MAX
 	u16			sk_gso_max_segs;
+	u8			sk_pacing_shift;
 	unsigned long	        sk_lingertime;
 	struct proto		*sk_prot_creator;
 	rwlock_t		sk_callback_lock;
@@ -458,9 +472,6 @@ struct sock {
 	const struct cred	*sk_peer_cred;
 	long			sk_rcvtimeo;
 	ktime_t			sk_stamp;
-#if BITS_PER_LONG==32
-	seqlock_t		sk_stamp_seq;
-#endif
 	u16			sk_tsflags;
 	u8			sk_shutdown;
 	u32			sk_tskey;
@@ -481,12 +492,23 @@ struct sock {
 	void                    (*sk_destruct)(struct sock *sk);
 	struct sock_reuseport __rcu	*sk_reuseport_cb;
 	struct rcu_head		sk_rcu;
+
+#ifdef CONFIG_HUAWEI_XENGINE
+	int			hicom_flag;
+	u8	snd_pkt_cnt;
+	u8	is_mp_flow:1,
+		is_download_flow:1;
+#endif
+#ifdef CONFIG_CGROUP_BPF
+	char		sk_process_name[TASK_COMM_LEN];
+#endif
 };
 
 enum sk_pacing {
 	SK_PACING_NONE		= 0,
 	SK_PACING_NEEDED	= 1,
 	SK_PACING_FQ		= 2,
+
 };
 
 #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
@@ -1081,7 +1103,6 @@ struct proto {
 	void			(*unhash)(struct sock *sk);
 	void			(*rehash)(struct sock *sk);
 	int			(*get_port)(struct sock *sk, unsigned short snum);
-
 	/* Keeping track of sockets in use */
 #ifdef CONFIG_PROC_FS
 	unsigned int		inuse_idx;
@@ -1462,7 +1483,6 @@ static inline void lock_sock(struct sock *sk)
 	lock_sock_nested(sk, 0);
 }
 
-void __release_sock(struct sock *sk);
 void release_sock(struct sock *sk);
 
 /* BH context may only use the following locking interface. */
@@ -2211,34 +2231,6 @@ static inline void sk_drops_add(struct sock *sk, const struct sk_buff *skb)
 	atomic_add(segs, &sk->sk_drops);
 }
 
-static inline ktime_t sock_read_timestamp(struct sock *sk)
-{
-#if BITS_PER_LONG==32
-	unsigned int seq;
-	ktime_t kt;
-
-	do {
-		seq = read_seqbegin(&sk->sk_stamp_seq);
-		kt = sk->sk_stamp;
-	} while (read_seqretry(&sk->sk_stamp_seq, seq));
-
-	return kt;
-#else
-	return sk->sk_stamp;
-#endif
-}
-
-static inline void sock_write_timestamp(struct sock *sk, ktime_t kt)
-{
-#if BITS_PER_LONG==32
-	write_seqlock(&sk->sk_stamp_seq);
-	sk->sk_stamp = kt;
-	write_sequnlock(&sk->sk_stamp_seq);
-#else
-	sk->sk_stamp = kt;
-#endif
-}
-
 void __sock_recv_timestamp(struct msghdr *msg, struct sock *sk,
 			   struct sk_buff *skb);
 void __sock_recv_wifi_status(struct msghdr *msg, struct sock *sk,
@@ -2263,7 +2255,7 @@ sock_recv_timestamp(struct msghdr *msg, struct sock *sk, struct sk_buff *skb)
 	     (sk->sk_tsflags & SOF_TIMESTAMPING_RAW_HARDWARE)))
 		__sock_recv_timestamp(msg, sk, skb);
 	else
-		sock_write_timestamp(sk, kt);
+		sk->sk_stamp = kt;
 
 	if (sock_flag(sk, SOCK_WIFI_STATUS) && skb->wifi_acked_valid)
 		__sock_recv_wifi_status(msg, sk, skb);
@@ -2284,9 +2276,9 @@ static inline void sock_recv_ts_and_drops(struct msghdr *msg, struct sock *sk,
 	if (sk->sk_flags & FLAGS_TS_OR_DROPS || sk->sk_tsflags & TSFLAGS_ANY)
 		__sock_recv_ts_and_drops(msg, sk, skb);
 	else if (unlikely(sock_flag(sk, SOCK_TIMESTAMP)))
-		sock_write_timestamp(sk, skb->tstamp);
+		sk->sk_stamp = skb->tstamp;
 	else if (unlikely(sk->sk_stamp == SK_DEFAULT_STAMP))
-		sock_write_timestamp(sk, 0);
+		sk->sk_stamp = 0;
 }
 
 void __sock_tx_timestamp(__u16 tsflags, __u8 *tx_flags);
@@ -2418,5 +2410,16 @@ extern int sysctl_optmem_max;
 
 extern __u32 sysctl_wmem_default;
 extern __u32 sysctl_rmem_default;
+
+/* Default TCP Small queue budget is ~1 ms of data (1sec >> 10)
+ * Some wifi drivers need to tweak it to get more chunks.
+ * They can use this helper from their ndo_start_xmit()
+ */
+static inline void sk_pacing_shift_update(struct sock *sk, int val)
+{
+	if (!sk || !sk_fullsock(sk) || sk->sk_pacing_shift == val)
+		return;
+	sk->sk_pacing_shift = val;
+}
 
 #endif	/* _SOCK_H */

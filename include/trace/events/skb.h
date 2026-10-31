@@ -69,7 +69,6 @@ TRACE_EVENT(skb_copy_datagram_iovec,
 
 	TP_printk("skbaddr=%p len=%d", __entry->skbaddr, __entry->len)
 );
-
 #endif /* _TRACE_SKB_H */
 
 /* This part must be outside protection */

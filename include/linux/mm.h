@@ -67,6 +67,11 @@ extern const int mmap_rnd_compat_bits_min;
 extern const int mmap_rnd_compat_bits_max;
 extern int mmap_rnd_compat_bits __read_mostly;
 #endif
+#ifdef CONFIG_HISI_LB
+extern int lb_pages_detach(unsigned int pid, struct page *pages, size_t count);
+extern unsigned int lb_page_to_gid(struct page *page);
+#endif
+
 
 #include <asm/page.h>
 #include <asm/pgtable.h>
@@ -864,8 +869,13 @@ static inline void put_page(struct page *page)
 		return;
 	}
 
-	if (put_page_testzero(page))
+	if (put_page_testzero(page)) {
+#ifdef CONFIG_HISI_LB
+		if (PageLB(page))
+			lb_pages_detach(lb_page_to_gid(page), page, 1UL);
+#endif
 		__put_page(page);
+	}
 }
 
 #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
@@ -1079,7 +1089,6 @@ static inline struct mem_cgroup *page_memcg_rcu(struct page *page)
 	return NULL;
 }
 #endif
-
 /*
  * Some inline functions in vmstat.h depend on page_zone()
  */
@@ -1344,6 +1353,7 @@ int invalidate_inode_page(struct page *page);
 #ifdef CONFIG_MMU
 extern int handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
 		unsigned int flags);
+
 extern int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
 			    unsigned long address, unsigned int fault_flags,
 			    bool *unlocked);
@@ -2098,6 +2108,7 @@ void anon_vma_interval_tree_verify(struct anon_vma_chain *node);
 
 /* mmap.c */
 extern int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin);
+
 extern int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
 	unsigned long end, pgoff_t pgoff, struct vm_area_struct *insert,
 	struct vm_area_struct *expand);
@@ -2106,6 +2117,7 @@ static inline int vma_adjust(struct vm_area_struct *vma, unsigned long start,
 {
 	return __vma_adjust(vma, start, end, pgoff, insert, NULL);
 }
+
 extern struct vm_area_struct *vma_merge(struct mm_struct *,
 	struct vm_area_struct *prev, unsigned long addr, unsigned long end,
 	unsigned long vm_flags, struct anon_vma *, struct file *, pgoff_t,
@@ -2422,6 +2434,8 @@ typedef int (*pte_fn_t)(pte_t *pte, pgtable_t token, unsigned long addr,
 extern int apply_to_page_range(struct mm_struct *mm, unsigned long address,
 			       unsigned long size, pte_fn_t fn, void *data);
 
+extern void change_secpage_range(phys_addr_t phys, unsigned long addr,
+		      unsigned long size, pgprot_t prot);
 
 #ifdef CONFIG_PAGE_POISONING
 extern bool page_poisoning_enabled(void);
@@ -2488,6 +2502,10 @@ extern bool process_shares_mm(struct task_struct *p, struct mm_struct *mm);
 extern int sysctl_drop_caches;
 int drop_caches_sysctl_handler(struct ctl_table *, int,
 					void __user *, size_t *, loff_t *);
+#ifdef CONFIG_ION_HISI_CPA
+void cpa_drop_pagecache(void);
+#endif
+
 #endif
 
 void drop_slab(void);

@@ -22,16 +22,39 @@
 #include <linux/gfp.h>
 #include <net/tcp.h>
 
+#ifdef CONFIG_HUAWEI_XENGINE
+#include <huawei_platform/emcom/emcom_xengine.h>
+#endif
+
 int sysctl_tcp_thin_linear_timeouts __read_mostly;
 
+#ifdef CONFIG_HUAWEI_MSS_AUTO_CHANGE
+#define TCP_MSS_REDUCE_SIZE (200)
+#define TCP_MSS_MIN_SIZE    (1200)
+void tcp_reduce_mss(struct inet_connection_sock *icsk, struct sock *sk)
+{
+	struct tcp_sock *tp = NULL;
+	if (icsk && sk) {
+		tp = tcp_sk(sk);
+		if (tp && tp->mss_cache > TCP_MSS_MIN_SIZE && tp->rx_opt.mss_clamp > TCP_MSS_MIN_SIZE) {
+			if (tp->mss_cache - TCP_MSS_REDUCE_SIZE < TCP_MSS_MIN_SIZE) {
+				tp->rx_opt.mss_clamp = TCP_MSS_MIN_SIZE;
+			} else {
+				tp->rx_opt.mss_clamp = tp->mss_cache - TCP_MSS_REDUCE_SIZE;
+			}
+			tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
+		}
+	}
+}
+#endif
 /**
  *  tcp_write_err() - close socket and save error info
  *  @sk:  The socket the error has appeared on.
  *
  *  Returns: Nothing (void)
  */
-
-static void tcp_write_err(struct sock *sk)
+static
+void tcp_write_err(struct sock *sk)
 {
 	sk->sk_err = sk->sk_err_soft ? : ETIMEDOUT;
 	sk->sk_error_report(sk);
@@ -88,6 +111,7 @@ static int tcp_out_of_resources(struct sock *sk, bool do_reset)
 			do_reset = true;
 		if (do_reset)
 			tcp_send_active_reset(sk, GFP_ATOMIC);
+
 		tcp_done(sk);
 		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPABORTONMEMORY);
 		return 1;
@@ -141,6 +165,7 @@ static void tcp_mtu_probing(struct inet_connection_sock *icsk, struct sock *sk)
 			mss = tcp_mtu_to_mss(sk, icsk->icsk_mtup.search_low) >> 1;
 			mss = min(net->ipv4.sysctl_tcp_base_mss, mss);
 			mss = max(mss, 68 - tp->tcp_header_len);
+			mss = max(mss, net->ipv4.sysctl_tcp_min_snd_mss);
 			icsk->icsk_mtup.search_low = tcp_mss_to_mtu(sk, mss);
 			tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
 		}
@@ -161,7 +186,8 @@ static void tcp_mtu_probing(struct inet_connection_sock *icsk, struct sock *sk)
  * after "boundary" unsuccessful, exponentially backed-off
  * retransmissions with an initial RTO of TCP_RTO_MIN.
  */
-static bool retransmits_timed_out(struct sock *sk,
+static
+bool retransmits_timed_out(struct sock *sk,
 				  unsigned int boundary,
 				  unsigned int timeout)
 {
@@ -188,7 +214,8 @@ static bool retransmits_timed_out(struct sock *sk,
 }
 
 /* A write timeout has occurred. Process the after effects. */
-static int tcp_write_timeout(struct sock *sk)
+static
+int tcp_write_timeout(struct sock *sk)
 {
 	struct inet_connection_sock *icsk = inet_csk(sk);
 	struct tcp_sock *tp = tcp_sk(sk);
@@ -224,6 +251,9 @@ static int tcp_write_timeout(struct sock *sk)
 			}
 			/* Black hole detection */
 			tcp_mtu_probing(icsk, sk);
+#ifdef CONFIG_HUAWEI_MSS_AUTO_CHANGE
+			tcp_reduce_mss(icsk, sk);
+#endif
 
 			dst_negative_advice(sk);
 		} else {
@@ -244,8 +274,16 @@ static int tcp_write_timeout(struct sock *sk)
 		expired = retransmits_timed_out(sk, retry_until,
 						icsk->icsk_user_timeout);
 	}
+
+#ifdef CONFIG_HUAWEI_XENGINE
+	emcom_xengine_mpflow_fallback(sk, EMCOM_MPFLOW_FALLBACK_RETRANS, 0);
+#endif
+
 	if (expired) {
 		/* Has it gone just too far? */
+#ifdef CONFIG_HUAWEI_XENGINE
+		emcom_xengine_mpflow_fallback(sk, EMCOM_MPFLOW_FALLBACK_SYN_TOUT, 0);
+#endif
 		tcp_write_err(sk);
 		return 1;
 	}
@@ -255,6 +293,9 @@ static int tcp_write_timeout(struct sock *sk)
 /* Called with BH disabled */
 void tcp_delack_timer_handler(struct sock *sk)
 {
+#ifdef CONFIG_TCP_ARGO
+	struct tcp_sock *tp = tcp_sk(sk);
+#endif
 	struct inet_connection_sock *icsk = inet_csk(sk);
 
 	sk_mem_reclaim_partial(sk);
@@ -280,7 +321,11 @@ void tcp_delack_timer_handler(struct sock *sk)
 			icsk->icsk_ack.pingpong = 0;
 			icsk->icsk_ack.ato      = TCP_ATO_MIN;
 		}
-		tcp_mstamp_refresh(tcp_sk(sk));
+#ifdef CONFIG_TCP_ARGO
+		if (tp->argo && tp->argo->delay_ack_nums)
+			/* Delay ack timeout, disable argo. */
+			tp->argo->delay_ack_nums = 0;
+#endif /* CONFIG_TCP_ARGO */
 		tcp_send_ack(sk);
 		__NET_INC_STATS(sock_net(sk), LINUX_MIB_DELAYEDACKS);
 	}
@@ -303,7 +348,6 @@ out:
 static void tcp_delack_timer(unsigned long data)
 {
 	struct sock *sk = (struct sock *)data;
-
 	bh_lock_sock(sk);
 	if (!sock_owned_by_user(sk)) {
 		tcp_delack_timer_handler(sk);
@@ -536,9 +580,18 @@ out_reset_timer:
 	    icsk->icsk_retransmits <= TCP_THIN_LINEAR_RETRIES) {
 		icsk->icsk_backoff = 0;
 		icsk->icsk_rto = min(__tcp_set_rto(tp), TCP_RTO_MAX);
+#ifdef CONFIG_HW_SYN_LINEAR_RETRY
+	} else if (sk->sk_state == TCP_SYN_SENT &&
+	    icsk->icsk_retransmits <= TCP_SYN_SENT_LINEAR_RETRIES &&
+	    icsk->icsk_rto == TCP_TIMEOUT_INIT) {
+		icsk->icsk_backoff = 0;
+#endif
 	} else {
 		/* Use normal (exponential) backoff */
 		icsk->icsk_rto = min(icsk->icsk_rto << 1, TCP_RTO_MAX);
+#ifdef CONFIG_HUAWEI_XENGINE
+		emcom_xengine_fastsyn(sk);
+#endif
 	}
 	inet_csk_reset_xmit_timer(sk, ICSK_TIME_RETRANS, icsk->icsk_rto, TCP_RTO_MAX);
 	if (retransmits_timed_out(sk, net->ipv4.sysctl_tcp_retries1 + 1, 0))
@@ -590,7 +643,6 @@ out:
 static void tcp_write_timer(unsigned long data)
 {
 	struct sock *sk = (struct sock *)data;
-
 	bh_lock_sock(sk);
 	if (!sock_owned_by_user(sk)) {
 		tcp_write_timer_handler(sk);
@@ -630,7 +682,6 @@ static void tcp_keepalive_timer (unsigned long data)
 	struct inet_connection_sock *icsk = inet_csk(sk);
 	struct tcp_sock *tp = tcp_sk(sk);
 	u32 elapsed;
-
 	/* Only process if socket is not in use. */
 	bh_lock_sock(sk);
 	if (sock_owned_by_user(sk)) {
@@ -645,6 +696,7 @@ static void tcp_keepalive_timer (unsigned long data)
 	}
 
 	tcp_mstamp_refresh(tp);
+
 	if (sk->sk_state == TCP_FIN_WAIT2 && sock_flag(sk, SOCK_DEAD)) {
 		if (tp->linger2 >= 0) {
 			const int tmo = tcp_fin_time(sk) - TCP_TIMEWAIT_LEN;

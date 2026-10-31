@@ -29,7 +29,6 @@
 #include <linux/hw_breakpoint.h>
 #include <linux/cn_proc.h>
 #include <linux/compat.h>
-#include <linux/sched/signal.h>
 
 /*
  * Access another process' address space via ptrace.
@@ -262,10 +261,12 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
 
 static int ptrace_has_cap(struct user_namespace *ns, unsigned int mode)
 {
+	int check_cap = (mode & PTRACE_MODE_PERF_EVENT) ? CAP_PERF_EVENT : CAP_SYS_PTRACE;
+
 	if (mode & PTRACE_MODE_NOAUDIT)
-		return has_ns_capability_noaudit(current, ns, CAP_SYS_PTRACE);
+		return has_ns_capability_noaudit(current, ns, check_cap);
 	else
-		return has_ns_capability(current, ns, CAP_SYS_PTRACE);
+		return has_ns_capability(current, ns, check_cap);
 }
 
 /* Returns 0 on success, -errno on denial. */
@@ -926,26 +927,18 @@ int ptrace_request(struct task_struct *child, long request,
 			ret = ptrace_setsiginfo(child, &siginfo);
 		break;
 
-	case PTRACE_GETSIGMASK: {
-		sigset_t *mask;
-
+	case PTRACE_GETSIGMASK:
 		if (addr != sizeof(sigset_t)) {
 			ret = -EINVAL;
 			break;
 		}
 
-		if (test_tsk_restore_sigmask(child))
-			mask = &child->saved_sigmask;
-		else
-			mask = &child->blocked;
-
-		if (copy_to_user(datavp, mask, sizeof(sigset_t)))
+		if (copy_to_user(datavp, &child->blocked, sizeof(sigset_t)))
 			ret = -EFAULT;
 		else
 			ret = 0;
 
 		break;
-	}
 
 	case PTRACE_SETSIGMASK: {
 		sigset_t new_set;
@@ -970,8 +963,6 @@ int ptrace_request(struct task_struct *child, long request,
 		spin_lock_irq(&child->sighand->siglock);
 		child->blocked = new_set;
 		spin_unlock_irq(&child->sighand->siglock);
-
-		clear_tsk_restore_sigmask(child);
 
 		ret = 0;
 		break;

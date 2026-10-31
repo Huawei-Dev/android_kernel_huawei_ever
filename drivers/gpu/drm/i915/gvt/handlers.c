@@ -874,7 +874,7 @@ static int dp_aux_ch_ctl_mmio_write(struct intel_vgpu *vgpu,
 			 * Write request exceeds what we supported,
 			 * DCPD spec: When a Source Device is writing a DPCD
 			 * address not supported by the Sink Device, the Sink
-			 * Device shall reply with AUX NACK and “M” equal to
+			 * Device shall reply with AUX NACK and ???M??? equal to
 			 * zero.
 			 */
 

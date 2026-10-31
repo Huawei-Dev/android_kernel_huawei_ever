@@ -73,6 +73,9 @@
  * SPARSEMEM_EXTREME with !SPARSEMEM_VMEMMAP).
  */
 enum pageflags {
+#ifdef CONFIG_HISI_KERNELDUMP
+	PG_memdump,		/* added for kernel dump. */
+#endif
 	PG_locked,		/* Page is locked. Don't touch. */
 	PG_referenced,
 	PG_uptodate,
@@ -103,9 +106,18 @@ enum pageflags {
 #ifdef CONFIG_MEMORY_FAILURE
 	PG_hwpoison,		/* hardware poisoned page. Don't touch */
 #endif
+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+	PG_compound_lock,
+#endif
 #if defined(CONFIG_IDLE_PAGE_TRACKING) && defined(CONFIG_64BIT)
 	PG_young,
 	PG_idle,
+#endif
+#ifdef CONFIG_HISI_LB
+	PG_lb,
+#endif
+#ifdef CONFIG_ZRAM_NON_COMPRESS
+	PG_non_compress,
 #endif
 	__NR_PAGEFLAGS,
 
@@ -291,6 +303,9 @@ PAGEFLAG(Reserved, reserved, PF_NO_COMPOUND)
 PAGEFLAG(SwapBacked, swapbacked, PF_NO_TAIL)
 	__CLEARPAGEFLAG(SwapBacked, swapbacked, PF_NO_TAIL)
 	__SETPAGEFLAG(SwapBacked, swapbacked, PF_NO_TAIL)
+#ifdef CONFIG_HISI_KERNELDUMP
+PAGEFLAG(MemDump, memdump, PF_ANY);   /*added for kernel dump*/
+#endif
 
 /*
  * Private page markings that may be used by the filesystem that owns the page
@@ -316,6 +331,11 @@ PAGEFLAG(Reclaim, reclaim, PF_NO_TAIL)
 	TESTCLEARFLAG(Reclaim, reclaim, PF_NO_TAIL)
 PAGEFLAG(Readahead, reclaim, PF_NO_COMPOUND)
 	TESTCLEARFLAG(Readahead, reclaim, PF_NO_COMPOUND)
+
+#ifdef CONFIG_ZRAM_NON_COMPRESS
+PAGEFLAG(NonCompress, non_compress, PF_NO_TAIL)
+	TESTSCFLAG(NonCompress, non_compress, PF_NO_TAIL)
+#endif
 
 #ifdef CONFIG_HIGHMEM
 /*
@@ -375,6 +395,10 @@ TESTPAGEFLAG(Young, young, PF_ANY)
 SETPAGEFLAG(Young, young, PF_ANY)
 TESTCLEARFLAG(Young, young, PF_ANY)
 PAGEFLAG(Idle, idle, PF_ANY)
+#endif
+
+#ifdef CONFIG_HISI_LB
+PAGEFLAG(LB, lb, PF_ANY)
 #endif
 
 /*

@@ -26,7 +26,6 @@ enum {
 	TCP_LISTEN,
 	TCP_CLOSING,	/* Now a valid state */
 	TCP_NEW_SYN_RECV,
-
 	TCP_MAX_STATES	/* Leave at the end! */
 };
 

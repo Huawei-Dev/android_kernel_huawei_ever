@@ -374,6 +374,7 @@ try_again:
 
 	ulen = udp6_skb_len(skb);
 	copied = len;
+
 	if (copied > ulen - off)
 		copied = ulen - off;
 	else if (copied < ulen)
@@ -464,7 +465,6 @@ try_again:
 	err = copied;
 	if (flags & MSG_TRUNC)
 		err = ulen;
-
 	skb_consume_udp(sk, skb, peeking ? -err : err);
 	return err;
 
@@ -609,7 +609,6 @@ static int udpv6_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
 		encap_rcv = ACCESS_ONCE(up->encap_rcv);
 		if (encap_rcv) {
 			int ret;
-
 			/* Verify checksum before giving to encap */
 			if (udp_lib_checksum_complete(skb))
 				goto csum_error;

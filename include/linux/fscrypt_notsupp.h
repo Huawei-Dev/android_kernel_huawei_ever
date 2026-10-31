@@ -14,17 +14,21 @@
 #ifndef _LINUX_FSCRYPT_NOTSUPP_H
 #define _LINUX_FSCRYPT_NOTSUPP_H
 
+#include <linux/fscrypt_common.h>
+
+
 static inline bool fscrypt_has_encryption_key(const struct inode *inode)
 {
-	return false;
+        return false;
 }
 
 static inline bool fscrypt_dummy_context_enabled(struct inode *inode)
 {
-	return false;
+        return false;
 }
 
 /* crypto.c */
+
 static inline void fscrypt_enqueue_decrypt_work(struct work_struct *work)
 {
 }
@@ -59,11 +63,17 @@ static inline int fscrypt_decrypt_page(const struct inode *inode,
 
 static inline struct page *fscrypt_control_page(struct page *page)
 {
-	WARN_ON_ONCE(1);
-	return ERR_PTR(-EINVAL);
+       WARN_ON_ONCE(1);
+       return ERR_PTR(-EINVAL);
 }
 
+
 static inline void fscrypt_restore_control_page(struct page *page)
+{
+	return;
+}
+
+static inline void fscrypt_set_encrypted_dentry(struct dentry *dentry)
 {
 	return;
 }

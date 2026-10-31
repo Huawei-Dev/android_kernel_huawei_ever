@@ -105,6 +105,8 @@ SECTIONS
 
 	. = KIMAGE_VADDR + TEXT_OFFSET;
 
+	. = ALIGN(SZ_64K);
+	_protect_start = .;
 	.head.text : {
 		_text = .;
 		HEAD_TEXT
@@ -132,12 +134,25 @@ SECTIONS
 		*(.got)			/* Global offset table		*/
 	}
 
+#ifdef CONFIG_HW_LOGGER
+	. = ALIGN(32);
+	__start_hwlog_tag = .;
+	__start_hwlog_tag : {
+		*(__hwlog_tag)
+	}
+	. = ALIGN(SEGMENT_ALIGN);
+	__stop_hwlog_tag = .;
+#endif
+
 	. = ALIGN(SEGMENT_ALIGN);
 	_etext = .;			/* End of text section */
 
-	RO_DATA(PAGE_SIZE)		/* everything from this point to     */
-	EXCEPTION_TABLE(8)		/* __init_begin will be marked RO NX */
+	RO_AFTER_INIT_SECTION(PAGE_SIZE)	/* everything from this point */
+	RO_DATA(PAGE_SIZE)			/* to __init_begin will be    */
+	EXCEPTION_TABLE(8)			/* marked RO NX		      */
 	NOTES
+	. = ALIGN(SZ_64K);
+	_protect_end = .; /* begin from _protect_start to _protect_end, only access by acpu */
 
 	. = ALIGN(SEGMENT_ALIGN);
 	__init_begin = .;
@@ -169,6 +184,12 @@ SECTIONS
 		CON_INITCALL
 		SECURITY_INITCALL
 		INIT_RAM_FS
+#ifdef CONFIG_ARM64_BUILTIN_APPENDED_DTB_OVERRIDE
+		/* Init-only catalog: released by free_initmem() after boot. */
+		. = ALIGN(8);
+		KEEP(*(.builtin_custom_dtb))
+		. = ALIGN(8);
+#endif
 		*(.init.rodata.* .init.bss)	/* from the EFI stub */
 	}
 	.exit.data : {

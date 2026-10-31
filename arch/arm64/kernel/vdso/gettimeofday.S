@@ -220,7 +220,7 @@ realtime:
 	get_clock_shifted_nsec res=x15, cycle_last=x10, mult=x11
 	get_ts_realtime res_sec=x10, res_nsec=x11, \
 		clock_nsec=x15, xtime_sec=x13, xtime_nsec=x14, nsec_to_sec=x9
-	clock_gettime_return, shift=1
+	clock_gettime_return shift=1
 
 	ALIGN
 monotonic:
@@ -243,7 +243,7 @@ monotonic:
 		clock_nsec=x15, xtime_sec=x13, xtime_nsec=x14, nsec_to_sec=x9
 
 	add_ts sec=x10, nsec=x11, ts_sec=x3, ts_nsec=x4, nsec_to_sec=x9
-	clock_gettime_return, shift=1
+	clock_gettime_return shift=1
 
 	ALIGN
 monotonic_raw:
@@ -264,7 +264,7 @@ monotonic_raw:
 		clock_nsec=x15, nsec_to_sec=x9
 
 	add_ts sec=x10, nsec=x11, ts_sec=x13, ts_nsec=x14, nsec_to_sec=x9
-	clock_gettime_return, shift=1
+	clock_gettime_return shift=1
 
 	ALIGN
 realtime_coarse:
@@ -301,13 +301,14 @@ ENTRY(__kernel_clock_getres)
 	ccmp	w0, #CLOCK_MONOTONIC_RAW, #0x4, ne
 	b.ne	1f
 
-	ldr	x2, 5f
+	adr	vdso_data, _vdso_data
+	ldr	w2, [vdso_data, #CLOCK_REALTIME_RES]
 	b	2f
 1:
 	cmp	w0, #CLOCK_REALTIME_COARSE
 	ccmp	w0, #CLOCK_MONOTONIC_COARSE, #0x4, ne
 	b.ne	4f
-	ldr	x2, 6f
+	ldr	x2, 5f
 2:
 	cbz	x1, 3f
 	stp	xzr, x2, [x1]
@@ -321,8 +322,6 @@ ENTRY(__kernel_clock_getres)
 	svc	#0
 	ret
 5:
-	.quad	CLOCK_REALTIME_RES
-6:
 	.quad	CLOCK_COARSE_RES
 	.cfi_endproc
 ENDPROC(__kernel_clock_getres)

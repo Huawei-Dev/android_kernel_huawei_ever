@@ -320,6 +320,10 @@ static void __cfg80211_sme_scan_done(struct net_device *dev)
 void cfg80211_sme_scan_done(struct net_device *dev)
 {
 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+#ifdef CONFIG_BCMDHD
+	if (NULL == wdev)
+		return;
+#endif
 
 	wdev_lock(wdev);
 	__cfg80211_sme_scan_done(dev);
@@ -665,7 +669,28 @@ static void disconnect_work(struct work_struct *work)
 
 static DECLARE_WORK(cfg80211_disconnect_work, disconnect_work);
 
+#ifdef CONFIG_HW_VOWIFI
+void cfg80211_drv_vowifi(struct net_device *dev, gfp_t gfp)
+{
+	struct wireless_dev *wdev = dev->ieee80211_ptr;
+	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+	struct cfg80211_event *ev;
+	unsigned long flags;
 
+	ev = kzalloc(sizeof(*ev), gfp);
+	if (!ev) {
+		printk(KERN_ERR "%s: malloc fail\n", __FUNCTION__);
+		return;
+	}
+
+	ev->type = EVENT_DRV_VOWIFI;
+	spin_lock_irqsave(&wdev->event_lock, flags);
+	list_add_tail(&ev->list, &wdev->event_list);
+	spin_unlock_irqrestore(&wdev->event_lock, flags);
+	queue_work(cfg80211_wq, &rdev->event_work);
+}
+EXPORT_SYMBOL(cfg80211_drv_vowifi);
+#endif
 /*
  * API calls for drivers implementing connect/disconnect and
  * SME event handling
@@ -969,14 +994,25 @@ void __cfg80211_disconnected(struct net_device *dev, const u8 *ie,
 			     size_t ie_len, u16 reason, bool from_ap)
 {
 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+#ifdef CONFIG_BCMDHD
+	struct cfg80211_registered_device *rdev = NULL;
+#else
 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+#endif
 	int i;
 #ifdef CONFIG_CFG80211_WEXT
 	union iwreq_data wrqu;
 #endif
+#ifdef CONFIG_BCMDHD
+	if (NULL == wdev)
+		return;
+#endif
 
 	ASSERT_WDEV_LOCK(wdev);
 
+#ifdef CONFIG_BCMDHD
+	rdev = wiphy_to_rdev(wdev->wiphy);
+#endif
 	if (WARN_ON(wdev->iftype != NL80211_IFTYPE_STATION &&
 		    wdev->iftype != NL80211_IFTYPE_P2P_CLIENT))
 		return;
@@ -1169,8 +1205,12 @@ int cfg80211_disconnect(struct cfg80211_registered_device *rdev,
 		err = cfg80211_sme_disconnect(wdev, reason);
 	else if (!rdev->ops->disconnect)
 		cfg80211_mlme_down(rdev, dev);
-	else if (wdev->ssid_len)
+	else if (wdev->ssid_len) {
 		err = rdev_disconnect(rdev, dev, reason);
+		if (!err) {
+			__cfg80211_disconnected(dev, NULL, 0, reason, false);
+		}
+	}
 
 	/*
 	 * Clear ssid_len unless we actually were fully connected,

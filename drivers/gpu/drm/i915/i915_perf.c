@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015-2016 Intel Corporation
+ * Copyright ?? 2015-2016 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -1508,7 +1508,7 @@ static int hsw_enable_metric_set(struct drm_i915_private *dev_priv,
 {
 	/* PRM:
 	 *
-	 * OA unit is using “crclk” for its functionality. When trunk
+	 * OA unit is using ???crclk??? for its functionality. When trunk
 	 * level clock gating takes place, OA clock would be gated,
 	 * unable to count the events from non-render clock domain.
 	 * Render clock gating must be disabled when OA is enabled to

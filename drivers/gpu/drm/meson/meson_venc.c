@@ -714,7 +714,6 @@ struct meson_hdmi_venc_vic_mode {
 	{ 5, &meson_hdmi_encp_mode_1080i60 },
 	{ 20, &meson_hdmi_encp_mode_1080i50 },
 	{ 32, &meson_hdmi_encp_mode_1080p24 },
-	{ 33, &meson_hdmi_encp_mode_1080p50 },
 	{ 34, &meson_hdmi_encp_mode_1080p30 },
 	{ 31, &meson_hdmi_encp_mode_1080p50 },
 	{ 16, &meson_hdmi_encp_mode_1080p60 },
@@ -1201,7 +1200,7 @@ void meson_venc_hdmi_mode_set(struct meson_drm *priv, int vic,
 
 		writel_relaxed(1, priv->io_base + _REG(ENCP_VIDEO_EN));
 
-		/* Set DE signal’s polarity is active high */
+		/* Set DE signal???s polarity is active high */
 		writel_bits_relaxed(BIT(14), BIT(14),
 				    priv->io_base + _REG(ENCP_VIDEO_MODE));
 

@@ -116,6 +116,14 @@
 #include <net/sock_reuseport.h>
 #include <net/addrconf.h>
 
+#ifdef CONFIG_DOZE_FILTER
+#include <huawei_platform/power/wifi_filter/wifi_filter.h>
+#endif
+
+#ifdef CONFIG_HUAWEI_XENGINE
+#include <huawei_platform/emcom/emcom_xengine.h>
+#endif
+
 struct udp_table udp_table __read_mostly;
 EXPORT_SYMBOL(udp_table);
 
@@ -293,6 +301,13 @@ int udp_lib_get_port(struct sock *sk, unsigned short snum,
 	} else {
 		hslot = udp_hashslot(udptable, net, snum);
 		spin_lock_bh(&hslot->lock);
+
+		if (inet_is_local_reserved_port(net, snum) &&
+			!sysctl_local_reserved_ports_bind_ctrl &&
+			(!sysctl_local_reserved_ports_bind_pid ||
+			 sysctl_local_reserved_ports_bind_pid != current->tgid))
+			goto fail_unlock;
+
 		if (hslot->count > 10) {
 			int exist;
 			unsigned int slot2 = udp_sk(sk)->udp_portaddr_hash ^ snum;
@@ -833,9 +848,10 @@ send:
 				      UDP_MIB_SNDBUFERRORS, is_udplite);
 			err = 0;
 		}
-	} else
+	} else {
 		UDP_INC_STATS(sock_net(sk),
 			      UDP_MIB_OUTDATAGRAMS, is_udplite);
+	}
 	return err;
 }
 
@@ -853,7 +869,6 @@ int udp_push_pending_frames(struct sock *sk)
 	skb = ip_finish_skb(sk, fl4);
 	if (!skb)
 		goto out;
-
 	err = udp_send_skb(skb, fl4);
 
 out:
@@ -882,6 +897,9 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
 	int (*getfrag)(void *, char *, int, int, int, struct sk_buff *);
 	struct sk_buff *skb;
 	struct ip_options_data opt_copy;
+#ifdef CONFIG_HUAWEI_XENGINE
+	bool bAccelerate = false;
+#endif
 
 	if (len > 0xFFFF)
 		return -EMSGSIZE;
@@ -893,6 +911,14 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
 	if (msg->msg_flags & MSG_OOB) /* Mirror BSD error message compatibility */
 		return -EOPNOTSUPP;
 
+#ifdef CONFIG_HUAWEI_XENGINE
+	bAccelerate = emcom_xengine_hook_ul_stub(sk);
+	if (!bAccelerate)
+		EMCOM_XENGINE_SET_ACCSTATE(sk, EMCOM_XENGINE_ACC_NORMAL);
+#endif
+#ifdef CONFIG_HUAWEI_BASTET
+	BST_FG_Custom_Process(sk, msg, (uint8_t)BST_FG_UDP_BITMAP);
+#endif
 	ipc.opt = NULL;
 	ipc.tx_flags = 0;
 	ipc.ttl = 0;
@@ -929,7 +955,6 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
 			if (usin->sin_family != AF_UNSPEC)
 				return -EAFNOSUPPORT;
 		}
-
 		daddr = usin->sin_addr.s_addr;
 		dport = usin->sin_port;
 		if (dport == 0)
@@ -1596,6 +1621,7 @@ try_again:
 
 	ulen = udp_skb_len(skb);
 	copied = len;
+
 	if (copied > ulen - off)
 		copied = ulen - off;
 	else if (copied < ulen)
@@ -1637,9 +1663,10 @@ try_again:
 		return err;
 	}
 
-	if (!peeked)
+	if (!peeked) {
 		UDP_INC_STATS(sock_net(sk),
 			      UDP_MIB_INDATAGRAMS, is_udplite);
+	}
 
 	sock_recv_ts_and_drops(msg, sk, skb);
 
@@ -1657,7 +1684,6 @@ try_again:
 	err = copied;
 	if (flags & MSG_TRUNC)
 		err = ulen;
-
 	skb_consume_udp(sk, skb, peeking ? -err : err);
 	return err;
 
@@ -1859,7 +1885,6 @@ static int udp_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
 		encap_rcv = ACCESS_ONCE(up->encap_rcv);
 		if (encap_rcv) {
 			int ret;
-
 			/* Verify checksum before giving to encap */
 			if (udp_lib_checksum_complete(skb))
 				goto csum_error;
@@ -2161,6 +2186,9 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 	 * Hmm.  We got an UDP packet to a port to which we
 	 * don't wanna listen.  Ignore it.
 	 */
+	#ifdef CONFIG_DOZE_FILTER
+		get_filter_infoEx(skb);
+	#endif
 	kfree_skb(skb);
 	return 0;
 

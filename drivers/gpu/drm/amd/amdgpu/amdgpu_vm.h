@@ -19,7 +19,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
- * Authors: Christian König
+ * Authors: Christian K??nig
  */
 #ifndef __AMDGPU_VM_H__
 #define __AMDGPU_VM_H__

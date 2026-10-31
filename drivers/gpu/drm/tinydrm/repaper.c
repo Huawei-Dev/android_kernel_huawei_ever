@@ -2,7 +2,7 @@
  * DRM driver for Pervasive Displays RePaper branded e-ink panels
  *
  * Copyright 2013-2017 Pervasive Displays, Inc.
- * Copyright 2017 Noralf Trønnes
+ * Copyright 2017 Noralf Tr??nnes
  *
  * The driver supports:
  * Material Film: Aurora Mb (V231)
@@ -1113,5 +1113,5 @@ static struct spi_driver repaper_spi_driver = {
 module_spi_driver(repaper_spi_driver);
 
 MODULE_DESCRIPTION("Pervasive Displays RePaper DRM driver");
-MODULE_AUTHOR("Noralf Trønnes");
+MODULE_AUTHOR("Noralf Tr??nnes");
 MODULE_LICENSE("GPL");

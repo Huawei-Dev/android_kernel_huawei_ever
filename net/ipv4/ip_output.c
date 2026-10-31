@@ -81,6 +81,10 @@
 #include <linux/netlink.h>
 #include <linux/tcp.h>
 
+#ifdef CONFIG_HUAWEI_BASTET
+int g_FastGrabDscp = 0;    /*fg app dscp value,get from hilink*/
+#endif
+
 static int
 ip_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
 	    unsigned int mtu,
@@ -307,6 +311,7 @@ static int ip_finish_output(struct net *net, struct sock *sk, struct sk_buff *sk
 		return dst_output(net, sk, skb);
 	}
 #endif
+
 	mtu = ip_skb_dst_mtu(sk, skb);
 	if (skb_is_gso(skb))
 		return ip_finish_output_gso(net, sk, skb, mtu);
@@ -473,6 +478,15 @@ int ip_queue_xmit(struct sock *sk, struct sk_buff *skb, struct flowi *fl)
 packet_routed:
 	if (inet_opt && inet_opt->opt.is_strictroute && rt->rt_uses_gateway)
 		goto no_route;
+
+#ifdef CONFIG_HUAWEI_BASTET
+	/*if get dscp value and this socket belong to fg, modify dscp to support high pri transmission*/
+	if (g_FastGrabDscp != 0 && sk->fg_Spec > 0 && inet->tos == 0)
+	{
+		/*dscp is the highest 6 bits of tos*/
+		inet->tos = (((__u8)g_FastGrabDscp) << 2);
+	}
+#endif
 
 	/* OK, we know where to send it, allocate and build IP header. */
 	skb_push(skb, sizeof(struct iphdr) + (inet_opt ? inet_opt->opt.optlen : 0));

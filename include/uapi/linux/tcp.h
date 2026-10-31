@@ -121,6 +121,10 @@ enum {
 #define TCP_ULP			31	/* Attach a ULP to a TCP connection */
 #define TCP_MD5SIG_EXT		32	/* TCP MD5 Signature with extensions */
 
+#ifdef CONFIG_HUAWEI_BASTET
+#define TCP_RECONN		100
+#endif
+
 struct tcp_repair_opt {
 	__u32	opt_code;
 	__u32	opt_val;

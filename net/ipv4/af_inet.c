@@ -89,6 +89,7 @@
 #include <linux/netfilter_ipv4.h>
 #include <linux/random.h>
 #include <linux/slab.h>
+#include <linux/netfilter/xt_qtaguid.h>
 
 #include <linux/uaccess.h>
 
@@ -120,6 +121,23 @@
 #include <linux/mroute.h>
 #endif
 #include <net/l3mdev.h>
+
+#ifdef CONFIG_ANDROID_PARANOID_NETWORK
+#include <linux/android_aid.h>
+
+static inline int current_has_network(void)
+{
+	return in_egroup_p(AID_INET) || capable(CAP_NET_RAW);
+}
+#else
+static inline int current_has_network(void)
+{
+	return 1;
+}
+#endif
+
+int sysctl_local_reserved_ports_bind_ctrl __read_mostly = 1;
+int sysctl_local_reserved_ports_bind_pid  __read_mostly = 0;
 
 /* The inetsw table contains everything that inet_create needs to
  * build a new socket.
@@ -239,9 +257,8 @@ EXPORT_SYMBOL(inet_listen);
 /*
  *	Create an inet socket.
  */
-
-static int inet_create(struct net *net, struct socket *sock, int protocol,
-		       int kern)
+static
+int inet_create(struct net *net, struct socket *sock, int protocol, int kern)
 {
 	struct sock *sk;
 	struct inet_protosw *answer;
@@ -253,6 +270,9 @@ static int inet_create(struct net *net, struct socket *sock, int protocol,
 
 	if (protocol < 0 || protocol >= IPPROTO_MAX)
 		return -EINVAL;
+
+	if (!current_has_network())
+		return -EACCES;
 
 	sock->state = SS_UNCONNECTED;
 
@@ -331,6 +351,12 @@ lookup_protocol:
 		if (IPPROTO_RAW == protocol)
 			inet->hdrincl = 1;
 	}
+#if defined(CONFIG_HUAWEI_BASTET) || defined(CONFIG_HUAWEI_XENGINE)
+	sk->acc_state	= 0;
+#endif
+#if defined(CONFIG_HUAWEI_BASTET)
+	sk->discard_duration   = 0;
+#endif
 
 	if (net->ipv4.sysctl_ip_no_pmtu_disc)
 		inet->pmtudisc = IP_PMTUDISC_DONT;
@@ -386,6 +412,11 @@ lookup_protocol:
 		}
 	}
 out:
+#ifdef CONFIG_CGROUP_BPF
+	if (!err)
+		get_task_comm(sk->sk_process_name, current->group_leader);
+#endif
+
 	return err;
 out_rcu_unlock:
 	rcu_read_unlock();
@@ -405,6 +436,13 @@ int inet_release(struct socket *sock)
 	if (sk) {
 		long timeout;
 
+#ifdef CONFIG_HUAWEI_BASTET
+		bastet_inet_release(sk);
+#endif
+
+#ifdef CONFIG_NETFILTER_XT_MATCH_QTAGUID
+		qtaguid_untag(sock, true);
+#endif
 		/* Applications forget to leave groups before exiting */
 		ip_mc_drop_socket(sk);
 
@@ -756,7 +794,6 @@ int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
 	if (!inet_sk(sk)->inet_num && !sk->sk_prot->no_autobind &&
 	    inet_autobind(sk))
 		return -EAGAIN;
-
 	return sk->sk_prot->sendmsg(sk, msg, size);
 }
 EXPORT_SYMBOL(inet_sendmsg);
@@ -1642,6 +1679,7 @@ static __net_init int ipv4_mib_init_net(struct net *net)
 	net->mib.tcp_statistics = alloc_percpu(struct tcp_mib);
 	if (!net->mib.tcp_statistics)
 		goto err_tcp_mib;
+
 	net->mib.ip_statistics = alloc_percpu(struct ipstats_mib);
 	if (!net->mib.ip_statistics)
 		goto err_ip_mib;

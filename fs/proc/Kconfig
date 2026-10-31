@@ -81,6 +81,7 @@ config PROC_CHILDREN
 
 	  Say Y if you are running any user-space software which takes benefit from
 	  this interface. For example, rkt is such a piece of software.
+source "fs/proc/hisi/Kconfig"
 
 config PROC_UID
 	bool "Include /proc/uid/ files"

@@ -85,6 +85,9 @@
 #include <crypto/hash.h>
 #include <linux/scatterlist.h>
 
+#ifdef CONFIG_HUAWEI_XENGINE
+#include <huawei_platform/emcom/emcom_xengine.h>
+#endif
 #ifdef CONFIG_TCP_MD5SIG
 static int tcp_v4_md5_hash_hdr(char *md5_hash, const struct tcp_md5sig_key *key,
 			       __be32 daddr, __be32 saddr, const struct tcphdr *th);
@@ -157,6 +160,10 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len)
 
 	if (usin->sin_family != AF_INET)
 		return -EAFNOSUPPORT;
+
+#ifdef CONFIG_HUAWEI_XENGINE
+	emcom_xengine_mpflow_bind2device(sk, uaddr);
+#endif
 
 	nexthop = daddr = usin->sin_addr.s_addr;
 	inet_opt = rcu_dereference_protected(inet->inet_opt,
@@ -400,7 +407,6 @@ void tcp_v4_err(struct sk_buff *icmp_skb, u32 info)
 				  (type == ICMP_DEST_UNREACH &&
 				   (code == ICMP_NET_UNREACH ||
 				    code == ICMP_HOST_UNREACH)));
-
 	bh_lock_sock(sk);
 	/* If too many ICMPs get dropped on busy
 	 * servers this needs to be solved differently.
@@ -514,7 +520,6 @@ void tcp_v4_err(struct sk_buff *icmp_skb, u32 info)
 		 */
 		if (fastopen && !fastopen->sk)
 			break;
-
 		if (!sock_owned_by_user(sk)) {
 			sk->sk_err = err;
 
@@ -593,8 +598,8 @@ EXPORT_SYMBOL(tcp_v4_send_check);
  *		arrived with segment.
  *	Exception: precedence violation. We do not implement it in any case.
  */
-
-static void tcp_v4_send_reset(const struct sock *sk, struct sk_buff *skb)
+static
+void tcp_v4_send_reset(const struct sock *sk, struct sk_buff *skb)
 {
 	const struct tcphdr *th = tcp_hdr(skb);
 	struct {
@@ -729,7 +734,6 @@ out:
 /* The code following below sending ACKs in SYN-RECV and TIME-WAIT states
    outside socket context is ugly, certainly. What can I do?
  */
-
 static void tcp_v4_send_ack(const struct sock *sk,
 			    struct sk_buff *skb, u32 seq, u32 ack,
 			    u32 win, u32 tsval, u32 tsecr, int oif,
@@ -810,7 +814,6 @@ static void tcp_v4_timewait_ack(struct sock *sk, struct sk_buff *skb)
 {
 	struct inet_timewait_sock *tw = inet_twsk(sk);
 	struct tcp_timewait_sock *tcptw = tcp_twsk(sk);
-
 	tcp_v4_send_ack(sk, skb,
 			tcptw->tw_snd_nxt, tcptw->tw_rcv_nxt,
 			tcptw->tw_rcv_wnd >> tw->tw_rcv_wscale,
@@ -821,7 +824,6 @@ static void tcp_v4_timewait_ack(struct sock *sk, struct sk_buff *skb)
 			tw->tw_transparent ? IP_REPLY_ARG_NOSRCCHECK : 0,
 			tw->tw_tos
 			);
-
 	inet_twsk_put(tw);
 }
 
@@ -850,13 +852,13 @@ static void tcp_v4_reqsk_send_ack(const struct sock *sk, struct sk_buff *skb,
 			inet_rsk(req)->no_srccheck ? IP_REPLY_ARG_NOSRCCHECK : 0,
 			ip_hdr(skb)->tos);
 }
-
 /*
  *	Send a SYN-ACK after having received a SYN.
  *	This still operates on a request_sock only, not on a big
  *	socket.
  */
-static int tcp_v4_send_synack(const struct sock *sk, struct dst_entry *dst,
+static
+int tcp_v4_send_synack(const struct sock *sk, struct dst_entry *dst,
 			      struct flowi *fl,
 			      struct request_sock *req,
 			      struct tcp_fastopen_cookie *foc,
@@ -876,11 +878,9 @@ static int tcp_v4_send_synack(const struct sock *sk, struct dst_entry *dst,
 	if (skb) {
 		__tcp_v4_send_check(skb, ireq->ir_loc_addr, ireq->ir_rmt_addr);
 
-		rcu_read_lock();
 		err = ip_build_and_send_pkt(skb, sk, ireq->ir_loc_addr,
 					    ireq->ir_rmt_addr,
-					    rcu_dereference(ireq->ireq_opt));
-		rcu_read_unlock();
+					    ireq_opt_deref(ireq));
 		err = net_xmit_eval(err);
 	}
 
@@ -890,7 +890,8 @@ static int tcp_v4_send_synack(const struct sock *sk, struct dst_entry *dst,
 /*
  *	IPv4 request_sock destructor.
  */
-static void tcp_v4_reqsk_destructor(struct request_sock *req)
+static
+void tcp_v4_reqsk_destructor(struct request_sock *req)
 {
 	kfree(rcu_dereference_protected(inet_rsk(req)->ireq_opt, 1));
 }
@@ -1292,7 +1293,8 @@ struct request_sock_ops tcp_request_sock_ops __read_mostly = {
 	.syn_ack_timeout =	tcp_syn_ack_timeout,
 };
 
-static const struct tcp_request_sock_ops tcp_request_sock_ipv4_ops = {
+static
+const struct tcp_request_sock_ops tcp_request_sock_ipv4_ops = {
 	.mss_clamp	=	TCP_MSS_DEFAULT,
 #ifdef CONFIG_TCP_MD5SIG
 	.req_md5_lookup	=	tcp_v4_md5_lookup,
@@ -1429,7 +1431,8 @@ put_and_exit:
 }
 EXPORT_SYMBOL(tcp_v4_syn_recv_sock);
 
-static struct sock *tcp_v4_cookie_check(struct sock *sk, struct sk_buff *skb)
+static
+struct sock *tcp_v4_cookie_check(struct sock *sk, struct sk_buff *skb)
 {
 #ifdef CONFIG_SYN_COOKIES
 	const struct tcphdr *th = tcp_hdr(skb);
@@ -1451,7 +1454,6 @@ static struct sock *tcp_v4_cookie_check(struct sock *sk, struct sk_buff *skb)
 int tcp_v4_do_rcv(struct sock *sk, struct sk_buff *skb)
 {
 	struct sock *rsk;
-
 	if (sk->sk_state == TCP_ESTABLISHED) { /* Fast path */
 		struct dst_entry *dst = sk->sk_rx_dst;
 
@@ -1684,6 +1686,7 @@ process:
 		 */
 		sock_hold(sk);
 		refcounted = true;
+
 		nsk = NULL;
 		if (!tcp_filter(sk, skb)) {
 			th = (const struct tcphdr *)skb->data;
@@ -1725,6 +1728,9 @@ process:
 	iph = ip_hdr(skb);
 	tcp_v4_fill_cb(skb, iph, th);
 
+#ifdef CONFIG_TCP_ARGO
+	argo_try_to_init(sk, skb);
+#endif /* CONFIG_TCP_ARGO */
 	skb->dev = NULL;
 
 	if (sk->sk_state == TCP_LISTEN) {
@@ -1737,6 +1743,14 @@ process:
 	bh_lock_sock_nested(sk);
 	tcp_segs_in(tcp_sk(sk), skb);
 	ret = 0;
+
+#ifdef CONFIG_HUAWEI_BASTET
+	if (bastet_sock_recv_prepare(sk, skb)) {
+		bh_unlock_sock(sk);
+		sock_put(sk);
+		return ret;
+	}
+#endif
 	if (!sock_owned_by_user(sk)) {
 		ret = tcp_v4_do_rcv(sk, skb);
 	} else if (tcp_add_backlog(sk, skb)) {
@@ -2477,6 +2491,7 @@ static int __net_init tcp_sk_init(struct net *net)
 	net->ipv4.sysctl_tcp_ecn_fallback = 1;
 
 	net->ipv4.sysctl_tcp_base_mss = TCP_BASE_MSS;
+	net->ipv4.sysctl_tcp_min_snd_mss = TCP_MIN_SND_MSS;
 	net->ipv4.sysctl_tcp_probe_threshold = TCP_PROBE_THRESHOLD;
 	net->ipv4.sysctl_tcp_probe_interval = TCP_PROBE_INTERVAL;
 
@@ -2502,7 +2517,7 @@ static int __net_init tcp_sk_init(struct net *net)
 	net->ipv4.sysctl_max_syn_backlog = max(128, cnt / 256);
 	net->ipv4.sysctl_tcp_sack = 1;
 	net->ipv4.sysctl_tcp_window_scaling = 1;
-	net->ipv4.sysctl_tcp_timestamps = 1;
+	net->ipv4.sysctl_tcp_timestamps = 2;
 
 	return 0;
 fail:

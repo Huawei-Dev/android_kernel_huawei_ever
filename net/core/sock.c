@@ -140,7 +140,16 @@
 #include <trace/events/sock.h>
 
 #include <net/tcp.h>
+
+#ifdef CONFIG_ANDROID_PARANOID_NETWORK
+#include <linux/android_aid.h>
+#endif
+
 #include <net/busy_poll.h>
+
+#ifdef CONFIG_HUAWEI_XENGINE
+#include <huawei_platform/emcom/emcom_xengine.h>
+#endif
 
 static DEFINE_MUTEX(proto_list_mutex);
 static LIST_HEAD(proto_list);
@@ -569,7 +578,11 @@ static int sock_setbindtodevice(struct sock *sk, char __user *optval,
 
 	/* Sorry... */
 	ret = -EPERM;
-	if (!ns_capable(net->user_ns, CAP_NET_RAW))
+	if (!ns_capable(net->user_ns, CAP_NET_RAW)
+#ifdef CONFIG_ANDROID_PARANOID_NETWORK
+		&& !in_egroup_p(AID_INET)
+#endif
+		)
 		goto out;
 
 	ret = -EINVAL;
@@ -700,6 +713,13 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
 	/*
 	 *	Options without arguments
 	 */
+#ifdef CONFIG_HUAWEI_XENGINE
+	if (optname == SO_XENGINE_PROXYUID)
+		return emcom_xengine_setproxyuid(sk, optval, optlen);
+
+	if (optname == SO_XENGINE_SOCKFLAG)
+		return emcom_xengine_setsockflag(sk, optval, optlen);
+#endif
 
 	if (optname == SO_BINDTODEVICE)
 		return sock_setbindtodevice(sk, optval, optlen);
@@ -735,7 +755,6 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
 		break;
 	case SO_DONTROUTE:
 		sock_valbool_flag(sk, SOCK_LOCALROUTE, valbool);
-		sk_dst_reset(sk);
 		break;
 	case SO_BROADCAST:
 		sock_valbool_flag(sk, SOCK_BROADCAST, valbool);
@@ -987,8 +1006,9 @@ set_rcvbuf:
 	case SO_MARK:
 		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
 			ret = -EPERM;
-		else
+		else {
 			sk->sk_mark = val;
+		}
 		break;
 
 	case SO_RXQ_OVFL:
@@ -1354,6 +1374,7 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
 		v.val = sk->sk_incoming_cpu;
 		break;
 
+
 	case SO_MEMINFO:
 	{
 		u32 meminfo[SK_MEMINFO_VARS];
@@ -1377,7 +1398,13 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
 		/* aggregate non-NAPI IDs down to 0 */
 		if (v.val < MIN_NAPI_ID)
 			v.val = 0;
+		break;
+#endif
 
+#ifdef CONFIG_HUAWEI_XENGINE
+
+	case SO_XENGINE_SOCKFLAG:
+		v.val = sk->hicom_flag;
 		break;
 #endif
 
@@ -1539,8 +1566,16 @@ struct sock *sk_alloc(struct net *net, int family, gfp_t priority,
 
 		mem_cgroup_sk_alloc(sk);
 		cgroup_sk_alloc(&sk->sk_cgrp_data);
+#ifdef CONFIG_HWDPI_MODULE
+		sk->sk_hwdpi_mark = 0;
+#endif
+
 		sock_update_classid(&sk->sk_cgrp_data);
 		sock_update_netprioidx(&sk->sk_cgrp_data);
+
+#ifdef CONFIG_CGROUP_BPF
+		*(sk->sk_process_name) = '\0';
+#endif
 	}
 
 	return sk;
@@ -1554,6 +1589,10 @@ static void __sk_destruct(struct rcu_head *head)
 {
 	struct sock *sk = container_of(head, struct sock, sk_rcu);
 	struct sk_filter *filter;
+
+#ifdef CONFIG_HUAWEI_BASTET
+	bastet_sock_release(sk);
+#endif
 
 	if (sk->sk_destruct)
 		sk->sk_destruct(sk);
@@ -1680,6 +1719,12 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
 		newsk->sk_send_head	= NULL;
 		newsk->sk_userlocks	= sk->sk_userlocks & ~SOCK_BINDPORT_LOCK;
 		atomic_set(&newsk->sk_zckey, 0);
+#ifdef CONFIG_HUAWEI_BASTET
+		if (sk_fullsock(newsk)) {
+			newsk->bastet = NULL;
+			newsk->reconn = NULL;
+		}
+#endif
 
 		sock_reset_flag(newsk, SOCK_DONE);
 		mem_cgroup_sk_alloc(newsk);
@@ -2243,7 +2288,7 @@ static void __lock_sock(struct sock *sk)
 	finish_wait(&sk->sk_lock.wq, &wait);
 }
 
-void __release_sock(struct sock *sk)
+static void __release_sock(struct sock *sk)
 	__releases(&sk->sk_lock.slock)
 	__acquires(&sk->sk_lock.slock)
 {
@@ -2731,9 +2776,6 @@ void sock_init_data(struct socket *sock, struct sock *sk)
 	sk->sk_sndtimeo		=	MAX_SCHEDULE_TIMEOUT;
 
 	sk->sk_stamp = SK_DEFAULT_STAMP;
-#if BITS_PER_LONG==32
-	seqlock_init(&sk->sk_stamp_seq);
-#endif
 	atomic_set(&sk->sk_zckey, 0);
 
 #ifdef CONFIG_NET_RX_BUSY_POLL
@@ -2743,7 +2785,13 @@ void sock_init_data(struct socket *sock, struct sock *sk)
 
 	sk->sk_max_pacing_rate = ~0U;
 	sk->sk_pacing_rate = ~0U;
+	sk->sk_pacing_shift = 10;
 	sk->sk_incoming_cpu = -1;
+
+#ifdef CONFIG_HUAWEI_XENGINE
+	sk->hicom_flag = 0;
+#endif
+
 	/*
 	 * Before updating sk_refcnt, we must commit prior changes to memory
 	 * (Documentation/RCU/rculist_nulls.txt for details)

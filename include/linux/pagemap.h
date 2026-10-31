@@ -261,6 +261,8 @@ pgoff_t page_cache_prev_hole(struct address_space *mapping,
 struct page *pagecache_get_page(struct address_space *mapping, pgoff_t offset,
 		int fgp_flags, gfp_t cache_gfp_mask);
 
+#define pch_get_page pagecache_get_page
+
 /**
  * find_get_page - find and get a page reference
  * @mapping: the address_space to search

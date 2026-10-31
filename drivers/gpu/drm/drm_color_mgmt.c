@@ -33,7 +33,7 @@
  * properties on the &drm_crtc object. They are set up by calling
  * drm_crtc_enable_color_mgmt().
  *
- * "DEGAMMA_LUT”:
+ * "DEGAMMA_LUT???:
  *	Blob property to set the degamma lookup table (LUT) mapping pixel data
  *	from the framebuffer before it is given to the transformation matrix.
  *	The data is interpreted as an array of &struct drm_color_lut elements.
@@ -46,14 +46,14 @@
  *	driver boot-up state too. Drivers can access this blob through
  *	&drm_crtc_state.degamma_lut.
  *
- * “DEGAMMA_LUT_SIZE”:
+ * ???DEGAMMA_LUT_SIZE???:
  *	Unsinged range property to give the size of the lookup table to be set
  *	on the DEGAMMA_LUT property (the size depends on the underlying
  *	hardware). If drivers support multiple LUT sizes then they should
  *	publish the largest size, and sub-sample smaller sized LUTs (e.g. for
  *	split-gamma modes) appropriately.
  *
- * “CTM”:
+ * ???CTM???:
  *	Blob property to set the current transformation matrix (CTM) apply to
  *	pixel data after the lookup through the degamma LUT and before the
  *	lookup through the gamma LUT. The data is interpreted as a struct
@@ -64,7 +64,7 @@
  *	boot-up state too. Drivers can access the blob for the color conversion
  *	matrix through &drm_crtc_state.ctm.
  *
- * “GAMMA_LUT”:
+ * ???GAMMA_LUT???:
  *	Blob property to set the gamma lookup table (LUT) mapping pixel data
  *	after the transformation matrix to data sent to the connector. The
  *	data is interpreted as an array of &struct drm_color_lut elements.
@@ -77,7 +77,7 @@
  *	driver boot-up state too. Drivers can access this blob through
  *	&drm_crtc_state.gamma_lut.
  *
- * “GAMMA_LUT_SIZE”:
+ * ???GAMMA_LUT_SIZE???:
  *	Unsigned range property to give the size of the lookup table to be set
  *	on the GAMMA_LUT property (the size depends on the underlying hardware).
  *	If drivers support multiple LUT sizes then they should publish the

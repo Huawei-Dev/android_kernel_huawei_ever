@@ -359,6 +359,19 @@ static inline void setup_nr_cpu_ids(void) { }
 static inline void smp_prepare_cpus(unsigned int maxcpus) { }
 #endif
 
+static void remove_flag(char *cmd, const char *flag)
+{
+	char *start_addr, *end_addr;
+	/* Ensure all instances of a flag are removed */
+	while ((start_addr = strstr(cmd, flag))) {
+		end_addr = strchr(start_addr, ' ');
+		if (end_addr)
+			memmove(start_addr, end_addr + 1, strlen(end_addr));
+		else
+			*(start_addr - 1) = '\0';
+	}
+}
+
 /*
  * We need to store the untouched command line for future reference.
  * We also need to store the touched command line since the parameter
@@ -367,6 +380,16 @@ static inline void smp_prepare_cpus(unsigned int maxcpus) { }
  */
 static void __init setup_command_line(char *command_line)
 {
+	// magisk removes skip_initramfs from kernel
+	// so skip_initramfs won't be removed from cmdline
+	// and magisk will use SARInit which renders
+	// the device unbootable so we have to 'hide'
+	// skip_initramfs string
+	char skip_initramfs[] = "skip!initramfs";
+	skip_initramfs[4] = '_';
+	remove_flag(command_line, skip_initramfs);
+	remove_flag(boot_command_line, skip_initramfs);
+
 	saved_command_line =
 		memblock_virt_alloc(strlen(boot_command_line) + 1, 0);
 	initcall_command_line =
@@ -510,6 +533,39 @@ static void __init mm_init(void)
 	pti_init();
 }
 
+#ifdef CMDLINE_INFO_FILTER
+static void __init print_filtered_cmdline(const char *cmdline)
+{
+	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+	char *cmd_prefix = NULL;
+	char *cmd_suffix = NULL;
+	int len = 0;
+
+	if (cmdline == NULL)
+		return;
+
+	strlcpy(tmp_cmdline, cmdline, COMMAND_LINE_SIZE);
+	cmd_prefix = strstr(tmp_cmdline, "androidboot.serialno");
+	if (cmd_prefix == NULL) {
+		pr_notice("Kernel command line: %s\n", tmp_cmdline);
+		return;
+	}
+	cmd_suffix = strstr(cmd_prefix, " ");
+	len = (cmd_suffix != NULL) ? (cmd_suffix - cmd_prefix)
+		: (cmdline + strlen(cmdline) - cmd_prefix);
+	memset(cmd_prefix, '*', len);
+	pr_notice("Kernel command line: %s\n", tmp_cmdline);
+}
+#endif
+
+#ifdef CONFIG_STRICT_KERNEL_RWX
+void mark_constdata_ro(void);
+#else
+static void mark_constdata_ro(void)
+{
+}
+#endif
+
 asmlinkage __visible void __init start_kernel(void)
 {
 	char *command_line;
@@ -539,6 +595,7 @@ asmlinkage __visible void __init start_kernel(void)
 	add_latent_entropy();
 	add_device_randomness(command_line, strlen(command_line));
 	boot_init_stack_canary();
+
 	mm_init_cpumask(&init_mm);
 	setup_command_line(command_line);
 	setup_nr_cpu_ids();
@@ -549,7 +606,9 @@ asmlinkage __visible void __init start_kernel(void)
 	build_all_zonelists(NULL);
 	page_alloc_init();
 
-	pr_notice("Kernel command line: %s\n", boot_command_line);
+#ifdef CMDLINE_INFO_FILTER
+	print_filtered_cmdline(boot_command_line);
+#endif
 	parse_early_param();
 	after_dashes = parse_args("Booting kernel",
 				  static_command_line, __start___param,
@@ -895,6 +954,17 @@ static void __init do_initcalls(void)
 {
 	int level;
 
+#ifdef CONFIG_HISI_BB
+	extern int rdr_hisiap_early_init(void);
+
+	/* startup mntn init set here to cover whole init flow */
+	(void)rdr_hisiap_early_init();
+
+#ifdef CONFIG_HISI_BB_DEBUG
+	extern u32 hisi_mntn_test_startkernel_panic(void);
+	(void)hisi_mntn_test_startkernel_panic();
+#endif
+#endif
 	for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++)
 		do_initcall_level(level);
 }
@@ -980,10 +1050,12 @@ static void mark_readonly(void)
 		 * insecure pages which are W+X.
 		 */
 		rcu_barrier_sched();
+		mark_constdata_ro();
 		mark_rodata_ro();
 		rodata_test();
-	} else
+	} else {
 		pr_info("Kernel memory protection disabled.\n");
+	}
 }
 #else
 static inline void mark_readonly(void)
@@ -1006,6 +1078,8 @@ static int __ref kernel_init(void *unused)
 	numa_default_policy();
 
 	rcu_end_inkernel_boot();
+
+	pr_err("Kernel init end, jump to execute/init\n");
 
 	if (ramdisk_execute_command) {
 		ret = run_init_process(ramdisk_execute_command);

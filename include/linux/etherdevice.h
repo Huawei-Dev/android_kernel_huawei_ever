@@ -29,6 +29,7 @@
 #include <asm/bitsperlong.h>
 
 #ifdef __KERNEL__
+
 struct device;
 int eth_platform_get_mac_address(struct device *dev, u8 *mac_addr);
 unsigned char *arch_get_platform_mac_address(void);

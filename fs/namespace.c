@@ -25,6 +25,7 @@
 #include <linux/magic.h>
 #include <linux/bootmem.h>
 #include <linux/task_work.h>
+#include <linux/hisi/pagecache_manage.h>
 #include <linux/sched/task.h>
 
 #include "pnode.h"
@@ -1574,6 +1575,8 @@ static int do_umount(struct mount *mnt, int flags)
 	struct super_block *sb = mnt->mnt.mnt_sb;
 	int retval;
 
+	umounting_fs_register_pch(sb);
+
 	retval = security_sb_umount(&mnt->mnt, flags);
 	if (retval)
 		return retval;
@@ -1666,6 +1669,7 @@ static int do_umount(struct mount *mnt, int flags)
 out:
 	unlock_mount_hash();
 	namespace_unlock();
+	umounted_fs_register_pch(sb);
 	return retval;
 }
 
@@ -1761,6 +1765,7 @@ SYSCALL_DEFINE2(umount, char __user *, name, int, flags)
 		goto dput_and_out;
 
 	retval = do_umount(mnt, flags);
+
 dput_and_out:
 	/* we mustn't call path_put() as that would clear mnt_expiry_mark */
 	dput(path.dentry);
@@ -2587,6 +2592,8 @@ static int do_new_mount(struct path *path, const char *fstype, int sb_flags,
 	err = do_add_mount(real_mount(mnt), path, mnt_flags);
 	if (err)
 		mntput(mnt);
+	else
+		mount_fs_register_pch(mnt);
 	return err;
 }
 
@@ -2902,6 +2909,7 @@ long do_mount(const char *dev_name, const char __user *dir_name,
 	else
 		retval = do_new_mount(&path, type_page, sb_flags, mnt_flags,
 				      dev_name, data_page);
+
 dput_out:
 	path_put(&path);
 	return retval;

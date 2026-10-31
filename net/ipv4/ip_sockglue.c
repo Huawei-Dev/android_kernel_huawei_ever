@@ -43,7 +43,6 @@
 #include <net/transp_v6.h>
 #endif
 #include <net/ip_fib.h>
-
 #include <linux/errqueue.h>
 #include <linux/uaccess.h>
 
@@ -146,17 +145,19 @@ static void ip_cmsg_recv_security(struct msghdr *msg, struct sk_buff *skb)
 
 static void ip_cmsg_recv_dstaddr(struct msghdr *msg, struct sk_buff *skb)
 {
-	__be16 _ports[2], *ports;
 	struct sockaddr_in sin;
+	__be16 *ports;
+	int end;
+
+	end = skb_transport_offset(skb) + 4;
+	if (end > 0 && !pskb_may_pull(skb, end))
+		return;
 
 	/* All current transport protocols have the port numbers in the
 	 * first four bytes of the transport header and this function is
 	 * written with this assumption in mind.
 	 */
-	ports = skb_header_pointer(skb, skb_transport_offset(skb),
-				   sizeof(_ports), &_ports);
-	if (!ports)
-		return;
+	ports = (__be16 *)skb_transport_header(skb);
 
 	sin.sin_family = AF_INET;
 	sin.sin_addr.s_addr = ip_hdr(skb)->daddr;
@@ -354,6 +355,8 @@ int ip_ra_control(struct sock *sk, unsigned char on,
 		return -EINVAL;
 
 	new_ra = on ? kmalloc(sizeof(*new_ra), GFP_KERNEL) : NULL;
+	if (on && !new_ra)
+		return -ENOMEM;
 
 	for (rap = &ip_ra_chain;
 	     (ra = rtnl_dereference(*rap)) != NULL;

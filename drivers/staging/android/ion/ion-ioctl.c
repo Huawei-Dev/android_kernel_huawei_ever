@@ -17,12 +17,16 @@
 #include <linux/file.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
-
+#ifdef CONFIG_HW_FDLEAK
+#include <chipset_common/hwfdleak/fdleak.h>
+#endif
 #include "ion.h"
+#include "ion_drm_compat.h"
 
 union ion_ioctl_arg {
 	struct ion_allocation_data allocation;
 	struct ion_heap_query query;
+	struct ion_drm_map_data drm_map;
 };
 
 static int validate_ioctl_arg(unsigned int cmd, union ion_ioctl_arg *arg)
@@ -87,15 +91,31 @@ long ion_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		fd = ion_alloc(data.allocation.len,
 			       data.allocation.heap_id_mask,
 			       data.allocation.flags);
-		if (fd < 0)
+		if (fd < 0) {
+			pr_err("alloc failed!len:%llx,heap mask:%x,flags:%x\n",
+				data.allocation.len,
+				data.allocation.heap_id_mask,
+				data.allocation.flags);
 			return fd;
+		}
 
 		data.allocation.fd = fd;
-
+#ifdef CONFIG_HW_FDLEAK
+		fdleak_report(FDLEAK_WP_DMABUF, 0);
+#endif
 		break;
 	}
 	case ION_IOC_HEAP_QUERY:
 		ret = ion_query_heaps(&data.query);
+		break;
+	case ION_IOC_DRM_MAP:
+		if (data.drm_map.flags || data.drm_map.iova ||
+		    data.drm_map.mapped_size)
+			return -EINVAL;
+		ret = ion_drm_map_fd(data.drm_map.fd,
+		                     data.drm_map.requested_size,
+		                     &data.drm_map.iova,
+		                     &data.drm_map.mapped_size);
 		break;
 	default:
 		return -ENOTTY;

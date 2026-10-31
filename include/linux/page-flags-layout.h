@@ -81,7 +81,6 @@
 #else
 #define LAST_CPUPID_WIDTH 0
 #endif
-
 /*
  * We are going to use the flags for the page to node mapping if its in
  * there.  This includes the case where there is no node, so it is implicit.

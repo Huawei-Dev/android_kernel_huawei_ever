@@ -44,6 +44,19 @@ static int root_wait;
 
 dev_t ROOT_DEV;
 
+
+#ifdef CONFIG_ANDROID_SAR_RAMDISK
+static int __initdata android_bootmode;
+
+extern int mount_sar_ramdisk(char*);
+
+static int __init android_bootmode_setup(char *str) {
+	android_bootmode = simple_strtol(str,NULL,0);
+	return 1;
+}
+__setup("bootmode=", android_bootmode_setup);
+#endif
+
 static int __init load_ramdisk(char *str)
 {
 	rd_doload = simple_strtol(str,NULL,0) & 3;
@@ -531,6 +544,28 @@ void __init mount_root(void)
 			change_floppy("root floppy");
 	}
 #endif
+#ifdef CONFIG_ANDROID_SAR_RAMDISK
+	// don't load ramdisk for recovery
+	if (android_bootmode != 2) {
+		dev_t android_bootpart;
+
+		/* wait for any asynchronous scanning to complete */
+		printk(KERN_INFO "Waiting for root device %s...\n",
+			CONFIG_ANDROID_BOOT_PARTITION);
+		while (driver_probe_done() != 0 ||
+			(android_bootpart = name_to_dev_t(CONFIG_ANDROID_BOOT_PARTITION)) == 0)
+			msleep(5);
+		async_synchronize_full();
+
+		create_dev("/dev/android_boot", android_bootpart);
+
+		if (mount_sar_ramdisk("/dev/android_boot")) {
+			ROOT_DEV = Root_RAM0;
+
+			return;
+		}
+	}
+#endif
 #ifdef CONFIG_BLOCK
 	{
 		int err = create_dev("/dev/root", ROOT_DEV);
@@ -548,13 +583,13 @@ void __init mount_root(void)
 void __init prepare_namespace(void)
 {
 	int is_floppy;
-
+#ifndef CONFIG_HYBRID_FEATURE
 	if (root_delay) {
 		printk(KERN_INFO "Waiting %d sec before mounting root device...\n",
 		       root_delay);
 		ssleep(root_delay);
 	}
-
+#endif
 	/*
 	 * wait for the known devices to complete their probing
 	 *
@@ -565,6 +600,7 @@ void __init prepare_namespace(void)
 	wait_for_device_probe();
 
 	md_run_setup();
+	dm_run_setup();
 
 	if (saved_root_name[0]) {
 		root_device_name = saved_root_name;
