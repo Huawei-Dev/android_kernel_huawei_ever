@@ -1614,7 +1614,7 @@
 			sec-attr = <0x0 0x20>;
 			svc-id = <0x0 0x10>;
 			reusable;
-			status = "disabled";
+			status = "ok";
 			visible_to_users;
 			phandle = <0x27a>;
 		};
@@ -1626,7 +1626,7 @@
 			compatible = "hisi-algo-sta-cma-pool";
 			sec-attr = <0x0 0x20>;
 			reusable;
-			status = "disabled";
+			status = "ok";
 			visible_to_users;
 			phandle = <0x27b>;
 		};
