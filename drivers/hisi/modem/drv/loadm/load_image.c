@@ -113,6 +113,9 @@ struct image_type_name  modem_images_root[] =
 {
     {MODEM, DDR_MCORE_ADDR,         DDR_MCORE_SIZE,       MODEM_IMAGE_PATH,  "balong_modem.bin"},
     {HIFI,  DDR_HIFI_ADDR,          DDR_HIFI_SIZE,        MODEM_IMAGE_PATH,  "hifi.img"},/* ???? */
+#ifdef CONFIG_PHY_LOAD
+    {DSP, DDR_TLPHY_IMAGE_ADDR, DDR_TLPHY_IMAGE_SIZE,     MODEM_IMAGE_PATH, "phy.bin"},
+#endif
     {TAS,   0,                      0,                    MODEM_IMAGE_PATH,  "tas.bin"},
     {WAS,   0,                      0,                    MODEM_IMAGE_PATH,  "was.bin"},
     {CAS,   0,                      0,                    MODEM_IMAGE_PATH,  "cas.bin"}, /* ???? */
@@ -137,6 +140,9 @@ struct image_type_name modem_images_vendor[] =
 {
     {MODEM, DDR_MCORE_ADDR,         DDR_MCORE_SIZE,       MODEM_IMAGE_PATH_VENDOR,  "balong_modem.bin"},
     {HIFI,  DDR_HIFI_ADDR,          DDR_HIFI_SIZE,        MODEM_IMAGE_PATH_VENDOR,  "hifi.img"},/* ???? */
+#ifdef CONFIG_PHY_LOAD
+    {DSP, DDR_TLPHY_IMAGE_ADDR, DDR_TLPHY_IMAGE_SIZE,     MODEM_IMAGE_PATH_VENDOR, "phy.bin"},
+#endif
     {TAS,   0,                      0,                    MODEM_IMAGE_PATH_VENDOR,  "tas.bin"},
     {WAS,   0,                      0,                    MODEM_IMAGE_PATH_VENDOR,  "was.bin"},
     {CAS,   0,                      0,                    MODEM_IMAGE_PATH_VENDOR,  "cas.bin"}, /* ???? */
@@ -1356,7 +1362,6 @@ int bsp_load_modem_images(void)
         goto error;
     }
 
-
 #ifdef CONFIG_COLD_PATCH
     cold_patch_stamp[0][0] = bsp_get_slice_value();
     if(bsp_nvem_cold_patch_read(&g_cold_patch_info))
@@ -1364,15 +1369,18 @@ int bsp_load_modem_images(void)
     load_modem_cold_patch_image(DSP_COLD_PATCH);
 #endif
 
-
-
-
+#ifdef CONFIG_PHY_LOAD
+    ret = load_image(DSP, 0, 0);
+    if (ret) {
+        sec_print_err("load phy image failed, ret = 0x%x\n", ret);
+        goto error;
+    }
+#endif
 
 #ifdef CONFIG_COLD_PATCH
     cold_patch_stamp[0][1] = bsp_get_slice_value();
     update_modem_cold_patch_status(DSP_PATCH);
 #endif
-
 
 #ifdef CONFIG_MODEM_DTB_LOAD_IN_KERNEL
     ret = load_and_verify_dtb_data();
@@ -1403,8 +1411,6 @@ int bsp_load_modem_images(void)
     cold_patch_stamp[1][1] = bsp_get_slice_value();
     update_modem_cold_patch_status(CCORE_PATCH);
 #endif
-
-
 
 error:
 #if (defined CONFIG_TZDRIVER) && (defined CONFIG_LOAD_SEC_IMAGE)
